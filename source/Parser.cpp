@@ -92,8 +92,18 @@ bool Parser::codeProcess() {
 
 
 bool Parser::program () {
+	//getToken();
+	//return procedure ();
+	fstream myfile;
+	myfile.open ("hh.txt");
+	
+
+
 	getToken();
-	return procedure ();
+	while(nextToken.length()!=0){
+		procedure();
+	}
+	return true;
 }
 
 bool Parser::procedure() {
@@ -106,7 +116,8 @@ bool Parser::procedure() {
 	stmtLst(vector < PairNumber >());
 	match ("}");
 	if (currentPossition < inputSize - 1) {
-		error();
+		//error();
+		// zhao yang add, not error anymore
 	}
 	return true;
 }
