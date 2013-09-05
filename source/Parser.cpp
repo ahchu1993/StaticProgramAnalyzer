@@ -94,8 +94,8 @@ bool Parser::codeProcess() {
 bool Parser::program () {
 	//getToken();
 	//return procedure ();
-	fstream myfile;
-	myfile.open ("hh.txt");
+	//fstream myfile;
+	//myfile.open ("hh.txt");
 	
 
 
@@ -212,7 +212,7 @@ bool Parser::assign(vector < PairNumber > useModifyList) {
 	TNode* varNode = pkb->createNode("var", varIndex, line);
 	pkb->makeLeftChild(assignNode, varNode);
 	match("=");
-	pkb->makeRightChild(assignNode, expr(useModifyList, getFactorList()));
+	pkb->makeRightChild(assignNode, expr(useModifyList, getFactorListString()));
 	match (";");
 	return true;
 }
@@ -264,19 +264,19 @@ bool Parser::ifProcess(vector < PairNumber > useModifyList) {
 	return true;
 }
 
-vector < string > Parser::getFactorList () {
-	vector < string > factorList = vector < string >();
+string Parser::getFactorListString () {
+	string factorList = "";
 	bool flag = false;
 	while (nextToken.compare(";") != 0) {
 		if (flag) {
 			match("+");
 		}
 		string factorName = nextToken;
-		factorList.push_back(factorName);
-		flag = true;
+		factorList=factorList+factorName;
+		//flag = true;
 		getToken();
 	}
-	if (factorList.size() == 0) {
+	if (factorList.length() == 0) {
 		error();
 	}
 	return factorList;
@@ -306,8 +306,56 @@ TNode* Parser::processFactor (string factor, vector < PairNumber > useModifyList
 	}
 }
 
-TNode* Parser::expr (vector < PairNumber > useModifyList, vector < string > factorList) {
-	if (factorList.size() == 1) {
+int Parser::findRightMostOperation(string factorList, int flag){
+	if(flag==0){ // find + -
+		int plusIndex = factorList.find_last_of('+');
+		int minusIndex = factorList.find_last_of('-');
+		return max(plusIndex,minusIndex);
+	}else{
+		return factorList.find_last_of('*');
+	}
+	return -1;
+}
+
+TNode* Parser::expr (vector < PairNumber > useModifyList, string factorList) {
+	// factorList     x  +  y * z + y * x + 1;
+		int indexOfPlusMinusOperation = findRightMostOperation(factorList,0);
+		//cout<<"??  "<<indexOfPlusMinusOperation<<"   "<<factorList<<endl;
+		//getchar();
+		if(indexOfPlusMinusOperation==-1){  // no +/-
+			int indexOfMulOperation = findRightMostOperation(factorList,1);
+			if(indexOfMulOperation==-1){  // no *
+				return processFactor(factorList, useModifyList);
+			}else{
+				string factorList1 = factorList.substr(0,indexOfMulOperation);
+				string factor = factorList.substr(indexOfMulOperation+1,factorList.length());
+
+				TNode* mulNode = pkb->createNode("opt", -1, line);  //TMP
+				pkb->makeRightChild(mulNode, processFactor(factor, useModifyList));
+				pkb->makeLeftChild(mulNode, expr(useModifyList, factorList1));
+				return mulNode;
+			}
+		}else{
+			string factorList1 = factorList.substr(0,indexOfPlusMinusOperation);
+			string factorList2 = factorList.substr(indexOfPlusMinusOperation+1,factorList.length());
+
+			if(factorList[indexOfPlusMinusOperation]=='+'){// +
+				TNode* plusNode = pkb->createNode("opt", -1, line);  //TMP
+				pkb->makeRightChild(plusNode, expr(useModifyList, factorList2));
+				pkb->makeLeftChild(plusNode, expr(useModifyList, factorList1));
+				return plusNode;
+			}else{ //-
+				TNode* minusNode = pkb->createNode("opt", -1, line);  //TMP
+				pkb->makeRightChild(minusNode, expr(useModifyList, factorList2));
+				pkb->makeLeftChild(minusNode, expr(useModifyList, factorList1));
+				return minusNode;
+			}
+		}
+		
+
+
+		//return pkb->createNode("opt", -1, line); // dummy
+	/*else if (factorList.size() == 1) {
 		return processFactor(factorList[0], useModifyList);
 	} else if (factorList.size() == 2){
 		TNode* plusNode = pkb->createNode("opt", -1, line);
@@ -320,7 +368,8 @@ TNode* Parser::expr (vector < PairNumber > useModifyList, vector < string > fact
 		factorList.erase(factorList.end() - 1);
 		pkb->makeLeftChild(plusNode, expr(useModifyList, factorList));
 		return plusNode;
-	}
+	}*/
+	
 }
 
 string Parser::checkVariable(string variable) {
