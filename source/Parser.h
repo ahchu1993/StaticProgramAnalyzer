@@ -41,8 +41,9 @@ private:
 	bool isOneLetterToken (char letter);
 	bool isSpecialChar (char letter);
 	void processWhile ();
-	TNode* expr (vector < PairNumber > useModifyList, vector < string > factorList);
+	TNode* expr (vector < PairNumber > useModifyList, string factorList);
 	bool program ();
+	int findRightMostOperation(string expr, int flag);
 	bool ifProcess(vector < PairNumber > useModifyList);
 	bool w(vector < PairNumber > useModifyList);
 	bool assign(vector < PairNumber > useModifyList);
@@ -50,7 +51,7 @@ private:
 	bool stmtLst(vector < PairNumber > useModifyList);
 	bool procedure();
 	string getToken();
-	vector < string > getFactorList ();
+	string getFactorListString ();
 	TNode* processFactor (string factor, vector < PairNumber > useModifyList);
 	bool match(string token);
 };
