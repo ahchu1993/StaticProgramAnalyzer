@@ -70,6 +70,25 @@ public:
 		string evaluation_type;
 	};
 
+	/// ---------------------------build table for table driven parsing---------------------------------
+	void fillArg(arg_type_list* arg_list,bool undersc, bool int_t, bool string_t);
+	void addModifiesEntry();
+	void addUsesEntry();
+	void addCallsEntry();
+	void addCallsTEntry();
+	void addParentEntry();
+	void addParentTEntry();
+	void addFollowsEntry();
+	void addFollowsTEntry();
+	void addNextEntry();
+	void addNextTEntry();
+	void addAffectsEntry();
+	void addAffectsTEntry();
+	void buildTable();
+	void print_relation(string r);
+	void print_table();
+	
+	void build_attr_table();
 
 	///------------------auxiliary functions---------------------------------
 	string trim(string str);
@@ -173,25 +192,7 @@ private:
 	/// attr_pairs store all attr_compare(left attr , right attr) in with clause
 	vector<attr_compare> attr_pairs;
 	
-	/// ---------------------------build table for table driven parsing---------------------------------
-	void fillArg(arg_type_list* arg_list,bool undersc, bool int_t, bool string_t)；
-	void addModifiesEntry()；
-	void addUsesEntry()；
-	void addCallsEntry()；
-	void addCallsTEntry()；
-	void addParentEntry()；
-	void addParentTEntry()；
-	void addFollowsEntry()；
-	void addFollowsTEntry()；
-	void addNextEntry()；
-	void addNextTEntry()；
-	void addAffectsEntry()；
-	void addAffectsTEntry()；
-	void buildTable()；
-	void print_relation(string r)；
-	void print_table()；
 	
-	void build_attr_table();
 };
 
 

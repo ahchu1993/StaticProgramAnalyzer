@@ -10,12 +10,7 @@ using namespace std;
 static string designEntity[] = {"procedure","stmtList", "stmt", "assign", "call", "while", "if", "variable", "constant", "prog_line"};
 static const int NumDE = 10;
 
-QueryPreprocessor::QueryPreprocessor(){
-	build_table();
-	build_attr_table();
-}
-
-void QueryPreprocessor::fillArg(arg_type_list* arg_list,bool undersc, bool int_t, bool string_t){
+void fillArg(QueryPreprocessor::arg_type_list* arg_list,bool undersc, bool int_t, bool string_t){
 	arg_list->underscore = undersc;
 	arg_list->int_type = int_t;
 	arg_list->string_type = string_t;
@@ -202,8 +197,8 @@ void QueryPreprocessor::buildTable(){
 
 /// --------------debugging use-------------------
 void QueryPreprocessor::print_relation(string r){   
-	entry e;
-	arg_type_list arg1_list, arg2_list;
+	QueryPreprocessor::entry e;
+	QueryPreprocessor::arg_type_list arg1_list, arg2_list;
 	cout<< r<<":\n";
 	e = table[r];
 	arg1_list = e.arg1_list;
@@ -237,6 +232,11 @@ void QueryPreprocessor::print_table(){
 	print_relation("Next*");
 	print_relation("Affects");
 	print_relation("Affects*");
+}
+
+QueryPreprocessor::QueryPreprocessor(){
+	buildTable();
+	build_attr_table();
 }
 
 /// ------------------- auxiliary functions----------------------
@@ -1177,27 +1177,27 @@ bool QueryPreprocessor::patternCond(string patternCond){
 /// ----------- with clause  functions-------------------------
 
 void QueryPreprocessor::build_attr_table(){
-    attr_entry e;
-    e= {"procedure","string"};
+    //attr_entry e;
+	attr_entry e={ "procedure","string" };
     attr_table["procName"] =e;
 
-    e = {"variable","string"};
+   attr_entry e2 = { "variable","string"};
     attr_table["varName"] = e;
 
-    e = {"constant","integer"};
+    attr_entry e3 = {"constant","integer"};
     attr_table["value"] = e;
 
-    e = {"stmt","integer"};
+    attr_entry e4 = {"stmt","integer"};
     attr_table["stmt#"] = e;
 
-    e = {"prog_line","integer"};
+    attr_entry e5 = {"prog_line","integer"};
     attr_table["prog_line"];
 
-    e = {"integer","integer"};
+    /*e = {"integer","integer"};
     attr_table["integer"] = e ;
 
     e = {"string","string"};
-    attr_table["string"] = e ;
+    attr_table["string"] = e ; */
 }
 
 bool QueryPreprocessor::attrCompare(string s){
