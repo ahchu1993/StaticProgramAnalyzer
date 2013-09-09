@@ -6,10 +6,10 @@
 using namespace std;
 
 class QueryPreprocessor
-{
+{	
 public:
-	//QueryPreprocessor(void);
-	//~QueryPreprocessor(void);
+	QueryPreprocessor();
+	~QueryPreprocessor(void);
 
 	typedef string DE_TYPE;
 	typedef string DA_TYPE;
@@ -21,10 +21,12 @@ public:
 	};
 
 	struct designAbstraction{
-		DA_TYPE type;
-		string ref1;
-		string ref2;
-	};
+    string relation_type;
+    string ref1;
+    string ref1_type;
+    string ref2;
+    string ref2_type;
+};
 
 	struct tree_node{
 		string content;
@@ -41,31 +43,34 @@ public:
 
 	};
 
-	struct attr_compare{
-		string attr_left;
-		string attr_right;
+	struct attrRef{
+		string prefix;
+		string postfix;  //use postfix determine type
 	};
-private:
+	struct attr_compare{
+		attrRef left_ref;
+		attrRef right_ref;
+		string evaluation_type;
+	};
 
-	string query, declaration_cl,result_cl,suchthat_cl,pattern_cl;
-	std::map<int,string> positions;
+	struct arg_type_list{
+		vector<string> synonym_type;
+		bool underscore;
+		bool int_type;
+		bool string_type;
+	};
 
-	/// declaration_reff store all declarations(type, synonym);
-	vector<entityReff> declaration_reffs;
+	struct entry{
+		arg_type_list arg1_list;
+		arg_type_list arg2_list;
+	};
+	
+	struct attr_entry{
+		string prefix_type;
+		string evaluation_type;
+	};
 
-	/// result_reffs store all result synonyms
-	vector<string> result_reffs;
 
-	/// relations store all design abstractions (designabstraction, ref1,ref2)
-	vector<designAbstraction> relations;
-
-	/// pattern store all patterns(pattern_type, synonym, varRef, expr_spec)
-	vector<pattern> patterns;
-
-	/// attr_pairs store all attr_compare(left attr , right attr) in with clause
-	vector<attr_compare> attr_pairs;
-
-public:
 	///------------------auxiliary functions---------------------------------
 	string trim(string str);
 	bool exists(string reff);
@@ -81,27 +86,11 @@ public:
 	bool check_attrRef(string attrRef);
 	bool check_elem(string elem);
 	bool check_varRef(string s);
-	bool check_entRef(string entRef);
-	bool check_stmtRef(string stmtRef);
-	bool check_lineRef(string lineRef);
 	bool match_entity(string token);
 	bool check_process_tuple(string t);
 
 	///-----------------design abstraction validation & process------------------
-	bool ModifiesP(string s);
-	bool ModifiesS(string s);
-	bool UsesP(string s);
-	bool UsesS(string s);
-	bool Calls(string s);
-	bool CallsT(string s);
-	bool Parent(string s);
-	bool ParentT(string s);
-	bool Follows(string s);
-	bool FollowsT(string s);
-	bool Next(string s);
-	bool NextT(string s);
-	bool Affects(string s);
-	bool AffectsT(string s);
+	
 	bool relRef(string relRef);
 	bool relCond(string s);
 
@@ -127,7 +116,7 @@ public:
 	bool patternCond(string patternCond);
 
 	///------------------------functions to validate with clause---------------- 
-	bool check_ref(string s);
+	
 	bool attrCompare(string s);
 	bool attrCond(string s);
 
@@ -159,6 +148,50 @@ public:
 	vector<pattern> getPatterns();
 	vector<attr_compare> getAttrPairs(); 
 
+	
+private:
+
+	string query, declaration_cl,result_cl,suchthat_cl,pattern_cl;
+	std::map<int,string> positions;
+	
+	/// table is used for arguments type checking  -- table driven
+	map<string,entry> table;
+	map<string,attr_entry> attr_table;
+	
+	/// declaration_reff store all declarations(type, synonym);
+	vector<entityReff> declaration_reffs;
+
+	/// result_reffs store all result synonyms
+	vector<string> result_reffs;
+
+	/// relations store all design abstractions (designabstraction, ref1,ref2)
+	vector<designAbstraction> relations;
+
+	/// pattern store all patterns(pattern_type, synonym, varRef, expr_spec)
+	vector<pattern> patterns;
+
+	/// attr_pairs store all attr_compare(left attr , right attr) in with clause
+	vector<attr_compare> attr_pairs;
+	
+	/// ---------------------------build table for table driven parsing---------------------------------
+	void fillArg(arg_type_list* arg_list,bool undersc, bool int_t, bool string_t)；
+	void addModifiesEntry()；
+	void addUsesEntry()；
+	void addCallsEntry()；
+	void addCallsTEntry()；
+	void addParentEntry()；
+	void addParentTEntry()；
+	void addFollowsEntry()；
+	void addFollowsTEntry()；
+	void addNextEntry()；
+	void addNextTEntry()；
+	void addAffectsEntry()；
+	void addAffectsTEntry()；
+	void buildTable()；
+	void print_relation(string r)；
+	void print_table()；
+	
+	void build_attr_table();
 };
 
 

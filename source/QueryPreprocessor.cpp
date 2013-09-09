@@ -10,6 +10,236 @@ using namespace std;
 static string designEntity[] = {"procedure","stmtList", "stmt", "assign", "call", "while", "if", "variable", "constant", "prog_line"};
 static const int NumDE = 10;
 
+QueryPreprocessor::QueryPreprocessor(){
+	build_table();
+	build_attr_table();
+}
+
+void QueryPreprocessor::fillArg(arg_type_list* arg_list,bool undersc, bool int_t, bool string_t){
+	arg_list->underscore = undersc;
+	arg_list->int_type = int_t;
+	arg_list->string_type = string_t;
+
+}
+
+void QueryPreprocessor::addModifiesEntry(){
+	arg_type_list arg1_list,arg2_list;
+	arg1_list.synonym_type.push_back("procedure");
+	arg1_list.synonym_type.push_back("prog_line");
+	arg1_list.synonym_type.push_back("stmt");
+	arg1_list.synonym_type.push_back("assign");
+	arg1_list.synonym_type.push_back("if");
+	arg1_list.synonym_type.push_back("while");
+	fillArg(&arg1_list,false,true,true);
+
+	arg2_list.synonym_type.push_back("variable");
+	fillArg(&arg2_list,true,false,true);
+	entry e = {arg1_list,arg2_list};
+	table["Modifies"] = e;
+}
+
+void QueryPreprocessor::addUsesEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("procedure");
+	arg1.synonym_type.push_back("prog_line");
+	arg1.synonym_type.push_back("stmt");
+	arg1.synonym_type.push_back("assign");
+	arg1.synonym_type.push_back("if");
+	arg1.synonym_type.push_back("while");
+	fillArg(&arg1,false,true,true);
+
+	arg2.synonym_type.push_back("variable");
+	fillArg(&arg2,true,false,true);
+	entry e = {arg1,arg2};
+	table["Uses"] = e;
+}
+
+void QueryPreprocessor::addCallsEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("procedure");
+	fillArg(&arg1,true,true,true);
+	arg2.synonym_type.push_back("procedure");
+	fillArg(&arg2,true,true,true);
+	entry e = {arg1,arg2};
+	table["Calls"] = e;
+}
+
+void QueryPreprocessor::addCallsTEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("procedure");
+	fillArg(&arg1,true,true,true);
+	arg2.synonym_type.push_back("procedure");
+	fillArg(&arg2,true,true,true);
+	entry e = {arg1,arg2};
+	table["Calls*"] = e;
+}
+
+void QueryPreprocessor::addParentEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("stmt");
+	arg1.synonym_type.push_back("if");
+	arg1.synonym_type.push_back("while");
+	fillArg(&arg1,true,true,false);
+
+	arg2.synonym_type.push_back("stmt");
+	arg2.synonym_type.push_back("assign");
+	arg2.synonym_type.push_back("if");
+	arg2.synonym_type.push_back("while");
+	fillArg(&arg2,true,true,false);
+	entry e = {arg1,arg2};
+	table["Parent"] = e;
+}
+
+void QueryPreprocessor::addParentTEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("stmt");
+	arg1.synonym_type.push_back("if");
+	arg1.synonym_type.push_back("while");
+	fillArg(&arg1,true,true,false);
+
+	arg2.synonym_type.push_back("stmt");
+	arg2.synonym_type.push_back("assign");
+	arg2.synonym_type.push_back("if");
+	arg2.synonym_type.push_back("while");
+	fillArg(&arg2,true,true,false);
+	entry e = {arg1,arg2};
+	table["Parent*"] = e;
+}
+
+void QueryPreprocessor::addFollowsEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("stmt");
+	arg1.synonym_type.push_back("assign");
+	arg1.synonym_type.push_back("if");
+	arg1.synonym_type.push_back("while");
+	fillArg(&arg1,true,true,false);
+
+	arg2.synonym_type.push_back("stmt");
+	arg2.synonym_type.push_back("assign");
+	arg2.synonym_type.push_back("if");
+	arg2.synonym_type.push_back("while");
+	fillArg(&arg2,true,true,false);
+	entry e = {arg1,arg2};
+	table["Follows"] = e;
+}
+
+void QueryPreprocessor::addFollowsTEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("stmt");
+	arg1.synonym_type.push_back("assign");
+	arg1.synonym_type.push_back("if");
+	arg1.synonym_type.push_back("while");
+	fillArg(&arg1,true,true,false);
+
+	arg2.synonym_type.push_back("stmt");
+	arg2.synonym_type.push_back("assign");
+	arg2.synonym_type.push_back("if");
+	arg2.synonym_type.push_back("while");
+	fillArg(&arg2,true,true,false);
+	entry e = {arg1,arg2};
+	table["Follows*"] = e;
+}
+
+void QueryPreprocessor::addNextEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("prog_line");
+	fillArg(&arg1,true,true,false);
+
+	arg2.synonym_type.push_back("prog_line");
+	fillArg(&arg2,true,true,false);
+	entry e = {arg1,arg2};
+	table["Next"] = e;
+}
+
+void QueryPreprocessor::addNextTEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("prog_line");
+	fillArg(&arg1,true,true,false);
+
+	arg2.synonym_type.push_back("prog_line");
+	fillArg(&arg2,true,true,false);
+	entry e = {arg1,arg2};
+	table["Next*"] = e;
+}
+
+void QueryPreprocessor::addAffectsEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("assign");
+	fillArg(&arg1,true,true,false);
+
+	arg2.synonym_type.push_back("assign");
+	fillArg(&arg2,true,true,false);
+	entry e = {arg1,arg2};
+	table["Affects"] = e;
+}
+
+void QueryPreprocessor::addAffectsTEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("assign");
+	fillArg(&arg1,true,true,false);
+
+	arg2.synonym_type.push_back("assign");
+	fillArg(&arg2,true,true,false);
+	entry e = {arg1,arg2};
+	table["Affects*"] = e;
+}
+
+void QueryPreprocessor::buildTable(){
+	addModifiesEntry();
+	addUsesEntry();
+	addCallsEntry();
+	addCallsTEntry();
+	addParentEntry();
+	addParentTEntry();
+	addFollowsEntry();
+	addFollowsTEntry();
+	addNextEntry();
+	addNextTEntry();
+	addAffectsEntry();
+	addAffectsTEntry();
+
+}
+
+/// --------------debugging use-------------------
+void QueryPreprocessor::print_relation(string r){   
+	entry e;
+	arg_type_list arg1_list, arg2_list;
+	cout<< r<<":\n";
+	e = table[r];
+	arg1_list = e.arg1_list;
+	cout<< "arg1: ";
+	for(unsigned int i =0;i<arg1_list.synonym_type.size();i++){
+		cout<<arg1_list.synonym_type[i]<<" ";
+	}
+	cout<< "underscore "<<arg1_list.underscore<<
+		" integer "<<arg1_list.int_type<<" string "<<arg1_list.string_type;
+
+	arg2_list = e.arg2_list;
+	cout<< "\narg2: ";
+	for(unsigned int i =0;i<arg2_list.synonym_type.size();i++){
+		cout<<arg2_list.synonym_type[i]<<" ";
+	}
+	cout<< "underscore "<<arg2_list.underscore<<
+		" integer "<<arg2_list.int_type<<" string "<<arg2_list.string_type<<"\n";
+
+}
+
+void QueryPreprocessor::print_table(){
+	print_relation("Calls");
+	print_relation("Calls*");
+	print_relation("Modifies");
+	print_relation("Uses");
+	print_relation("Parent");
+	print_relation("Parent*");
+	print_relation("Follows");
+	print_relation("Follows*");
+	print_relation("Next");
+	print_relation("Next*");
+	print_relation("Affects");
+	print_relation("Affects*");
+}
+
+/// ------------------- auxiliary functions----------------------
 
 string QueryPreprocessor::trim(string str){
 	if(str.find_first_not_of(" ")>str.size()) {
@@ -69,11 +299,13 @@ bool QueryPreprocessor::check_Letter(char c){
     else return false;
 
 }
+
 bool QueryPreprocessor::check_Digit(char c){
     if(isdigit(c)) return true;
     else return false;
 
 }
+
 bool QueryPreprocessor::check_IDENT(string ident){
 	if(ident=="") return false;
 	if(check_Letter(ident.at(0))){
@@ -88,6 +320,7 @@ bool QueryPreprocessor::check_IDENT(string ident){
 	}
 	else return false;
 }
+
 bool QueryPreprocessor::check_Integer(string i){
 	if(i=="") return false;
 	if(check_Digit(i.at(0))){
@@ -117,45 +350,14 @@ bool QueryPreprocessor::check_attrRef(string attrRef){
 	return check_synonym(s)&&check_attrName(attr);
 }
 
-
-
 bool QueryPreprocessor::check_elem(string elem){
 	return check_synonym(elem)||check_attrRef(elem);
 }
-
 
 bool QueryPreprocessor::check_varRef(string s){
 	if(s.at(0)=='\"'&&s.at(s.size()-1)=='\"')
 		s = s.substr(1,s.size()-2);
 	return check_synonym(s)||s=="_"||check_IDENT(s);
-}
-
-bool QueryPreprocessor::check_entRef(string entRef){
-
-	if(check_synonym(entRef)){
-		if(!exists((entRef))) return false;
-		else return true;
-	}
-
-	if(entRef.at(0)=='\"'&&entRef.at(entRef.size()-1)=='\"'){
-
-		entRef = entRef.substr(1,entRef.size()-2);
-	}
-
-	return entRef=="_"||check_IDENT(entRef)||check_Integer(entRef);
-}
-
-bool QueryPreprocessor::check_stmtRef(string stmtRef){
-
-	if(check_synonym(stmtRef)){
-		if(!exists((stmtRef))) return false;
-		else return true;
-	}
-	return stmtRef=="_"||check_Integer(stmtRef);
-}
-
-bool QueryPreprocessor::check_lineRef(string lineRef){
-	return check_stmtRef(lineRef);
 }
 
 bool QueryPreprocessor::match_entity(string token){
@@ -165,7 +367,6 @@ bool QueryPreprocessor::match_entity(string token){
 	}
 	return false;
 }
-
 
 bool QueryPreprocessor::check_process_tuple(string t){
 	t = trim(t);
@@ -256,482 +457,75 @@ bool QueryPreprocessor::check_process_tuple(string t){
 
 /// ---------------------   design abstractions-------------
 
-bool QueryPreprocessor::ModifiesP(string s){
-	s = trim(s);
-	unsigned int p = s.find("Modifies");
-	if(p!=0) return false;
-	else {
-		s = s.substr(8,s.size()-8);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
-
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
-
-				if(s.at(s.size()-1)==')'){
-					if(check_entRef(s1)&&check_varRef(s2))
-					{
-						designAbstraction da = {"ModifiesP",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-				}
-				else return false;
-			}
-		}
+QueryPreprocessor::DE_TYPE QueryPreprocessor::get_type(string synonym){
+	for(unsigned int i=0;i<declaration_reffs.size();i++){
+		if(synonym == declaration_reffs.at(i).synonym)
+			return declaration_reffs.at(i).type;
 	}
+	return "";
 }
 
-bool QueryPreprocessor::ModifiesS(string s){
-	s = trim(s);
-	unsigned int p = s.find("Modifies");
-	if(p!=0) return false;
-	else {
-		s = s.substr(8,s.size()-8);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
+bool QueryPreprocessor::relRef(string relation){
+    int p1 = relation.find("(");
+    int p2 = relation.find(",");
+    int p3 = relation.find(")");
+    string rel_type = trim(relation.substr(0,p1));
+    string arg1 = trim(relation.substr(p1+1,p2-p1-1));
+    string arg2 = trim(relation.substr(p2+1,p3-p2-1));
+    entry e = table[rel_type];
 
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
+    bool arg1_flag = false;
+    bool arg2_flag = false;
 
-				if(s.at(s.size()-1)==')'){
-					if(check_stmtRef(s1)&&check_varRef(s2))
-					{
-						designAbstraction da = {"ModifiesS",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-				}
-				else return false;
-			}
-		}
-	}
-}
+    string arg1_type, arg2_type;
+    arg_type_list arg1_list, arg2_list;
 
-bool QueryPreprocessor::UsesP(string s){
-	s = trim(s);
-	unsigned int p = s.find("Uses");
-	if(p!=0) return false;
-	else {
-		s = s.substr(4,s.size()-4);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
+    if(check_synonym(arg1)){
+        arg1_type = get_type(arg1);
+        arg1_list= e.arg1_list;
+        for(unsigned int i=0;i<arg1_list.synonym_type.size();i++){
+            if (arg1_type == arg1_list.synonym_type[i])
+                arg1_flag = true;
+                break;
+        }
+    }else if(arg1=="_"&& arg1_list.underscore){
+        arg1_type = "";
+        arg1_flag = true;
+    }else if(check_Integer(arg1)&&arg1_list.int_type){
+        arg1_type = "integer";
+        arg1_flag = true;
+    }else{
+        if (arg1[0]=='"' && arg1[arg1.size()-1]=='"' && arg1_list.string_type)
+            arg1_type = "string";
+            arg1_flag = true;
+    }
 
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
+    if(check_synonym(arg2)){
+        arg2_type = get_type(arg2);
+        arg2_list= e.arg2_list;
+        for(unsigned int i=0;i<arg2_list.synonym_type.size();i++){
+            if (arg2_type == arg2_list.synonym_type[i])
+                arg2_flag = true;
+                break;
+        }
+    }else if(arg2=="_"&& arg2_list.underscore){
+        arg2_type = "";
+        arg2_flag = true;
+    }else if(check_Integer(arg2)&&arg2_list.int_type){
+        arg2_type = "integer";
+        arg2_flag = true;
+    }else{
+        if (arg2[0]=='"' && arg2[arg2.size()-1]=='"' && arg2_list.string_type)
+            arg2_type = "string";
+            arg2_flag = true;
+    }
 
-				if(s.at(s.size()-1)==')'){
-					if(check_entRef(s1)&&check_varRef(s2))
-					{
-						designAbstraction da = {"UsesP",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-				}
-				else return false;
-			}
-		}
-	}
-}
+    if(arg1_flag&&arg2_flag){
+        designAbstraction da = {rel_type,arg1,arg1_type,arg2,arg2_type};
+        relations.push_back(da);
+        return true;
+    }else return false;
 
-bool QueryPreprocessor::UsesS(string s){
-	s = trim(s);
-	unsigned int p = s.find("Uses");
-	if(p!=0) return false;
-	else {
-		s = s.substr(4,s.size()-4);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
-
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
-
-				if(s.at(s.size()-1)==')'){
-					if(check_stmtRef(s1)&&check_varRef(s2))
-					{
-						designAbstraction da = {"UsesS",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-				}
-				else return false;
-			}
-		}
-	}
-}
-
-bool QueryPreprocessor::Calls(string s){
-	s = trim(s);
-	unsigned int p = s.find("Calls");
-	if(p!=0) return false;
-	else {
-		s = s.substr(5,s.size()-5);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
-
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
-
-				if(s.at(s.size()-1)==')'){
-					if(check_entRef(s1)&&check_entRef(s2))
-					{
-						designAbstraction da = {"Calls",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-				}
-				else return false;
-			}
-		}
-	}
-}
-
-bool QueryPreprocessor::CallsT(string s){
-	s = trim(s);
-	unsigned int p = s.find("Calls*");
-	if(p!=0) return false;
-	else {
-		s = s.substr(6,s.size()-6);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
-
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
-
-				if(s.at(s.size()-1)==')'){
-					if(check_entRef(s1)&&check_entRef(s2))
-					{
-						designAbstraction da = {"CallsT",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-				}
-				else return false;
-			}
-		}
-	}
-}
-
-bool QueryPreprocessor::Parent(string s){
-	s = trim(s);
-	unsigned int p = s.find("Parent");
-	if(p!=0) return false;
-	else {
-		s = s.substr(6,s.size()-6);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
-
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
-
-				if(s.at(s.size()-1)==')'){
-					if(check_stmtRef(s1)&&check_stmtRef(s2))
-					{
-						designAbstraction da ={"Parent",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-				}
-				else return false;
-			}
-		}
-	}
-}
-
-bool QueryPreprocessor::ParentT(string s){
-	s = trim(s);
-	unsigned int p = s.find("Parent*");
-	if(p!=0) return false;
-	else {
-		s = s.substr(7,s.size()-7);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
-
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
-
-				if(s.at(s.size()-1)==')'){
-					if(check_stmtRef(s1)&&check_stmtRef(s2))
-					{
-						designAbstraction da = {"ParentT",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-				}
-				else return false;
-			}
-		}
-	}
-}
-
-bool QueryPreprocessor::Follows(string s){
-	s = trim(s);
-	unsigned int p = s.find("Follows");
-	if(p!=0) return false;
-	else {
-		s = s.substr(7,s.size()-7);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
-
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
-
-				if(s.at(s.size()-1)==')'){
-					if(check_stmtRef(s1)&&check_stmtRef(s2))
-					{
-						designAbstraction da ={"Follows",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-				}
-				else return false;
-			}
-		}
-	}
-}
-
-bool QueryPreprocessor::FollowsT(string s){
-	s = trim(s);
-	unsigned int p = s.find("Follows*");
-	if(p!=0) return false;
-	else {
-		s = s.substr(8,s.size()-8);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
-
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
-
-				if(s.at(s.size()-1)==')'){
-					if(check_stmtRef(s1)&&check_stmtRef(s2))
-					{
-						designAbstraction da = {"FollowsT",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-				}
-				else return false;
-			}
-		}
-	}
-}
-
-bool QueryPreprocessor::Next(string s){
-	s = trim(s);
-	unsigned int p = s.find("Next");
-	if(p!=0) return false;
-	else {
-		s = s.substr(4,s.size()-4);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
-
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
-
-				if(s.at(s.size()-1)==')'){
-					if(check_lineRef(s1)&&check_lineRef(s2))
-					{
-						designAbstraction da ={"Next",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-				}
-				else return false;
-			}
-		}
-	}
-}
-
-bool QueryPreprocessor::NextT(string s){
-	s = trim(s);
-	unsigned int p = s.find("Next*");
-	if(p!=0) return false;
-	else {
-		s = s.substr(5,s.size()-5);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
-
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
-
-				if(s.at(s.size()-1)==')'){
-					if(check_lineRef(s1)&&check_lineRef(s2)){
-						designAbstraction da = {"NextT",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-				}
-				else return false;
-			}
-		}
-	}
-}
-
-bool QueryPreprocessor::Affects(string s){
-	s = trim(s);
-	unsigned int p = s.find("Affects");
-	if(p!=0) return false;
-	else {
-		s = s.substr(7,s.size()-7);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
-
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
-
-				if(s.at(s.size()-1)==')'){
-					if(check_stmtRef(s1)&&check_stmtRef(s2)){
-						designAbstraction da = {"Affects",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-				}
-				else return false;
-			}
-		}
-	}
-}
-
-bool QueryPreprocessor::AffectsT(string s){
-	s = trim(s);
-	unsigned int p = s.find("Affects*");
-	if(p!=0) return false;
-	else {
-		s = s.substr(8,s.size()-8);
-		s = trim(s);
-		p = s.find("(");
-		if(p!=0) return false;
-		else {
-			s = s.substr(1,s.size()-1);
-			s = trim(s);
-
-			p = s.find(",");
-			if(p>s.size()) return false;
-			else {
-				string s1 = trim(s.substr(0,p));
-				string s2 = trim(s.substr(p+1,s.size()-p-2));
-
-				if(s.at(s.size()-1)==')'){
-					if(check_stmtRef(s1)&&check_stmtRef(s2)){
-						designAbstraction da ={"AffectsT",s1,s2};
-						relations.push_back(da);
-						return true;
-					}
-					else return false;
-
-				}
-				else return false;
-			}
-		}
-	}
-}
-
-bool QueryPreprocessor::relRef(string relRef){
-	return ModifiesP(relRef)||ModifiesS(relRef)||UsesP(relRef)||UsesS(relRef)||Calls(relRef)||CallsT(relRef)||Parent(relRef)||ParentT(relRef)||Follows(relRef)||FollowsT(relRef)||Next(relRef)||NextT(relRef)||Affects(relRef)||AffectsT(relRef);
 }
 
 bool QueryPreprocessor::relCond(string s){
@@ -743,9 +537,6 @@ bool QueryPreprocessor::relCond(string s){
 	}
 	else return relRef(s);
 }
-
-/// -------------------------------------End such that-----------------------------
-
 
 
 /// -----------SIMPLE expression validation-----------------------------------------
@@ -807,6 +598,7 @@ bool QueryPreprocessor::check_expr(string s){    ///handle simple expr without b
 
 
 }
+
 bool QueryPreprocessor::check_expr_f(string s){
 	std::map<int,string> op_positions;
 	std::map<int,string>::reverse_iterator rit;
@@ -1018,7 +810,6 @@ QueryPreprocessor::tree_node QueryPreprocessor::build_tree_term(string s){
 	return t;
 }
 
-
 QueryPreprocessor::tree_node QueryPreprocessor::build_tree_expr(string s){
 	s = trim(s);
 	if(s.at(0)=='('&&s.at(s.size()-1)==')')
@@ -1211,7 +1002,6 @@ QueryPreprocessor::tree_node QueryPreprocessor::build_tree(string s){
 	return t;
 }
 
-
 bool QueryPreprocessor::check_expr_spec(string s){
 
 	s = trim(s);
@@ -1226,14 +1016,6 @@ bool QueryPreprocessor::check_expr_spec(string s){
 		return check_expr_spec(s);
 
 	}else return false;
-}
-
-QueryPreprocessor::DE_TYPE QueryPreprocessor::get_type(string synonym){
-	for(unsigned int i=0;i<declaration_reffs.size();i++){
-		if(synonym == declaration_reffs.at(i).synonym)
-			return declaration_reffs.at(i).type;
-	}
-	return "";
 }
 
 bool QueryPreprocessor::pattern_assign(string s){
@@ -1268,7 +1050,7 @@ bool QueryPreprocessor::pattern_assign(string s){
 
 						expr_spec = expr_spec.substr(p1+1,p2-p1-1);
 						tree_node t = build_tree(expr_spec);
-						pattern patt = {"p_assign", synonym,varRef,false,t};
+						pattern patt = {"p_assign", synonym,varRef,true,t};
 						patterns.push_back(patt);
 					}
 					else {
@@ -1277,7 +1059,7 @@ bool QueryPreprocessor::pattern_assign(string s){
 
 						expr_spec = expr_spec.substr(p1+1,p2-p1-1);
 						tree_node t = build_tree(expr_spec);
-						pattern patt = {"p_assign", synonym,varRef,true,t};
+						pattern patt = {"p_assign", synonym,varRef,false,t};
 						patterns.push_back(patt);
 					}
 
@@ -1392,35 +1174,126 @@ bool QueryPreprocessor::patternCond(string patternCond){
 }
 
 
-
-
 /// ----------- with clause  functions-------------------------
 
-bool QueryPreprocessor::check_ref(string s){
-	s = trim(s);
-	if(check_synonym(s)){
-		if(exists(s)) return true;
-		else return false;
-	}
-	if(s.at(0)=='"'&&s.at(s.size()-1)=='"')
-		s = s.substr(1,s.size()-2);
-	return check_IDENT(s)||check_Integer(s)||check_attrRef(s);
-}
+void QueryPreprocessor::build_attr_table(){
+    attr_entry e;
+    e= {"procedure","string"};
+    attr_table["procName"] =e;
 
+    e = {"variable","string"};
+    attr_table["varName"] = e;
+
+    e = {"constant","integer"};
+    attr_table["value"] = e;
+
+    e = {"stmt","integer"};
+    attr_table["stmt#"] = e;
+
+    e = {"prog_line","integer"};
+    attr_table["prog_line"];
+
+    e = {"integer","integer"};
+    attr_table["integer"] = e ;
+
+    e = {"string","string"};
+    attr_table["string"] = e ;
+}
 
 bool QueryPreprocessor::attrCompare(string s){
-	unsigned int p = s.find("=");
-	if(p>s.size()) return false;
-	string s1 = trim(s.substr(0,p));
-	string s2 = trim(s.substr(p+1,s.size()-p-1));
-	if(check_ref(s1)&&check_ref(s2)){
-		attr_compare a = {s1,s2};
-		attr_pairs.push_back(a);
-		return true;
-	}
-	else return false;
+    unsigned int p = s.find("=");
+    if(p>s.size()) return false;
+    string ref1 = trim(s.substr(0,p));
+    string ref2 = trim(s.substr(p+1,s.size()-p-1));
 
+    string evaluation_type;
+    bool flag1 = false;
+    bool flag2 = false;
+    string ref1_prefix, ref1_postfix, ref2_prefix, ref2_postfix;
+    int unsigned p1 = ref1.find(".");
+    if(p1<ref1.size()){
+        ref1_prefix = trim(ref1.substr(0,p1));
+        ref1_postfix = trim(ref1.substr(p1+1,ref1.size()-p1-1));
+        attr_entry e = attr_table[ref1_postfix];
+        string ref1_prefix_type = get_type(ref1_prefix);
+        if(ref1_prefix_type == e.prefix_type){
+            flag1 = true;
+            evaluation_type = e.evaluation_type;
+        }
+
+    }else{
+        if(check_Integer(ref1)){
+            ref1_prefix = ref1;
+            ref1_postfix = "integer";
+            evaluation_type = "integer";
+            flag1 = true;
+        }else if(check_synonym(ref1)){
+            string ref1_prefix_type = get_type(ref1);
+            if(ref1_prefix_type == "prog_line"){
+                ref1_prefix = ref1;
+                ref1_postfix = "prog_line";
+                evaluation_type = "integer";
+                flag1 = true;
+            }
+        }else{
+            if(ref1[0]=='"' && ref1[ref1.size()-1]=='"'){
+                ref1_prefix = ref1;
+                ref1_postfix = "string";
+                evaluation_type = "string";
+                flag1 = true;
+            }
+        }
+    }
+
+    unsigned int p2 = ref2.find(".");
+    if(p2<ref2.size()){
+        ref2_prefix = trim(ref2.substr(0,p2));
+        ref2_postfix = trim(ref2.substr(p2+1,ref2.size()-p2-1));
+        attr_entry e = attr_table[ref2_postfix];
+        string ref2_prefix_type = get_type(ref2_prefix);
+        if(ref2_prefix_type == e.prefix_type){
+            if(evaluation_type!=e.evaluation_type)
+                return false;
+            flag2 = true;
+        }
+
+    }else{
+        if(check_Integer(ref2)){
+            ref2_prefix = ref2;
+            ref2_postfix = "integer";
+            if(evaluation_type != "integer")
+                return false;
+            flag2 = true;
+        }else if(check_synonym(ref2)){
+            string ref2_prefix_type = get_type(ref2);
+            if(ref2_prefix_type == "prog_line"){
+                ref2_prefix = ref2;
+                ref2_postfix = "prog_line";
+                if(evaluation_type != "integer")
+                    return false;
+                flag2 = true;
+            }
+        }else{
+            if(ref2[0]=='"' && ref2[ref2.size()-1]=='"'){
+                ref2_prefix = ref2;
+                ref2_postfix = "string";
+                if(evaluation_type != "string")
+                    return false;
+                flag2 = true;
+            }
+        }
+    }
+
+    if(flag1&&flag2){
+        attrRef r1 = {ref1_prefix,ref1_postfix};
+        attrRef r2 = {ref2_prefix,ref2_postfix};
+        attr_compare compare = {r1,r2,evaluation_type};
+        attr_pairs.push_back(compare);
+        return true;
+    }
+    else return false;
 }
+
 bool QueryPreprocessor::attrCond(string s){
 	unsigned int p = s.find("and");
 	if(p<s.size()){
@@ -1544,7 +1417,6 @@ bool QueryPreprocessor::validate_declaration(string declare_cl){
 	return true;
 }
 
-
 bool QueryPreprocessor::validate_result(string result_clause){
 	result_clause = trim(result_clause);
 	if(result_clause=="BOOLEAN"){
@@ -1583,46 +1455,41 @@ bool QueryPreprocessor::process_query(string query){
 	result_cl = query.substr(p0+6, p1-p0-6);
 	if(!validate_declaration(declaration_cl)||!validate_result(result_cl)) return false;
 
-    if(positions.size()>1){
-        it++;
-        int p2 = it->first;
+	it++;
+	int p2 = it->first;
 
 
 
-        while ( it!=positions.end()){
-            if(cl_type == "such that"){
-                string suchthat = query.substr(p1,p2-p1);
+	while ( it!=positions.end()){
+		if(cl_type == "such that"){
+			string suchthat = query.substr(p1,p2-p1);
 
-                if(validate_suchthat(suchthat)){
-                    p1 = p2;
-                    cl_type = it->second;
-                }
-                else return false;
-            }
-            else if(cl_type == "with"){
-                string with = query.substr(p1,p2-p1);
-                if(validate_with(with)){
-                    p1 = p2;
-                    cl_type = it->second;
-                }
-                else return false;
-            }
-            else {
-                string pattern = query.substr(p1,p2-p1);
-
-                if(validate_pattern(pattern)){
-                    p1 = p2;
-                    cl_type = it->second;
-                }
-                else return false;
-            }
-			it++;
-			if(it!=positions.end()){			
-				p2 = it->first;
+			if(validate_suchthat(suchthat)){
+				p1 = p2;
+				cl_type = it->second;
 			}
-            
-        }
-    }
+			else return false;
+		}
+		else if(cl_type == "with"){
+			string with = query.substr(p1,p2-p1);
+			if(validate_with(with)){
+				p1 = p2;
+				cl_type = it->second;
+			}
+			else return false;
+		}
+		else {
+			string pattern = query.substr(p1,p2-p1);
+
+			if(validate_pattern(pattern)){
+				p1 = p2;
+				cl_type = it->second;
+			}
+			else return false;
+		}
+		it++;
+		p2 = it->first;
+	}
 
 	if(cl_type == "such that"){
 		string suchthat = query.substr(p1,query.size()-p1);
@@ -1654,9 +1521,10 @@ void QueryPreprocessor::print_result(){
 }
 
 void QueryPreprocessor::print_relations(){
-	for(unsigned int i=0;i<relations.size();i++){
-		cout<<relations.at(i).type<<" "<<relations.at(i).ref1<<" "<<relations.at(i).ref2<<"\n";
-	}
+    for(unsigned int i=0;i<relations.size();i++){
+            designAbstraction da = relations.at(i);
+            cout<<da.relation_type<<" "<<da.ref1<<" "<<da.ref1_type<<" "<<da.ref2<<" "<<da.ref2_type<<"\n";
+    }
 }
 
 void QueryPreprocessor::print_tree(tree_node t){
@@ -1666,6 +1534,7 @@ void QueryPreprocessor::print_tree(tree_node t){
 	if(t.right!=NULL) print_tree(*(t.right));
 
 }
+
 void QueryPreprocessor::print_patterns(){
 	for(unsigned int i=0;i<patterns.size();i++){
 		cout<<patterns.at(i).type<<" "<<patterns.at(i).synonym<<" "<<patterns.at(i).varRef<<" "<<patterns.at(i).exact<<"\n";
@@ -1674,11 +1543,14 @@ void QueryPreprocessor::print_patterns(){
 	}
 }
 
-
 void QueryPreprocessor::print_attr_pairs(){
-	for(unsigned int i=0;i<attr_pairs.size();i++){
-		cout<<attr_pairs.at(i).attr_left<<"  "<<attr_pairs.at(i).attr_right<<"\n";
-	}
+    for(unsigned int i=0;i<attr_pairs.size();i++){
+            attr_compare compare = attr_pairs.at(i);
+            attrRef left = compare.left_ref;
+            attrRef right = compare.right_ref;
+            cout<<left.prefix<<"  "<<left.postfix<<" "
+            <<right.prefix<<" "<<right.postfix<<" "<<compare.evaluation_type<<"\n";
+    }
 }
 
 void QueryPreprocessor::print_query(){
@@ -1709,35 +1581,6 @@ vector<QueryPreprocessor::pattern> QueryPreprocessor::getPatterns(){
 vector<QueryPreprocessor::attr_compare> QueryPreprocessor::getAttrPairs(){
 	return attr_pairs;
 }
-/// -------------main function-------------------------------------------
-/*int main()
-{
-string query;
-ifstream infile;
 
-infile.open("query.txt");
-
-while(!infile.eof()){
-getline(infile,query);
-cout<<query<<"\n";
-if(process_query(query)){
-
-cout<<"valid query\n";
-print_query();
-}
-else cout<<"invalid query\n";
-
-/// clear vectors
-positions.clear();
-declaration_reffs.clear();
-result_reffs.clear();
-patterns.clear();
-relations.clear();
-attr_pairs.clear();
-cout<<"\n";
-}
-
-return 0;
-}  */
 
 
