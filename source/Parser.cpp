@@ -181,7 +181,14 @@ int Parser::stmt(vector<int> stmtListNumber,vector < PairNumber > useModifyList)
 			pkb->insertFollow(p,pkb->getStmtType(p), line,"if");
 		}
 		processIf(useModifyList);
-	} else {
+	} else if(nextToken.compare("call") == 0) {
+		getToken();
+		string calledProcedure = nextToken;
+		pkb->insert(procName,calledProcedure);
+		getToken();
+		match(";");
+		// zhao yang, procName call calledProcedure;
+	}else {
 		if (stmtListNumber.size()>1) {
 			int p = stmtListNumber[stmtListNumber.size()-2];
 			//printf("##Follow  %d  %d \n",*previousStmtLine,line);
