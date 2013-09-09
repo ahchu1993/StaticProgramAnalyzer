@@ -9,6 +9,23 @@
 /* Begin PBXBuildFile section */
 		A1959AD717D5B894003793F7 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1959AD617D5B894003793F7 /* main.cpp */; };
 		A1959AD917D5B894003793F7 /* cs3202.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = A1959AD817D5B894003793F7 /* cs3202.1 */; };
+		A1F20A8617DDB118000CD15F /* AST.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A6417DDB118000CD15F /* AST.cpp */; };
+		A1F20A8717DDB118000CD15F /* CallTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A6617DDB118000CD15F /* CallTable.cpp */; };
+		A1F20A8817DDB118000CD15F /* ConstantTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A6817DDB118000CD15F /* ConstantTable.cpp */; };
+		A1F20A8917DDB118000CD15F /* DesignExtractor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A6A17DDB118000CD15F /* DesignExtractor.cpp */; };
+		A1F20A8A17DDB118000CD15F /* FollowTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A6C17DDB118000CD15F /* FollowTable.cpp */; };
+		A1F20A8B17DDB118000CD15F /* ModifyTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A6E17DDB118000CD15F /* ModifyTable.cpp */; };
+		A1F20A8C17DDB118000CD15F /* ParentTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A7017DDB118000CD15F /* ParentTable.cpp */; };
+		A1F20A8D17DDB118000CD15F /* Parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A7217DDB118000CD15F /* Parser.cpp */; };
+		A1F20A8E17DDB118000CD15F /* PKB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A7417DDB118000CD15F /* PKB.cpp */; };
+		A1F20A8F17DDB118000CD15F /* ProcTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A7617DDB118000CD15F /* ProcTable.cpp */; };
+		A1F20A9017DDB118000CD15F /* Query.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A7817DDB118000CD15F /* Query.cpp */; };
+		A1F20A9117DDB118000CD15F /* QueryEvaluator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A7A17DDB118000CD15F /* QueryEvaluator.cpp */; };
+		A1F20A9217DDB118000CD15F /* QueryPreprocessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A7C17DDB118000CD15F /* QueryPreprocessor.cpp */; };
+		A1F20A9317DDB118000CD15F /* StmtTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A7E17DDB118000CD15F /* StmtTable.cpp */; };
+		A1F20A9417DDB118000CD15F /* TNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A8017DDB118000CD15F /* TNode.cpp */; };
+		A1F20A9517DDB118000CD15F /* UseTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A8217DDB118000CD15F /* UseTable.cpp */; };
+		A1F20A9617DDB118000CD15F /* VarTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1F20A8417DDB118000CD15F /* VarTable.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +45,40 @@
 		A1959AD317D5B894003793F7 /* cs3202 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cs3202; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1959AD617D5B894003793F7 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A1959AD817D5B894003793F7 /* cs3202.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = cs3202.1; sourceTree = "<group>"; };
+		A1F20A6417DDB118000CD15F /* AST.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AST.cpp; sourceTree = "<group>"; };
+		A1F20A6517DDB118000CD15F /* AST.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AST.h; sourceTree = "<group>"; };
+		A1F20A6617DDB118000CD15F /* CallTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CallTable.cpp; sourceTree = "<group>"; };
+		A1F20A6717DDB118000CD15F /* CallTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CallTable.h; sourceTree = "<group>"; };
+		A1F20A6817DDB118000CD15F /* ConstantTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConstantTable.cpp; sourceTree = "<group>"; };
+		A1F20A6917DDB118000CD15F /* ConstantTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstantTable.h; sourceTree = "<group>"; };
+		A1F20A6A17DDB118000CD15F /* DesignExtractor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DesignExtractor.cpp; sourceTree = "<group>"; };
+		A1F20A6B17DDB118000CD15F /* DesignExtractor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesignExtractor.h; sourceTree = "<group>"; };
+		A1F20A6C17DDB118000CD15F /* FollowTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FollowTable.cpp; sourceTree = "<group>"; };
+		A1F20A6D17DDB118000CD15F /* FollowTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowTable.h; sourceTree = "<group>"; };
+		A1F20A6E17DDB118000CD15F /* ModifyTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ModifyTable.cpp; sourceTree = "<group>"; };
+		A1F20A6F17DDB118000CD15F /* ModifyTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModifyTable.h; sourceTree = "<group>"; };
+		A1F20A7017DDB118000CD15F /* ParentTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParentTable.cpp; sourceTree = "<group>"; };
+		A1F20A7117DDB118000CD15F /* ParentTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParentTable.h; sourceTree = "<group>"; };
+		A1F20A7217DDB118000CD15F /* Parser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Parser.cpp; sourceTree = "<group>"; };
+		A1F20A7317DDB118000CD15F /* Parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parser.h; sourceTree = "<group>"; };
+		A1F20A7417DDB118000CD15F /* PKB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PKB.cpp; sourceTree = "<group>"; };
+		A1F20A7517DDB118000CD15F /* PKB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PKB.h; sourceTree = "<group>"; };
+		A1F20A7617DDB118000CD15F /* ProcTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProcTable.cpp; sourceTree = "<group>"; };
+		A1F20A7717DDB118000CD15F /* ProcTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProcTable.h; sourceTree = "<group>"; };
+		A1F20A7817DDB118000CD15F /* Query.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Query.cpp; sourceTree = "<group>"; };
+		A1F20A7917DDB118000CD15F /* Query.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Query.h; sourceTree = "<group>"; };
+		A1F20A7A17DDB118000CD15F /* QueryEvaluator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QueryEvaluator.cpp; sourceTree = "<group>"; };
+		A1F20A7B17DDB118000CD15F /* QueryEvaluator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueryEvaluator.h; sourceTree = "<group>"; };
+		A1F20A7C17DDB118000CD15F /* QueryPreprocessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = QueryPreprocessor.cpp; sourceTree = "<group>"; };
+		A1F20A7D17DDB118000CD15F /* QueryPreprocessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueryPreprocessor.h; sourceTree = "<group>"; };
+		A1F20A7E17DDB118000CD15F /* StmtTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StmtTable.cpp; sourceTree = "<group>"; };
+		A1F20A7F17DDB118000CD15F /* StmtTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StmtTable.h; sourceTree = "<group>"; };
+		A1F20A8017DDB118000CD15F /* TNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TNode.cpp; sourceTree = "<group>"; };
+		A1F20A8117DDB118000CD15F /* TNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TNode.h; sourceTree = "<group>"; };
+		A1F20A8217DDB118000CD15F /* UseTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UseTable.cpp; sourceTree = "<group>"; };
+		A1F20A8317DDB118000CD15F /* UseTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UseTable.h; sourceTree = "<group>"; };
+		A1F20A8417DDB118000CD15F /* VarTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VarTable.cpp; sourceTree = "<group>"; };
+		A1F20A8517DDB118000CD15F /* VarTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VarTable.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +97,7 @@
 			children = (
 				A1959AD517D5B894003793F7 /* cs3202 */,
 				A1959AD417D5B894003793F7 /* Products */,
+				A1F20A6317DDB118000CD15F /* source */,
 			);
 			sourceTree = "<group>";
 		};
@@ -64,6 +116,47 @@
 				A1959AD817D5B894003793F7 /* cs3202.1 */,
 			);
 			path = cs3202;
+			sourceTree = "<group>";
+		};
+		A1F20A6317DDB118000CD15F /* source */ = {
+			isa = PBXGroup;
+			children = (
+				A1F20A6417DDB118000CD15F /* AST.cpp */,
+				A1F20A6517DDB118000CD15F /* AST.h */,
+				A1F20A6617DDB118000CD15F /* CallTable.cpp */,
+				A1F20A6717DDB118000CD15F /* CallTable.h */,
+				A1F20A6817DDB118000CD15F /* ConstantTable.cpp */,
+				A1F20A6917DDB118000CD15F /* ConstantTable.h */,
+				A1F20A6A17DDB118000CD15F /* DesignExtractor.cpp */,
+				A1F20A6B17DDB118000CD15F /* DesignExtractor.h */,
+				A1F20A6C17DDB118000CD15F /* FollowTable.cpp */,
+				A1F20A6D17DDB118000CD15F /* FollowTable.h */,
+				A1F20A6E17DDB118000CD15F /* ModifyTable.cpp */,
+				A1F20A6F17DDB118000CD15F /* ModifyTable.h */,
+				A1F20A7017DDB118000CD15F /* ParentTable.cpp */,
+				A1F20A7117DDB118000CD15F /* ParentTable.h */,
+				A1F20A7217DDB118000CD15F /* Parser.cpp */,
+				A1F20A7317DDB118000CD15F /* Parser.h */,
+				A1F20A7417DDB118000CD15F /* PKB.cpp */,
+				A1F20A7517DDB118000CD15F /* PKB.h */,
+				A1F20A7617DDB118000CD15F /* ProcTable.cpp */,
+				A1F20A7717DDB118000CD15F /* ProcTable.h */,
+				A1F20A7817DDB118000CD15F /* Query.cpp */,
+				A1F20A7917DDB118000CD15F /* Query.h */,
+				A1F20A7A17DDB118000CD15F /* QueryEvaluator.cpp */,
+				A1F20A7B17DDB118000CD15F /* QueryEvaluator.h */,
+				A1F20A7C17DDB118000CD15F /* QueryPreprocessor.cpp */,
+				A1F20A7D17DDB118000CD15F /* QueryPreprocessor.h */,
+				A1F20A7E17DDB118000CD15F /* StmtTable.cpp */,
+				A1F20A7F17DDB118000CD15F /* StmtTable.h */,
+				A1F20A8017DDB118000CD15F /* TNode.cpp */,
+				A1F20A8117DDB118000CD15F /* TNode.h */,
+				A1F20A8217DDB118000CD15F /* UseTable.cpp */,
+				A1F20A8317DDB118000CD15F /* UseTable.h */,
+				A1F20A8417DDB118000CD15F /* VarTable.cpp */,
+				A1F20A8517DDB118000CD15F /* VarTable.h */,
+			);
+			path = source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,6 +211,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				A1959AD717D5B894003793F7 /* main.cpp in Sources */,
+				A1F20A8617DDB118000CD15F /* AST.cpp in Sources */,
+				A1F20A8717DDB118000CD15F /* CallTable.cpp in Sources */,
+				A1F20A8817DDB118000CD15F /* ConstantTable.cpp in Sources */,
+				A1F20A8917DDB118000CD15F /* DesignExtractor.cpp in Sources */,
+				A1F20A8A17DDB118000CD15F /* FollowTable.cpp in Sources */,
+				A1F20A8B17DDB118000CD15F /* ModifyTable.cpp in Sources */,
+				A1F20A8C17DDB118000CD15F /* ParentTable.cpp in Sources */,
+				A1F20A8D17DDB118000CD15F /* Parser.cpp in Sources */,
+				A1F20A8E17DDB118000CD15F /* PKB.cpp in Sources */,
+				A1F20A8F17DDB118000CD15F /* ProcTable.cpp in Sources */,
+				A1F20A9017DDB118000CD15F /* Query.cpp in Sources */,
+				A1F20A9117DDB118000CD15F /* QueryEvaluator.cpp in Sources */,
+				A1F20A9217DDB118000CD15F /* QueryPreprocessor.cpp in Sources */,
+				A1F20A9317DDB118000CD15F /* StmtTable.cpp in Sources */,
+				A1F20A9417DDB118000CD15F /* TNode.cpp in Sources */,
+				A1F20A9517DDB118000CD15F /* UseTable.cpp in Sources */,
+				A1F20A9617DDB118000CD15F /* VarTable.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +326,7 @@
 				A1959ADE17D5B894003793F7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
