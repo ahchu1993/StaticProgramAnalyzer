@@ -47,13 +47,13 @@ public:
 	bool isConstant(string a);
 	void compareAST_Node(TNode* ast, QueryPreprocessor::pattern);
 
-	Colunm<int> QueryEvaluator::evaluate_follows(
+	Colunm<int> evaluate_follows(
 	int evaluate_position,string select_type, string evaluate_type,
 	QueryEvaluator::Colunm<int> pattern_result,int pattern_position, string relation);
 
 
 
-	Colunm<int> QueryEvaluator::evaluate_a_b_pattern_a();
+	Colunm<int> evaluate_a_b_pattern_a();
 private:
 	vector<QueryPreprocessor::entityReff> entity;
 	vector<QueryPreprocessor::designAbstraction> desAbstr;
