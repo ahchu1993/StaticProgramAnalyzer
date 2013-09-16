@@ -191,6 +191,21 @@ int Parser::stmt(vector<int> stmtListNumber,vector < PairNumber > useModifyList)
 		}
 		processIf(useModifyList);
 	} else if(nextToken.compare("call") == 0) {
+
+		// follow
+		if (stmtListNumber.size()>1) {
+			int p = stmtListNumber[stmtListNumber.size()-2];
+			//printf("##Follow  %d  %d \n",*previousStmtLine,line);
+			pkb->insertFollow(p,pkb->getStmtType(p), line,"call");
+		}
+		// stmt
+		pkb->insertStmt(line, "call");
+		// parent
+		if (useModifyList.size() > 0) {
+			pkb->insert(useModifyList[useModifyList.size() - 1].index, useModifyList[useModifyList.size() - 1].DE, line, "call");
+		}
+		// *** do we need AST here?
+
 		getToken();
 		string calledProcedure = nextToken;
 		pkb->insert(procName,calledProcedure);

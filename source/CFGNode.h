@@ -7,7 +7,6 @@ class CFGNode
 {
 public:
 	CFGNode(int statementNumber=0);
-	~CFGNode(void);
 	void addChild(CFGNode node);
 	int stmtNum; // 0 means it's not a cfg node.. just a linking node
 	int numOfChildren;
