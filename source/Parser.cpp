@@ -13,6 +13,8 @@ Parser::Parser(PKB* p) {
 }
 
 bool Parser::parseInput (string in) {
+	//cout<<CFGList.size()<<endl;
+	getchar();
 	initializeInput(in);
 	codeProcess();
 	return true;
@@ -100,7 +102,9 @@ bool Parser::program () {
 
 
 	getToken();
+	procedureIndex = 0;
 	while(nextToken.length()!=0){
+		procedureIndex++;
 		procedure();
 	}
 	return true;
@@ -110,6 +114,11 @@ bool Parser::procedure() {
 	match ("procedure");
 	procName = nextToken;
 	pkb->insertProc(procName);
+
+	//create cfg tree for current procedure
+
+
+
 	getToken();
 	match ("{");
 	vector<int> stmtListNumber;
@@ -263,10 +272,15 @@ bool Parser::ifProcess(vector < PairNumber > useModifyList) {
 	match ("then");
 	match ("{");
 	int ifLine = line;
-	stmtLst(useModifyList);
+	stmtLst(useModifyList);  // tell parent
 	if (ifLine == line) {
 		error();
 	}
+	match ("}");
+
+	match("else");
+	match ("{");
+	stmtLst(useModifyList);
 	match ("}");
 	return true;
 }

@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include "PKB.h"
+#include "CFGNode.h"
 using namespace std;
 
 struct PairNumber {
@@ -27,6 +28,10 @@ private:
 	char *inputArray;
 	int inputSize;
 	PKB *pkb;
+	int procedureIndex;
+	vector <CFGNode> CFGList;
+
+
 
 	string checkVariable (string variable);
 	void initializeInput(string input);
