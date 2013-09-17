@@ -18,14 +18,15 @@ using namespace std;
 class EvaluationTree{
 public:
     //Attributes
-    template<class T>
+    //template<class T>
 	struct e_node{
 		QueryPreprocessor::entityReff entity;
-        vector<e_node<T>*> links;
+        vector<e_node*> links;
         int weights;
 	};
     //Methods
-    
+    e_node addNode(e_node node);
+    void addLink(e_node parent, e_node child);
 };
 
 class QueryEvaluator{
@@ -58,16 +59,26 @@ public:
         desAbstr:
             with: 1
             pattern: 2
-            modify follow parent: 3
+            modify Use follow parent: 3
             next affect: 4
-            modify* follow* parent*: 30
+            follow* parent*: 30
             next*: 40
             affect*: 50
         parameter:
-            0 entity: 0
-            1 unselected entity: 10
-            1 selected eneity: 100
+      
+            1 constant: 0
+            2 constant: 1
+            1 unselected enity: 10
+            2 unselected entity: 50
+            1 selected entity: 100
+            2 selected eneity: 200
       */
+    /*
+      1. sort the desAbstr and eliminate duplicate desAbstr
+      2. Querying all the desAbstr with only constants
+      3. group the desAbstr with common entities with sorted order
+      4. In each group find out the chains
+     */
     
 private:
     vector<QueryPreprocessor::entityReff> entity;
