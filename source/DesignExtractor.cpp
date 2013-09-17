@@ -66,7 +66,7 @@ CFGNode* DesignExtractor::buildLink(int stmtNo)
 		int followedIndex = pkb->findFollowed(stmtNo);
 		if(followedIndex>0){
 			whileNode->addChild(buildLink(followedIndex));
-		}
+		}else whileNode->addChild(findNext(stmtNo));
 
 		return whileNode;
 	}else if(stmtType.compare("if")==0){
