@@ -7,7 +7,7 @@ CFGNode::CFGNode(int statementNumber)
 	numOfChildren = 0;
 }
 
-void CFGNode::addChild(CFGNode node)
+void CFGNode::addChild(CFGNode *node)
 {
 	childList.push_back(node);
 	numOfChildren++;

@@ -7,11 +7,10 @@ class CFGNode
 {
 public:
 	CFGNode(int statementNumber=0);
-	void addChild(CFGNode node);
+	void addChild(CFGNode *node);
 	int stmtNum; // 0 means it's not a cfg node.. just a linking node
 	int numOfChildren;
-private:
-	vector<CFGNode> childList;
+	vector<CFGNode *> childList;
 
 
 };
