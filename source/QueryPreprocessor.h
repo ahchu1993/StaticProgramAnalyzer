@@ -149,7 +149,7 @@ public:
 	
 	///--------------entry point to process a query-----------------------------------
 	bool process_query(string st_clause);
-
+	void group_relations();
 
 	///----------helper functions to print info--------------
 	void print_declaration();
@@ -192,7 +192,9 @@ private:
 	/// attr_pairs store all attr_compare(left attr , right attr) in with clause
 	vector<attr_compare> attr_pairs;
 	
-	
+	vector<designAbstraction> constant_relations;
+
+	vector<vector<designAbstraction>> grouped_relations;
 };
 
 
