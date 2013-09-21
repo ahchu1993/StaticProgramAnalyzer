@@ -1462,6 +1462,68 @@ bool QueryPreprocessor::validate_result(string result_clause){
 	else return false;
 }
 
+void QueryPreprocessor::group_relations(){
+    int total_count = relations.size();
+    int before = 0;
+    int c = 0;
+    map<string,int> dependence;
+    vector<int> relation_map;
+    for(unsigned i=0;i<relations.size();i++){
+        relation_map.push_back(0);
+    }
+
+    for(unsigned i=0;i<declaration_reffs.size();i++){
+        entityReff e = declaration_reffs.at(i);
+        string synonym = e.synonym;
+        dependence[synonym] = 0;
+    }
+
+
+
+    while(total_count>0){
+        vector<designAbstraction> group;
+
+        for(unsigned j =0;j<relation_map.size();j++){
+                if(relation_map[j]==0){
+                    designAbstraction first = relations.at(j);
+                    string r1 = first.ref1;
+                    string r2 = first.ref2;
+                    
+                    dependence[r1] = 1;
+                    dependence[r2] = 1;
+                    break;
+                }
+        }
+
+        do{
+            before = c;
+            for (unsigned int i=0;i< relations.size();i++){
+                if(relation_map[i]==1) continue;
+                designAbstraction r = relations.at(i);
+                string r1 = r.ref1;
+                string r2 = r.ref2;
+                if(dependence[r1]==1||dependence[r2]==1){
+                    dependence[r1] = 1;
+                    dependence[r2] = 1;
+                    group.push_back(r);
+                    c++;
+                    total_count--;
+                    relation_map[i] =1;
+                }
+            }
+        }while(c!=before);
+        //clear  dependence map
+        for(unsigned i=0;i<declaration_reffs.size();i++){
+            entityReff e = declaration_reffs.at(i);
+            string synonym = e.synonym;
+            dependence[synonym] = 0;
+        }
+
+        grouped_relations.push_back(group);
+        c=0;
+    }
+}
+
 
 bool QueryPreprocessor::process_query(string query){
 
