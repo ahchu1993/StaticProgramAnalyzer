@@ -17,6 +17,7 @@ bool Parser::parseInput (string in) {
 	getchar();
 	initializeInput(in);
 	codeProcess();
+	pkb->buildCFG();
 	return true;
 }
 

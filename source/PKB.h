@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include <algorithm> 
 using namespace std;
 typedef short PROC;
 
@@ -19,6 +19,7 @@ typedef short PROC;
 #include "ParentTable.h"
 #include "CallTable.h"
 #include "AST.h"
+#include "CFG.h"
 class PKB {
 private:
 	VarTable varTable;
@@ -31,7 +32,12 @@ private:
 	ParentTable parentTable;
 	CallTable callTable;
 	AST ast;
-	
+
+	//CFG -ZHAO yang
+	CFG cfg;
+
+
+
 	//static PKB* pInstance;
 public:
 	//static PKB* instance();
@@ -121,5 +127,18 @@ public:
 	vector<int> getStmtForConst(int number);
 	vector<int> getAllStmtForConst();
 	void printConstTable();
+
+	// CFG - zhao yang
+	void buildCFG();
+	void buildTree(int procIndex);
+	CFGNode* buildLink(int stmtNum);
+	int currentIndex;
+	vector<int> visited;
+	CFGNode* findNext(int stmtNo);
+	void printCFG();
+	void printfTree(CFGNode *node);
+
+	//next - zhao yang
+
 };
 #endif

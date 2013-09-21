@@ -253,3 +253,160 @@ vector<TNode> getChildren(TNode parent);
 TNode getLeftSibling(TNode node);
 TNode getRightSibling(TNode node);
 */
+
+
+
+
+///////////////////////////////////////////
+///////////////////////////////////////////
+/////////// CFG -Zhao Yang  ///////////////
+///////////////////////////////////////////
+///////////////////////////////////////////
+
+void PKB::buildCFG()
+{
+	currentIndex=1;
+	for(int i=0;i< getSizeStmtTable()+1;i++)
+	{
+		CFGNode * newNode = new CFGNode(i); // 0 is dummy
+		cfg.CFGNodes.push_back(newNode);
+		
+		visited.push_back(0);
+	}
+	cout<<"size proc table "<< getSizeProcTable()<<endl;
+	int procNum =  getSizeProcTable();
+	for(int i=0;i<procNum;i++){
+		buildTree(i);
+		getchar();
+	}
+}
+
+void PKB::buildTree(int procIndex)
+{
+	cout<<"current index "<<currentIndex<<endl;
+	cfg.CFGHeaderList.push_back(cfg.CFGNodes[currentIndex]);
+	buildLink(currentIndex);
+}
+// top down approach
+CFGNode* PKB::buildLink(int stmtNo)
+{
+	if(visited[stmtNo]==0)
+		visited[stmtNo]=1;
+	else return cfg.CFGNodes[stmtNo];
+	currentIndex++;
+	string stmtType =   getStmtType(stmtNo);
+
+	cout<<"stmtType: "<<stmtType<<"  "<<stmtNo<<endl;
+	//cout<<"followed: "<< findFollowed(1)<<endl; // find after
+	//cout<<"follows: "<< findFollows(1)<<endl;  // find prev
+
+	if(stmtType.compare("while")==0){
+
+		CFGNode *whileNode=cfg.CFGNodes[stmtNo];
+
+		whileNode->addChild(buildLink(stmtNo+1)); // must be his child
+
+		int followedIndex =  findFollowed(stmtNo);
+		if(followedIndex>0){
+			whileNode->addChild(buildLink(followedIndex));
+		}
+
+		return whileNode;
+	}else if(stmtType.compare("if")==0){
+		CFGNode *ifNode=cfg.CFGNodes[stmtNo];
+
+		vector<int> childrenList =  getChildren(stmtNo,"stmt"); // *** why?
+		cout<<"child "<<childrenList.size()<<"  stmtNo: "<<stmtNo<<endl;
+		
+		// find else stmtList
+		int afterElseStmtNo=0;
+		std::sort (childrenList.begin(), childrenList.end());
+		for(int i=0;i<childrenList.size()-1;i++){
+			int index1=childrenList[i];
+			int index2=childrenList[i+1];
+			if(! isFollowed(index1,index2)){
+				afterElseStmtNo = index2;
+				break;
+			}
+		}
+
+		cout<<"haha found: "<<"  "<<afterElseStmtNo<<endl;
+
+		ifNode->addChild(buildLink(stmtNo+1)); // then
+		ifNode->addChild(buildLink(afterElseStmtNo)); // else
+
+		return ifNode;
+	}else{  // call or assign
+		// detect  self and ++stmtNo is follow or, otherwize find parent, then follow..
+		
+		CFGNode *node=cfg.CFGNodes[stmtNo];
+
+		int afterStmtNo = stmtNo+1;
+		if( isFollowed(stmtNo,afterStmtNo)){
+			node->addChild(buildLink(afterStmtNo));
+		}else{
+			CFGNode* nextNode= findNext(stmtNo);
+			if(nextNode->stmtNum==0)
+				return node;
+			else node->addChild(nextNode);
+		}
+		return node;
+	}
+
+	return NULL;
+}
+
+CFGNode* PKB::findNext(int stmtNo)
+{
+	int parentIndex =  getParent(stmtNo);	
+	if(parentIndex<=0){
+		return cfg.CFGNodes[0];
+	}
+	else{
+		string parentType =  getStmtType(parentIndex);
+		if(parentType.compare("while")==0){
+			return cfg.CFGNodes[parentIndex];
+		}else if(parentType.compare("if")==0){
+			int afterParentNo =  findFollowed(parentIndex);
+			if(afterParentNo>0){ // exits
+				return buildLink(afterParentNo);  // may be duplicated
+			}else {
+				return findNext(parentIndex);
+			}
+		}
+	}
+
+	return cfg.CFGNodes[0];
+}
+
+void PKB::printCFG()
+{
+	for(int i=0;i<visited.size();i++){
+		visited[i]=0;
+	}
+	cout<<" CFGList size "<<cfg.CFGHeaderList.size()<<endl;
+	for(int i=0;i<cfg.CFGHeaderList.size();i++){
+		cout<<" procedure "<<(i+1)<<endl;
+		CFGNode* rootNode = cfg.CFGHeaderList[i];
+		printfTree(rootNode);
+	}
+	getchar();
+	cout<<"CFG END"<<endl;
+	getchar();
+}
+void PKB::printfTree(CFGNode *node)
+{
+	int stmtNo = node->stmtNum;
+	if(visited[stmtNo]==0)
+		visited[stmtNo]=1;
+	else return;
+	for(int i=0;i<node->childList.size();i++)
+	{
+		cout<<node->stmtNum<<" to "<<node->childList[i]->stmtNum<<endl;
+		printfTree(node->childList[i]);
+	}
+	if(node->childList.size()==0)
+	{
+		cout<<node->stmtNum<<" to "<<"NO-WHERE"<<endl;
+	}
+}
