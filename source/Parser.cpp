@@ -13,6 +13,8 @@ Parser::Parser(PKB* p) {
 }
 
 bool Parser::parseInput (string in) {
+	//cout<<CFGList.size()<<endl;
+	getchar();
 	initializeInput(in);
 	codeProcess();
 	return true;
@@ -100,7 +102,9 @@ bool Parser::program () {
 
 
 	getToken();
+	procedureIndex = 0;
 	while(nextToken.length()!=0){
+		procedureIndex++;
 		procedure();
 	}
 	return true;
@@ -110,6 +114,11 @@ bool Parser::procedure() {
 	match ("procedure");
 	procName = nextToken;
 	pkb->insertProc(procName);
+
+	//create cfg tree for current procedure
+
+
+
 	getToken();
 	match ("{");
 	vector<int> stmtListNumber;
@@ -181,7 +190,29 @@ int Parser::stmt(vector<int> stmtListNumber,vector < PairNumber > useModifyList)
 			pkb->insertFollow(p,pkb->getStmtType(p), line,"if");
 		}
 		processIf(useModifyList);
-	} else {
+	} else if(nextToken.compare("call") == 0) {
+
+		// follow
+		if (stmtListNumber.size()>1) {
+			int p = stmtListNumber[stmtListNumber.size()-2];
+			//printf("##Follow  %d  %d \n",*previousStmtLine,line);
+			pkb->insertFollow(p,pkb->getStmtType(p), line,"call");
+		}
+		// stmt
+		pkb->insertStmt(line, "call");
+		// parent
+		if (useModifyList.size() > 0) {
+			pkb->insert(useModifyList[useModifyList.size() - 1].index, useModifyList[useModifyList.size() - 1].DE, line, "call");
+		}
+		// *** do we need AST here?
+
+		getToken();
+		string calledProcedure = nextToken;
+		pkb->insert(procName,calledProcedure);
+		getToken();
+		match(";");
+		// zhao yang, procName call calledProcedure;
+	}else {
 		if (stmtListNumber.size()>1) {
 			int p = stmtListNumber[stmtListNumber.size()-2];
 			//printf("##Follow  %d  %d \n",*previousStmtLine,line);
@@ -256,10 +287,15 @@ bool Parser::ifProcess(vector < PairNumber > useModifyList) {
 	match ("then");
 	match ("{");
 	int ifLine = line;
-	stmtLst(useModifyList);
+	stmtLst(useModifyList);  // tell parent
 	if (ifLine == line) {
 		error();
 	}
+	match ("}");
+
+	match("else");
+	match ("{");
+	stmtLst(useModifyList);
 	match ("}");
 	return true;
 }

@@ -60,12 +60,12 @@ public:
 		bool string_type;
 	};
 
-	struct entry{
+	struct entry{ // for table driven type checking
 		arg_type_list arg1_list;
 		arg_type_list arg2_list;
 	};
 	
-	struct attr_entry{
+	struct attr_entry{ // for attr_compare table
 		string prefix_type;
 		string evaluation_type;
 	};
