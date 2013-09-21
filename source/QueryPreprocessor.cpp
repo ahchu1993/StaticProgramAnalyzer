@@ -71,11 +71,13 @@ void QueryPreprocessor::addCallsTEntry(){
 
 void QueryPreprocessor::addParentEntry(){
 	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("prog_line");
 	arg1.synonym_type.push_back("stmt");
 	arg1.synonym_type.push_back("if");
 	arg1.synonym_type.push_back("while");
 	fillArg(&arg1,true,true,false);
 
+	arg2.synonym_type.push_back("prog_line");
 	arg2.synonym_type.push_back("stmt");
 	arg2.synonym_type.push_back("assign");
 	arg2.synonym_type.push_back("if");
@@ -87,11 +89,13 @@ void QueryPreprocessor::addParentEntry(){
 
 void QueryPreprocessor::addParentTEntry(){
 	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("prog_line");
 	arg1.synonym_type.push_back("stmt");
 	arg1.synonym_type.push_back("if");
 	arg1.synonym_type.push_back("while");
 	fillArg(&arg1,true,true,false);
 
+	arg2.synonym_type.push_back("prog_line");
 	arg2.synonym_type.push_back("stmt");
 	arg2.synonym_type.push_back("assign");
 	arg2.synonym_type.push_back("if");
@@ -103,12 +107,14 @@ void QueryPreprocessor::addParentTEntry(){
 
 void QueryPreprocessor::addFollowsEntry(){
 	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("prog_line");
 	arg1.synonym_type.push_back("stmt");
 	arg1.synonym_type.push_back("assign");
 	arg1.synonym_type.push_back("if");
 	arg1.synonym_type.push_back("while");
 	fillArg(&arg1,true,true,false);
 
+	arg2.synonym_type.push_back("prog_line");
 	arg2.synonym_type.push_back("stmt");
 	arg2.synonym_type.push_back("assign");
 	arg2.synonym_type.push_back("if");
@@ -120,12 +126,14 @@ void QueryPreprocessor::addFollowsEntry(){
 
 void QueryPreprocessor::addFollowsTEntry(){
 	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("prog_line");
 	arg1.synonym_type.push_back("stmt");
 	arg1.synonym_type.push_back("assign");
 	arg1.synonym_type.push_back("if");
 	arg1.synonym_type.push_back("while");
 	fillArg(&arg1,true,true,false);
 
+	arg2.synonym_type.push_back("prog_line");
 	arg2.synonym_type.push_back("stmt");
 	arg2.synonym_type.push_back("assign");
 	arg2.synonym_type.push_back("if");
@@ -138,9 +146,17 @@ void QueryPreprocessor::addFollowsTEntry(){
 void QueryPreprocessor::addNextEntry(){
 	arg_type_list arg1,arg2;
 	arg1.synonym_type.push_back("prog_line");
+	arg1.synonym_type.push_back("stmt");
+	arg1.synonym_type.push_back("assign");
+	arg1.synonym_type.push_back("if");
+	arg1.synonym_type.push_back("while");
 	fillArg(&arg1,true,true,false);
 
 	arg2.synonym_type.push_back("prog_line");
+	arg2.synonym_type.push_back("stmt");
+	arg2.synonym_type.push_back("assign");
+	arg2.synonym_type.push_back("if");
+	arg2.synonym_type.push_back("while");
 	fillArg(&arg2,true,true,false);
 	entry e = {arg1,arg2};
 	table["Next"] = e;
@@ -149,9 +165,17 @@ void QueryPreprocessor::addNextEntry(){
 void QueryPreprocessor::addNextTEntry(){
 	arg_type_list arg1,arg2;
 	arg1.synonym_type.push_back("prog_line");
+	arg1.synonym_type.push_back("stmt");
+	arg1.synonym_type.push_back("assign");
+	arg1.synonym_type.push_back("if");
+	arg1.synonym_type.push_back("while");
 	fillArg(&arg1,true,true,false);
 
 	arg2.synonym_type.push_back("prog_line");
+	arg2.synonym_type.push_back("stmt");
+	arg2.synonym_type.push_back("assign");
+	arg2.synonym_type.push_back("if");
+	arg2.synonym_type.push_back("while");
 	fillArg(&arg2,true,true,false);
 	entry e = {arg1,arg2};
 	table["Next*"] = e;
@@ -159,10 +183,14 @@ void QueryPreprocessor::addNextTEntry(){
 
 void QueryPreprocessor::addAffectsEntry(){
 	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("stmt");
 	arg1.synonym_type.push_back("assign");
+	arg1.synonym_type.push_back("prog_line");
 	fillArg(&arg1,true,true,false);
 
+	arg2.synonym_type.push_back("stmt");
 	arg2.synonym_type.push_back("assign");
+	arg2.synonym_type.push_back("prog_line");
 	fillArg(&arg2,true,true,false);
 	entry e = {arg1,arg2};
 	table["Affects"] = e;
@@ -170,10 +198,14 @@ void QueryPreprocessor::addAffectsEntry(){
 
 void QueryPreprocessor::addAffectsTEntry(){
 	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("stmt");
 	arg1.synonym_type.push_back("assign");
+	arg1.synonym_type.push_back("prog_line");
 	fillArg(&arg1,true,true,false);
 
+	arg2.synonym_type.push_back("stmt");
 	arg2.synonym_type.push_back("assign");
+	arg2.synonym_type.push_back("prog_line");
 	fillArg(&arg2,true,true,false);
 	entry e = {arg1,arg2};
 	table["Affects*"] = e;

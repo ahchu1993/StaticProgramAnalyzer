@@ -15,19 +15,7 @@
 #include <sstream>
 #include <set>
 using namespace std;
-class EvaluationTree{
-public:
-    //Attributes
-    //template<class T>
-	struct e_node{
-		QueryPreprocessor::entityReff entity;
-        vector<e_node*> links;
-        int weights;
-	};
-    //Methods
-    e_node addNode(e_node node);
-    void addLink(e_node parent, e_node child);
-};
+
 
 class QueryEvaluator{
 public:
