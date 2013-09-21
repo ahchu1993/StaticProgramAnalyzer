@@ -1,6 +1,13 @@
+//
+//  QueryEvaluator.h
+//  cs3202
+//
+//  Created by Zhao Weixiang on 16/9/13.
+//  Copyright (c) 2013 Zhao Weixiang. All rights reserved.
+//
 #pragma once
 #include "QueryPreprocessor.h"
-
+#include <iostream>
 #include "PKB.h"
 #include "string.h"
 #include <vector>
@@ -8,54 +15,73 @@
 #include <sstream>
 #include <set>
 using namespace std;
-class QueryEvaluator
-{
+class EvaluationTree{
 public:
-	QueryEvaluator(PKB* a);
-	//QueryEvaluator(ModifyTable m, FollowsTable f, CallTable c, varTable v, ProcTable p, UseTable u);
-	string getQuery();
-	
-	template<class T>
-	struct Colunm{
-		string header;
-		string type;
-		set<int> cell;
+    //Attributes
+    //template<class T>
+	struct e_node{
+		QueryPreprocessor::entityReff entity;
+        vector<e_node*> links;
+        int weights;
 	};
-	template<typename T>
-	int compare(T a, T b);
+    //Methods
+    e_node addNode(e_node node);
+    void addLink(e_node parent, e_node child);
+};
 
-
-	template<class T>
-	struct Table{
-		vector<Colunm<T>> colunms;
+class QueryEvaluator{
+public:
+    template<class T>
+	struct rated_desAbstr{
+		QueryPreprocessor::designAbstraction desAbstr;
+		int rating;
 	};
 
-	bool compareAST(TNode* ast, QueryPreprocessor::pattern pattern);
-	string getType(string synonym);
-
-	list<string> processQuery(string query);
-	Colunm<int> evaluate_modify_uses(int evaluate_position,string select_type, string evaluate_type,
-		Colunm<int> pattern_result,int pattern_position, string relation);
-
-	QueryPreprocessor::entityReff getEntity(string synonym);
-	Colunm<int> evaluatePattern();
-	Colunm<int> evaluateRelation(int evaluate_position,string select_type, string evaluate_type,
-		QueryEvaluator::Colunm<int> pattern_result,int pattern_position);
-	Colunm<int> evaluate_parents_follows(int evaluate_position,string select_type, string evaluate_type,
-	QueryEvaluator::Colunm<int> pattern_result,int pattern_position, string relation);
-	Colunm<int> getAll(string type);
-	bool isConstant(string a);
-	void compareAST_Node(TNode* ast, QueryPreprocessor::pattern);
-
-	Colunm<int> QueryEvaluator::evaluate_follows(
-	int evaluate_position,string select_type, string evaluate_type,
-	QueryEvaluator::Colunm<int> pattern_result,int pattern_position, string relation);
-
-
-
-	Colunm<int> QueryEvaluator::evaluate_a_b_pattern_a();
+    QueryEvaluator();
+    string getQuery();
+    vector<QueryPreprocessor::designAbstraction> sort_desAbstr(QueryPreprocessor::designAbstraction desAbstr);
+    /*
+     priority:
+     1. with unselected entity
+     2. pattern unselected entity
+     3. modify, follow, parent with 2 constant
+     4. affect, next with 2 constant
+     5. modify*, follow*, parent* with 2 constant
+     6. affect*, next* with 2 constant
+     7. modify, follow, parent with 1 constant and unselected entity
+     8. modify*, follow*, parent* with 1 constant and unselected entity
+     9. affect, next* with 1 constant and unselected entity
+     10. affect*, next* with 1 constant and unselected entity
+     11-20. same order with selected entity
+     */
+     /*
+      rating:
+        desAbstr:
+            with: 1
+            pattern: 2
+            modify Use follow parent: 3
+            next affect: 4
+            follow* parent*: 30
+            next*: 40
+            affect*: 50
+        parameter:
+      
+            1 constant: 0
+            2 constant: 1
+            1 unselected enity: 10
+            2 unselected entity: 50
+            1 selected entity: 100
+            2 selected eneity: 200
+      */
+    /*
+      1. sort the desAbstr and eliminate duplicate desAbstr
+      2. Querying all the desAbstr with only constants
+      3. group the desAbstr with common entities with sorted order
+      4. In each group find out the chains
+     */
+    
 private:
-	vector<QueryPreprocessor::entityReff> entity;
+    vector<QueryPreprocessor::entityReff> entity;
 	vector<QueryPreprocessor::designAbstraction> desAbstr;
 	vector<QueryPreprocessor::pattern> pattern;
 	vector<string> result;
@@ -65,7 +91,6 @@ private:
 	bool has_pattern_result;
 	QueryPreprocessor Qprocessor;
 	bool flag;
+    
+    
 };
-
-
-
