@@ -119,6 +119,10 @@ void PKB::printFollowTable(){
 }
 
 //ModifyTable
+vector<Pair> PKB::getModify(string arg1, string arg1Type, string arg2, string arg2Type){
+
+}
+
 int PKB::insertModifyStmt(int stmtNo, int varIndex, string DE){
 	return modifyTable.insertModifyStmt(stmtNo, varIndex, DE);
 }

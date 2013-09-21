@@ -9,6 +9,7 @@
 using namespace std;
 typedef short PROC;
 
+#include "Pair.h"
 #include "VarTable.h"
 #include "ProcTable.h"
 #include "StmtTable.h"
@@ -36,6 +37,7 @@ private:
 public:
 	//static PKB* instance();
 	PKB();
+
 	//AST
 	TNode* createRootNode(string type, int content, int lineNo);
 	TNode* createNode(string type, int content, int lineNo);
@@ -55,6 +57,7 @@ public:
 	vector<string> getCallsList(string procName);
 	vector<string> getCalledList(string procName);
 	void printCallTable();
+
 	//ParentTable
 	void insert(int stm1, string DE1, int stm2, string DE2);
 	int getParent (int stm);
@@ -79,6 +82,8 @@ public:
 	//int getFollowedListSpecific(int varIndex, string DE);
 
 	//ModifyTable
+	vector<Pair> getModify(string arg1, string arg1Type, string arg2, string arg2Type);
+
 	int insertModifyStmt(int stmtNo, int varIndex, string DE);
 	int insertModifyProc(int procIndex, int varIndex);
 	vector<int> getModifiedStmt(int stmtNo);
