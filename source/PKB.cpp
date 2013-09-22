@@ -279,6 +279,8 @@ void PKB::buildCFG()
 		buildTree(i);
 		getchar();
 	}
+	for(int i=0;i<cfg.CFGHeaderList.size();i++)
+		cfg.buildCFGParentList(cfg.CFGHeaderList[i]->stmtNum);
 }
 
 void PKB::buildTree(int procIndex)
@@ -409,4 +411,7 @@ void PKB::printfTree(CFGNode *node)
 	{
 		cout<<node->stmtNum<<" to "<<"NO-WHERE"<<endl;
 	}
+}
+vector<int> PKB::getNext(int stmtNo){
+	return cfg.getNext(stmtNo);
 }

@@ -139,6 +139,6 @@ public:
 	void printfTree(CFGNode *node);
 
 	//next - zhao yang
-
+	vector<int> getNext(int stmtNo);
 };
 #endif
