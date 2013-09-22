@@ -140,5 +140,6 @@ public:
 
 	//next - zhao yang
 	vector<int> getNext(int stmtNo);
+	vector<int> getPrev(int stmtNo);
 };
 #endif

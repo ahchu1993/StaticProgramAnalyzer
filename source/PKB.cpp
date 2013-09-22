@@ -279,6 +279,8 @@ void PKB::buildCFG()
 		buildTree(i);
 		getchar();
 	}
+
+	// build cfgparentlist   ->double linked list
 	for(int i=0;i<cfg.CFGHeaderList.size();i++)
 		cfg.buildCFGParentList(cfg.CFGHeaderList[i]->stmtNum);
 }
@@ -412,6 +414,12 @@ void PKB::printfTree(CFGNode *node)
 		cout<<node->stmtNum<<" to "<<"NO-WHERE"<<endl;
 	}
 }
+
+// next relation
 vector<int> PKB::getNext(int stmtNo){
 	return cfg.getNext(stmtNo);
+}
+
+vector<int> PKB::getPrev(int stmtNo){
+	return cfg.getPrev(stmtNo);
 }

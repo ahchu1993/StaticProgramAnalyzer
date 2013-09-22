@@ -9,6 +9,7 @@ public:
 	vector<CFGNode *> CFGNodes;	
 
 	vector<int> getNext(int stmtNo);
+	vector<int> getPrev(int stmtNo);
 
 	void buildCFGParentList(int stmtNo);
 	vector<int> visited;

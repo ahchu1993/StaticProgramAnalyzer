@@ -16,6 +16,15 @@ vector<int> CFG::getNext(int stmtNo)
 	return resultList;
 }
 
+vector<int> CFG::getPrev(int stmtNo){
+	vector<int> resultList;
+	CFGNode *currentNode = CFGNodes[stmtNo];
+	vector<CFGNode *> parentList = currentNode->parentList;
+	for(int i=0;i<parentList.size();i++)
+		resultList.push_back(parentList[i]->stmtNum);
+	return resultList;
+}
+
 void CFG::buildCFGParentList(int stmtNo)
 {
 	while(visited.size()<=stmtNo)
