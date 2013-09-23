@@ -141,5 +141,7 @@ public:
 	//next - zhao yang
 	vector<int> getNext(int stmtNo);
 	vector<int> getPrev(int stmtNo);
+	vector<int> v;
+	bool isNext(int stmtNo1,int stmtNo2);
 };
 #endif

@@ -423,3 +423,15 @@ vector<int> PKB::getNext(int stmtNo){
 vector<int> PKB::getPrev(int stmtNo){
 	return cfg.getPrev(stmtNo);
 }
+bool PKB::isNext(int stmtNo1,int stmtNo2)
+{
+	vector<CFGNode *> childrenList = cfg.CFGNodes[stmtNo1]->childList;
+	for(int i=0;i<childrenList.size();i++){
+		CFGNode *currentNode = childrenList[i];
+		int currentStmt = currentNode->stmtNum;
+		if(currentStmt==stmtNo2){
+			return true;
+		}
+	}
+	return false;
+}
