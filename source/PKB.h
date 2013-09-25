@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <vector>
 
 using namespace std;
@@ -65,7 +66,6 @@ public:
 	vector<int> getChildren(int stm, string DE);
 	vector<int> getChildrenT(int stmt,string DE);
 	void printParentTable(); 
-
 
 	//for DE
 	//1. "assign"

@@ -159,3 +159,148 @@ void ModifyTable::printModifyTable()
 		cout << temp_row_2.procIndex << "\t" << temp_row_2.varIndex << endl;
 	}
 }
+
+/*************************************** New APIs *******************************************/
+
+vector<int> ModifyTable::getModifyProcList(){
+	modify_proc_row temp_row;
+	vector<int> results;
+
+	for (unsigned i =0; i<ModifyProcTable.size(); i++)
+	{
+		temp_row = ModifyProcTable.at(i);
+		results.push_back(temp_row.procIndex);
+	}
+
+	// Remove duplicate
+	sort(results.begin(), results.end());
+    results.erase(unique(results.begin(), results.end()), results.end());
+
+	return results;
+}
+
+vector<int> ModifyTable::getModifyStmtList(){
+	modify_stmt_row temp_row;
+	vector<int> results;
+
+	for (unsigned i =0; i<ModifyStmtTable.size(); i++)
+	{
+		temp_row = ModifyStmtTable.at(i);
+		results.push_back(temp_row.stmtNo);
+	}
+
+	// Remove duplicate
+	sort(results.begin(), results.end());
+    results.erase(unique(results.begin(), results.end()), results.end());
+
+	return results;
+}
+
+vector<int> ModifyTable::getModifyDEList(string DE){
+	modify_stmt_row temp_row;
+	vector<int> results;
+
+	for (unsigned i =0; i<ModifyStmtTable.size(); i++)
+	{
+		temp_row = ModifyStmtTable.at(i);
+		if(temp_row.DE.compare(DE) == 0){
+			results.push_back(temp_row.stmtNo);
+		}
+	}
+
+	// Remove duplicate
+	sort(results.begin(), results.end());
+    results.erase(unique(results.begin(), results.end()), results.end());
+
+	return results;
+}
+
+vector<int> ModifyTable::getModifyVarList(){
+	modify_proc_row temp_proc_row;
+	modify_stmt_row temp_stmt_row;
+	vector<int> results;
+
+	for (unsigned i =0; i<ModifyProcTable.size(); i++)
+	{
+		temp_proc_row = ModifyProcTable.at(i);
+		results.push_back(temp_proc_row.varIndex);
+	}
+
+	for (unsigned i =0; i<ModifyStmtTable.size(); i++)
+	{
+		temp_stmt_row = ModifyStmtTable.at(i);
+		results.push_back(temp_stmt_row.varIndex);
+	}
+
+	// Remove duplicate
+	sort(results.begin(), results.end());
+    results.erase(unique(results.begin(), results.end()), results.end());
+
+	return results;
+}
+
+vector<Pair> ModifyTable::getModifyPairList(vector<int> set1, vector<int> set2){
+	modify_proc_row temp_proc_row;
+	modify_stmt_row temp_stmt_row;
+	bool flag1 = true;
+	bool flag2 = true;
+	ostringstream convert;
+	string str1, str2;
+	vector<Pair> results;
+
+	for (unsigned i =0; i<ModifyProcTable.size(); i++)
+	{
+		temp_proc_row = ModifyProcTable.at(i);
+		flag1 = false;
+		flag2 = false;
+		for (unsigned j = 0; j < set1.size(); j++){
+			if(temp_proc_row.procIndex == set1.at(j)){
+				flag1 = true;
+				break;
+			}
+		}
+		for (unsigned j = 0; j < set2.size(); j++){
+			if(temp_proc_row.varIndex == set2.at(j)){
+				flag2 = true;
+				break;
+			}
+		}
+		if(flag1 && flag2){
+			convert<<temp_proc_row.procIndex;
+			str1 = convert.str();
+			convert<<temp_proc_row.varIndex;
+			str2 = convert.str();
+			Pair myPair(str1, str2);
+			results.push_back(myPair);
+		}
+	}
+
+	for (unsigned i =0; i<ModifyStmtTable.size(); i++)
+	{
+		temp_stmt_row = ModifyStmtTable.at(i);
+		flag1 = false;
+		flag2 = false;
+		for (unsigned j = 0; j < set1.size(); j++){
+			if(temp_stmt_row.stmtNo == set1.at(j)){
+				flag1 = true;
+				break;
+			}
+		}
+		for (unsigned j = 0; j < set2.size(); j++){
+			if(temp_stmt_row.varIndex == set2.at(j)){
+				flag2 = true;
+				break;
+			}
+		}
+		if(flag1 && flag2){
+			convert<<temp_stmt_row.stmtNo;
+			str1 = convert.str();
+			convert<<temp_stmt_row.varIndex;
+			str2 = convert.str();
+			Pair myPair(str1, str2);
+			results.push_back(myPair);
+		}
+	}
+
+	return results;
+}

@@ -1,9 +1,12 @@
 #ifndef MODIFYTABLE_H
 #define MODIFYTABLE_H
 #include <vector>
-#include "iostream"
+#include <iostream>
 #include <string>
+#include <algorithm>
 #include <assert.h>
+#include "Pair.h"
+#include <sstream>
 
 using namespace std;
 
@@ -46,5 +49,22 @@ public:
 
 	// Print ModifyTable
 	void printModifyTable();
+
+	/*************************************** New APIs *******************************************/
+
+	// Return index of all procedures in ModifyTable
+	vector<int> getModifyProcList();
+
+	// Return index of all stmt in ModifyTable
+	vector<int> getModifyStmtList();
+
+	// Return index of all stmt of type DE in ModifyTable
+	vector<int> getModifyDEList(string DE);
+
+	// Return index of all variables in ModifyTable
+	vector<int> getModifyVarList();
+
+	// Return pairs satisfying set1 and set2
+	vector<Pair> getModifyPairList(vector<int> set1, vector<int> set2);
 };
 #endif

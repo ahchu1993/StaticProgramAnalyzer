@@ -1,22 +1,9 @@
-#include <stdio.h>
-#include <iostream>
-#include <string>
-#include <vector>
-
 using namespace std;
 #include "PKB.h"
 
-//PKB* PKB::pInstance = NULL;
 PKB::PKB(){
 
 }
-
-/*PKB* PKB::instance(){
-	if(!pInstance){
-		pInstance = new PKB();
-	}
-	return pInstance;
-} */
 
 //AST
 TNode* PKB::createRootNode(string type, int content, int lineNo){
@@ -119,9 +106,35 @@ void PKB::printFollowTable(){
 }
 
 //ModifyTable
-//vector<Pair> PKB::getModify(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<Pair> PKB::getModify(string arg1, string arg1Type, string arg2, string arg2Type){
+	vector<int> set1;
+	vector<int> set2;
+	vector<Pair> results;
 
-//}
+	// Get the set of possible values for argument 1
+	if (arg1Type.compare("procedure") == 0){
+		set1 = modifyTable.getModifyProcList();
+	} else if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0){
+		set1 = modifyTable.getModifyStmtList();
+	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
+		set1 = modifyTable.getModifyDEList(arg1Type);
+	} else if (arg1Type.compare("string") == 0){
+		// Waiting for confirmation
+	} else if (arg1Type.compare("integer") == 0){
+		int stmtNo;
+		istringstream(arg1)>>stmtNo;
+		set1.push_back(stmtNo);
+	}
+
+	// Get the set of possible values for argument 1
+	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
+		set2 = modifyTable.getModifyVarList();
+	} else if (arg2Type.compare("string") == 0){
+		// Waiting for confirmation
+	}
+
+	return modifyTable.getModifyPairList(set1, set2);
+}
 
 int PKB::insertModifyStmt(int stmtNo, int varIndex, string DE){
 	return modifyTable.insertModifyStmt(stmtNo, varIndex, DE);
@@ -247,13 +260,3 @@ void PKB::printConstTable()
 {
 	constTable.printConstTable();
 }
-
-/*
-void makeLeft(TNode left);
-void makeRight(TNode right);
-void makeChild(TNode child);
-TNode getParent(TNode child);
-vector<TNode> getChildren(TNode parent);
-TNode getLeftSibling(TNode node);
-TNode getRightSibling(TNode node);
-*/
