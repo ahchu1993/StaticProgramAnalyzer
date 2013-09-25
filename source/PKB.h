@@ -7,8 +7,6 @@
 #include <sstream>
 #include <vector>
 #include <algorithm> 
-using namespace std;
-typedef short PROC;
 
 #include "Pair.h"
 #include "VarTable.h"
@@ -22,6 +20,10 @@ typedef short PROC;
 #include "CallTable.h"
 #include "AST.h"
 #include "CFG.h"
+
+using namespace std;
+typedef short PROC;
+
 class PKB {
 private:
 	VarTable varTable;
@@ -38,14 +40,10 @@ private:
 	//CFG -ZHAO yang
 	CFG cfg;
 
-
-
-	//static PKB* pInstance;
 public:
-	//static PKB* instance();
 	PKB();
 
-	//AST
+	/************************************************** AST *************************************************/
 	TNode* createRootNode(string type, int content, int lineNo);
 	TNode* createNode(string type, int content, int lineNo);
 	void makeLeftChild(TNode* parent, TNode* leftChild);
@@ -58,14 +56,14 @@ public:
 	vector<TNode*> getAST();
 	void printAST();
 
-	//CallTable
+	/************************************************** CallTable *************************************************/
 	void insert(string proc1, string proc2);
 	bool isCalled(string proc1, string proc2);
 	vector<string> getCallsList(string procName);
 	vector<string> getCalledList(string procName);
 	void printCallTable();
 
-	//ParentTable
+	/************************************************** ParentTable *************************************************/
 	void insert(int stm1, string DE1, int stm2, string DE2);
 	int getParent (int stm);
 	vector<int> getParentT(int stmt);
@@ -73,11 +71,11 @@ public:
 	vector<int> getChildrenT(int stmt,string DE);
 	void printParentTable(); 
 
+	/************************************************** FollowTable *************************************************/
 	//for DE
 	//1. "assign"
 	//2. "while"
 	//3. "stmt"
-	//FollowTable
 	void insertFollow(int stm1, string DE1, int stm2, string DE2);
 	int findFollowed(int stm);
 	vector<int> findFollowedT(int stmt, string DE);
@@ -87,8 +85,9 @@ public:
 	void printFollowTable();
 	//int getFollowedListSpecific(int varIndex, string DE);
 
-	//ModifyTable
+	/************************************************** ModifyTable *************************************************/
 	vector<Pair> getModify(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkModify(string arg1, string arg1Type, string arg2, string arg2Type);
 
 	int insertModifyStmt(int stmtNo, int varIndex, string DE);
 	int insertModifyProc(int procIndex, int varIndex);
@@ -97,7 +96,10 @@ public:
 	vector<int> getModifiedList(int varIndex, string DE);
 	void printModifyTable();
 
-	//UseTable
+	/************************************************** UseTable *************************************************/
+	vector<Pair> getUse(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkUse(string arg1, string arg1Type, string arg2, string arg2Type);
+
 	int insertUseStmt(int stmtNo, int varIndex, string DE);
 	int insertUseProc(int procIndex, int varIndex);
 	vector<int> getUsedStmt(int stmtNo);
@@ -105,35 +107,35 @@ public:
 	vector<int> getUsedList(int varIndex, string DE);
 	void printUseTable();
 
-	//VarTable
+	/************************************************** VarTable *************************************************/
 	int insertVar(string varName);
 	string getVarName(int index);
 	int getVarIndex(string varName);
 	int getSizeVarTable();
 	void printVarTable();
 
-	//ProcTable
+	/************************************************** ProcTable *************************************************/
 	int insertProc(string procName);	
 	string getProcName(int index);
 	int getProcIndex(string procName);
 	int getSizeProcTable();
 	void printProcTable();
 
-	//StmtTable
+	/************************************************** StmtTable *************************************************/
 	int insertStmt(int stmtNo, string type);
 	vector<int> getStmtNo(string type);
 	int getSizeStmtTable();
 	string getStmtType(int stmtNo);
 	void printStmtTable();
 
-	// ConstantTable
+	/************************************************** Constanttable *************************************************/
 	void insertConst(int stmtNo, int number);
 	vector<int> getConst(int stmtNo);
 	vector<int> getStmtForConst(int number);
 	vector<int> getAllStmtForConst();
 	void printConstTable();
 
-	// CFG - zhao yang
+	/************************************************** CFG - Zhao Yang *************************************************/
 	void buildCFG();
 	void buildTree(int procIndex);
 	CFGNode* buildLink(int stmtNum);
@@ -143,7 +145,7 @@ public:
 	void printCFG();
 	void printfTree(CFGNode *node);
 
-	//next - zhao yang
+	/************************************************** Next - Zhao Yang *************************************************/
 	vector<int> getNext(int stmtNo);
 	vector<int> getPrev(int stmtNo);
 	vector<int> v;

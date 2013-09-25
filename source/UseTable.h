@@ -2,8 +2,11 @@
 #define USETABLE_H
 #include <vector>
 #include <string>
-#include "iostream"
+#include <iostream>
 #include <assert.h>
+#include <algorithm>
+#include "Pair.h"
+#include <sstream>
 
 using namespace std;
 typedef struct use_stmt_row_t{
@@ -44,5 +47,25 @@ public:
 
 	// Print UseTable
 	void printUseTable();
+
+	/*************************************** New APIs *******************************************/
+
+	// Return index of all procedures in UseTable
+	vector<int> getUseProcList();
+
+	// Return index of all stmt in UseTable
+	vector<int> getUseStmtList();
+
+	// Return index of all stmt of type DE in UseTable
+	vector<int> getUseDEList(string DE);
+
+	// Return index of all variables in UseTable
+	vector<int> getUseVarList();
+
+	// Return pairs satisfying set1 and set2
+	vector<Pair> getUsePairList(vector<int> set1, vector<int> set2);
+
+	// Return whether there exist a pair satisfying set1 and set2
+	bool checkUse(vector<int> set1, vector<int> set2);
 };
 #endif

@@ -66,5 +66,8 @@ public:
 
 	// Return pairs satisfying set1 and set2
 	vector<Pair> getModifyPairList(vector<int> set1, vector<int> set2);
+
+	// Return whether there exist a pair satisfying set1 and set2
+	bool checkModify(vector<int> set1, vector<int> set2);
 };
 #endif
