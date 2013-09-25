@@ -163,6 +163,10 @@ bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type
 	return modifyTable.checkModify(set1, set2);
 }
 
+void PKB::updateModify(){
+	// Update ModifyTable using CallTable
+}
+
 int PKB::insertModifyStmt(int stmtNo, int varIndex, string DE){
 	return modifyTable.insertModifyStmt(stmtNo, varIndex, DE);
 }
