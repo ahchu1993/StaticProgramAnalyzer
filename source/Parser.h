@@ -3,6 +3,7 @@
 #include <vector>
 #include "PKB.h"
 #include "CFGNode.h"
+#include <stack>
 using namespace std;
 
 struct PairNumber {
@@ -57,6 +58,7 @@ private:
 	bool procedure();
 	string getToken();
 	string getFactorListString ();
+	string deleteBrackets(string factorList);
 	TNode* processFactor (string factor, vector < PairNumber > useModifyList);
 	bool match(string token);
 };

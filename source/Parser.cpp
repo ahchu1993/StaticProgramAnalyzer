@@ -17,6 +17,7 @@ bool Parser::parseInput (string in) {
 	getchar();
 	initializeInput(in);
 	codeProcess();
+	pkb->buildCFG();
 	return true;
 }
 
@@ -319,6 +320,7 @@ string Parser::getFactorListString () {
 }
 
 TNode* Parser::processFactor (string factor, vector < PairNumber > useModifyList) {
+	factor = deleteBrackets(factor);
 	if (isNumber(factor)) {
 		int factorNumber = atoi(factor.c_str());
 		TNode* factorNode = pkb->createNode("const", factorNumber, line);
@@ -344,30 +346,86 @@ TNode* Parser::processFactor (string factor, vector < PairNumber > useModifyList
 
 int Parser::findRightMostOperation(string factorList, int flag){
 	if(flag==0){ // find + -
-		int plusIndex = factorList.find_last_of('+');
-		int minusIndex = factorList.find_last_of('-');
-		return max(plusIndex,minusIndex);
+		stack <int> bracketStack;
+		int index = -1;
+		for(int i=0;i<factorList.size();i++){
+			if(factorList[i]=='('){
+				bracketStack.push(1);
+			}else if(factorList[i]==')'){
+				bracketStack.pop();
+			}
+			if(bracketStack.size()==0&&(factorList[i]=='+'||factorList[i]=='-')){
+				index = i;
+			}
+		}
+
+
+		return index;
 	}else{
-		return factorList.find_last_of('*');
+		stack <int> bracketStack;
+		int index = -1;
+		for(int i=0;i<factorList.size();i++){
+			if(factorList[i]=='('){
+				bracketStack.push(1);
+			}else if(factorList[i]==')'){
+				bracketStack.pop();
+			}
+			if(bracketStack.size()==0&&factorList[i]=='*'){
+				index = i;
+			}
+		}
+		return index;
 	}
 	return -1;
 }
+string Parser::deleteBrackets(string factorList)  // delete outest brackets
+{
+	string str = factorList;
+ 
+	if(factorList[0]=='('&&factorList[factorList.length()-1]==')'){
+
+	}else return factorList;
+
+	stack <int> bracketStack;
+	int flag=1;
+	for(int i=1;i<factorList.length()-1;i++){
+		if(factorList[i]=='('){
+			bracketStack.push(1);
+		}else if(factorList[i]==')'){
+			if(bracketStack.size()>0)
+				bracketStack.pop();
+			else{
+				flag=0;
+				break;
+			}
+		}
+	}
+	str="";
+	if(flag==0) return factorList;
+	else{
+		for(int i=1;i<factorList.size()-1;i++)
+			str+=factorList[i];
+		return deleteBrackets(str);
+	} 
+}
 
 TNode* Parser::expr (vector < PairNumber > useModifyList, string factorList) {
-	// factorList     x  +  y * z + y * x + 1;
-		int indexOfPlusMinusOperation = findRightMostOperation(factorList,0);
+		// factorList     (x  +  y * z + y * x + 1);
+		factorList = deleteBrackets(factorList); // delete outest bracket if there are
+
+		int indexOfPlusMinusOperation = findRightMostOperation(factorList,0);  // find +-
 		//cout<<"??  "<<indexOfPlusMinusOperation<<"   "<<factorList<<endl;
 		//getchar();
 		if(indexOfPlusMinusOperation==-1){  // no +/-
-			int indexOfMulOperation = findRightMostOperation(factorList,1);
+			int indexOfMulOperation = findRightMostOperation(factorList,1);   // find *
 			if(indexOfMulOperation==-1){  // no *
 				return processFactor(factorList, useModifyList);
 			}else{
 				string factorList1 = factorList.substr(0,indexOfMulOperation);
-				string factor = factorList.substr(indexOfMulOperation+1,factorList.length());
+				string factorList2 = factorList.substr(indexOfMulOperation+1,factorList.length());
 
 				TNode* mulNode = pkb->createNode("opt", -1, line);  //TMP
-				pkb->makeRightChild(mulNode, processFactor(factor, useModifyList));
+				pkb->makeRightChild(mulNode, expr(useModifyList,factorList2));
 				pkb->makeLeftChild(mulNode, expr(useModifyList, factorList1));
 				return mulNode;
 			}
