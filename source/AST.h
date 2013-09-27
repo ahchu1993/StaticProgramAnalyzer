@@ -17,14 +17,14 @@ public:
 	AST();
 	~AST();
 
-	// Create root node for the AST, type must be "ROOT"
+	// Create root node for the AST, type must be "root"
 	// content is -1 for ASSIGN, -2 for IF, -3 for WHILE
 	TNode* createRootNode(string type, int content, int lineNo);
 
-	// Create normal node for the AST, type can be "OPT", "VAR" or "CONST"
-	// Type "OPT", content is -1 for +, -2 for -, -3 for *, -4 for /
-	// Type "VAR", content is varIndex
-	// Type "CONST", content is constant value
+	// Create normal node for the AST, type can be "opt", "var" or "const"
+	// Type "opt", content is -1 for +, -2 for -, -3 for *, -4 for /
+	// Type "var", content is varIndex
+	// Type "const", content is constant value
 	TNode* createNode(string type, int content, int lineNo);
 
 	// Link parent and left child node
