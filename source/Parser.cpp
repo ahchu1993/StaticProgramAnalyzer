@@ -252,6 +252,12 @@ bool Parser::assign(vector < PairNumber > useModifyList) {
 bool Parser::w(vector < PairNumber > useModifyList) {
 	getToken();
 	int varIndex = pkb->getVarIndex(checkVariable(nextToken));
+
+	// while node
+	TNode* whileNode = pkb->createRootNode("root", -3, line);
+	TNode* varNode = pkb->createNode("var", varIndex, line);
+	pkb->makeLeftChild(whileNode,varNode);
+
 	if (varIndex < 0) {
 		varIndex = (*pkb).insertVar(nextToken);
 	}
@@ -278,6 +284,12 @@ bool Parser::ifProcess(vector < PairNumber > useModifyList) {
 	if (varIndex < 0) {
 		varIndex = (*pkb).insertVar(nextToken);
 	}
+
+	// if node
+	TNode* ifNode = pkb->createRootNode("root", -2, line);
+	TNode* varNode = pkb->createNode("var", varIndex, line);
+	pkb->makeLeftChild(ifNode,varNode);
+
 	//use
 	pkb->insertUseProc(pkb->getProcIndex(procName), varIndex);
 	useModifyList.push_back(PairNumber(line, "if"));
@@ -424,7 +436,7 @@ TNode* Parser::expr (vector < PairNumber > useModifyList, string factorList) {
 				string factorList1 = factorList.substr(0,indexOfMulOperation);
 				string factorList2 = factorList.substr(indexOfMulOperation+1,factorList.length());
 
-				TNode* mulNode = pkb->createNode("opt", -1, line);  //TMP
+				TNode* mulNode = pkb->createNode("opt", -3, line);  //TMP
 				pkb->makeRightChild(mulNode, expr(useModifyList,factorList2));
 				pkb->makeLeftChild(mulNode, expr(useModifyList, factorList1));
 				return mulNode;
@@ -439,7 +451,7 @@ TNode* Parser::expr (vector < PairNumber > useModifyList, string factorList) {
 				pkb->makeLeftChild(plusNode, expr(useModifyList, factorList1));
 				return plusNode;
 			}else{ //-
-				TNode* minusNode = pkb->createNode("opt", -1, line);  //TMP
+				TNode* minusNode = pkb->createNode("opt", -2, line);  //TMP
 				pkb->makeRightChild(minusNode, expr(useModifyList, factorList2));
 				pkb->makeLeftChild(minusNode, expr(useModifyList, factorList1));
 				return minusNode;
