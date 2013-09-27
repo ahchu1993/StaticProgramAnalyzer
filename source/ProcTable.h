@@ -37,5 +37,10 @@ public:
 
 	// Print ProcTable
 	void printProcTable();
+
+	/*************************************** New APIs *******************************************/
+
+	// Return list of all proc index
+	vector<int> getProcList();
 };
 #endif

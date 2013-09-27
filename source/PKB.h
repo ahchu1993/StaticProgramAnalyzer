@@ -102,6 +102,7 @@ public:
 	/************************************************** UseTable *************************************************/
 	vector<Pair> getUse(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkUse(string arg1, string arg1Type, string arg2, string arg2Type);
+	void updateUse();
 
 	int insertUseStmt(int stmtNo, int varIndex, string DE);
 	int insertUseProc(int procIndex, int varIndex);

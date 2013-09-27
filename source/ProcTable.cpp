@@ -77,3 +77,15 @@ void ProcTable::printProcTable()
 		cout<< temp_row.procIndex << "\t" << temp_row.proc_name << endl;
 	}
 }
+
+vector<int> ProcTable::getProcList(){
+	vector<int> results;
+	proc_row temp_row;
+
+	for (unsigned i=0; i<Proc_Table.size(); i++){
+		temp_row = Proc_Table.at(i);
+		results.push_back(temp_row.procIndex);
+	}
+
+	return results;
+}

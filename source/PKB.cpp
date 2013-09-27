@@ -62,16 +62,16 @@ vector<Pair> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2
 
 	for(unsigned i=0; i<result.size(); i++){
 		stringstream ss1,ss2;
-		string proc1 = result.at(i).getFirst();
-		string proc2 = result.at(i).getSecond();
-		int proc1 =	procTable.getProcIndex(proc1);
-		int proc2 =	procTable.getProcIndex(proc2);
+		string proc1_string = result.at(i).getFirst();
+		string proc2_string = result.at(i).getSecond();
+		int proc1 =	procTable.getProcIndex(proc1_string);
+		int proc2 =	procTable.getProcIndex(proc2_string);
 		ss1 << proc1;
 		ss2 << proc2;
-		proc1 = ss1.str();
-		proc2 = ss2.str();
-		result.at(i).setFirst(proc1);
-		result.at(i).setSecond(proc2);
+		proc1_string = ss1.str();
+		proc2_string = ss2.str();
+		result.at(i).setFirst(proc1_string);
+		result.at(i).setSecond(proc2_string);
 	}
 	return result;
 }
@@ -204,8 +204,28 @@ bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type
 	return modifyTable.checkModify(set1, set2);
 }
 
+// Update ModifyTable using CallTable
 void PKB::updateModify(){
-	// Update ModifyTable using CallTable
+	vector<int> procList;
+	int currentProcIndex;
+	int tempProcIndex;
+	int tempVarIndex;
+	vector<int> callingProc;
+	vector<int> modifiedVar;
+
+	procList = procTable.getProcList();
+	for (unsigned i=0; i<procList.size(); i++){
+		currentProcIndex = procList.at(i);
+		callingProc = getCallsList(currentProcIndex);
+		modifiedVar = modifyTable.getModifiedProc(currentProcIndex);
+		for (unsigned j=0; j<callingProc.size(); j++){
+			tempProcIndex = callingProc.at(j);
+			for (unsigned k=0; k<modifiedVar.size(); k++){
+				tempVarIndex = modifiedVar.at(k);
+				modifyTable.insertModifyProc(tempProcIndex, tempVarIndex);
+			}
+		}
+	}
 }
 
 int PKB::insertModifyStmt(int stmtNo, int varIndex, string DE){
@@ -285,6 +305,30 @@ bool PKB::checkUse(string arg1, string arg1Type, string arg2, string arg2Type){
 	}
 
 	return useTable.checkUse(set1, set2);
+}
+
+// Update UseTable using CallTable
+void PKB::updateUse(){
+	vector<int> procList;
+	int currentProcIndex;
+	int tempProcIndex;
+	int tempVarIndex;
+	vector<int> callingProc;
+	vector<int> usedVar;
+
+	procList = procTable.getProcList();
+	for (unsigned i=0; i<procList.size(); i++){
+		currentProcIndex = procList.at(i);
+		callingProc = getCallsList(currentProcIndex);
+		usedVar = useTable.getUsedProc(currentProcIndex);
+		for (unsigned j=0; j<callingProc.size(); j++){
+			tempProcIndex = callingProc.at(j);
+			for (unsigned k=0; k<usedVar.size(); k++){
+				tempVarIndex = usedVar.at(k);
+				useTable.insertUseProc(tempProcIndex, tempVarIndex);
+			}
+		}
+	}
 }
 
 int PKB::insertUseStmt(int stmtNo, int varIndex, string DE){
