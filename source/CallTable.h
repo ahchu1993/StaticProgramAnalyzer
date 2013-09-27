@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "procTable.h"
+#include "Pair.h"
 
 using namespace std;
 typedef struct call_row_t{
@@ -16,13 +17,15 @@ class CallTable
 {
 private:
 	vector<call_row> callTable;
-	vector<call_row>::iterator it;
 public:
 	CallTable(void);
 	void insert(string proc1, string proc2);
 	bool isCalled(string proc1, string proc2);
 	vector<string> getCallsList(string procName);
 	vector<string> getCalledList(string procName);
+	vector<string> CallTable::getCall(string procName);
+	vector<string> CallTable::getCalled(string procName);
+	vector<Pair> CallTable::getCallPairList(vector<string> set1, vector<string> set2);
 	int getSize();
 	void print();
 };

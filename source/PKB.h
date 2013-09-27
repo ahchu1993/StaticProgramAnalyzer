@@ -57,6 +57,7 @@ public:
 	void printAST();
 
 	/************************************************** CallTable *************************************************/
+	vector<Pair> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(string proc1, string proc2);
 	bool isCalled(string proc1, string proc2);
 	vector<string> getCallsList(string procName);

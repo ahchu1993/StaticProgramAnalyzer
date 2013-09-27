@@ -45,6 +45,22 @@ void PKB::printAST()
 }
 
 /************************************************** CallTable *************************************************/
+vector<Pair> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type){	
+	vector<string> set1, set2;
+	if(arg1Type.compare("procedure") == 0 || arg1Type.compare("_") == 0){
+		set1 = callTable.getCall("_");
+	}else if(arg1Type.compare("String") == 0){
+		set1 = callTable.getCall(arg1);
+	}
+
+	if(arg2Type.compare("procedure") == 0 || arg2Type.compare("_") == 0){
+		set2 = callTable.getCalled("_");
+	}else if(arg2Type.compare("String") == 0){
+		set2 = callTable.getCalled(arg2);
+	}
+
+	return callTable.getCallPairList(set1, set2);
+}
 void PKB::insert(string proc1, string proc2){
 	callTable.insert(proc1,proc2);
 }
