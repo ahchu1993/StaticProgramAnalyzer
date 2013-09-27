@@ -150,5 +150,8 @@ public:
 	vector<int> getPrev(int stmtNo);
 	vector<int> v;
 	bool isNext(int stmtNo1,int stmtNo2);
+
+	/************************************************** Affect - Zhao Yang *************************************************/
+	
 };
 #endif
