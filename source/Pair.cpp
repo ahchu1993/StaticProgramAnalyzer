@@ -12,3 +12,11 @@ string Pair::getFirst(){
 string Pair::getSecond(){
 	return _second;
 }
+
+void Pair::setFirst(string f){
+	_first = f;
+}
+
+void Pair::setSecond(string s){
+	_second = s;
+}

@@ -17,6 +17,10 @@ public:
 	string getFirst();
 
 	string getSecond();
+
+	void Pair::setFirst(string f);
+
+	void Pair::setSecond(string s);
 };
 
 #endif

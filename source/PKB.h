@@ -63,6 +63,7 @@ public:
 	vector<string> getCallsList(string procName);
 	vector<string> getCalledList(string procName);
 	void printCallTable();
+	vector<int> PKB::getCallsList(int procIndex);
 
 	/************************************************** ParentTable *************************************************/
 	void insert(int stm1, string DE1, int stm2, string DE2);

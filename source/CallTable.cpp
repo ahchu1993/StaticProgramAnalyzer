@@ -79,11 +79,11 @@ vector<Pair> CallTable::getCallPairList(vector<string> set1, vector<string> set2
 	for(unsigned i=0; i<set1.size(); i++){
 		for(unsigned j=0; j<set2.size(); j++){
 			if(isCalled(set1.at(i), set2.at(j)))
-				result.push_back(Pair(set1.at(i), set2.at(j)));
+			result.push_back(Pair(set1.at(i), set2.at(j)));
 		}
 	}
-	return result;
 
+	return result;
 }
 int CallTable::getSize(){
 	return callTable.size();

@@ -58,8 +58,22 @@ vector<Pair> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2
 	}else if(arg2Type.compare("String") == 0){
 		set2 = callTable.getCalled(arg2);
 	}
+	vector<Pair> result = callTable.getCallPairList(set1, set2);
 
-	return callTable.getCallPairList(set1, set2);
+	for(unsigned i=0; i<result.size(); i++){
+		stringstream ss1,ss2;
+		string proc1 = result.at(i).getFirst();
+		string proc2 = result.at(i).getSecond();
+		int proc1 =	procTable.getProcIndex(proc1);
+		int proc2 =	procTable.getProcIndex(proc2);
+		ss1 << proc1;
+		ss2 << proc2;
+		proc1 = ss1.str();
+		proc2 = ss2.str();
+		result.at(i).setFirst(proc1);
+		result.at(i).setSecond(proc2);
+	}
+	return result;
 }
 void PKB::insert(string proc1, string proc2){
 	callTable.insert(proc1,proc2);
@@ -67,6 +81,7 @@ void PKB::insert(string proc1, string proc2){
 bool PKB::isCalled(string proc1, string proc2){
 	return callTable.isCalled(proc1,proc2);
 }
+
 vector<string> PKB::getCallsList(string procName){
 	return callTable.getCallsList(procName);
 }
@@ -76,7 +91,17 @@ vector<string> PKB::getCalledList(string procName){
 void PKB::printCallTable(){
 	callTable.print();
 }
-
+//Api for Khue
+vector<int> PKB::getCallsList(int procIndex){
+	vector<int> result;
+	string procName = procTable.getProcName(procIndex);
+	vector<string> callList = callTable.getCallsList(procName);
+	
+	for(unsigned i=0; i<callList.size(); i++){
+		result.push_back(procTable.getProcIndex(callList.at(i)));
+	}
+	return result;
+}
 /************************************************** ParentTable *************************************************/
 void PKB::insert(int stm1, string DE1, int stm2, string DE2){
 	parentTable.insert(stm1, DE1, stm2, DE2);
