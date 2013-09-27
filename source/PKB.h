@@ -88,6 +88,7 @@ public:
 	/************************************************** ModifyTable *************************************************/
 	vector<Pair> getModify(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkModify(string arg1, string arg1Type, string arg2, string arg2Type);
+	void updateModify();
 
 	int insertModifyStmt(int stmtNo, int varIndex, string DE);
 	int insertModifyProc(int procIndex, int varIndex);
