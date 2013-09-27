@@ -11,7 +11,7 @@ AST::~AST(void)
 
 TNode* AST::createRootNode(string type, int content, int lineNo)
 {
-	assert(type.compare("root") == 0 && content == -1 && lineNo >= 0);
+	assert(type.compare("root") == 0 && (content == -1 || content == -2 || content == -3) && lineNo >= 0);
 
 	TNode* temp_node;
 	TNode* new_node = NULL;
@@ -33,7 +33,7 @@ TNode* AST::createRootNode(string type, int content, int lineNo)
 
 TNode* AST::createNode(string type, int content, int lineNo)
 {
-	assert((type.compare("opt") == 0 || type.compare("var") == 0 || type.compare("const") == 0) && (content == -1 || content >= 0) && lineNo >= 0);
+	assert((type.compare("opt") == 0 || type.compare("var") == 0 || type.compare("const") == 0) && content >= -4 && lineNo >= 0);
 
 	TNode* new_node =  new TNode(type, content, lineNo);
 	return new_node;
