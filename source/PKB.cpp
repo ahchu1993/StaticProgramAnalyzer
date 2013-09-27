@@ -741,19 +741,23 @@ bool PKB::isAffect(int stmtNo1, int stmtNo2)
 	int modifiedVarIndex = getModifiedStmt(stmtNo1)[0];
 
 	vector<int> modifiedStmts = getUsedList(modifiedVarIndex,"assign");
-
+	//cout<<"var "<<getVarName(modifiedVarIndex)<<endl;
 	if(!contains(modifiedStmts,stmtNo2)){  // used in stmtNo2
+		//for(int i=0;i<modifiedStmts.size();i++)
+			//cout<<"!! mofie "<<modifiedStmts[i]<<"  "<<endl;
 		return false;
 	}
 	if(!isNextT(stmtNo1,stmtNo2)){    // next*
+		//cout<<"!! next* "<<endl;
 		return false;
 	}
 	bool modifiedInBetween = false;
-	cfg.visited.clear();
+	visited.clear();
 	vector<int> nextList = getNext(stmtNo1);
 	for(unsigned int i=0;i<nextList.size();i++){
 		int nextStmt=nextList[i];
 		modifiedInBetween = isMofiedBetween(modifiedVarIndex,nextStmt,stmtNo2);
+		//cout<<"?? "<<modifiedInBetween<<endl;
 		if(!modifiedInBetween)
 			return true;
 	}
@@ -766,11 +770,14 @@ bool PKB::isMofiedBetween(int modifiedVarIndex,int currentLine,int target)
 		return false;
 	bool result=false;
 	vector<int> nextList = getNext(currentLine);
-	for(int i=0;i<nextList[i];i++){
+	for(int i=0;i<nextList.size();i++){
 		int nextStmtNo = nextList[i];
-
+		if(nextStmtNo==target){
+			return false;
+		}
+		if(nextStmtNo<=0) continue;
 		// add size in case over flow
-		while(visited.size()<=(unsigned int)nextStmtNo){
+		while(visited.size()<=nextStmtNo){
 			visited.push_back(0);
 		}
 		// loop detection

@@ -2,6 +2,7 @@
 #define CFG_H
 #include "CFGNode.h"
 #include <algorithm>
+#include <iostream>
 class CFG
 {
 public:

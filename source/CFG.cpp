@@ -8,23 +8,23 @@ CFG::CFG(){
 
 vector<int> CFG::getNext(int stmtNo)
 {
-	resultList.clear();
+	vector<int> results;
 	CFGNode *currentNode = CFGNodes[stmtNo];
 	vector<CFGNode *> childrenList = currentNode->childList;
 	for(unsigned int i=0;i<childrenList.size();i++)
-		resultList.push_back(childrenList[i]->stmtNum);
-	sort (resultList.begin(), resultList.end());
-	return resultList;
+		results.push_back(childrenList[i]->stmtNum);
+	sort (results.begin(), results.end());
+	return results;
 }
 
 vector<int> CFG::getPrev(int stmtNo){
-	resultList.clear();
+	vector<int> results;
 	CFGNode *currentNode = CFGNodes[stmtNo];
 	vector<CFGNode *> parentList = currentNode->parentList;
 	for(unsigned int i=0;i<parentList.size();i++)
-		resultList.push_back(parentList[i]->stmtNum);
-	sort (resultList.begin(), resultList.end());
-	return resultList;
+		results.push_back(parentList[i]->stmtNum);
+	sort (results.begin(), results.end());
+	return results;
 }
 
 bool CFG::isNext(int stmtNo1, int stmtNo2)
@@ -51,6 +51,7 @@ vector<int> CFG::getNextStar(int stmtNo)
 	resultList.clear();
 	getNextStarRecursive(stmtNo);
 	sort (resultList.begin(), resultList.end());
+	
 	return resultList;
 }
 vector<int> CFG::getPrevStar(int stmtNo)
@@ -76,6 +77,7 @@ void CFG::getPrevStarRecursive(int stmtNo)
 		if(visited[prevStmtNo]==0){
 			visited[prevStmtNo]=1;
 		}else return;
+		
 		resultList.push_back(prevStmtNo);
 		getPrevStarRecursive(prevStmtNo);
 	}
@@ -94,7 +96,6 @@ void CFG::getNextStarRecursive(int stmtNo)
 		if(visited[childStmtNo]==0){
 			visited[childStmtNo]=1;
 		}else return;
-
 		resultList.push_back(childStmtNo);
 		getNextStarRecursive(childStmtNo);
 	}
