@@ -103,6 +103,22 @@ vector<int> PKB::getCallsList(int procIndex){
 	return result;
 }
 /************************************************** ParentTable *************************************************/
+vector<Pair> PKB::getParent(string arg1, string arg1Type, string arg2, string arg2Type){
+	vector<int> set1, set2;
+	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
+		set1 = parentTable.getParentList("_");
+	}else if(arg1Type.compare("while") == 0 || arg1Type.compare("if") == 0){
+		set1 = parentTable.getParentList(arg1Type);
+	}
+
+	if(arg2Type.compare("prog_line") == 0 || arg2Type.compare("stmt") == 0 || arg2Type.compare("_") == 0){
+		set2 = parentTable.getChildrenList("_");
+	}else if(arg2Type.compare("while") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("assign") == 0){
+		set2 = parentTable.getChildrenList(arg2Type);
+	}
+	
+	return parentTable.getParentPairList(set1, set2);
+}
 void PKB::insert(int stm1, string DE1, int stm2, string DE2){
 	parentTable.insert(stm1, DE1, stm2, DE2);
 }
