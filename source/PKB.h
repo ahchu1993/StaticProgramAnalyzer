@@ -103,6 +103,7 @@ public:
 	/************************************************** UseTable *************************************************/
 	vector<Pair> getUse(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkUse(string arg1, string arg1Type, string arg2, string arg2Type);
+	void updateUse();
 
 	int insertUseStmt(int stmtNo, int varIndex, string DE);
 	int insertUseProc(int procIndex, int varIndex);
@@ -150,12 +151,22 @@ public:
 	void printfTree(CFGNode *node);
 
 	/************************************************** Next - Zhao Yang *************************************************/
+	// utilities
 	vector<int> getNext(int stmtNo);
 	vector<int> getPrev(int stmtNo);
 	vector<int> v;
+	vector<int> getNextT(int stmtNo);
+	vector<int> getPrevT(int stmtNo);
 	bool isNext(int stmtNo1,int stmtNo2);
+	bool isNextT(int stmtNo1, int stmtNo2);
+	bool contains(vector<int> list, int stmtNo);
 
-	/************************************************** Affect - Zhao Yang *************************************************/
+	// API for QE
+	vector<Pair> getNext(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair> getNextT(string arg1, string arg1Type, string arg2, string arg2Type);
 	
+	/************************************************** Affect - Zhao Yang *************************************************/
+	bool isAffect(int stmtNo1, int stmtNo2);
+	bool isMofiedBetween(int modifiedVarIndex,int currentLine,int target);
 };
 #endif

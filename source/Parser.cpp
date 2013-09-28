@@ -18,6 +18,8 @@ bool Parser::parseInput (string in) {
 	initializeInput(in);
 	codeProcess();
 	pkb->buildCFG();
+	//***** not yet, minh
+	//pkb->updateModify();
 	return true;
 }
 
@@ -360,7 +362,7 @@ int Parser::findRightMostOperation(string factorList, int flag){
 	if(flag==0){ // find + -
 		stack <int> bracketStack;
 		int index = -1;
-		for(int i=0;i<factorList.size();i++){
+		for(unsigned int i=0;i<factorList.size();i++){
 			if(factorList[i]=='('){
 				bracketStack.push(1);
 			}else if(factorList[i]==')'){
@@ -376,7 +378,7 @@ int Parser::findRightMostOperation(string factorList, int flag){
 	}else{
 		stack <int> bracketStack;
 		int index = -1;
-		for(int i=0;i<factorList.size();i++){
+		for(unsigned int i=0;i<factorList.size();i++){
 			if(factorList[i]=='('){
 				bracketStack.push(1);
 			}else if(factorList[i]==')'){
@@ -400,7 +402,7 @@ string Parser::deleteBrackets(string factorList)  // delete outest brackets
 
 	stack <int> bracketStack;
 	int flag=1;
-	for(int i=1;i<factorList.length()-1;i++){
+	for(unsigned int i=1;i<factorList.length()-1;i++){
 		if(factorList[i]=='('){
 			bracketStack.push(1);
 		}else if(factorList[i]==')'){
@@ -415,7 +417,7 @@ string Parser::deleteBrackets(string factorList)  // delete outest brackets
 	str="";
 	if(flag==0) return factorList;
 	else{
-		for(int i=1;i<factorList.size()-1;i++)
+		for(unsigned int i=1;i<factorList.size()-1;i++)
 			str+=factorList[i];
 		return deleteBrackets(str);
 	} 
