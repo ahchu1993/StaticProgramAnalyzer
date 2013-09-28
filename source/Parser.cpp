@@ -19,7 +19,8 @@ bool Parser::parseInput (string in) {
 	codeProcess();
 	pkb->buildCFG();
 	//***** not yet, minh
-	//pkb->updateModify();
+	pkb->updateModify();
+	pkb->updateUse();
 	return true;
 }
 
