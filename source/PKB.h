@@ -79,6 +79,7 @@ public:
 	//1. "assign"
 	//2. "while"
 	//3. "stmt"
+	vector<Pair> getFollow(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insertFollow(int stm1, string DE1, int stm2, string DE2);
 	int findFollowed(int stm);
 	vector<int> findFollowedT(int stmt, string DE);

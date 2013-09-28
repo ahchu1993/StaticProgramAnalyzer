@@ -139,6 +139,22 @@ void PKB::printParentTable(){
 }
 
 /************************************************** FollowTable *************************************************/
+vector<Pair> PKB::getFollow(string arg1, string arg1Type, string arg2, string arg2Type){	
+	vector<int> set1, set2;
+	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
+		set1 = followTable.getFollowsList("_");
+	}else if(arg1Type.compare("while") == 0 || arg1Type.compare("if") == 0){
+		set1 = followTable.getFollowsList(arg1Type);
+	}
+
+	if(arg2Type.compare("prog_line") == 0 || arg2Type.compare("stmt") == 0 || arg2Type.compare("_") == 0){
+		set2 = followTable.getFollowedList("_");
+	}else if(arg2Type.compare("while") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("assign") == 0){
+		set2 = followTable.getFollowedList(arg2Type);
+	}
+	
+	return followTable.getFollowPairList(set1, set2);
+}
 void PKB::insertFollow(int stm1, string DE1, int stm2, string DE2){
 	followTable.insertFollow(stm1, DE1, stm2, DE2);
 }
