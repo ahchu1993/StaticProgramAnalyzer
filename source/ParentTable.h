@@ -30,7 +30,7 @@ public:
 	vector<int> getParentList (string DE);
 	vector<int> getChildrenList (string DE);
 	bool isParent(int stm1, int stm2);
-	vector<Pair<string>> getParentPairList(vector<int> set1, vector<int> set2);
+	vector<Pair<string,string>> getParentPairList(vector<int> set1, vector<int> set2);
 	int getSize();
 	void print();
 };

@@ -31,7 +31,7 @@ public:
 	vector<int> findFollowsT(int stmt, string DE);
 	vector<int> getFollowsList(string DE);
 	vector<int> getFollowedList(string DE);
-	vector<Pair<string>> getFollowPairList(vector<int> set1, vector<int> set2);
+	vector<Pair<string,string>> getFollowPairList(vector<int> set1, vector<int> set2);
 	int getSize();
 	void print();
 };
