@@ -166,8 +166,8 @@ public:
 	bool contains(vector<int> list, int stmtNo);
 
 	// API for QE
-	vector<Pair> getNext(string arg1, string arg1Type, string arg2, string arg2Type);
-	vector<Pair> getNextT(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string,string>> getNext(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string,string>> getNextT(string arg1, string arg1Type, string arg2, string arg2Type);
 	
 	/************************************************** Affect - Zhao Yang *************************************************/
 	bool isAffect(int stmtNo1, int stmtNo2);

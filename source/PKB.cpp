@@ -701,10 +701,10 @@ vector<int> PKB::getPrevT(int stmtNo)
 	return prevStarList;
 }
 
-vector<Pair> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2Type){
 	// synonym(prog_line|stmt|assign|if|while), _, integer
 	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<Pair> result;
+	vector<Pair<string,string>> result;
 	vector<int> list1;
 	vector<int> list2;
 	int type =0;
@@ -735,7 +735,7 @@ vector<Pair> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2
 			vector<int> nextList = getNext(stmtNo1);
 			for(unsigned int j=0;j<nextList.size();j++){
 				int stmtNo2 = nextList[j];
-				Pair p(stmtNo1+"", stmtNo2+"");
+				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -748,7 +748,7 @@ vector<Pair> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2
 				for(unsigned int i=0;i<prevList.size();i++){
 					int stmtNo1 = prevList[i];
 					if(contains(list1,stmtNo1)){
-						Pair p(stmtNo1+"", stmtNo2+"");
+						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -760,7 +760,7 @@ vector<Pair> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2
 				for(unsigned int j=0;j<nextList.size();j++){
 					int stmtNo2 = nextList[j];
 					if(contains(list2,stmtNo2)){
-						Pair p(stmtNo1+"", stmtNo2+"");
+						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -773,7 +773,7 @@ vector<Pair> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2
 		for(unsigned int i=0;i<prevList.size();i++){
 			int stmtNo1 = prevList[i];
 			if(contains(list1,stmtNo1)){
-				Pair p(stmtNo1+"", stmtNo2+"");
+				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -784,7 +784,7 @@ vector<Pair> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2
 			vector<int> nextList = getNext(stmtNo1);
 			for(unsigned int j=0;j<nextList.size();j++){
 				int stmtNo2 = nextList[j];
-				Pair p(stmtNo1+"", stmtNo2+"");
+				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -801,11 +801,11 @@ bool PKB::contains(vector<int> list, int stmtNo)
 			return true;
 	return false;
 }
-vector<Pair> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg2Type)
+vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 {
 	// synonym(prog_line|stmt|assign|if|while), _, integer
 	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<Pair> result;
+	vector<Pair<string,string>> result;
 	vector<int> list1;
 	vector<int> list2;
 	int type =0;
@@ -836,7 +836,7 @@ vector<Pair> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg
 			vector<int> nextTList = getNextT(stmtNo1);
 			for(unsigned int j=0;j<nextTList.size();j++){
 				int stmtNo2 = nextTList[j];
-				Pair p(stmtNo1+"", stmtNo2+"");
+				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -849,7 +849,7 @@ vector<Pair> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg
 				for(unsigned int i=0;i<prevTList.size();i++){
 					int stmtNo1 = prevTList[i];
 					if(contains(list1,stmtNo1)){
-						Pair p(stmtNo1+"", stmtNo2+"");
+						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -861,7 +861,7 @@ vector<Pair> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg
 				for(unsigned int j=0;j<nextTList.size();j++){
 					int stmtNo2 = nextTList[j];
 					if(contains(list2,stmtNo2)){
-						Pair p(stmtNo1+"", stmtNo2+"");
+						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -874,7 +874,7 @@ vector<Pair> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg
 		for(unsigned int i=0;i<prevTList.size();i++){
 			int stmtNo1 = prevTList[i];
 			if(contains(list1,stmtNo1)){
-				Pair p(stmtNo1+"", stmtNo2+"");
+				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -885,7 +885,7 @@ vector<Pair> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg
 			vector<int> nextTList = getNextT(stmtNo1);
 			for(unsigned int j=0;j<nextTList.size();j++){
 				int stmtNo2 = nextTList[j];
-				Pair p(stmtNo1+"", stmtNo2+"");
+				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -935,14 +935,14 @@ bool PKB::isMofiedBetween(int modifiedVarIndex,int currentLine,int target)
 		return false;
 	bool result=false;
 	vector<int> nextList = getNext(currentLine);
-	for(int i=0;i<nextList.size();i++){
+	for(unsigned int i=0;i<nextList.size();i++){
 		int nextStmtNo = nextList[i];
 		if(nextStmtNo==target){
 			return false;
 		}
 		if(nextStmtNo<=0) continue;
 		// add size in case over flow
-		while(visited.size()<=nextStmtNo){
+		while(visited.size()<=(unsigned int)nextStmtNo){
 			visited.push_back(0);
 		}
 		// loop detection
