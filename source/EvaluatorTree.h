@@ -16,6 +16,7 @@
 #include <list>
 #include <sstream>
 #include <set>
+#include "Pair.h"
 using namespace std;
 class EvaluatorTree{
 public:
@@ -23,8 +24,8 @@ public:
     //template<class T>
 	struct e_node{
 		string ref;
-        e_node* before;
-        e_node* next;
+       // e_node* before;
+       // e_node* next;
         int value;
         int weights;
 	};
@@ -45,8 +46,8 @@ public:
      3. target nodes
      Function: This function will find all the nodes from a given vector of links and store them inside a given list.
      */
-    static void findNode(vector<EvaluatorTree::e_node*>& results, EvaluatorTree::e_node node);
+    static void findNode(vector<Pair<e_node*, int>>& results, e_node node);
     static e_node checkValid(int weight);
-    
+    static void duplicateAndAdd(e_node parent, e_node child);
     EvaluatorTree();
 };
