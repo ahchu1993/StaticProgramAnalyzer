@@ -45,7 +45,7 @@ void PKB::printAST()
 }
 
 /************************************************** CallTable *************************************************/
-vector<Pair> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type){	
+vector<Pair<string, string>> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type){	
 	vector<string> set1, set2;
 	if(arg1Type.compare("procedure") == 0 || arg1Type.compare("_") == 0){
 		set1 = callTable.getCall("_");
@@ -58,7 +58,7 @@ vector<Pair> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2
 	}else if(arg2Type.compare("String") == 0){
 		set2 = callTable.getCalled(arg2);
 	}
-	vector<Pair> result = callTable.getCallPairList(set1, set2);
+	vector<Pair<string, string>> result = callTable.getCallPairList(set1, set2);
 
 	for(unsigned i=0; i<result.size(); i++){
 		stringstream ss1,ss2;
@@ -74,6 +74,22 @@ vector<Pair> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2
 		result.at(i).setSecond(proc2_string);
 	}
 	return result;
+}
+
+bool PKB::checkCall(string arg1, string arg1Type, string arg2, string arg2Type){	
+	vector<string> set1, set2;
+	if(arg1Type.compare("procedure") == 0 || arg1Type.compare("_") == 0){
+		set1 = callTable.getCall("_");
+	}else if(arg1Type.compare("String") == 0){
+		set1 = callTable.getCall(arg1);
+	}
+
+	if(arg2Type.compare("procedure") == 0 || arg2Type.compare("_") == 0){
+		set2 = callTable.getCalled("_");
+	}else if(arg2Type.compare("String") == 0){
+		set2 = callTable.getCalled(arg2);
+	}
+	return callTable.checkCall(set1, set2);
 }
 void PKB::insert(string proc1, string proc2){
 	callTable.insert(proc1,proc2);
@@ -103,7 +119,7 @@ vector<int> PKB::getCallsList(int procIndex){
 	return result;
 }
 /************************************************** ParentTable *************************************************/
-vector<Pair> PKB::getParent(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<Pair<string, string>> PKB::getParent(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1, set2;
 	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
 		set1 = parentTable.getParentList("_");
@@ -155,7 +171,7 @@ void PKB::printParentTable(){
 }
 
 /************************************************** FollowTable *************************************************/
-vector<Pair> PKB::getFollow(string arg1, string arg1Type, string arg2, string arg2Type){	
+vector<Pair<string, string>> PKB::getFollow(string arg1, string arg1Type, string arg2, string arg2Type){	
 	vector<int> set1, set2;
 	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
 		set1 = followTable.getFollowsList("_");

@@ -57,7 +57,8 @@ public:
 	void printAST();
 
 	/************************************************** CallTable *************************************************/
-	vector<Pair> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string, string>> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool PKB::checkCall(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(string proc1, string proc2);
 	bool isCalled(string proc1, string proc2);
 	vector<string> getCallsList(string procName);
@@ -66,7 +67,7 @@ public:
 	vector<int> PKB::getCallsList(int procIndex);
 
 	/************************************************** ParentTable *************************************************/
-	vector<Pair> PKB::getParent(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string, string>> PKB::getParent(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkParent(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(int stm1, string DE1, int stm2, string DE2);
 	int getParent (int stm);
@@ -80,7 +81,7 @@ public:
 	//1. "assign"
 	//2. "while"
 	//3. "stmt"
-	vector<Pair> getFollow(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string, string>> getFollow(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkFollow(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insertFollow(int stm1, string DE1, int stm2, string DE2);
 	int findFollowed(int stm);
