@@ -16,17 +16,38 @@
 #include <list>
 #include <sstream>
 #include <set>
+#include "Pair.h"
+using namespace std;
 class EvaluatorTree{
 public:
     //Attributes
     //template<class T>
 	struct e_node{
 		string ref;
-        vector<e_node*> links;
+       // e_node* before;
+       // e_node* next;
         int value;
         int weights;
 	};
+    
+    struct Columns{
+		string ref;
+        vector<e_node*> links;
+	};
+    static vector<Columns*> columns;
     //Methods
-    e_node addNode(e_node node);
-    void addLink(e_node parent, e_node child);
+    static e_node createNode(string ref, vector<e_node*> links, int value, int weights);
+    static e_node merge(e_node parent, e_node child, bool flag);
+    static e_node addLink(e_node parent, e_node child);
+    static int findColumn(string ref);
+    /*
+     parameters: 1. list of enodes pointer, results to record all the nodes found
+     2. vector of links
+     3. target nodes
+     Function: This function will find all the nodes from a given vector of links and store them inside a given list.
+     */
+    static void findNode(vector<Pair<e_node*, int>>& results, e_node node);
+    static e_node checkValid(int weight);
+    static void duplicateAndAdd(e_node parent, e_node child);
+    EvaluatorTree();
 };

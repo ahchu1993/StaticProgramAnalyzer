@@ -228,14 +228,14 @@ vector<int> UseTable::getUseVarList(){
 	return results;
 }
 
-vector<Pair> UseTable::getUsePairList(vector<int> set1, vector<int> set2){
+vector<Pair<string,string>> UseTable::getUsePairList(vector<int> set1, vector<int> set2){
 	use_proc_row temp_proc_row;
 	use_stmt_row temp_stmt_row;
 	bool flag1 = true;
 	bool flag2 = true;
 	ostringstream convert;
 	string str1, str2;
-	vector<Pair> results;
+	vector<Pair<string,string>> results;
 
 	for (unsigned i =0; i<UseProcTable.size(); i++)
 	{
@@ -259,7 +259,7 @@ vector<Pair> UseTable::getUsePairList(vector<int> set1, vector<int> set2){
 			str1 = convert.str();
 			convert<<temp_proc_row.varIndex;
 			str2 = convert.str();
-			Pair myPair(str1, str2);
+			Pair<string,string> myPair(str1, str2);
 			results.push_back(myPair);
 		}
 	}
@@ -286,7 +286,7 @@ vector<Pair> UseTable::getUsePairList(vector<int> set1, vector<int> set2){
 			str1 = convert.str();
 			convert<<temp_stmt_row.varIndex;
 			str2 = convert.str();
-			Pair myPair(str1, str2);
+			Pair<string,string> myPair(str1, str2);
 			results.push_back(myPair);
 		}
 	}

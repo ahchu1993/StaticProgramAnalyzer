@@ -148,8 +148,8 @@ void ParentTable::print(){
 bool ParentTable::isParent(int stm1, int stm2){
 	return getParent(stm2) == stm1;
 }
-vector<Pair> ParentTable::getParentPairList(vector<int> set1, vector<int> set2){
-	vector<Pair> result;
+vector<Pair<string,string>> ParentTable::getParentPairList(vector<int> set1, vector<int> set2){
+	vector<Pair<string,string>> result;
 	for(unsigned i=0; i<set1.size(); i++){
 		for(unsigned j=0; j<set2.size(); j++){
 			if(isParent(set1.at(i), set2.at(j))){
@@ -159,7 +159,7 @@ vector<Pair> ParentTable::getParentPairList(vector<int> set1, vector<int> set2){
 				ostringstream convert2;
 				convert2 << set2.at(j);
 				string no2 = convert2.str();
-				result.push_back(Pair(no1, no2));
+				result.push_back(Pair<string,string>(no1, no2));
 			}
 		}
 	}

@@ -239,14 +239,14 @@ vector<int> ModifyTable::getModifyVarList(){
 	return results;
 }
 
-vector<Pair> ModifyTable::getModifyPairList(vector<int> set1, vector<int> set2){
+vector<Pair<string,string>> ModifyTable::getModifyPairList(vector<int> set1, vector<int> set2){
 	modify_proc_row temp_proc_row;
 	modify_stmt_row temp_stmt_row;
 	bool flag1 = true;
 	bool flag2 = true;
 	ostringstream convert;
 	string str1, str2;
-	vector<Pair> results;
+	vector<Pair<string,string>> results;
 
 	for (unsigned i =0; i<ModifyProcTable.size(); i++)
 	{
@@ -270,7 +270,7 @@ vector<Pair> ModifyTable::getModifyPairList(vector<int> set1, vector<int> set2){
 			str1 = convert.str();
 			convert<<temp_proc_row.varIndex;
 			str2 = convert.str();
-			Pair myPair(str1, str2);
+			Pair<string,string> myPair(str1, str2);
 			results.push_back(myPair);
 		}
 	}
@@ -297,7 +297,7 @@ vector<Pair> ModifyTable::getModifyPairList(vector<int> set1, vector<int> set2){
 			str1 = convert.str();
 			convert<<temp_stmt_row.varIndex;
 			str2 = convert.str();
-			Pair myPair(str1, str2);
+			Pair<string,string> myPair(str1, str2);
 			results.push_back(myPair);
 		}
 	}

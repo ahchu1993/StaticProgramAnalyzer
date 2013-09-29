@@ -63,7 +63,7 @@ public:
 	vector<int> getUseVarList();
 
 	// Return pairs satisfying set1 and set2
-	vector<Pair> getUsePairList(vector<int> set1, vector<int> set2);
+	vector<Pair<string,string>> getUsePairList(vector<int> set1, vector<int> set2);
 
 	// Return whether there exist a pair satisfying set1 and set2
 	bool checkUse(vector<int> set1, vector<int> set2);
