@@ -6,21 +6,20 @@
 
 using namespace std;
 
-class Pair{
+template <class T> class Pair{
 private:
-	string _first;
-	string _second;
+	T _first, _second;
 
 public:
-	Pair(string first, string second);
+	Pair(T first, T second);
 
-	string getFirst();
+	T getFirst();
 
-	string getSecond();
+	T getSecond();
 
-	void Pair::setFirst(string f);
+	void setFirst(T f);
 
-	void Pair::setSecond(string s);
+	void setSecond(T s);
 };
 
 #endif

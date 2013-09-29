@@ -1,22 +1,22 @@
 #include "Pair.h"
 
-Pair::Pair(string first, string second){
-	_first = first;
-	_second = second;
+template <class T> Pair<T>::Pair(T first, T second){
+    _first = first;
+    _second = second;
 }
 
-string Pair::getFirst(){
+template <class T>  T Pair<T>::getFirst(){
 	return _first;
 }
 
-string Pair::getSecond(){
+template <class T>  T Pair<T>::getSecond(){
 	return _second;
 }
 
-void Pair::setFirst(string f){
+template <class T> void Pair<T>::setFirst(T f){
 	_first = f;
 }
 
-void Pair::setSecond(string s){
+template <class T> void Pair<T>::setSecond(T s){
 	_second = s;
 }
