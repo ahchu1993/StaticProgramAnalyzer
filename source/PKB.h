@@ -67,6 +67,7 @@ public:
 
 	/************************************************** ParentTable *************************************************/
 	vector<Pair> PKB::getParent(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkParent(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(int stm1, string DE1, int stm2, string DE2);
 	int getParent (int stm);
 	vector<int> getParentT(int stmt);
@@ -80,6 +81,7 @@ public:
 	//2. "while"
 	//3. "stmt"
 	vector<Pair> getFollow(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkFollow(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insertFollow(int stm1, string DE1, int stm2, string DE2);
 	int findFollowed(int stm);
 	vector<int> findFollowedT(int stmt, string DE);

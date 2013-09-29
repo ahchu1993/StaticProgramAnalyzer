@@ -166,3 +166,16 @@ vector<Pair> ParentTable::getParentPairList(vector<int> set1, vector<int> set2){
 
 	return result;
 }
+
+bool ParentTable::checkParent(vector<int> set1, vector<int> set2){
+	for(unsigned i=0; i<set1.size(); i++){
+		for(unsigned j=0; j<set2.size(); j++){
+			if(isParent(set1.at(i), set2.at(j))){
+				if(isParent(set1.at(i), set2.at(j)))
+					return true;
+			}
+		}
+	}
+
+	return false;
+}

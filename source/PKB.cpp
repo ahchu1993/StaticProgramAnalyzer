@@ -119,6 +119,22 @@ vector<Pair> PKB::getParent(string arg1, string arg1Type, string arg2, string ar
 	
 	return parentTable.getParentPairList(set1, set2);
 }
+bool PKB::checkParent(string arg1, string arg1Type, string arg2, string arg2Type){
+	vector<int> set1, set2;
+	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
+		set1 = parentTable.getParentList("_");
+	}else if(arg1Type.compare("while") == 0 || arg1Type.compare("if") == 0){
+		set1 = parentTable.getParentList(arg1Type);
+	}
+
+	if(arg2Type.compare("prog_line") == 0 || arg2Type.compare("stmt") == 0 || arg2Type.compare("_") == 0){
+		set2 = parentTable.getChildrenList("_");
+	}else if(arg2Type.compare("while") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("assign") == 0){
+		set2 = parentTable.getChildrenList(arg2Type);
+	}
+	
+	return parentTable.checkParent(set1, set2);
+}
 void PKB::insert(int stm1, string DE1, int stm2, string DE2){
 	parentTable.insert(stm1, DE1, stm2, DE2);
 }
@@ -154,6 +170,22 @@ vector<Pair> PKB::getFollow(string arg1, string arg1Type, string arg2, string ar
 	}
 	
 	return followTable.getFollowPairList(set1, set2);
+}
+bool PKB::checkFollow(string arg1, string arg1Type, string arg2, string arg2Type){
+	vector<int> set1, set2;
+	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
+		set1 = followTable.getFollowsList("_");
+	}else if(arg1Type.compare("while") == 0 || arg1Type.compare("if") == 0){
+		set1 = followTable.getFollowsList(arg1Type);
+	}
+
+	if(arg2Type.compare("prog_line") == 0 || arg2Type.compare("stmt") == 0 || arg2Type.compare("_") == 0){
+		set2 = followTable.getFollowedList("_");
+	}else if(arg2Type.compare("while") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("assign") == 0){
+		set2 = followTable.getFollowedList(arg2Type);
+	}
+	
+	return followTable.checkFollow(set1, set2);
 }
 void PKB::insertFollow(int stm1, string DE1, int stm2, string DE2){
 	followTable.insertFollow(stm1, DE1, stm2, DE2);
