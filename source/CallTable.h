@@ -23,9 +23,9 @@ public:
 	bool isCalled(string proc1, string proc2);
 	vector<string> getCallsList(string procName);
 	vector<string> getCalledList(string procName);
-	vector<string> CallTable::getCall(string procName);
-	vector<string> CallTable::getCalled(string procName);
-	vector<Pair> CallTable::getCallPairList(vector<string> set1, vector<string> set2);
+	vector<string> getCall(string procName);
+	vector<string> getCalled(string procName);
+	vector<Pair> getCallPairList(vector<string> set1, vector<string> set2);
 	int getSize();
 	void print();
 };
