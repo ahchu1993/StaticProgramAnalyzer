@@ -49,10 +49,15 @@ vector<Pair> FollowTable::getFollowPairList(vector<int> set1, vector<int> set2){
 	return result;
 }
 
-string convertIntToString(int input){
-	ostringstream convert;
-	convert << input;
-	return convert.str();
+bool FollowTable::checkFollow(vector<int> set1, vector<int> set2){
+	for(unsigned i=0; i<set1.size(); i++){
+		for(unsigned j=0; j<set2.size(); j++){
+			if(isFollowed(set1.at(i), set2.at(j))){
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 int FollowTable::findFollows(int stm){

@@ -3,6 +3,7 @@
 #include <vector>
 #include <sstream>
 #include "Pair.h"
+#include "Util.h"
 using namespace std;
 #ifndef PARENTTABLE_H
 #define PARENTTABLE_H
@@ -31,6 +32,7 @@ public:
 	vector<int> getChildrenList (string DE);
 	bool isParent(int stm1, int stm2);
 	vector<Pair> getParentPairList(vector<int> set1, vector<int> set2);
+	bool checkParent(vector<int> set1, vector<int> set2);
 	int getSize();
 	void print();
 };
