@@ -210,7 +210,7 @@ void PKB::printFollowTable(){
 }
 
 /************************************************** ModifyTable *************************************************/
-vector<Pair> PKB::getModify(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<Pair<string, string>> PKB::getModify(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
 
@@ -313,7 +313,7 @@ void PKB::printModifyTable()
 }
 
 /************************************************** UseTable *************************************************/
-vector<Pair> PKB::getUse(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<Pair<string, string>> PKB::getUse(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
 

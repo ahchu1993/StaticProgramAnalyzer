@@ -92,7 +92,7 @@ public:
 	//int getFollowedListSpecific(int varIndex, string DE);
 
 	/************************************************** ModifyTable *************************************************/
-	vector<Pair> getModify(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string, string>> getModify(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkModify(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateModify();
 
@@ -104,7 +104,7 @@ public:
 	void printModifyTable();
 
 	/************************************************** UseTable *************************************************/
-	vector<Pair> getUse(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string, string>> getUse(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkUse(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateUse();
 
