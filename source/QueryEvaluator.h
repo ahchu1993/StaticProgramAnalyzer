@@ -17,7 +17,7 @@
 using namespace std;
 
 
-class QueryEvaluator{
+class QueryEval{
 public:
     template<class T>
 	struct rated_desAbstr{
@@ -27,7 +27,12 @@ public:
 
     QueryEvaluator();
     string getQuery();
+    list<string> processQuery(string query);
     vector<QueryPreprocessor::designAbstraction> sort_desAbstr(QueryPreprocessor::designAbstraction desAbstr);
+    vector<QueryPreprocessor::entityReff> entity;
+	vector<QueryPreprocessor::designAbstraction> desAbstr;
+	vector<QueryPreprocessor::pattern> pattern;
+    vector<QueryPreprocessor::attr_compare> attr_pairs;
     /*
      priority:
      1. with unselected entity
