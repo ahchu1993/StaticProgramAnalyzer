@@ -553,8 +553,15 @@ bool QueryPreprocessor::relRef(string relation){
     }
 
     if(arg1_flag&&arg2_flag){
-        designAbstraction da = {rel_type,arg1,arg1_type,arg2,arg2_type};
-        relations.push_back(da);
+        designAbstraction d("da",rel_type,arg1,arg1_type,arg2,arg2_type);
+        designAbstraction* da = &d;
+
+        bool t1 = arg1_type==""||arg1_type=="string"||arg1_type=="integer";
+        bool t2 = arg2_type==""||arg2_type=="string"||arg2_type=="integer";
+        if(t1||t2){
+            constant_relations.push_back(da);
+        }
+        else relations.push_back(*da);
         return true;
     }else return false;
 
