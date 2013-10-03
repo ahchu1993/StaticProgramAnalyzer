@@ -57,17 +57,17 @@ public:
 	void printAST();
 
 	/************************************************** CallTable *************************************************/
-	vector<Pair<string, string>> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type);
-	bool PKB::checkCall(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string, string>> getCall(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkCall(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(string proc1, string proc2);
 	bool isCalled(string proc1, string proc2);
 	vector<string> getCallsList(string procName);
 	vector<string> getCalledList(string procName);
 	void printCallTable();
-	vector<int> PKB::getCallsList(int procIndex);
+	vector<int> getCallsList(int procIndex);
 
 	/************************************************** ParentTable *************************************************/
-	vector<Pair<string, string>> PKB::getParent(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string, string>> getParent(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkParent(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(int stm1, string DE1, int stm2, string DE2);
 	int getParent (int stm);

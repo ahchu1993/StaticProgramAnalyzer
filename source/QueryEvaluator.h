@@ -17,22 +17,22 @@
 using namespace std;
 
 
-class QueryEval{
+class QueryEvaluator{
 public:
     template<class T>
 	struct rated_desAbstr{
 		QueryPreprocessor::designAbstraction desAbstr;
 		int rating;
 	};
-
+	struct value_set{
+		string ref;
+		set<int> values;
+	};
     QueryEvaluator();
     string getQuery();
     list<string> processQuery(string query);
     vector<QueryPreprocessor::designAbstraction> sort_desAbstr(QueryPreprocessor::designAbstraction desAbstr);
-    vector<QueryPreprocessor::entityReff> entity;
-	vector<QueryPreprocessor::designAbstraction> desAbstr;
-	vector<QueryPreprocessor::pattern> pattern;
-    vector<QueryPreprocessor::attr_compare> attr_pairs;
+    vector<value_set>valueSet;
     /*
      priority:
      1. with unselected entity
@@ -45,7 +45,7 @@ public:
      8. modify*, follow*, parent* with 1 constant and unselected entity
      9. affect, next* with 1 constant and unselected entity
      10. affect*, next* with 1 constant and unselected entity
-     11-20. same order with selected entity
+     11-20. same order with selected entityf
      */
      /*
       rating:
@@ -77,6 +77,7 @@ private:
     vector<QueryPreprocessor::entityReff> entity;
 	vector<QueryPreprocessor::designAbstraction> desAbstr;
 	vector<QueryPreprocessor::pattern> pattern;
+    vector<QueryPreprocessor::attr_compare> attr_pairs;
 	vector<string> result;
 	PKB* pkb;
 	bool has_pattern;
@@ -84,6 +85,9 @@ private:
 	bool has_pattern_result;
 	QueryPreprocessor Qprocessor;
 	bool flag;
-    
+    void processAttrParis(vector<QueryPreprocessor::attr_compare> attr_pairs);
+    void QueryEvaluator::initialzeValueTable(vector<QueryPreprocessor::entityReff> entity);
+    void processPattern(vector<QueryPreprocessor::pattern> pattern);
+    void processRelations(vector<QueryPreprocessor::designAbstraction> desAbstr);
     
 };

@@ -22,34 +22,41 @@ Results::cell createNode(string ref,int value, int weights){
     node.weights = weights;
     return node;
 }
-
-int findColumn(string ref){
-    for(int i = 0; i < Results::columns.size(); i++){
-        if(Results::columns.at(i)->ref.compare(ref)==0)
-            return i;
+/*
+ 
+ for (set<int>::iterator g = pattern_result.cell.begin(); g != pattern_result.cell.end(); g++) {
+ int element = *g;
+ 
+ */
+Pair<Results::Columns*,int> findColumn(string ref){
+    int counter = 0;
+    for (set<Results::Columns*>::iterator g = Results::columns.begin(); g != Results::columns.end(); g++) {
+        Results::Columns* element = *g;
+        if(element->ref.compare(ref)==0)
+            return Pair<Results::Columns*,int>(element,counter);
     }
-    return -1;
+    return Pair<Results::Columns*,int>(NULL,counter);
 }
 
-void findNode(vector<Pair<Results::cell*, int>>& results, Results::cell node){
-    int i = findColumn(node.ref);
-    if(i!=-1){
-        vector<Results::cell*> temp = Results::columns.at(i)->links;
-        for(int j =0; j<temp.size();j++){
-            if(temp.at(j)->value == node.value){
-                Pair<Results::cell*, int> pair = Pair<Results::cell*, int>::Pair(temp.at(j), j);
-                results.push_back(pair);
+void findNode(vector<Results::cell*>& results, Results::cell node){
+    Results::Columns* i = findColumn(node.ref).getFirst();
+    if(i!=NULL){
+        list<Results::cell*> temp = i->links;
+        for (list<Results::cell*>::iterator g = temp.begin(); g != temp.end(); g++) {
+            Results::cell* element = *g;
+            if (element->value.compare(node.value)==0) {
+                results.push_back(element);
             }
-                                            
-        }
-    }
+        }//for
+    }//if !NULL
 }
+/*
 void merge(Results::cell parent, Results::cell child, bool flag){
     vector<Pair<Results::cell*, int>> parent_sets;
-    int index_parent =findColumn(parent.ref);
-    int index_child =findColumn(child.ref);
+    Pair<Results::Columns*,int> column_parent =findColumn(parent.ref);
+    Pair<Results::Columns*,int> column_child =findColumn(child.ref);
     if(!flag){//the both columns are not empty, do elimination
-        Results::Columns* firstColumn = Results::columns.at(0);
+        Results::Columns* firstColumn = *Results::columns.begin();
         Results::findNode(parent_sets, parent);
         if(parent_sets.size()==0){//if parent is not in the tree
             //do nothing
@@ -63,10 +70,10 @@ void merge(Results::cell parent, Results::cell child, bool flag){
                      rowHeader->weights++;
                 }//if
             }//for
-            /*
+            //
              should do deletion
              will done in the future
-             */
+             //
         }//else found parent
     }//if column is not empty
     else{//else one or two column is empty
@@ -91,37 +98,39 @@ void merge(Results::cell parent, Results::cell child, bool flag){
     
     }//else one or two column is empty
 }
-
-
-/*Results::cell findNodeRef(vector<Results::cell*>nodes, Results::cell node){
-    if(nodes.size()==0){
-        Results::cell null;
-        null.ref = "";
- return null;
-    }
-    for (int i=0;i<nodes.size();i++)
-    {
-        if (nodes.at(i)->ref == node.ref)
-            return *nodes.at(i);
-
-        else return findNodeRef(nodes.at(i)->links, node);
-    }
-}
-void findNode(vector<Results::cell*>& results, vector<Results::cell*>nodes, Results::cell node){
-    unsigned long linksize = nodes.size();
-    if(linksize>0){
-        for (int i=0;i<linksize;i++){
-            if (nodes.at(i)->ref == node.ref && nodes.at(i)->value == node.value){
-                results.push_back(nodes.at(i));
-                break;
-            }
-            else{
-                findNode(results, nodes.at(i)->links, node);
-            }
-        }
-    }
-}
 */
+void validation(Pair<Results::Columns*,int> column_parent, Pair<Results::Columns*,int> column_child, vector<Pair<string,string>> results){
+    if (column_parent.getSecond()<column_child.getSecond()) {//parent child
+        Results::Columns* firstColumn = *Results::columns.begin();
+        
+    }
+}
+void merge(Pair<string, string> refs, vector<Pair<string,string>> results){
+    bool flag_parent=false;//use flag to check whether parent or child column exits or not
+    bool flag_child=false;
+    Pair<Results::Columns*,int> column_parent =findColumn(refs.getFirst());
+    Pair<Results::Columns*,int> column_child =findColumn(refs.getSecond());
+    if (column_parent.getFirst()==NULL) {
+        flag_parent=true;
+    }
+    if (column_child.getFirst()==NULL) {
+        flag_child=true;
+    }
+    if (flag_parent&&flag_child) {
+        validation(column_parent, column_child, results);
+    }
+    else{// parent or child is not in the result table
+        if (flag_parent) {
+            naturalJoin();
+        }
+        else if(flag_child){
+            naturalJoin();
+        }
+        else{
+            joinTables();
+        }
+    }//else parent or child is not in the result table
+}
 
 
 static void duplicateAndAdd(Results::cell parent,Results::cell child){
