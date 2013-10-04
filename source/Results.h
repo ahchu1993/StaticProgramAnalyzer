@@ -36,12 +36,13 @@ public:
 	};
     //static set<Columns*> columns;
     set<string> columns;
-    list<cell*> tuple;
+    //list<cell*> tuple;
     list<list<cell*>*> tuple_list;
     //Methods
 
     
     //void joinTable(cell parent, cell child, bool flag);
+    void initTable(Pair<string, string> refs,vector<Pair<string,string>> results);
     void validation(int parent_index, int child_index, vector<Pair<string,string>> results);
     int findColumn(string ref);
     void join(Pair<string, string> refs, vector<Pair<string,string>> results);

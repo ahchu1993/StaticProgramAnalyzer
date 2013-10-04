@@ -123,6 +123,21 @@ int Results::findColumn(string ref){
  }
  }
  */
+void Results::initTable(Pair<string, string> refs,vector<Pair<string,string>> results){
+    columns.insert(refs.getFirst());
+    columns.insert(refs.getSecond());//initiate column
+    for (int i=0; i<results.size(); i++) {
+        list<cell*> tuple;
+        Results::cell first;
+        Results::cell second;
+        first.value = results.at(i).getFirst();
+        second.value =results.at(i).getSecond();
+        tuple.push_back(&first);
+        tuple.push_back(&second);
+        tuple_list.push_back(&tuple);
+    }
+
+}
 void Results::validation(int parent_index, int child_index, vector<Pair<string,string>> results){
     for (list<list<cell*>*>::iterator g = tuple_list.begin(); g != tuple_list.end(); g++) {
         //find for each parent child pair in the table with the same synonmy from results
