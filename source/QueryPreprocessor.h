@@ -1,8 +1,11 @@
+#include "baseRelation.h"
 #include <iostream>
+#include <list>
 #include <vector>
 #include <sstream>
 #include <map>
 #include <fstream>
+
 using namespace std;
 
 class QueryPreprocessor
@@ -11,22 +14,10 @@ public:
 	QueryPreprocessor();
 	~QueryPreprocessor(void);
 
-	typedef string DE_TYPE;
-	typedef string DA_TYPE;
-	typedef string Pattern_TYPE;
-
 	struct entityReff {
-		DE_TYPE type;
+		string type;
 		string synonym;
 	};
-
-	struct designAbstraction{
-    string relation_type;
-    string ref1;
-    string ref1_type;
-    string ref2;
-    string ref2_type;
-};
 
 	struct tree_node{
 		string content;
@@ -34,24 +25,7 @@ public:
 		tree_node* right;
 	};
 
-	struct pattern {
-		Pattern_TYPE type;
-		string synonym;
-		string varRef;
-		bool exact;   ///flag to tell whether it is a exact match or a partial match(depends on "_")
-		tree_node expr_tree;
 
-	};
-
-	struct attrRef{
-		string prefix;
-		string postfix;  //use postfix determine type
-	};
-	struct attr_compare{
-		attrRef left_ref;
-		attrRef right_ref;
-		string evaluation_type;
-	};
 
 	struct arg_type_list{
 		vector<string> synonym_type;
@@ -69,6 +43,22 @@ public:
 		string prefix_type;
 		string evaluation_type;
 	};
+
+	/// ---------------------------------data structures for QE-----------------------------
+	/// declaration_reff store all declarations(type, synonym);
+	vector<entityReff> declaration_reffs;
+
+	/// result_reffs store all result synonyms
+	vector<string> result_reffs;
+
+	/// store all baseRelation which has at least one constant
+	list<baseRelation*> constant_relations;
+
+	///group all baseRelation which has dependence
+	list<list<baseRelation*>> grouped_relations;
+
+	/// relations store all baseRelations( attr_compare, pattern, designAbstraction)
+	list<baseRelation*> relations;
 
 	/// ---------------------------build table for table driven parsing---------------------------------
 	void fillArg(arg_type_list* arg_list,bool undersc, bool int_t, bool string_t);
@@ -127,8 +117,9 @@ public:
 
 
 	///-------------------validate pattern clauses------------------
+	string flatten(tree_node* t);
 	bool check_expr_spec(string s);
-	DE_TYPE get_type(string synonym);
+	string get_type(string synonym);
 	bool pattern_assign(string s);
 	bool pattern_if(string s);
 	bool pattern_while(string s);
@@ -160,12 +151,12 @@ public:
 	void print_attr_pairs();
 	void print_query();
 
-	///---------------------getters ---------------------------
+	/*///---------------------getters ---------------------------
 	vector<entityReff> getSymbols();
 	vector<string> getResults();
 	vector<designAbstraction> getRelations();
 	vector<pattern> getPatterns();
-	vector<attr_compare> getAttrPairs(); 
+	vector<attr_compare> getAttrPairs();  */
 
 	
 private:
@@ -177,24 +168,4 @@ private:
 	map<string,entry> table;
 	map<string,attr_entry> attr_table;
 	
-	/// declaration_reff store all declarations(type, synonym);
-	vector<entityReff> declaration_reffs;
-
-	/// result_reffs store all result synonyms
-	vector<string> result_reffs;
-
-	/// relations store all design abstractions (designabstraction, ref1,ref2)
-	vector<designAbstraction> relations;
-
-	/// pattern store all patterns(pattern_type, synonym, varRef, expr_spec)
-	vector<pattern> patterns;
-
-	/// attr_pairs store all attr_compare(left attr , right attr) in with clause
-	vector<attr_compare> attr_pairs;
-	
-	vector<designAbstraction> constant_relations;
-
-	vector<vector<designAbstraction>> grouped_relations;
 };
-
-
