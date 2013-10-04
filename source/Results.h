@@ -23,32 +23,29 @@ public:
     //Attributes
     //template<class T>
 	struct cell{
-		string ref;
+       // string ref;
        // cell* before;
-        cell* next;
+       // cell* next;
         string value;
-        int weights;
+       // int weights;
 	};
     
     struct Columns{
 		string ref;
         list<cell*> links;
 	};
-    static set<Columns*> columns;
+    //static set<Columns*> columns;
+    set<string> columns;
+    list<cell*> tuple;
+    list<list<cell*>*> tuple_list;
     //Methods
-    static cell createNode(string ref, vector<cell*> links, int value, int weights);
-    static cell merge(cell parent, cell child, bool flag);
-    static cell addLink(cell parent, cell child);
-    //static int findColumn(string ref);
-    static Pair<Columns*,int> findColumn(string ref);
-    /*
-     parameters: 1. list of enodes pointer, results to record all the nodes found
-     2. vector of links
-     3. target nodes
-     Function: This function will find all the nodes from a given vector of links and store them inside a given list.
-     */
-   // static void findNode(vector<Pair<cell*, int>>& results, cell node);
-    static cell checkValid(int weight);
-    static void duplicateAndAdd(cell parent, cell child);
+
+    
+    //void joinTable(cell parent, cell child, bool flag);
+    void validation(int parent_index, int child_index, vector<Pair<string,string>> results);
+    int findColumn(string ref);
+    void join(Pair<string, string> refs, vector<Pair<string,string>> results);
+    list<list<cell*>*> equiJoin(int join_index,int position, vector<Pair<string,string>> results);
+    void merge(Results table);
     Results();
 };
