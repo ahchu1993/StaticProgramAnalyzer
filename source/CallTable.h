@@ -25,7 +25,7 @@ public:
 	vector<string> getCalledList(string procName);
 	vector<string> getCall(string procName);
 	vector<string> getCalled(string procName);
-	vector<Pair<string, string>> getCallPairList(vector<string> set1, vector<string> set2);
+	vector<Pair<string,string>> getCallPairList(vector<string> set1, vector<string> set2);
 	bool checkCall(vector<string> set1, vector<string> set2);
 	int getSize();
 	void print();
