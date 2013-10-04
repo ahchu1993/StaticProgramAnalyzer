@@ -139,7 +139,7 @@ void Results::validation(int parent_index, int child_index, vector<Pair<string,s
                 break;
             }
         }
-        if (!flag_find) {
+        if (!flag_find) {//if not match at all, delete this tuple from list
             tuple_list.erase(g);
         }
     }
