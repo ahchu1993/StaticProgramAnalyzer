@@ -75,8 +75,8 @@ public:
      */
     
 private:
-
-	map<string, set<string>> resultTable;
+  
+	map<string, set<string>> valueTable;
     vector<QueryPreprocessor::entityReff> entity;
 	vector<string> result;
 	list<baseRelation*> constant_relations;
@@ -91,5 +91,5 @@ private:
     void initialzeValueTable(vector<QueryPreprocessor::entityReff> entity);
     void processPattern(vector<pattern> pattern);
     void processRelations(vector<designAbstraction> desAbstr);
-    
+      void updateValueTable(string ref, vector<string> values);
 };

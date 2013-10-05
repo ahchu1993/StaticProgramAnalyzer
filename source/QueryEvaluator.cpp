@@ -64,6 +64,23 @@ void processPattern(vector<pattern> pattern){
 
 
 }
+void QueryEvaluator::updateValueTable(string ref, vector<string> values){
+    
+    for (set<string>::iterator g = valueTable[ref].begin(); g != valueTable[ref].end(); g++) {
+        string value = *g;
+        bool flag_find = false;
+        for (int i =0; i<values.size(); i++) {
+            if (value.compare(values.at(i))==0) {
+                flag_find = true;
+                break;
+            }
+        }
+        if (!flag_find) {
+            valueTable[ref].erase(g);//if not match at all, delete this value from set
+        }
+        
+    }//for
+}
 void QueryEvaluator::processRelations(vector<designAbstraction> desAbstr){
     for (int i=0; i<desAbstr.size(); i++) {
         designAbstraction relation = desAbstr.at(i);
