@@ -42,7 +42,8 @@ vector<Pair<string,string>> FollowTable::getFollowPairList(vector<int> set1, vec
 			if(isFollowed(set1.at(i), set2.at(j))){
 				string no1 = Util::convertIntToString(set1.at(i));
 				string no2 = Util::convertIntToString(set2.at(i));
-				result.push_back(Pair<string,string>(no1, no2));
+				Pair::Pair<string,string> p(no1,no2);
+				result.push_back(p);
 			}
 		}
 	}
