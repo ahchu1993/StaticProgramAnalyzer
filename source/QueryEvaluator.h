@@ -62,7 +62,7 @@ public:
             2 unselected entity: 50
             1 selected entity: 100
             2 selected eneity: 200
-      *//Users/Andy/Workplace/cs3202/source/Results.cpp
+      *Users/Andy/Workplace/cs3202/source/Results.cpp
     /*
       1. sort the desAbstr and eliminate duplicate desAbstr
       2. Querying all the desAbstr with only constants
@@ -91,4 +91,5 @@ private:
 
     bool processConstantRelations();
 	bool QueryEvaluator::processTwoConstantsRelations(designAbstraction* da);
+	bool QueryEvaluator::processOneConstantRelations(designAbstraction* da);
 };

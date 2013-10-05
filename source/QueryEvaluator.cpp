@@ -37,47 +37,52 @@ bool QueryEvaluator::processConstantRelations(){
 		{
 			designAbstraction* da = static_cast<designAbstraction*>(b);
 			//Handle 2 integers case
-			if(da->ref1_type == "integer" && da->ref2_type == "integer"){
-				processTwoConstantsRelations(da);
+			if((da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "_") 
+				&& (da->ref2_type == "integer" || da->ref2_type == "string" || da->ref2_type == "_")){
+				return processTwoConstantsRelations(da);
 			}
-			string relation = da->relation_type;
-			vector<pair<string, string>> res;
-
-			if(relation == "Modify"){
-				res = pkb-> getModify(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
-			}else if(relation == "Use"){
-				res = pkb-> getUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
-			}else if(relation == "Call"){
-				res = pkb-> getCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
-			}else if(relation == "Parent"){
-				res = pkb-> getParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
-			}else if(relation == "Next"){
-				res = pkb-> getNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
-			}
-
-			if(res.size() == 0)
-				return 0;
-
-			vector<string> result;
-			string ref;
-			if(da->ref1_type == "integer"){
-				for(unsigned i=0; i<res.size(); i++){
-					result.push_back(res.at(i).first);
-					ref = da->ref2;
-				}
-			}else if(da->ref2_type == "integer"){
-				for(unsigned i=0; i<res.size(); i++){
-					result.push_back(res.at(i).second);
-					ref = da->ref1;
-				}
-			}
-			//Update value table with result vector
-			updateValueTable(ref, result);	
+			return 	processOneConstantRelations(da);
 		}
+		return false;
 	}
 		
 }
 
+bool QueryEvaluator::processOneConstantRelations(designAbstraction* da){
+	string relation = da->relation_type;
+	vector<pair<string, string>> res;
+
+	if(relation == "Modifies"){
+		res = pkb-> getModify(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Uses"){
+		res = pkb-> getUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Calls"){
+		res = pkb-> getCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Parents"){
+		res = pkb-> getParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Nexts"){
+		res = pkb-> getNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}
+
+	if(res.size() == 0)
+		return 0;
+
+	vector<string> result;
+	string ref;
+	if(da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "_"){
+		for(unsigned i=0; i<res.size(); i++){
+			result.push_back(res.at(i).first);
+			ref = da->ref2;
+		}
+	}else if(da->ref2_type == "integer" || da->ref2_type == "string" || da->ref2_type == "_"){
+		for(unsigned i=0; i<res.size(); i++){
+			result.push_back(res.at(i).second);
+			ref = da->ref1;
+		}
+	}
+	//Update value table with result vector
+	updateValueTable(ref, result);
+}
 bool QueryEvaluator::processTwoConstantsRelations(designAbstraction* da){
 	string relation = da->relation_type;
 
