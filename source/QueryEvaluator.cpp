@@ -29,31 +29,98 @@ list<string> QueryEvaluator::processQuery(string query){
     }
     return results;
 }
-bool processConstantRelations(){
-	/*go thru constant_relations
-		baseRelation* b = constant_relations(i);
-		if(b->type=="des")
+bool QueryEvaluator::processConstantRelations(){
+
+	for(list<baseRelation*>::iterator it=constant_relations.begin(); it!=constant_relations.end(); it++){
+		baseRelation* b = *it;
+		if(b->type=="desAbstraction")
 		{
 			designAbstraction* da = static_cast<designAbstraction*>(b);
-			da->relation_type;
-			pkb ->
-		}else (b->type)
-		*/
+			//Handle 2 integers case
+			if(da->ref1_type == "integer" && da->ref2_type == "integer"){
+				processTwoConstantsRelations(da);
+			}
+			string relation = da->relation_type;
+			vector<Pair<string, string>> res;
+
+			if(relation == "Modify"){
+				res = pkb-> getModify(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+			}else if(relation == "Use"){
+				res = pkb-> getUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+			}else if(relation == "Call"){
+				res = pkb-> getCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+			}else if(relation == "Parent"){
+				res = pkb-> getParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+			}else if(relation == "Next"){
+				res = pkb-> getNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+			}
+
+			if(res.size() == 0)
+				return 0;
+
+			vector<string> result;
+			string ref;
+			if(da->ref1_type == "integer"){
+				for(unsigned i=0; i<res.size(); i++){
+					result.push_back(res.at(i).getFirst());
+					ref = da->ref2;
+				}
+			}else if(da->ref2_type == "integer"){
+				for(unsigned i=0; i<res.size(); i++){
+					result.push_back(res.at(i).getSecond());
+					ref = da->ref1;
+				}
+			}
+			//Update value table with result vector
+			updateValueTable(ref, result);	
+		}
+	}
+		
 }
 
+bool QueryEvaluator::processTwoConstantsRelations(designAbstraction* da){
+	string relation = da->relation_type;
+
+	if(relation == "Modify"){
+		return pkb-> checkModify(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Use"){
+		return pkb-> checkUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Call"){
+		return pkb-> checkCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Parent"){
+		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Next"){
+		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}
+
+	
+}
 bool processGroupedRelations(){
+    
 }
 //store all the possible values for each synonmy
 void QueryEvaluator::initialzeValueTable(vector<QueryPreprocessor::entityReff> entities){
-    for (int i =0; i<entity.size(); i++) {
-        QueryPreprocessor::entityReff entity;
-        QueryEvaluator::value_set temp;
-        temp.ref = entity.synonym;
-        temp.values = QueryEvaluator::pkb->getValues(entity.at(i).type);
-        valueSet.push_back(temp);
+    for (int i =0; i<entities.size(); i++) {
+        QueryPreprocessor::entityReff entity = entities.at(i);
+        valueTable[entity.synonym] = QueryEvaluator::pkb->getValues(entity.type);
     }
-
-
+}
+void QueryEvaluator::updateValueTable(string ref, vector<string> values){
+    
+    for (set<string>::iterator g = valueTable[ref].begin(); g != valueTable[ref].end(); g++) {
+        string value = *g;
+        bool flag_find = false;
+        for (int i =0; i<values.size(); i++) {
+            if (value.compare(values.at(i))==0) {
+                flag_find = true;
+                break;
+            }
+        }
+        if (!flag_find) {
+            valueTable[ref].erase(g);//if not match at all, delete this value from set
+        }
+        
+    }//for
 }
 void processAttrPairs(vector<QueryPreprocessor::attr_compare> attr_pairs){
 
@@ -64,6 +131,8 @@ void processPattern(vector<pattern> pattern){
 
 
 }
+
+
 void QueryEvaluator::processRelations(vector<designAbstraction> desAbstr){
     for (int i=0; i<desAbstr.size(); i++) {
         designAbstraction relation = desAbstr.at(i);

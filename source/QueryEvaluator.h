@@ -14,7 +14,6 @@
 #include <list>
 #include <sstream>
 #include <set>
-#include "baseRelation.h"
 using namespace std;
 
 
@@ -25,15 +24,12 @@ public:
 		QueryPreprocessor::designAbstraction desAbstr;
 		int rating;
 	};
-	struct value_set{
-		string ref;
-		set<int> values;
-	};
-    QueryEvaluator();
+
+    QueryEvaluator(PKB* pkb);
     string getQuery();
     list<string> processQuery(string query);
     vector<designAbstraction> sort_desAbstr(designAbstraction desAbstr);
-    vector<value_set>valueSet;
+    //vector<value_set>valueSet;
     /*
      priority:
      1. with unselected entity
@@ -66,7 +62,7 @@ public:
             2 unselected entity: 50
             1 selected entity: 100
             2 selected eneity: 200
-      */
+      *//Users/Andy/Workplace/cs3202/source/Results.cpp
     /*
       1. sort the desAbstr and eliminate duplicate desAbstr
       2. Querying all the desAbstr with only constants
@@ -76,7 +72,7 @@ public:
     
 private:
 
-	map<string, set<string>> resultTable;
+	map<string, set<string>> valueTable;
     vector<QueryPreprocessor::entityReff> entity;
 	vector<string> result;
 	list<baseRelation*> constant_relations;
@@ -88,8 +84,11 @@ private:
 	QueryPreprocessor Qprocessor;
 	bool flag;
     void processAttrParis(vector<attr_compare> attr_pairs);
-    void QueryEvaluator::initialzeValueTable(vector<QueryPreprocessor::entityReff> entity);
+    void initialzeValueTable(vector<QueryPreprocessor::entityReff> entity);
     void processPattern(vector<pattern> pattern);
     void processRelations(vector<designAbstraction> desAbstr);
-    
+      void updateValueTable(string ref, vector<string> values);
+
+    bool processConstantRelations();
+	bool QueryEvaluator::processTwoConstantsRelations(designAbstraction* da);
 };

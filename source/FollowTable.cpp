@@ -35,14 +35,14 @@ vector<int> FollowTable::getFollowedList(string DE){
 	return result;
 }
 
-vector<Pair<string,string>> FollowTable::getFollowPairList(vector<int> set1, vector<int> set2){
-	vector<Pair<string,string>> result;
+vector<pair<string,string>> FollowTable::getFollowPairList(vector<int> set1, vector<int> set2){
+	vector<pair<string,string>> result;
 	for(unsigned i=0; i<set1.size(); i++){
 		for(unsigned j=0; j<set2.size(); j++){
 			if(isFollowed(set1.at(i), set2.at(j))){
 				string no1 = Util::convertIntToString(set1.at(i));
 				string no2 = Util::convertIntToString(set2.at(i));
-				Pair::Pair<string,string> p(no1,no2);
+                pair<string,string> p(no1, no2);
 				result.push_back(p);
 			}
 		}

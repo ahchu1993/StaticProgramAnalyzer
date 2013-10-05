@@ -6,13 +6,17 @@ TNode::TNode(string type, int content, int line){
 	TNode::lineNo = line;
 	TNode::leftChild = NULL;
 	TNode::rightChild = NULL;
+	hasRightChild=0;
+	hasLeftChild=0;
 }
 
 void TNode::makeLeftChild(TNode* leftChild){
+	hasLeftChild=1;
 	TNode::leftChild = leftChild;
 }
 
 void TNode::makeRightChild(TNode* rightChild){
+	hasRightChild=1;
 	TNode::rightChild = rightChild;
 }
 

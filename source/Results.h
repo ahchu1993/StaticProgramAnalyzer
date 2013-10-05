@@ -16,7 +16,7 @@
 #include <list>
 #include <sstream>
 #include <set>
-#include "Pair.h"
+#include <utility>
 using namespace std;
 class Results{
 public:
@@ -42,11 +42,11 @@ public:
 
     
     //void joinTable(cell parent, cell child, bool flag);
-    void initTable(Pair<string, string> refs,vector<Pair<string,string>> results);
-    void validation(int parent_index, int child_index, vector<Pair<string,string>> results);
+    void initTable(pair<string, string> refs,vector<pair<string,string>> results);
+    void validation(int parent_index, int child_index, vector<pair<string,string>> results);
     int findColumn(string ref);
-    void join(Pair<string, string> refs, vector<Pair<string,string>> results);
-    list<list<cell*>*> equiJoin(int join_index,int position, vector<Pair<string,string>> results);
+    void join(pair<string, string> refs, vector<pair<string,string>> results);
+    list<list<cell*>*> equiJoin(int join_index,int position, vector<pair<string,string>> results);
     void merge(Results table);
     Results();
 };
