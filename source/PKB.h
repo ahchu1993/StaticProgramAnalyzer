@@ -90,10 +90,10 @@ public:
 	vector<int> findFollowsT(int stmt, string DE);
 	bool isFollowed(int stm1,int stm2);
 	void printFollowTable();
-	//int getFollowedListSpecific(int varIndex, string DE);
 
 	/************************************************** ModifyTable *************************************************/
 	vector<Pair<string, string>> getModify(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string, string>> getModifySpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
 	bool checkModify(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateModify();
 

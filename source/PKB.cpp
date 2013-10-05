@@ -267,6 +267,47 @@ vector<Pair<string, string>> PKB::getModify(string arg1, string arg1Type, string
 	return modifyTable.getModifyPairList(set1, set2);
 }
 
+vector<Pair<string, string>> PKB::getModifySpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type){
+	vector<int> set1;
+	vector<int> set2;
+	int procIndex, varIndex;
+
+	// Get the set of possible values for argument 1
+	if (arg1Type.compare("procedure") == 0){
+		set1 = modifyTable.getModifyProcList();
+	} else if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0){
+		set1 = modifyTable.getModifyStmtList();
+	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
+		set1 = modifyTable.getModifyDEList(arg1Type);
+	} else if (arg1Type.compare("string") == 0){
+		procIndex = procTable.getProcIndex(arg1);
+		if(procIndex != -1){
+			set1.push_back(procIndex);
+		}
+	} else if (arg1Type.compare("integer") == 0){
+		int stmtNo;
+		istringstream(arg1)>>stmtNo;
+		set1.push_back(stmtNo);
+	}
+
+	// Get the set of possible values for argument 1
+	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
+		set2 = modifyTable.getModifyVarList();
+	} else if (arg2Type.compare("string") == 0){
+		procIndex = procTable.getProcIndex(arg2);
+		if (procIndex != -1){
+			set2.push_back(procIndex);
+		} else{
+			varIndex = varTable.getVarIndex(arg2);
+			if (varIndex != -1){
+				set2.push_back(varIndex);
+			}
+		}
+	}
+
+	return modifyTable.getModifyPairList(set1, set2);
+}
+
 bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
