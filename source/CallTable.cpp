@@ -74,12 +74,14 @@ vector<string> CallTable::getCalled(string procName){
 	return result;
 }
 
-vector<Pair<string, string>> CallTable::getCallPairList(vector<string> set1, vector<string> set2){
-	vector<Pair<string, string>> result;
+vector<pair<string, string>> CallTable::getCallPairList(vector<string> set1, vector<string> set2){
+	vector<pair<string, string>> result;
 	for(unsigned i=0; i<set1.size(); i++){
 		for(unsigned j=0; j<set2.size(); j++){
-			if(isCalled(set1.at(i), set2.at(j)))
-			result.push_back(Pair<string, string>(set1.at(i), set2.at(j)));
+			if(isCalled(set1.at(i), set2.at(j))){
+                pair<string,string> p(set1.at(i), set2.at(j));
+				result.push_back(p);
+            }
 		}
 	}
 
@@ -87,7 +89,7 @@ vector<Pair<string, string>> CallTable::getCallPairList(vector<string> set1, vec
 }
 
 bool CallTable::checkCall(vector<string> set1, vector<string> set2){
-	vector<Pair<string, string>> result;
+	vector<pair<string, string>> result;
 	for(unsigned i=0; i<set1.size(); i++){
 		for(unsigned j=0; j<set2.size(); j++){
 			if(isCalled(set1.at(i), set2.at(j)))

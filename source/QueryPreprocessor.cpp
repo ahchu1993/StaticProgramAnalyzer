@@ -1567,14 +1567,14 @@ void QueryPreprocessor::group_relations(){
 
 
     while(total_count>0){
-        list<baseRelation*> group;
+        list<BaseRelation*> group;
 
 		//get the first relation not processed and mark its dependence
         for(unsigned j =0;j<relation_map.size();j++){ 
-			std::list<baseRelation*>::iterator it = relations.begin();
+			std::list<BaseRelation*>::iterator it = relations.begin();
             if(relation_map[j]==0){
 
-				baseRelation* f = *it;
+				BaseRelation* f = *it;
 				++it;
 
 				if(f->type=="designAbstraction"){
@@ -1614,10 +1614,10 @@ void QueryPreprocessor::group_relations(){
         do{
             before = c;
 			int i=0;
-            for (std::list<baseRelation*>::iterator it=relations.begin();it!=relations.end();++it){
+            for (std::list<BaseRelation*>::iterator it=relations.begin();it!=relations.end();++it){
                 if(relation_map[i]==1) continue; //relation processed
 
-				baseRelation* re = *it;
+				BaseRelation* re = *it;
 
 				string r1,r2;
 				if(re->type=="designAbstraction"){
@@ -1757,7 +1757,7 @@ void QueryPreprocessor::print_result(){
 /*
 void QueryPreprocessor::print_relations(){
     for(unsigned int i=0;i<relations.size();i++){
-            baseRelation* d = relations.at(i);
+            BaseRelation* d = relations.at(i);
 			designAbstraction* da = static_cast<designAbstraction*>(da);
             cout<<da->relation_type<<" "<<da->ref1<<" "<<da->ref1_type<<" "<<da->ref2<<" "<<da->ref2_type<<"\n";
     }

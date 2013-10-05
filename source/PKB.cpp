@@ -45,7 +45,7 @@ void PKB::printAST()
 }
 
 /************************************************** CallTable *************************************************/
-vector<Pair<string, string>> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type){	
+vector<pair<string, string>> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type){	
 	vector<string> set1, set2;
 	if(arg1Type.compare("procedure") == 0 || arg1Type.compare("_") == 0){
 		set1 = callTable.getCall("_");
@@ -58,20 +58,20 @@ vector<Pair<string, string>> PKB::getCall(string arg1, string arg1Type, string a
 	}else if(arg2Type.compare("String") == 0){
 		set2 = callTable.getCalled(arg2);
 	}
-	vector<Pair<string, string>> result = callTable.getCallPairList(set1, set2);
+	vector<pair<string, string>> result = callTable.getCallPairList(set1, set2);
 
 	for(unsigned i=0; i<result.size(); i++){
 		stringstream ss1,ss2;
-		string proc1_string = result.at(i).getFirst();
-		string proc2_string = result.at(i).getSecond();
+		string proc1_string = result.at(i).first;
+		string proc2_string = result.at(i).second;
 		int proc1 =	procTable.getProcIndex(proc1_string);
 		int proc2 =	procTable.getProcIndex(proc2_string);
 		ss1 << proc1;
 		ss2 << proc2;
 		proc1_string = ss1.str();
 		proc2_string = ss2.str();
-		result.at(i).setFirst(proc1_string);
-		result.at(i).setSecond(proc2_string);
+		result.at(i).first= proc1_string;
+		result.at(i).second = proc2_string;
 	}
 	return result;
 }
@@ -119,7 +119,7 @@ vector<int> PKB::getCallsList(int procIndex){
 	return result;
 }
 /************************************************** ParentTable *************************************************/
-vector<Pair<string, string>> PKB::getParent(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<pair<string, string>> PKB::getParent(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1, set2;
 	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
 		set1 = parentTable.getParentList("_");
@@ -171,7 +171,7 @@ void PKB::printParentTable(){
 }
 
 /************************************************** FollowTable *************************************************/
-vector<Pair<string, string>> PKB::getFollow(string arg1, string arg1Type, string arg2, string arg2Type){	
+vector<pair<string, string>> PKB::getFollow(string arg1, string arg1Type, string arg2, string arg2Type){	
 	vector<int> set1, set2;
 	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
 		set1 = followTable.getFollowsList("_");
@@ -226,7 +226,7 @@ void PKB::printFollowTable(){
 }
 
 /************************************************** ModifyTable *************************************************/
-vector<Pair<string, string>> PKB::getModify(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<pair<string, string>> PKB::getModify(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
 	int procIndex, varIndex;
@@ -394,7 +394,7 @@ void PKB::printModifyTable()
 }
 
 /************************************************** UseTable *************************************************/
-vector<Pair<string, string>> PKB::getUse(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<pair<string, string>> PKB::getUse(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
 	int procIndex, varIndex;
@@ -790,10 +790,10 @@ vector<int> PKB::getPrevT(int stmtNo)
 	return prevStarList;
 }
 
-vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<pair<string,string>> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2Type){
 	// synonym(prog_line|stmt|assign|if|while), _, integer
 	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<Pair<string,string>> result;
+	vector<pair<string,string>> result;
 	vector<int> list1;
 	vector<int> list2;
 	int type =0;
@@ -824,7 +824,7 @@ vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string ar
 			vector<int> nextList = getNext(stmtNo1);
 			for(unsigned int j=0;j<nextList.size();j++){
 				int stmtNo2 = nextList[j];
-				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+				pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -837,7 +837,7 @@ vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string ar
 				for(unsigned int i=0;i<prevList.size();i++){
 					int stmtNo1 = prevList[i];
 					if(contains(list1,stmtNo1)){
-						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+						pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -849,7 +849,7 @@ vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string ar
 				for(unsigned int j=0;j<nextList.size();j++){
 					int stmtNo2 = nextList[j];
 					if(contains(list2,stmtNo2)){
-						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+						pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -862,7 +862,7 @@ vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string ar
 		for(unsigned int i=0;i<prevList.size();i++){
 			int stmtNo1 = prevList[i];
 			if(contains(list1,stmtNo1)){
-				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+				pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -873,7 +873,7 @@ vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string ar
 			vector<int> nextList = getNext(stmtNo1);
 			for(unsigned int j=0;j<nextList.size();j++){
 				int stmtNo2 = nextList[j];
-				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+				pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -883,6 +883,104 @@ vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string ar
 
 	return result;
 }
+bool PKB::checkNext(string arg1, string arg1Type, string arg2, string arg2Type){
+	// synonym(prog_line|stmt|assign|if|while), _, integer
+	//					synonym(prog_line|stmt|assign|if|while), _, integer
+	vector<pair<string,string>> result;
+	vector<int> list1;
+	vector<int> list2;
+	int type =0;
+	// Get the set of possible values for argument 1
+	if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0){
+		type=1;
+		list1 = getStmtNo("stmt");
+	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
+		type=2;
+		list1 = getStmtNo(arg1Type);
+	} else if (arg1Type.compare("integer") == 0){
+		type=3;
+		int stmtNo;
+		istringstream(arg1)>>stmtNo;
+		list1.push_back(stmtNo);
+	} else if(arg1Type.compare("_")==0){
+		type=4;
+		// ***** what?
+		list1 = getStmtNo("stmt");
+	}
+
+	//************ need optimize according to arg2type
+
+	// Get the set of possible values for argument 2
+	if (arg2Type.compare("stmt") == 0 || arg2Type.compare("prog_line") == 0){
+		for(unsigned int i=0;i<list1.size();i++){
+			int stmtNo1 = list1[i];
+			vector<int> nextList = getNext(stmtNo1);
+			for(unsigned int j=0;j<nextList.size();j++){
+				int stmtNo2 = nextList[j];
+				pair<string,string>p(stmtNo1+"", stmtNo2+"");
+				result.push_back(p);
+				return true;
+			}
+		}
+	} else if (arg2Type.compare("assign") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("while") == 0){
+		list2 = getStmtNo(arg2Type);
+		if(type!=3){
+			for(unsigned int j=0;j<list2.size();j++){
+				int stmtNo2=list2[j];
+				vector<int> prevList = getPrev(stmtNo2);
+				for(unsigned int i=0;i<prevList.size();i++){
+					int stmtNo1 = prevList[i];
+					if(contains(list1,stmtNo1)){
+						pair<string,string>p(stmtNo1+"", stmtNo2+"");
+						result.push_back(p);
+						return true;
+					}
+				}
+			}
+		}else{ // arg1type==integer
+			for(unsigned int i=0;i<list1.size();i++){
+				int stmtNo1 = list1[i];
+				vector<int> nextList = getNext(stmtNo1);
+				for(unsigned int j=0;j<nextList.size();j++){
+					int stmtNo2 = nextList[j];
+					if(contains(list2,stmtNo2)){
+						pair<string,string>p(stmtNo1+"", stmtNo2+"");
+						result.push_back(p);
+						return true;
+					}
+				}
+			}
+		}
+	} else if (arg2Type.compare("integer") == 0){
+		int stmtNo2;
+		istringstream(arg2)>>stmtNo2;
+		vector<int> prevList = getPrev(stmtNo2);
+		for(unsigned int i=0;i<prevList.size();i++){
+			int stmtNo1 = prevList[i];
+			if(contains(list1,stmtNo1)){
+				pair<string,string>p(stmtNo1+"", stmtNo2+"");
+				result.push_back(p);
+				return true;
+			}
+		}
+	} else if(arg2Type.compare("_")==0){
+		// ***** what?
+		for(unsigned int i=0;i<list1.size();i++){
+			int stmtNo1 = list1[i];
+			vector<int> nextList = getNext(stmtNo1);
+			for(unsigned int j=0;j<nextList.size();j++){
+				int stmtNo2 = nextList[j];
+				pair<string,string>p(stmtNo1+"", stmtNo2+"");
+				result.push_back(p);
+				return true;
+			}
+		}
+	}
+
+
+
+	return false;
+}
 bool PKB::contains(vector<int> list, int stmtNo)
 {
 	for(unsigned int i=0;i<list.size();i++)
@@ -890,11 +988,11 @@ bool PKB::contains(vector<int> list, int stmtNo)
 			return true;
 	return false;
 }
-vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg2Type)
+vector<pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 {
 	// synonym(prog_line|stmt|assign|if|while), _, integer
 	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<Pair<string,string>> result;
+	vector<pair<string,string>> result;
 	vector<int> list1;
 	vector<int> list2;
 	int type =0;
@@ -925,7 +1023,7 @@ vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string a
 			vector<int> nextTList = getNextT(stmtNo1);
 			for(unsigned int j=0;j<nextTList.size();j++){
 				int stmtNo2 = nextTList[j];
-				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+				pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -938,7 +1036,7 @@ vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string a
 				for(unsigned int i=0;i<prevTList.size();i++){
 					int stmtNo1 = prevTList[i];
 					if(contains(list1,stmtNo1)){
-						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+						pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -950,7 +1048,7 @@ vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string a
 				for(unsigned int j=0;j<nextTList.size();j++){
 					int stmtNo2 = nextTList[j];
 					if(contains(list2,stmtNo2)){
-						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+						pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -963,7 +1061,7 @@ vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string a
 		for(unsigned int i=0;i<prevTList.size();i++){
 			int stmtNo1 = prevTList[i];
 			if(contains(list1,stmtNo1)){
-				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+				pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -974,7 +1072,7 @@ vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string a
 			vector<int> nextTList = getNextT(stmtNo1);
 			for(unsigned int j=0;j<nextTList.size();j++){
 				int stmtNo2 = nextTList[j];
-				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+				pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -984,7 +1082,105 @@ vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string a
 
 	return result;
 }
+bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
+{
+	// synonym(prog_line|stmt|assign|if|while), _, integer
+	//					synonym(prog_line|stmt|assign|if|while), _, integer
+	vector<pair<string,string>> result;
+	vector<int> list1;
+	vector<int> list2;
+	int type =0;
+	// Get the set of possible values for argument 1
+	if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0){
+		type=1;
+		list1 = getStmtNo("stmt");
+	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
+		type=2;
+		list1 = getStmtNo(arg1Type);
+	} else if (arg1Type.compare("integer") == 0){
+		type=3;
+		int stmtNo;
+		istringstream(arg1)>>stmtNo;
+		list1.push_back(stmtNo);
+	} else if(arg1Type.compare("_")==0){
+		type=4;
+		// ***** what?
+		list1 = getStmtNo("stmt");
+	}
 
+	//************ need optimize according to arg2type
+
+	// Get the set of possible values for argument 2
+	if (arg2Type.compare("stmt") == 0 || arg2Type.compare("prog_line") == 0){
+		for(unsigned int i=0;i<list1.size();i++){
+			int stmtNo1 = list1[i];
+			vector<int> nextTList = getNextT(stmtNo1);
+			for(unsigned int j=0;j<nextTList.size();j++){
+				int stmtNo2 = nextTList[j];
+				pair<string,string>p(stmtNo1+"", stmtNo2+"");
+				result.push_back(p);
+				return true;
+			}
+		}
+	} else if (arg2Type.compare("assign") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("while") == 0){
+		list2 = getStmtNo(arg2Type);
+		if(type!=3){
+			for(unsigned int j=0;j<list2.size();j++){
+				int stmtNo2=list2[j];
+				vector<int> prevTList = getPrevT(stmtNo2);
+				for(unsigned int i=0;i<prevTList.size();i++){
+					int stmtNo1 = prevTList[i];
+					if(contains(list1,stmtNo1)){
+						pair<string,string>p(stmtNo1+"", stmtNo2+"");
+						result.push_back(p);
+						return true;
+					}
+				}
+			}
+		}else{ // arg1type==integer
+			for(unsigned int i=0;i<list1.size();i++){
+				int stmtNo1 = list1[i];
+				vector<int> nextTList = getNextT(stmtNo1);
+				for(unsigned int j=0;j<nextTList.size();j++){
+					int stmtNo2 = nextTList[j];
+					if(contains(list2,stmtNo2)){
+						pair<string,string>p(stmtNo1+"", stmtNo2+"");
+						result.push_back(p);
+						return true;
+					}
+				}
+			}
+		}
+	} else if (arg2Type.compare("integer") == 0){
+		int stmtNo2;
+		istringstream(arg2)>>stmtNo2;
+		vector<int> prevTList = getPrevT(stmtNo2);
+		for(unsigned int i=0;i<prevTList.size();i++){
+			int stmtNo1 = prevTList[i];
+			if(contains(list1,stmtNo1)){
+				pair<string,string>p(stmtNo1+"", stmtNo2+"");
+				result.push_back(p);
+				return true;
+			}
+		}
+	} else if(arg2Type.compare("_")==0){
+		// ***** what?
+		for(unsigned int i=0;i<list1.size();i++){
+			int stmtNo1 = list1[i];
+			vector<int> nextTList = getNextT(stmtNo1);
+			for(unsigned int j=0;j<nextTList.size();j++){
+				int stmtNo2 = nextTList[j];
+				pair<string,string>p(stmtNo1+"", stmtNo2+"");
+				result.push_back(p);
+				return true;
+			}
+		}
+	}
+
+
+
+	return false;
+}
 
 
 /************************************************** Affect *************************************************/
@@ -1055,4 +1251,82 @@ bool PKB::isMofiedBetween(int modifiedVarIndex,int currentLine,int target)
 		}
 	}
 	return true;
+}
+
+/************************************************** Flatten - Zhao Yang *************************************************/
+void PKB::flattenAST()
+{
+	vector<TNode*> listOfRootNode = ast.getAST();
+	getchar();
+	
+	for(int i=0;i<listOfRootNode.size();i++){
+		string type ="";
+		int lineNum =-1;
+		string varRef="#";
+		string postfixExpr="#";
+
+		TNode *thisTnode = listOfRootNode[i];
+		// get type
+		int content= (thisTnode->getContent());
+		if(content==-1){
+			type="assign";
+		}else if(content==-2){
+			type="if";
+		}else if(content==-3){
+			type="while";
+		}else type = ""; // default
+
+		// get varRef
+		int varIndex = thisTnode->getLeftChild()->getContent();
+		varRef = getVarName(varIndex);
+
+		lineNum = thisTnode->getLineNo();
+		
+		postfixExpr = createPostfix(thisTnode->getRightChild());
+
+		cout<<endl;
+		cout<<"type: "<<type<<endl;
+		cout<<"lineNum: "<<lineNum<<endl;
+		cout<<"varRef: "<<varRef<<endl;
+		cout<<"postfixExpr: --"<<postfixExpr<<"--"<<endl;
+		cout<<endl;
+
+		postfixNode node(type,lineNum,varRef,postfixExpr);
+
+		postfixExprList.push_back(node);
+	}
+
+	getchar();
+}
+string PKB::createPostfix(TNode *node)
+{
+	string result = "";;
+	if(!node)
+		return "";
+	if(node&&node->hasLeftChild==1)
+		result += createPostfix(node->getLeftChild());
+	if(node&&node->hasRightChild==1)
+		result += createPostfix(node->getRightChild());
+	if(node->getType().compare("opt")!=0){  
+		if(node->getType().compare("const")!=0)// var node
+			result += getVarName(node->getContent());
+		else{ // const node
+			int constFactor=node->getContent();
+			stringstream ss;
+			ss << constFactor;
+			result += ss.str();
+		}
+	}
+	else{
+		if(node->getContent()==-1)
+			result += "+";
+		else if(node->getContent()==-2)
+			result += "-";
+		else if(node->getContent()==-3)
+			result += "*";
+		else if(node->getContent()==-4)
+			result += "/";
+	}
+	result += " ";
+	return result;
 }

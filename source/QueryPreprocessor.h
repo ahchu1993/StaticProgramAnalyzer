@@ -1,4 +1,4 @@
-#include "baseRelation.h"
+#include "BaseRelation.h"
 #include <iostream>
 #include <list>
 #include <vector>
@@ -51,14 +51,14 @@ public:
 	/// result_reffs store all result synonyms
 	vector<string> result_reffs;
 
-	/// store all baseRelation which has at least one constant
-	list<baseRelation*> constant_relations;
+	/// store all BaseRelation which has at least one constant
+	list<BaseRelation*> constant_relations;
 
-	///group all baseRelation which has dependence
-	list<list<baseRelation*>> grouped_relations;
+	///group all BaseRelation which has dependence
+	list<list<BaseRelation*>> grouped_relations;
 
-	/// relations store all baseRelations( attr_compare, pattern, designAbstraction)
-	list<baseRelation*> relations;
+	/// relations store all BaseRelations( attr_compare, pattern, designAbstraction)
+	list<BaseRelation*> relations;
 
 	/// ---------------------------build table for table driven parsing---------------------------------
 	void fillArg(arg_type_list* arg_list,bool undersc, bool int_t, bool string_t);

@@ -5,8 +5,8 @@
 #include <iostream>
 #include <assert.h>
 #include <algorithm>
-#include "Pair.h"
 #include <sstream>
+#include <util.h>
 
 using namespace std;
 typedef struct use_stmt_row_t{
@@ -63,7 +63,7 @@ public:
 	vector<int> getUseVarList();
 
 	// Return pairs satisfying set1 and set2
-	vector<Pair<string,string>> getUsePairList(vector<int> set1, vector<int> set2);
+	vector<pair<string,string>> getUsePairList(vector<int> set1, vector<int> set2);
 
 	// Return whether there exist a pair satisfying set1 and set2
 	bool checkUse(vector<int> set1, vector<int> set2);

@@ -80,7 +80,7 @@ int Results::findColumn(string ref){
  else{//else found parent
  vector<Results::cell*> childrenColumn = Results::columns.at(index_child)->links;
  for(int i=0;i<parent_sets.size();i++){
- int parentRow = parent_sets.at(i).getSecond();
+ int parentRow = parent_sets.at(i).second;
  if (childrenColumn.at(parentRow)->value == child.value){
  Results::cell* rowHeader = firstColumn->links.at(parentRow);
  rowHeader->weights++;
@@ -117,28 +117,28 @@ int Results::findColumn(string ref){
  */
 /*
  void Results::validation(Pair<Results::Columns*,int> column_parent, Pair<Results::Columns*,int> column_child, vector<Pair<string,string>> results){
- if (column_parent.getSecond()<column_child.getSecond()) {//parent child
+ if (column_parent.second<column_child.second) {//parent child
  Results::Columns* firstColumn = columns.begin();
  
  }
  }
  */
-void Results::initTable(Pair<string, string> refs,vector<Pair<string,string>> results){
-    columns.insert(refs.getFirst());
-    columns.insert(refs.getSecond());//initiate column
+void Results::initTable(pair<string, string> refs,vector<pair<string,string>> results){
+    columns.insert(refs.first);
+    columns.insert(refs.second);//initiate column
     for (int i=0; i<results.size(); i++) {
         list<cell*> tuple;
         Results::cell first;
         Results::cell second;
-        first.value = results.at(i).getFirst();
-        second.value =results.at(i).getSecond();
+        first.value = results.at(i).first;
+        second.value =results.at(i).second;
         tuple.push_back(&first);
         tuple.push_back(&second);
         tuple_list.push_back(&tuple);
     }
 
 }
-void Results::validation(int parent_index, int child_index, vector<Pair<string,string>> results){
+void Results::validation(int parent_index, int child_index, vector<pair<string,string>> results){
     for (list<list<cell*>*>::iterator g = tuple_list.begin(); g != tuple_list.end(); g++) {
         //find for each parent child pair in the table with the same synonmy from results
         bool flag_find = false;
@@ -149,7 +149,7 @@ void Results::validation(int parent_index, int child_index, vector<Pair<string,s
         cell* child_cell = *cit;
         //compare the parent child pair with values from results
         for(int i =0; i<results.size();i++){
-            if(parent_cell->value.compare(results.at(i).getFirst())==0 && child_cell->value.compare(results.at(i).getSecond())==0){
+            if(parent_cell->value.compare(results.at(i).first)==0 && child_cell->value.compare(results.at(i).second)==0){
                 flag_find = true;
                 break;
             }
@@ -160,7 +160,7 @@ void Results::validation(int parent_index, int child_index, vector<Pair<string,s
     }
 }
 //use nest loop join algorithm
-list<list<Results::cell*>*> Results::equiJoin(int join_index, int position,vector<Pair<string,string>> results){
+list<list<Results::cell*>*> Results::equiJoin(int join_index, int position,vector<pair<string,string>> results){
     list<list<Results::cell*>*> output;
     for (list<list<cell*>*>::iterator g = tuple_list.begin(); g != tuple_list.end(); g++) {
         //find for each parent child pair in the table with the same synonmy from results
@@ -172,12 +172,12 @@ list<list<Results::cell*>*> Results::equiJoin(int join_index, int position,vecto
             string compare;
             string add;
             if (position==1) {
-                compare = results.at(i).getFirst();
-                add = results.at(i).getSecond();
+                compare = results.at(i).first;
+                add = results.at(i).second;
             }
             else if (position==2){
-                compare = results.at(i).getSecond();
-                add = results.at(i).getFirst();
+                compare = results.at(i).second;
+                add = results.at(i).first;
             }
             if(join_cell->value.compare(compare)==0){
                 Results::cell newCell;
@@ -214,14 +214,14 @@ void Results::merge(Results table){
     }//for main
     tuple_list = output;//save output table into original table
 }
-void Results::join(Pair<string, string> refs, vector<Pair<string,string>> results){
+void Results::join(pair<string, string> refs, vector<pair<string,string>> results){
     bool flag_parent=false;//use flag to check whether parent or child column exits or not
     bool flag_child=false;
     if (columns.size()==0){
         initTable(refs, results);
     }
-    int column_parent =findColumn(refs.getFirst());
-    int column_child =findColumn(refs.getSecond());
+    int column_parent =findColumn(refs.first);
+    int column_child =findColumn(refs.second);
     if (column_parent!=-1) {
         flag_parent=true;
     }
@@ -233,11 +233,11 @@ void Results::join(Pair<string, string> refs, vector<Pair<string,string>> result
     }
     else{// parent or child is not in the result table
         if (flag_parent) {//parent is in the result table
-            columns.insert(refs.getSecond());
+            columns.insert(refs.second);
             tuple_list = equiJoin(column_parent, 1, results);
         }
         else if(flag_child){
-            columns.insert(refs.getFirst());
+            columns.insert(refs.first);
             tuple_list = equiJoin(column_child, 2, results);
         }
     }//else parent or child is not in the result table

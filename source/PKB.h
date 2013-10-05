@@ -8,7 +8,7 @@
 #include <vector>
 #include <algorithm> 
 
-#include "Pair.h"
+
 #include "VarTable.h"
 #include "ProcTable.h"
 #include "StmtTable.h"
@@ -57,7 +57,7 @@ public:
 	void printAST();
 
 	/************************************************** CallTable *************************************************/
-	vector<Pair<string, string>> getCall(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<pair<string, string>> getCall(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkCall(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(string proc1, string proc2);
 	bool isCalled(string proc1, string proc2);
@@ -67,7 +67,7 @@ public:
 	vector<int> getCallsList(int procIndex);
 
 	/************************************************** ParentTable *************************************************/
-	vector<Pair<string, string>> getParent(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<pair<string, string>> getParent(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkParent(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(int stm1, string DE1, int stm2, string DE2);
 	int getParent (int stm);
@@ -81,7 +81,7 @@ public:
 	//1. "assign"
 	//2. "while"
 	//3. "stmt"
-	vector<Pair<string, string>> getFollow(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<pair<string, string>> getFollow(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkFollow(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insertFollow(int stm1, string DE1, int stm2, string DE2);
 	int findFollowed(int stm);
@@ -92,8 +92,8 @@ public:
 	void printFollowTable();
 
 	/************************************************** ModifyTable *************************************************/
-	vector<Pair<string, string>> getModify(string arg1, string arg1Type, string arg2, string arg2Type);
-	vector<Pair<string, string>> getModifySpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
+	vector<pair<string, string>> getModify(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<pair<string, string>> getModifySpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
 	bool checkModify(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateModify();
 
@@ -105,7 +105,7 @@ public:
 	void printModifyTable();
 
 	/************************************************** UseTable *************************************************/
-	vector<Pair<string, string>> getUse(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<pair<string, string>> getUse(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkUse(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateUse();
 
@@ -166,11 +166,35 @@ public:
 	bool contains(vector<int> list, int stmtNo);
 
 	// API for QE
-	vector<Pair<string,string>> getNext(string arg1, string arg1Type, string arg2, string arg2Type);
-	vector<Pair<string,string>> getNextT(string arg1, string arg1Type, string arg2, string arg2Type);
+
+	bool checkNext(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkNextT(string arg1, string arg1Type, string arg2, string arg2Type);
+
+	vector<pair<string,string>> getNext(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<pair<string,string>> getNextT(string arg1, string arg1Type, string arg2, string arg2Type);
 	
+
 	/************************************************** Affect - Zhao Yang *************************************************/
 	bool isAffect(int stmtNo1, int stmtNo2);
 	bool isMofiedBetween(int modifiedVarIndex,int currentLine,int target);
+
+	struct postfixNode{
+
+		string type;// if/while/assig
+		int lineNum; 
+		string varRef; //'a' as control variable ...bla
+		string postfixExpr; //  2 5 *
+		postfixNode(string typeInput,int lineNumInput,string varRefInput, string postfixExprInput){
+			type=typeInput;
+			lineNum=lineNumInput;
+			varRef=varRefInput;
+			postfixExpr=postfixExprInput;
+		}
+	};
+
+	/************************************************** Flatten - Zhao Yang *************************************************/
+	vector<postfixNode> postfixExprList;
+	void flattenAST();
+	string createPostfix(TNode *node);
 };
 #endif
