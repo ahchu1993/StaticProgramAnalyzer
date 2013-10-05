@@ -266,8 +266,8 @@ vector<pair<string, string>> PKB::getModify(string arg1, string arg1Type, string
 
 	return modifyTable.getModifyPairList(set1, set2);
 }
-
-vector<Pair<string, string>> PKB::getModifySpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type){
+/*
+vector<pair<string, string>> PKB::getModifySpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
 	int procIndex, varIndex;
@@ -306,8 +306,9 @@ vector<Pair<string, string>> PKB::getModifySpecific(vector<string> arg1List, str
 	}
 
 	return modifyTable.getModifyPairList(set1, set2);
+	
 }
-
+*/
 bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
