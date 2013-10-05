@@ -30,16 +30,45 @@ list<string> QueryEvaluator::processQuery(string query){
     return results;
 }
 bool QueryEvaluator::processConstantRelations(){
-	for(unsigned i=0; i<constant_relations.size(); i++){
 
-		baseRelation* b = constant_relations(i);
-		if(b->type=="des")
+	for(list<baseRelation*>::iterator it=constant_relations.begin(); it<constant_relations.end(); it++){
+		baseRelation* b = *it;
+		if(b->type=="desAbstraction")
 		{
 			designAbstraction* da = static_cast<designAbstraction*>(b);
-			da->relation_type;
-			pkb ->
-		}else (b->type)
-		*/
+			string relation = da->relation_type;
+			vector<Pair<string, string>> res;
+			if(relation == "Modify"){
+				res = pkb-> getModify(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+			}else if(relation == "Use"){
+				res = pkb-> getUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+			}else if(relation == "Call"){
+				res = pkb-> getCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+			}else if(relation == "Parent"){
+				res = pkb-> getParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+			}else if(relation == "Next"){
+				res = pkb-> getNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+			}
+
+			if(res.size() == 0)
+				return;
+
+			vector<string> result;
+			if(da->ref1_type == "integer"){
+				for(unsigned i=0; i<res.size(); i++){
+					result.push_back(res.at(i).getFirst());
+				}
+			}else if(da->ref2_type == "integer"){
+				for(unsigned i=0; i<res.size(); i++){
+					result.push_back(res.at(i).getSecond());
+				}
+			}
+			//Update value table with result vector
+		
+			
+		}
+	}
+		
 }
 
 bool processGroupedRelations(){

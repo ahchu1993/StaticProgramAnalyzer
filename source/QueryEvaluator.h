@@ -91,5 +91,5 @@ private:
     void initialzeValueTable(vector<QueryPreprocessor::entityReff> entity);
     void processPattern(vector<pattern> pattern);
     void processRelations(vector<designAbstraction> desAbstr);
-    
+    bool processConstantRelations()
 };
