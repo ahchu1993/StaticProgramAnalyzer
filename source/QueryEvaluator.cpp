@@ -8,25 +8,30 @@
 
 #include "QueryEvaluator.h"
 
+QueryEvaluator::QueryEvaluator(PKB* p){
+	pkb  = p;
+	Qprocessor = new QueryPreprocessor();
+}
+
 list<string> QueryEvaluator::processQuery(string query){
     list<string> results;
-    if( QueryEvaluator::Qprocessor.process_query(query)!=true){
+    if( Qprocessor->process_query(query)!=true){
         cout<<"invalid querty/n";
     }
     else{
         //store all the parsed query infomation
-        QueryEvaluator::Qprocessor.group_relations();//group the relations
-		entities = Qprocessor.declaration_reffs;//declaration type, name
-		result = Qprocessor.result_reffs;//select clause
-		constant_relations = Qprocessor.constant_relations;//all the relations
+        Qprocessor->group_relations();//group the relations
+		entities = Qprocessor->declaration_reffs;//declaration type, name
+		result_refs = Qprocessor->result_reffs;//select clause
+		constant_relations = Qprocessor->constant_relations;//all the relations
 		//grouped_relations = & Qprocessor.grouped_relations;
        
         //start to evaluate query
         initialzeValueTable();
-        processConstantRelations();
-        
+        processConstantRelations();     
         processGroupedRelations();
     }
+	results = getResults();
     return results;
 }
 bool QueryEvaluator::processConstantRelations(){
@@ -101,8 +106,8 @@ bool QueryEvaluator::processTwoConstantsRelation(designAbstraction* da){
 
 	
 }
-bool processGroupedRelations(){
-    
+bool QueryEvaluator::processGroupedRelations(){
+    return true;
 }
 
 bool QueryEvaluator::processPattern(pattern* p){
@@ -160,12 +165,18 @@ bool QueryEvaluator::processPattern(pattern* p){
 		}
 		
 	}
+	return true;
 }
 //store all the possible values for each synonmy
 void QueryEvaluator::initialzeValueTable(){
     for (int i =0; i<entities.size(); i++) {
         QueryPreprocessor::entityReff entity = entities.at(i);
-        valueTable[entity.synonym] = QueryEvaluator::pkb->getValues(entity.type);
+		vector<int> stmts = QueryEvaluator::pkb->getStmtNo(entity.type);
+		
+		for(unsigned int i=0;i<stmts.size();i++){
+			valueTable[entity.synonym].insert(Util::convertIntToString(stmts.at(i)));
+		}
+        
     }
 }
 void QueryEvaluator::updateValueTable(string ref, vector<string> values){
@@ -186,11 +197,15 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
     }//for
 }
 
-void processPattern(vector<pattern> pattern){
-
-
+list<string> QueryEvaluator::getResults(){
+	string r = result_refs.at(0);
+	set<string> s =valueTable[r];
+	list<string> res;
+	for(set<string>::iterator it = s.begin();it!=s.end();it++){
+		res.push_back(*it);
+	}
+	return res;
 }
-
 /*
 void QueryEvaluator::processRelations(vector<designAbstraction> desAbstr){
     for (int i=0; i<desAbstr.size(); i++) {

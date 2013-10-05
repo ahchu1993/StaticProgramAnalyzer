@@ -10,7 +10,7 @@ using namespace std;
 static string designEntity[] = {"procedure","stmtList", "stmt", "assign", "call", "while", "if", "variable", "constant", "prog_line"};
 static const int NumDE = 10;
 
-void fillArg(QueryPreprocessor::arg_type_list* arg_list,bool undersc, bool int_t, bool string_t){
+void QueryPreprocessor::fillArg(QueryPreprocessor::arg_type_list* arg_list,bool undersc, bool int_t, bool string_t){
 	arg_list->underscore = undersc;
 	arg_list->int_type = int_t;
 	arg_list->string_type = string_t;
@@ -1054,7 +1054,7 @@ QueryPreprocessor::tree_node QueryPreprocessor::build_tree(string s){
 	return t;
 }
 
-string flatten(QueryPreprocessor::tree_node* t){
+string QueryPreprocessor::flatten(QueryPreprocessor::tree_node* t){
     string result = "";
     if(t==NULL) return result;
     result += flatten(t->left);
