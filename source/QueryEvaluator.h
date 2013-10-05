@@ -25,7 +25,7 @@ public:
 		int rating;
 	};
 
-    QueryEvaluator();
+    QueryEvaluator(PKB* pkb);
     string getQuery();
     list<string> processQuery(string query);
     vector<designAbstraction> sort_desAbstr(designAbstraction desAbstr);
@@ -90,5 +90,5 @@ private:
       void updateValueTable(string ref, vector<string> values);
 
     bool processConstantRelations();
-
+	bool QueryEvaluator::processTwoConstantsRelations(designAbstraction* da);
 };

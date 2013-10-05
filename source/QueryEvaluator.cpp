@@ -36,8 +36,13 @@ bool QueryEvaluator::processConstantRelations(){
 		if(b->type=="desAbstraction")
 		{
 			designAbstraction* da = static_cast<designAbstraction*>(b);
+			//Handle 2 integers case
+			if(da->ref1_type == "integer" && da->ref2_type == "integer"){
+				processTwoConstantsRelations(da);
+			}
 			string relation = da->relation_type;
 			vector<Pair<string, string>> res;
+
 			if(relation == "Modify"){
 				res = pkb-> getModify(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 			}else if(relation == "Use"){
@@ -51,26 +56,45 @@ bool QueryEvaluator::processConstantRelations(){
 			}
 
 			if(res.size() == 0)
-				return;
+				return 0;
 
 			vector<string> result;
+			string ref;
 			if(da->ref1_type == "integer"){
 				for(unsigned i=0; i<res.size(); i++){
 					result.push_back(res.at(i).getFirst());
+					ref = da->ref2;
 				}
 			}else if(da->ref2_type == "integer"){
 				for(unsigned i=0; i<res.size(); i++){
 					result.push_back(res.at(i).getSecond());
+					ref = da->ref1;
 				}
 			}
 			//Update value table with result vector
-		
-			
+			updateValueTable(ref, result);	
 		}
 	}
 		
 }
 
+bool QueryEvaluator::processTwoConstantsRelations(designAbstraction* da){
+	string relation = da->relation_type;
+
+	if(relation == "Modify"){
+		return pkb-> checkModify(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Use"){
+		return pkb-> checkUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Call"){
+		return pkb-> checkCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Parent"){
+		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Next"){
+		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}
+
+	
+}
 bool processGroupedRelations(){
 }
 //store all the possible values for each synonmy
