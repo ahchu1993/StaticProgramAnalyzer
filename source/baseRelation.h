@@ -2,14 +2,14 @@
 using namespace std;
 
 
-class baseRelation{
+class BaseRelation{
 
 public:
 	string type;
 
 };
 
-class designAbstraction:public baseRelation{
+class designAbstraction:public BaseRelation{
 	public:
     string relation_type;
     string ref1;
@@ -27,7 +27,7 @@ class designAbstraction:public baseRelation{
     }
 };
 
-class pattern: public baseRelation {
+class pattern: public BaseRelation {
 	
 public:
 	string pattern_type;
@@ -48,7 +48,7 @@ public:
 	}
 };
 
-class attr_compare: public baseRelation{
+class attr_compare: public BaseRelation{
 public:
 	string left_ref;
 	string left_ref_type;

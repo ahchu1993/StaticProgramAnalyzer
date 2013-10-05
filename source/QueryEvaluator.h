@@ -75,8 +75,8 @@ private:
 	map<string, set<string>> valueTable;
     vector<QueryPreprocessor::entityReff> entity;
 	vector<string> result;
-	list<baseRelation*> constant_relations;
-	list<list<baseRelation*>> * grouped_relations;
+	list<BaseRelation*> constant_relations;
+	list<list<BaseRelation*>> * grouped_relations;
 	PKB* pkb;
 	bool has_pattern;
 	bool has_relation;

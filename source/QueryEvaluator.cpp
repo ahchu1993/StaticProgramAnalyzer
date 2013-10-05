@@ -31,8 +31,8 @@ list<string> QueryEvaluator::processQuery(string query){
 }
 bool QueryEvaluator::processConstantRelations(){
 
-	for(list<baseRelation*>::iterator it=constant_relations.begin(); it!=constant_relations.end(); it++){
-		baseRelation* b = *it;
+	for(list<BaseRelation*>::iterator it=constant_relations.begin(); it!=constant_relations.end(); it++){
+		BaseRelation* b = *it;
 		if(b->type=="desAbstraction")
 		{
 			designAbstraction* da = static_cast<designAbstraction*>(b);
@@ -41,7 +41,7 @@ bool QueryEvaluator::processConstantRelations(){
 				processTwoConstantsRelations(da);
 			}
 			string relation = da->relation_type;
-			vector<Pair<string, string>> res;
+			vector<pair<string, string>> res;
 
 			if(relation == "Modify"){
 				res = pkb-> getModify(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
