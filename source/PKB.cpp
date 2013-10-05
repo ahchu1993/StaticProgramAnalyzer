@@ -266,49 +266,47 @@ vector<pair<string, string>> PKB::getModify(string arg1, string arg1Type, string
 
 	return modifyTable.getModifyPairList(set1, set2);
 }
-/*
+
 vector<pair<string, string>> PKB::getModifySpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
-	int procIndex, varIndex;
+	int procIndex, varIndex, stmtNo;
 
 	// Get the set of possible values for argument 1
 	if (arg1Type.compare("procedure") == 0){
-		set1 = modifyTable.getModifyProcList();
-	} else if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0){
-		set1 = modifyTable.getModifyStmtList();
-	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
-		set1 = modifyTable.getModifyDEList(arg1Type);
-	} else if (arg1Type.compare("string") == 0){
-		procIndex = procTable.getProcIndex(arg1);
-		if(procIndex != -1){
-			set1.push_back(procIndex);
+		// arg1List will be vector of proc name
+		for (unsigned i; i<arg1List.size(); i++){
+			procIndex = procTable.getProcIndex(arg1List.at(i));
+			if(procIndex != -1){
+				set1.push_back(procIndex);
+			}
+		}
+	} else if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0 || arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
+		for (unsigned i; i<arg1List.size(); i++){
+			istringstream(arg1List.at(i))>>stmtNo;
+			set1.push_back(stmtNo);
 		}
 	} else if (arg1Type.compare("integer") == 0){
-		int stmtNo;
-		istringstream(arg1)>>stmtNo;
-		set1.push_back(stmtNo);
+		if(arg1List.size() == (unsigned)1){
+			istringstream(arg1List.at(0))>>stmtNo;
+			set1.push_back(stmtNo);
+		}
 	}
 
 	// Get the set of possible values for argument 1
 	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
-		set2 = modifyTable.getModifyVarList();
-	} else if (arg2Type.compare("string") == 0){
-		procIndex = procTable.getProcIndex(arg2);
-		if (procIndex != -1){
-			set2.push_back(procIndex);
-		} else{
-			varIndex = varTable.getVarIndex(arg2);
-			if (varIndex != -1){
+		// arg2List will be vector of var name
+		for (unsigned i; i<arg2List.size(); i++){
+			varIndex = varTable.getVarIndex(arg2List.at(i));
+			if(varIndex != -1){
 				set2.push_back(varIndex);
 			}
 		}
 	}
 
 	return modifyTable.getModifyPairList(set1, set2);
-	
 }
-*/
+
 bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
@@ -428,6 +426,46 @@ vector<pair<string, string>> PKB::getUse(string arg1, string arg1Type, string ar
 		} else{
 			varIndex = varTable.getVarIndex(arg2);
 			if (varIndex != -1){
+				set2.push_back(varIndex);
+			}
+		}
+	}
+
+	return useTable.getUsePairList(set1, set2);
+}
+
+vector<pair<string, string>> PKB::getUseSpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type){
+	vector<int> set1;
+	vector<int> set2;
+	int procIndex, varIndex, stmtNo;
+
+	// Get the set of possible values for argument 1
+	if (arg1Type.compare("procedure") == 0){
+		// arg1List will be vector of proc name
+		for (unsigned i; i<arg1List.size(); i++){
+			procIndex = procTable.getProcIndex(arg1List.at(i));
+			if(procIndex != -1){
+				set1.push_back(procIndex);
+			}
+		}
+	} else if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0 || arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
+		for (unsigned i; i<arg1List.size(); i++){
+			istringstream(arg1List.at(i))>>stmtNo;
+			set1.push_back(stmtNo);
+		}
+	} else if (arg1Type.compare("integer") == 0){
+		if(arg1List.size() == (unsigned)1){
+			istringstream(arg1List.at(0))>>stmtNo;
+			set1.push_back(stmtNo);
+		}
+	}
+
+	// Get the set of possible values for argument 2
+	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
+		// arg2List will be vector of var name
+		for (unsigned i; i<arg2List.size(); i++){
+			varIndex = varTable.getVarIndex(arg2List.at(i));
+			if(varIndex != -1){
 				set2.push_back(varIndex);
 			}
 		}
