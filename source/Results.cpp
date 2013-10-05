@@ -217,6 +217,9 @@ void Results::merge(Results table){
 void Results::join(Pair<string, string> refs, vector<Pair<string,string>> results){
     bool flag_parent=false;//use flag to check whether parent or child column exits or not
     bool flag_child=false;
+    if (columns.size()==0){
+        initTable(refs, results);
+    }
     int column_parent =findColumn(refs.getFirst());
     int column_child =findColumn(refs.getSecond());
     if (column_parent!=-1) {
