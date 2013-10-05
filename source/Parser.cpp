@@ -21,6 +21,8 @@ bool Parser::parseInput (string in) {
 	//***** not yet, minh
 	pkb->updateModify();
 	pkb->updateUse();
+	cout<<"!!!!out of parser!!!!!"<<endl;
+	pkb->flattenAST();
 	return true;
 }
 
@@ -258,12 +260,14 @@ bool Parser::w(vector < PairNumber > useModifyList) {
 
 	// while node
 	TNode* whileNode = pkb->createRootNode("root", -3, line);
-	TNode* varNode = pkb->createNode("var", varIndex, line);
-	pkb->makeLeftChild(whileNode,varNode);
+
 
 	if (varIndex < 0) {
 		varIndex = (*pkb).insertVar(nextToken);
 	}
+	TNode* varNode = pkb->createNode("var", varIndex, line);
+	pkb->makeLeftChild(whileNode,varNode);
+
 	//use
 	pkb->insertUseProc(pkb->getProcIndex(procName), varIndex);
 	useModifyList.push_back(PairNumber(line, "while"));
