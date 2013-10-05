@@ -76,7 +76,7 @@ public:
     
 private:
 
-	map<string, set<string>> resultTable;
+	map<string, set<string>> valueTable;
     vector<QueryPreprocessor::entityReff> entity;
 	vector<string> result;
 	list<baseRelation*> constant_relations;

@@ -29,8 +29,9 @@ list<string> QueryEvaluator::processQuery(string query){
     }
     return results;
 }
-bool processConstantRelations(){
-	/*go thru constant_relations
+bool QueryEvaluator::processConstantRelations(){
+	for(unsigned i=0; i<constant_relations.size(); i++){
+
 		baseRelation* b = constant_relations(i);
 		if(b->type=="des")
 		{
