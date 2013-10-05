@@ -8,25 +8,30 @@
 
 #include "QueryEvaluator.h"
 
+QueryEvaluator::QueryEvaluator(PKB* p){
+	pkb  = p;
+	Qprocessor = new QueryPreprocessor();
+}
+
 list<string> QueryEvaluator::processQuery(string query){
     list<string> results;
-    if( QueryEvaluator::Qprocessor.process_query(query)!=true){
+    if( Qprocessor->process_query(query)!=true){
         cout<<"invalid querty/n";
     }
     else{
         //store all the parsed query infomation
-        QueryEvaluator::Qprocessor.group_relations();//group the relations
-		entity = Qprocessor.declaration_reffs;//declaration type, name
-		result = Qprocessor.result_reffs;//select clause
-		constant_relations = Qprocessor.constant_relations;//all the relations
+        Qprocessor->group_relations();//group the relations
+		entities = Qprocessor->declaration_reffs;//declaration type, name
+		result_refs = Qprocessor->result_reffs;//select clause
+		constant_relations = Qprocessor->constant_relations;//all the relations
 		//grouped_relations = & Qprocessor.grouped_relations;
        
         //start to evaluate query
-        initialzeValueTable(entity);
-        processConstantRelations();
-        
+        initialzeValueTable();
+        processConstantRelations();     
         processGroupedRelations();
     }
+	results = getResults();
     return results;
 }
 bool QueryEvaluator::processConstantRelations(){
@@ -37,18 +42,19 @@ bool QueryEvaluator::processConstantRelations(){
 		{
 			designAbstraction* da = static_cast<designAbstraction*>(b);
 			//Handle 2 integers case
+			
 			if((da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "_") 
 				&& (da->ref2_type == "integer" || da->ref2_type == "string" || da->ref2_type == "_")){
-				return processTwoConstantsRelations(da);
+				return processTwoConstantsRelation(da);
 			}
-			return 	processOneConstantRelations(da);
+			return 	processOneConstantRelation(da);
 		}
 		return false;
 	}
 		
 }
 
-bool QueryEvaluator::processOneConstantRelations(designAbstraction* da){
+bool QueryEvaluator::processOneConstantRelation(designAbstraction* da){
 	string relation = da->relation_type;
 	vector<pair<string, string>> res;
 
@@ -83,7 +89,7 @@ bool QueryEvaluator::processOneConstantRelations(designAbstraction* da){
 	//Update value table with result vector
 	updateValueTable(ref, result);
 }
-bool QueryEvaluator::processTwoConstantsRelations(designAbstraction* da){
+bool QueryEvaluator::processTwoConstantsRelation(designAbstraction* da){
 	string relation = da->relation_type;
 
 	if(relation == "Modify"){
@@ -100,14 +106,77 @@ bool QueryEvaluator::processTwoConstantsRelations(designAbstraction* da){
 
 	
 }
-bool processGroupedRelations(){
-    
+bool QueryEvaluator::processGroupedRelations(){
+    return true;
+}
+
+bool QueryEvaluator::processPattern(pattern* p){
+	vector<PKB::postfixNode> exp_list = pkb->postfixExprList;
+	vector<pair<string,string>> result;
+	if(p->pattern_type=="p_assign"){
+		if(p->varRef_type=="string"){
+			for(unsigned int i=0;i<exp_list.size();i++){
+				PKB::postfixNode n = exp_list.at(i);
+				if(n.type=="assign"&&p->varRef==n.varRef){ //assign stmt, same varRef
+					string q_expr = p->expr_tree;
+					string p_expr = n.postfixExpr;
+
+					if(p->exact&&q_expr==p_expr){ //complete match, and found
+						string first = Util::convertIntToString(n.lineNum);
+						string second = n.varRef;
+						pair<string,string> p(first,second);
+						result.push_back(p);
+						break;
+					}
+					else if(!(p->exact)){
+						int p = p_expr.find(q_expr);
+						if(p<p_expr.size())
+						{
+							string first = Util::convertIntToString(n.lineNum);
+							string second = n.varRef;
+							pair<string,string> pa(first,second);
+							result.push_back(pa);
+							break;
+						}
+					}else{}
+				}
+			}
+		}else { //varRef =="variable"
+			set<string> s = valueTable[p->synonym]; //redeced set
+			for(set<string>::iterator it =s.begin();it!=s.end();it++){
+				string a = *it;
+				int aint = Util::convertStringToInt(a); //assign stmt#
+				PKB::postfixNode n = exp_list.at(aint);
+				string q_expr = p->expr_tree;
+				string p_expr = n.postfixExpr;
+				if(p->exact){
+					
+					if(q_expr==p_expr){
+						string first = Util::convertIntToString(n.lineNum);
+						string second = n.varRef;
+						pair<string,string> pa(first,second);
+						result.push_back(pa);
+					}
+				}
+				else {
+					
+				}
+			}			
+		}
+		
+	}
+	return true;
 }
 //store all the possible values for each synonmy
-void QueryEvaluator::initialzeValueTable(vector<QueryPreprocessor::entityReff> entities){
+void QueryEvaluator::initialzeValueTable(){
     for (int i =0; i<entities.size(); i++) {
         QueryPreprocessor::entityReff entity = entities.at(i);
-        valueTable[entity.synonym] = QueryEvaluator::pkb->getValues(entity.type);
+		vector<int> stmts = QueryEvaluator::pkb->getStmtNo(entity.type);
+		
+		for(unsigned int i=0;i<stmts.size();i++){
+			valueTable[entity.synonym].insert(Util::convertIntToString(stmts.at(i)));
+		}
+        
     }
 }
 void QueryEvaluator::updateValueTable(string ref, vector<string> values){
@@ -128,12 +197,16 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
     }//for
 }
 
-void processPattern(vector<pattern> pattern){
-
-
+list<string> QueryEvaluator::getResults(){
+	string r = result_refs.at(0);
+	set<string> s =valueTable[r];
+	list<string> res;
+	for(set<string>::iterator it = s.begin();it!=s.end();it++){
+		res.push_back(*it);
+	}
+	return res;
 }
-
-
+/*
 void QueryEvaluator::processRelations(vector<designAbstraction> desAbstr){
     for (int i=0; i<desAbstr.size(); i++) {
         designAbstraction relation = desAbstr.at(i);
@@ -171,4 +244,4 @@ void QueryEvaluator::processRelations(vector<designAbstraction> desAbstr){
         }
     }
 
-}
+} */
