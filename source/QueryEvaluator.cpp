@@ -104,6 +104,63 @@ bool QueryEvaluator::processTwoConstantsRelation(designAbstraction* da){
 bool processGroupedRelations(){
     
 }
+
+bool QueryEvaluator::processPattern(pattern* p){
+	vector<PKB::postfixNode> exp_list = pkb->postfixExprList;
+	vector<pair<string,string>> result;
+	if(p->pattern_type=="p_assign"){
+		if(p->varRef_type=="string"){
+			for(unsigned int i=0;i<exp_list.size();i++){
+				PKB::postfixNode n = exp_list.at(i);
+				if(n.type=="assign"&&p->varRef==n.varRef){ //assign stmt, same varRef
+					string q_expr = p->expr_tree;
+					string p_expr = n.postfixExpr;
+
+					if(p->exact&&q_expr==p_expr){ //complete match, and found
+						string first = Util::convertIntToString(n.lineNum);
+						string second = n.varRef;
+						pair<string,string> p(first,second);
+						result.push_back(p);
+						break;
+					}
+					else if(!(p->exact)){
+						int p = p_expr.find(q_expr);
+						if(p<p_expr.size())
+						{
+							string first = Util::convertIntToString(n.lineNum);
+							string second = n.varRef;
+							pair<string,string> pa(first,second);
+							result.push_back(pa);
+							break;
+						}
+					}else{}
+				}
+			}
+		}else { //varRef =="variable"
+			set<string> s = valueTable[p->synonym]; //redeced set
+			for(set<string>::iterator it =s.begin();it!=s.end();it++){
+				string a = *it;
+				int aint = Util::convertStringToInt(a); //assign stmt#
+				PKB::postfixNode n = exp_list.at(aint);
+				string q_expr = p->expr_tree;
+				string p_expr = n.postfixExpr;
+				if(p->exact){
+					
+					if(q_expr==p_expr){
+						string first = Util::convertIntToString(n.lineNum);
+						string second = n.varRef;
+						pair<string,string> pa(first,second);
+						result.push_back(pa);
+					}
+				}
+				else {
+					
+				}
+			}			
+		}
+		
+	}
+}
 //store all the possible values for each synonmy
 void QueryEvaluator::initialzeValueTable(){
     for (int i =0; i<entities.size(); i++) {

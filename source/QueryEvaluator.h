@@ -82,7 +82,7 @@ private:
 	QueryPreprocessor Qprocessor;
 	bool flag;
     //void processAttrPair(attr_compare* attr_pair);
-    //void processPattern(pattern* p);
+    bool processPattern(pattern* p);
     //void processDesignAbstraction(designAbstraction* desAbstr);
 	void initialzeValueTable();
     void updateValueTable(string ref, vector<string> values);
