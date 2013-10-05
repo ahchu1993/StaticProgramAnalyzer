@@ -229,6 +229,7 @@ void PKB::printFollowTable(){
 vector<Pair<string, string>> PKB::getModify(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
+	int procIndex, varIndex;
 
 	// Get the set of possible values for argument 1
 	if (arg1Type.compare("procedure") == 0){
@@ -238,7 +239,10 @@ vector<Pair<string, string>> PKB::getModify(string arg1, string arg1Type, string
 	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
 		set1 = modifyTable.getModifyDEList(arg1Type);
 	} else if (arg1Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg1);
+		if(procIndex != -1){
+			set1.push_back(procIndex);
+		}
 	} else if (arg1Type.compare("integer") == 0){
 		int stmtNo;
 		istringstream(arg1)>>stmtNo;
@@ -249,7 +253,15 @@ vector<Pair<string, string>> PKB::getModify(string arg1, string arg1Type, string
 	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
 		set2 = modifyTable.getModifyVarList();
 	} else if (arg2Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg2);
+		if (procIndex != -1){
+			set2.push_back(procIndex);
+		} else{
+			varIndex = varTable.getVarIndex(arg2);
+			if (varIndex != -1){
+				set2.push_back(varIndex);
+			}
+		}
 	}
 
 	return modifyTable.getModifyPairList(set1, set2);
@@ -258,6 +270,7 @@ vector<Pair<string, string>> PKB::getModify(string arg1, string arg1Type, string
 bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
+	int procIndex, varIndex;
 
 	// Get the set of possible values for argument 1
 	if (arg1Type.compare("procedure") == 0){
@@ -267,7 +280,10 @@ bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type
 	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
 		set1 = modifyTable.getModifyDEList(arg1Type);
 	} else if (arg1Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg1);
+		if(procIndex != -1){
+			set1.push_back(procIndex);
+		}
 	} else if (arg1Type.compare("integer") == 0){
 		int stmtNo;
 		istringstream(arg1)>>stmtNo;
@@ -278,7 +294,15 @@ bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type
 	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
 		set2 = modifyTable.getModifyVarList();
 	} else if (arg2Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg2);
+		if (procIndex != -1){
+			set2.push_back(procIndex);
+		} else{
+			varIndex = varTable.getVarIndex(arg2);
+			if (varIndex != -1){
+				set2.push_back(varIndex);
+			}
+		}
 	}
 
 	return modifyTable.checkModify(set1, set2);
@@ -332,6 +356,7 @@ void PKB::printModifyTable()
 vector<Pair<string, string>> PKB::getUse(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
+	int procIndex, varIndex;
 
 	// Get the set of possible values for argument 1
 	if (arg1Type.compare("procedure") == 0){
@@ -341,7 +366,10 @@ vector<Pair<string, string>> PKB::getUse(string arg1, string arg1Type, string ar
 	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
 		set1 = useTable.getUseDEList(arg1Type);
 	} else if (arg1Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg1);
+		if(procIndex != -1){
+			set1.push_back(procIndex);
+		}
 	} else if (arg1Type.compare("integer") == 0){
 		int stmtNo;
 		istringstream(arg1)>>stmtNo;
@@ -352,7 +380,15 @@ vector<Pair<string, string>> PKB::getUse(string arg1, string arg1Type, string ar
 	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
 		set2 = useTable.getUseVarList();
 	} else if (arg2Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg2);
+		if (procIndex != -1){
+			set2.push_back(procIndex);
+		} else{
+			varIndex = varTable.getVarIndex(arg2);
+			if (varIndex != -1){
+				set2.push_back(varIndex);
+			}
+		}
 	}
 
 	return useTable.getUsePairList(set1, set2);
@@ -361,6 +397,7 @@ vector<Pair<string, string>> PKB::getUse(string arg1, string arg1Type, string ar
 bool PKB::checkUse(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
+	int procIndex, varIndex;
 
 	// Get the set of possible values for argument 1
 	if (arg1Type.compare("procedure") == 0){
@@ -370,7 +407,10 @@ bool PKB::checkUse(string arg1, string arg1Type, string arg2, string arg2Type){
 	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
 		set1 = useTable.getUseDEList(arg1Type);
 	} else if (arg1Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg1);
+		if(procIndex != -1){
+			set1.push_back(procIndex);
+		}
 	} else if (arg1Type.compare("integer") == 0){
 		int stmtNo;
 		istringstream(arg1)>>stmtNo;
@@ -381,7 +421,15 @@ bool PKB::checkUse(string arg1, string arg1Type, string arg2, string arg2Type){
 	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
 		set2 = useTable.getUseVarList();
 	} else if (arg2Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg2);
+		if (procIndex != -1){
+			set2.push_back(procIndex);
+		} else{
+			varIndex = varTable.getVarIndex(arg2);
+			if (varIndex != -1){
+				set2.push_back(varIndex);
+			}
+		}
 	}
 
 	return useTable.checkUse(set1, set2);

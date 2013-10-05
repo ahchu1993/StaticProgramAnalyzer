@@ -72,11 +72,11 @@ public:
      */
     
 private:
-  
+
 	map<string, set<string>> valueTable;
     vector<QueryPreprocessor::entityReff> entity;
 	vector<string> result;
-	list<baseRelation*>* constant_relations;
+	list<baseRelation*> constant_relations;
 	list<list<baseRelation*>> * grouped_relations;
 	PKB* pkb;
 	bool has_pattern;
@@ -89,4 +89,7 @@ private:
     void processPattern(vector<pattern> pattern);
     void processRelations(vector<designAbstraction> desAbstr);
       void updateValueTable(string ref, vector<string> values);
+
+    bool processConstantRelations();
+
 };
