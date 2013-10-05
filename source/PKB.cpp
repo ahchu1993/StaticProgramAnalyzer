@@ -45,7 +45,7 @@ void PKB::printAST()
 }
 
 /************************************************** CallTable *************************************************/
-vector<Pair> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type){	
+vector<Pair<string, string>> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type){	
 	vector<string> set1, set2;
 	if(arg1Type.compare("procedure") == 0 || arg1Type.compare("_") == 0){
 		set1 = callTable.getCall("_");
@@ -58,7 +58,7 @@ vector<Pair> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2
 	}else if(arg2Type.compare("String") == 0){
 		set2 = callTable.getCalled(arg2);
 	}
-	vector<Pair> result = callTable.getCallPairList(set1, set2);
+	vector<Pair<string, string>> result = callTable.getCallPairList(set1, set2);
 
 	for(unsigned i=0; i<result.size(); i++){
 		stringstream ss1,ss2;
@@ -74,6 +74,22 @@ vector<Pair> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2
 		result.at(i).setSecond(proc2_string);
 	}
 	return result;
+}
+
+bool PKB::checkCall(string arg1, string arg1Type, string arg2, string arg2Type){	
+	vector<string> set1, set2;
+	if(arg1Type.compare("procedure") == 0 || arg1Type.compare("_") == 0){
+		set1 = callTable.getCall("_");
+	}else if(arg1Type.compare("String") == 0){
+		set1 = callTable.getCall(arg1);
+	}
+
+	if(arg2Type.compare("procedure") == 0 || arg2Type.compare("_") == 0){
+		set2 = callTable.getCalled("_");
+	}else if(arg2Type.compare("String") == 0){
+		set2 = callTable.getCalled(arg2);
+	}
+	return callTable.checkCall(set1, set2);
 }
 void PKB::insert(string proc1, string proc2){
 	callTable.insert(proc1,proc2);
@@ -103,6 +119,38 @@ vector<int> PKB::getCallsList(int procIndex){
 	return result;
 }
 /************************************************** ParentTable *************************************************/
+vector<Pair<string, string>> PKB::getParent(string arg1, string arg1Type, string arg2, string arg2Type){
+	vector<int> set1, set2;
+	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
+		set1 = parentTable.getParentList("_");
+	}else if(arg1Type.compare("while") == 0 || arg1Type.compare("if") == 0){
+		set1 = parentTable.getParentList(arg1Type);
+	}
+
+	if(arg2Type.compare("prog_line") == 0 || arg2Type.compare("stmt") == 0 || arg2Type.compare("_") == 0){
+		set2 = parentTable.getChildrenList("_");
+	}else if(arg2Type.compare("while") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("assign") == 0){
+		set2 = parentTable.getChildrenList(arg2Type);
+	}
+	
+	return parentTable.getParentPairList(set1, set2);
+}
+bool PKB::checkParent(string arg1, string arg1Type, string arg2, string arg2Type){
+	vector<int> set1, set2;
+	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
+		set1 = parentTable.getParentList("_");
+	}else if(arg1Type.compare("while") == 0 || arg1Type.compare("if") == 0){
+		set1 = parentTable.getParentList(arg1Type);
+	}
+
+	if(arg2Type.compare("prog_line") == 0 || arg2Type.compare("stmt") == 0 || arg2Type.compare("_") == 0){
+		set2 = parentTable.getChildrenList("_");
+	}else if(arg2Type.compare("while") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("assign") == 0){
+		set2 = parentTable.getChildrenList(arg2Type);
+	}
+	
+	return parentTable.checkParent(set1, set2);
+}
 void PKB::insert(int stm1, string DE1, int stm2, string DE2){
 	parentTable.insert(stm1, DE1, stm2, DE2);
 }
@@ -123,6 +171,38 @@ void PKB::printParentTable(){
 }
 
 /************************************************** FollowTable *************************************************/
+vector<Pair<string, string>> PKB::getFollow(string arg1, string arg1Type, string arg2, string arg2Type){	
+	vector<int> set1, set2;
+	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
+		set1 = followTable.getFollowsList("_");
+	}else if(arg1Type.compare("while") == 0 || arg1Type.compare("if") == 0){
+		set1 = followTable.getFollowsList(arg1Type);
+	}
+
+	if(arg2Type.compare("prog_line") == 0 || arg2Type.compare("stmt") == 0 || arg2Type.compare("_") == 0){
+		set2 = followTable.getFollowedList("_");
+	}else if(arg2Type.compare("while") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("assign") == 0){
+		set2 = followTable.getFollowedList(arg2Type);
+	}
+	
+	return followTable.getFollowPairList(set1, set2);
+}
+bool PKB::checkFollow(string arg1, string arg1Type, string arg2, string arg2Type){
+	vector<int> set1, set2;
+	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
+		set1 = followTable.getFollowsList("_");
+	}else if(arg1Type.compare("while") == 0 || arg1Type.compare("if") == 0){
+		set1 = followTable.getFollowsList(arg1Type);
+	}
+
+	if(arg2Type.compare("prog_line") == 0 || arg2Type.compare("stmt") == 0 || arg2Type.compare("_") == 0){
+		set2 = followTable.getFollowedList("_");
+	}else if(arg2Type.compare("while") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("assign") == 0){
+		set2 = followTable.getFollowedList(arg2Type);
+	}
+	
+	return followTable.checkFollow(set1, set2);
+}
 void PKB::insertFollow(int stm1, string DE1, int stm2, string DE2){
 	followTable.insertFollow(stm1, DE1, stm2, DE2);
 }
@@ -146,9 +226,10 @@ void PKB::printFollowTable(){
 }
 
 /************************************************** ModifyTable *************************************************/
-vector<Pair> PKB::getModify(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<Pair<string, string>> PKB::getModify(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
+	int procIndex, varIndex;
 
 	// Get the set of possible values for argument 1
 	if (arg1Type.compare("procedure") == 0){
@@ -158,7 +239,10 @@ vector<Pair> PKB::getModify(string arg1, string arg1Type, string arg2, string ar
 	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
 		set1 = modifyTable.getModifyDEList(arg1Type);
 	} else if (arg1Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg1);
+		if(procIndex != -1){
+			set1.push_back(procIndex);
+		}
 	} else if (arg1Type.compare("integer") == 0){
 		int stmtNo;
 		istringstream(arg1)>>stmtNo;
@@ -169,7 +253,15 @@ vector<Pair> PKB::getModify(string arg1, string arg1Type, string arg2, string ar
 	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
 		set2 = modifyTable.getModifyVarList();
 	} else if (arg2Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg2);
+		if (procIndex != -1){
+			set2.push_back(procIndex);
+		} else{
+			varIndex = varTable.getVarIndex(arg2);
+			if (varIndex != -1){
+				set2.push_back(varIndex);
+			}
+		}
 	}
 
 	return modifyTable.getModifyPairList(set1, set2);
@@ -178,6 +270,7 @@ vector<Pair> PKB::getModify(string arg1, string arg1Type, string arg2, string ar
 bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
+	int procIndex, varIndex;
 
 	// Get the set of possible values for argument 1
 	if (arg1Type.compare("procedure") == 0){
@@ -187,7 +280,10 @@ bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type
 	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
 		set1 = modifyTable.getModifyDEList(arg1Type);
 	} else if (arg1Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg1);
+		if(procIndex != -1){
+			set1.push_back(procIndex);
+		}
 	} else if (arg1Type.compare("integer") == 0){
 		int stmtNo;
 		istringstream(arg1)>>stmtNo;
@@ -198,7 +294,15 @@ bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type
 	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
 		set2 = modifyTable.getModifyVarList();
 	} else if (arg2Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg2);
+		if (procIndex != -1){
+			set2.push_back(procIndex);
+		} else{
+			varIndex = varTable.getVarIndex(arg2);
+			if (varIndex != -1){
+				set2.push_back(varIndex);
+			}
+		}
 	}
 
 	return modifyTable.checkModify(set1, set2);
@@ -249,9 +353,10 @@ void PKB::printModifyTable()
 }
 
 /************************************************** UseTable *************************************************/
-vector<Pair> PKB::getUse(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<Pair<string, string>> PKB::getUse(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
+	int procIndex, varIndex;
 
 	// Get the set of possible values for argument 1
 	if (arg1Type.compare("procedure") == 0){
@@ -261,7 +366,10 @@ vector<Pair> PKB::getUse(string arg1, string arg1Type, string arg2, string arg2T
 	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
 		set1 = useTable.getUseDEList(arg1Type);
 	} else if (arg1Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg1);
+		if(procIndex != -1){
+			set1.push_back(procIndex);
+		}
 	} else if (arg1Type.compare("integer") == 0){
 		int stmtNo;
 		istringstream(arg1)>>stmtNo;
@@ -272,7 +380,15 @@ vector<Pair> PKB::getUse(string arg1, string arg1Type, string arg2, string arg2T
 	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
 		set2 = useTable.getUseVarList();
 	} else if (arg2Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg2);
+		if (procIndex != -1){
+			set2.push_back(procIndex);
+		} else{
+			varIndex = varTable.getVarIndex(arg2);
+			if (varIndex != -1){
+				set2.push_back(varIndex);
+			}
+		}
 	}
 
 	return useTable.getUsePairList(set1, set2);
@@ -281,6 +397,7 @@ vector<Pair> PKB::getUse(string arg1, string arg1Type, string arg2, string arg2T
 bool PKB::checkUse(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
+	int procIndex, varIndex;
 
 	// Get the set of possible values for argument 1
 	if (arg1Type.compare("procedure") == 0){
@@ -290,7 +407,10 @@ bool PKB::checkUse(string arg1, string arg1Type, string arg2, string arg2Type){
 	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
 		set1 = useTable.getUseDEList(arg1Type);
 	} else if (arg1Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg1);
+		if(procIndex != -1){
+			set1.push_back(procIndex);
+		}
 	} else if (arg1Type.compare("integer") == 0){
 		int stmtNo;
 		istringstream(arg1)>>stmtNo;
@@ -301,7 +421,15 @@ bool PKB::checkUse(string arg1, string arg1Type, string arg2, string arg2Type){
 	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
 		set2 = useTable.getUseVarList();
 	} else if (arg2Type.compare("string") == 0){
-		// Waiting for confirmation
+		procIndex = procTable.getProcIndex(arg2);
+		if (procIndex != -1){
+			set2.push_back(procIndex);
+		} else{
+			varIndex = varTable.getVarIndex(arg2);
+			if (varIndex != -1){
+				set2.push_back(varIndex);
+			}
+		}
 	}
 
 	return useTable.checkUse(set1, set2);
@@ -621,10 +749,10 @@ vector<int> PKB::getPrevT(int stmtNo)
 	return prevStarList;
 }
 
-vector<Pair> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2Type){
 	// synonym(prog_line|stmt|assign|if|while), _, integer
 	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<Pair> result;
+	vector<Pair<string,string>> result;
 	vector<int> list1;
 	vector<int> list2;
 	int type =0;
@@ -655,7 +783,7 @@ vector<Pair> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2
 			vector<int> nextList = getNext(stmtNo1);
 			for(unsigned int j=0;j<nextList.size();j++){
 				int stmtNo2 = nextList[j];
-				Pair p(stmtNo1+"", stmtNo2+"");
+				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -668,7 +796,7 @@ vector<Pair> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2
 				for(unsigned int i=0;i<prevList.size();i++){
 					int stmtNo1 = prevList[i];
 					if(contains(list1,stmtNo1)){
-						Pair p(stmtNo1+"", stmtNo2+"");
+						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -680,7 +808,7 @@ vector<Pair> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2
 				for(unsigned int j=0;j<nextList.size();j++){
 					int stmtNo2 = nextList[j];
 					if(contains(list2,stmtNo2)){
-						Pair p(stmtNo1+"", stmtNo2+"");
+						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -693,7 +821,7 @@ vector<Pair> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2
 		for(unsigned int i=0;i<prevList.size();i++){
 			int stmtNo1 = prevList[i];
 			if(contains(list1,stmtNo1)){
-				Pair p(stmtNo1+"", stmtNo2+"");
+				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -704,7 +832,7 @@ vector<Pair> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2
 			vector<int> nextList = getNext(stmtNo1);
 			for(unsigned int j=0;j<nextList.size();j++){
 				int stmtNo2 = nextList[j];
-				Pair p(stmtNo1+"", stmtNo2+"");
+				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -819,11 +947,11 @@ bool PKB::contains(vector<int> list, int stmtNo)
 			return true;
 	return false;
 }
-vector<Pair> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg2Type)
+vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 {
 	// synonym(prog_line|stmt|assign|if|while), _, integer
 	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<Pair> result;
+	vector<Pair<string,string>> result;
 	vector<int> list1;
 	vector<int> list2;
 	int type =0;
@@ -854,7 +982,7 @@ vector<Pair> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg
 			vector<int> nextTList = getNextT(stmtNo1);
 			for(unsigned int j=0;j<nextTList.size();j++){
 				int stmtNo2 = nextTList[j];
-				Pair p(stmtNo1+"", stmtNo2+"");
+				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -867,7 +995,7 @@ vector<Pair> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg
 				for(unsigned int i=0;i<prevTList.size();i++){
 					int stmtNo1 = prevTList[i];
 					if(contains(list1,stmtNo1)){
-						Pair p(stmtNo1+"", stmtNo2+"");
+						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -879,7 +1007,7 @@ vector<Pair> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg
 				for(unsigned int j=0;j<nextTList.size();j++){
 					int stmtNo2 = nextTList[j];
 					if(contains(list2,stmtNo2)){
-						Pair p(stmtNo1+"", stmtNo2+"");
+						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -892,7 +1020,7 @@ vector<Pair> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg
 		for(unsigned int i=0;i<prevTList.size();i++){
 			int stmtNo1 = prevTList[i];
 			if(contains(list1,stmtNo1)){
-				Pair p(stmtNo1+"", stmtNo2+"");
+				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -903,7 +1031,7 @@ vector<Pair> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg
 			vector<int> nextTList = getNextT(stmtNo1);
 			for(unsigned int j=0;j<nextTList.size();j++){
 				int stmtNo2 = nextTList[j];
-				Pair p(stmtNo1+"", stmtNo2+"");
+				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -1051,14 +1179,14 @@ bool PKB::isMofiedBetween(int modifiedVarIndex,int currentLine,int target)
 		return false;
 	bool result=false;
 	vector<int> nextList = getNext(currentLine);
-	for(int i=0;i<nextList.size();i++){
+	for(unsigned int i=0;i<nextList.size();i++){
 		int nextStmtNo = nextList[i];
 		if(nextStmtNo==target){
 			return false;
 		}
 		if(nextStmtNo<=0) continue;
 		// add size in case over flow
-		while(visited.size()<=nextStmtNo){
+		while(visited.size()<=(unsigned int)nextStmtNo){
 			visited.push_back(0);
 		}
 		// loop detection

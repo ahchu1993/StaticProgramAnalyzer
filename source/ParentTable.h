@@ -1,6 +1,9 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <sstream>
+#include "Pair.h"
+#include "Util.h"
 using namespace std;
 #ifndef PARENTTABLE_H
 #define PARENTTABLE_H
@@ -25,6 +28,11 @@ public:
 	vector<int> getChildren(int stm, string DE);
 	vector<int> getParentT(int stmt);
 	vector<int> getChildrenT(int stmt,string DE);
+	vector<int> getParentList (string DE);
+	vector<int> getChildrenList (string DE);
+	bool isParent(int stm1, int stm2);
+	bool checkParent(vector<int> set1, vector<int> set2);
+	vector<Pair<string,string>> getParentPairList(vector<int> set1, vector<int> set2);
 	int getSize();
 	void print();
 };

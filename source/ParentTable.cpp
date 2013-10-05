@@ -34,18 +34,26 @@ void ParentTable::insert(int stm1, string DE1, int stm2, string DE2){
 }
 int ParentTable::getParent (int stm){
 	assert(stm>=0);
-	vector<children_stm>::iterator ite;
-
-	for (it=parentTable.begin(); it<parentTable.end(); it++){
-		for (ite=(*it).children.begin(); ite<(*it).children.end(); ite++){
-			if((*ite).stm == stm){
-				return (*it).parent;
-			}
+	for(unsigned i=0; i<parentTable.size(); i++){
+		for(unsigned j=0; j<parentTable.at(i).children.size(); j++){
+			if(parentTable.at(i).children.at(j).stm == stm)
+				return parentTable.at(i).parent;
 		}
 	}
 	return -1;
-
 }
+
+vector<int> ParentTable::getParentList (string DE){
+	vector<int> result;
+	for(unsigned i=0; i<parentTable.size(); i++){
+		if(parentTable.at(i).parentDE.compare(DE) == 0 || DE.compare("_") == 0){
+			result.push_back(parentTable.at(i).parent);
+		}
+	}
+	return result;
+}
+
+	
 vector<int> ParentTable::getChildren (int stm, string DE){
 	assert(stm>=0);
 	vector<int> result;
@@ -65,6 +73,20 @@ vector<int> ParentTable::getChildren (int stm, string DE){
 	return result;
 }
 
+vector<int> ParentTable::getChildrenList (string DE){
+	vector<int> result;
+	for(unsigned i=0; i<parentTable.size(); i++){
+		for(unsigned j=0;j<parentTable.at(i).children.size();j++){
+			if(parentTable.at(i).children.at(j).DE.compare(DE) == 0 || DE.compare("_") == 0){
+				result.push_back(parentTable.at(i).children.at(j).stm);
+			}
+		}
+	}
+	//remove duplicate
+	sort(result.begin(), result.end());
+    result.erase(unique(result.begin(), result.end()), result.end());
+	return result;
+}
 vector<int> ParentTable::getParentT(int stmt){
 	assert(stmt>=0);
 	
@@ -122,4 +144,38 @@ void ParentTable::print(){
 		}
 		cout << "\n";
 	}
+}
+bool ParentTable::isParent(int stm1, int stm2){
+	return getParent(stm2) == stm1;
+}
+vector<Pair<string,string>> ParentTable::getParentPairList(vector<int> set1, vector<int> set2){
+	vector<Pair<string,string>> result;
+	for(unsigned i=0; i<set1.size(); i++){
+		for(unsigned j=0; j<set2.size(); j++){
+			if(isParent(set1.at(i), set2.at(j))){
+				ostringstream convert1;
+				convert1 << set1.at(i);
+				string no1 = convert1.str();
+				ostringstream convert2;
+				convert2 << set2.at(j);
+				string no2 = convert2.str();
+				result.push_back(Pair<string,string>(no1, no2));
+			}
+		}
+	}
+
+	return result;
+}
+
+bool ParentTable::checkParent(vector<int> set1, vector<int> set2){
+	for(unsigned i=0; i<set1.size(); i++){
+		for(unsigned j=0; j<set2.size(); j++){
+			if(isParent(set1.at(i), set2.at(j))){
+				if(isParent(set1.at(i), set2.at(j)))
+					return true;
+			}
+		}
+	}
+
+	return false;
 }

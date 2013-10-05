@@ -57,15 +57,18 @@ public:
 	void printAST();
 
 	/************************************************** CallTable *************************************************/
-	vector<Pair> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string, string>> getCall(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkCall(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(string proc1, string proc2);
 	bool isCalled(string proc1, string proc2);
 	vector<string> getCallsList(string procName);
 	vector<string> getCalledList(string procName);
 	void printCallTable();
-	vector<int> PKB::getCallsList(int procIndex);
+	vector<int> getCallsList(int procIndex);
 
 	/************************************************** ParentTable *************************************************/
+	vector<Pair<string, string>> getParent(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkParent(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(int stm1, string DE1, int stm2, string DE2);
 	int getParent (int stm);
 	vector<int> getParentT(int stmt);
@@ -78,6 +81,8 @@ public:
 	//1. "assign"
 	//2. "while"
 	//3. "stmt"
+	vector<Pair<string, string>> getFollow(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkFollow(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insertFollow(int stm1, string DE1, int stm2, string DE2);
 	int findFollowed(int stm);
 	vector<int> findFollowedT(int stmt, string DE);
@@ -88,7 +93,7 @@ public:
 	//int getFollowedListSpecific(int varIndex, string DE);
 
 	/************************************************** ModifyTable *************************************************/
-	vector<Pair> getModify(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string, string>> getModify(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkModify(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateModify();
 
@@ -100,7 +105,7 @@ public:
 	void printModifyTable();
 
 	/************************************************** UseTable *************************************************/
-	vector<Pair> getUse(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string, string>> getUse(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkUse(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateUse();
 
@@ -161,10 +166,14 @@ public:
 	bool contains(vector<int> list, int stmtNo);
 
 	// API for QE
-	vector<Pair> getNext(string arg1, string arg1Type, string arg2, string arg2Type);
-	vector<Pair> getNextT(string arg1, string arg1Type, string arg2, string arg2Type);
+
 	bool checkNext(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkNextT(string arg1, string arg1Type, string arg2, string arg2Type);
+
+	vector<Pair<string,string>> getNext(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<Pair<string,string>> getNextT(string arg1, string arg1Type, string arg2, string arg2Type);
+	
+
 	/************************************************** Affect - Zhao Yang *************************************************/
 	bool isAffect(int stmtNo1, int stmtNo2);
 	bool isMofiedBetween(int modifiedVarIndex,int currentLine,int target);

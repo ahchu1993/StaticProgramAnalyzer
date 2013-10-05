@@ -3,6 +3,10 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <sstream>
+#include "Pair.h"
+#include "Util.h"
+
 using namespace std;
 typedef struct follow_row_t{
 	int col1;
@@ -16,7 +20,7 @@ class FollowTable
 
 private:
 	vector<follow_row> followTable; 
-	vector<follow_row>::iterator it;
+	
 public:
 	FollowTable(void);
 	void insertFollow(int stm1, string DE1, int stm2, string DE2);
@@ -25,6 +29,10 @@ public:
 	bool isFollowed(int stm1,int stm2);
 	vector<int> findFollowedT(int stmt, string DE);
 	vector<int> findFollowsT(int stmt, string DE);
+	vector<int> getFollowsList(string DE);
+	vector<int> getFollowedList(string DE);
+	bool checkFollow(vector<int> set1, vector<int> set2);
+	vector<Pair<string,string>> getFollowPairList(vector<int> set1, vector<int> set2);
 	int getSize();
 	void print();
 };

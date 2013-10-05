@@ -6,7 +6,7 @@ FollowTable::FollowTable(void)
 
 void FollowTable::insertFollow(int stm1, string DE1, int stm2, string DE2)
 {
-	if(stm1 < 0 || stm2 < 0 ) return; //assert
+	if(stm1 < 0 || stm2 < 0 ) return; 
 	follow_row newRow;
 	newRow.col1 = stm1;
 	newRow.de1 = DE1;
@@ -14,12 +14,58 @@ void FollowTable::insertFollow(int stm1, string DE1, int stm2, string DE2)
 	newRow.de2 = DE2;
 	followTable.push_back(newRow);
 }
+
+vector<int> FollowTable::getFollowsList(string DE){
+	vector<int> result;
+	for(unsigned i=0; i<followTable.size(); i++){
+		if(followTable.at(i).de1.compare(DE) == 0 || DE.compare("_") == 0){
+			result.push_back(followTable.at(i).col1);
+		}
+	}
+	return result;
+}
+
+vector<int> FollowTable::getFollowedList(string DE){
+	vector<int> result;
+	for(unsigned i=0; i<followTable.size(); i++){
+		if(followTable.at(i).de2.compare(DE) == 0 || DE.compare("_") == 0){
+			result.push_back(followTable.at(i).col2);
+		}
+	}
+	return result;
+}
+
+vector<Pair<string,string>> FollowTable::getFollowPairList(vector<int> set1, vector<int> set2){
+	vector<Pair<string,string>> result;
+	for(unsigned i=0; i<set1.size(); i++){
+		for(unsigned j=0; j<set2.size(); j++){
+			if(isFollowed(set1.at(i), set2.at(j))){
+				string no1 = Util::convertIntToString(set1.at(i));
+				string no2 = Util::convertIntToString(set2.at(i));
+				result.push_back(Pair<string,string>(no1, no2));
+			}
+		}
+	}
+	return result;
+}
+
+bool FollowTable::checkFollow(vector<int> set1, vector<int> set2){
+	for(unsigned i=0; i<set1.size(); i++){
+		for(unsigned j=0; j<set2.size(); j++){
+			if(isFollowed(set1.at(i), set2.at(j))){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 int FollowTable::findFollows(int stm){
 	assert(stm >= 0);
 
-	for (it=followTable.begin(); it<followTable.end(); it++){
-		if(((follow_row)*it).col2 == stm){
-			return ((follow_row)*it).col1;
+	for(unsigned i=0; i<followTable.size(); i++){
+		if(followTable.at(i).col2 == stm){
+			return followTable.at(i).col1;
 		}
 	}
 
@@ -29,21 +75,20 @@ int FollowTable::findFollows(int stm){
 int FollowTable::findFollowed(int stm){
 	assert(stm >= 0);
 
-	for (it=followTable.begin(); it<followTable.end(); it++){
-		if(((follow_row)*it).col1 == stm){
-			return ((follow_row)*it).col2;
+	for(unsigned i=0; i<followTable.size(); i++){
+		if(followTable.at(i).col1 == stm){
+			return followTable.at(i).col2;
 		}
 	}
 
 	return -1;
 }
 
-
 bool FollowTable::isFollowed(int stm1,int stm2){
 	assert(stm2 >=0 && stm1 >= 0);
 
-	for (it=followTable.begin(); it<followTable.end(); it++){
-		if((((follow_row)*it).col1 == stm1) && (((follow_row)*it).col2 == stm2)){
+	for(unsigned i=0; i<followTable.size(); i++){
+		if(followTable.at(i).col1 == stm1 && followTable.at(i).col2 == stm2){
 			return true;
 		}
 	}
@@ -53,11 +98,12 @@ bool FollowTable::isFollowed(int stm1,int stm2){
 int FollowTable::getSize(){
 	return followTable.size();
 }
+
 void FollowTable::print(){
 	cout << "Follow Table: Size:" << followTable.size() << "\n";
 
-	for (it=followTable.begin(); it<followTable.end(); it++){
-		cout << ((follow_row)*it).col1 << ((follow_row)*it).de1 <<" : " << ((follow_row)*it).col2 << ((follow_row)*it).de2 << "\n";
+	for(unsigned i=0; i<followTable.size(); i++){
+		cout << followTable.at(i).col1 << followTable.at(i).de1 <<" : " << followTable.at(i).col2 << followTable.at(i).de2 << "\n";
 	}
 }
 
@@ -68,10 +114,10 @@ vector<int> FollowTable::findFollowedT(int stmt, string DE){
 	int index;
 
 	while((index = this->findFollowed(stmt)) != -1){
-		for (it=followTable.begin(); it<followTable.end(); it++){
-			if(((follow_row)*it).col2 == index){
-				if(((follow_row)*it).de2.compare(DE) == 0 || DE.compare("stmt") == 0){
-					result.push_back(((follow_row)*it).col2);	
+		for(unsigned i=0; i<followTable.size(); i++){
+			if(followTable.at(i).col2 == index){
+				if(followTable.at(i).de2.compare(DE) == 0 || DE.compare("stmt") == 0){
+					result.push_back(followTable.at(i).col2);	
 				}
 			}
 		}
@@ -87,10 +133,10 @@ vector<int> FollowTable::findFollowsT(int stmt, string DE){
 	int index;
 
 	while((index = this->findFollows(stmt)) != -1){
-		for (it=followTable.begin(); it<followTable.end(); it++){
-			if(((follow_row)*it).col1 == index){
-				if(((follow_row)*it).de1.compare(DE) == 0 || DE.compare("stmt")==0){
-					result.push_back(((follow_row)*it).col1);	
+		for(unsigned i=0; i<followTable.size(); i++){
+			if(followTable.at(i).col1 == index){
+				if(followTable.at(i).de1.compare(DE) == 0 || DE.compare("stmt") == 0){
+					result.push_back(followTable.at(i).col1);	
 				}
 			}
 		}

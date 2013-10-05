@@ -27,7 +27,9 @@ public:
 
     QueryEvaluator();
     string getQuery();
-    vector<QueryPreprocessor::designAbstraction> sort_desAbstr(QueryPreprocessor::designAbstraction desAbstr);
+    list<string> processQuery(string query);
+    vector<designAbstraction> sort_desAbstr(designAbstraction desAbstr);
+    //vector<value_set>valueSet;
     /*
      priority:
      1. with unselected entity
@@ -40,7 +42,7 @@ public:
      8. modify*, follow*, parent* with 1 constant and unselected entity
      9. affect, next* with 1 constant and unselected entity
      10. affect*, next* with 1 constant and unselected entity
-     11-20. same order with selected entity
+     11-20. same order with selected entityf
      */
      /*
       rating:
@@ -69,16 +71,24 @@ public:
      */
     
 private:
+
+	map<string, set<string>> valueTable;
     vector<QueryPreprocessor::entityReff> entity;
-	vector<QueryPreprocessor::designAbstraction> desAbstr;
-	vector<QueryPreprocessor::pattern> pattern;
 	vector<string> result;
+	list<baseRelation*> constant_relations;
+	list<list<baseRelation*>> * grouped_relations;
 	PKB* pkb;
 	bool has_pattern;
 	bool has_relation;
 	bool has_pattern_result;
 	QueryPreprocessor Qprocessor;
 	bool flag;
-    
-    
+    void processAttrParis(vector<attr_compare> attr_pairs);
+    void initialzeValueTable(vector<QueryPreprocessor::entityReff> entity);
+    void processPattern(vector<pattern> pattern);
+    void processRelations(vector<designAbstraction> desAbstr);
+      void updateValueTable(string ref, vector<string> values);
+
+    bool processConstantRelations();
+
 };
