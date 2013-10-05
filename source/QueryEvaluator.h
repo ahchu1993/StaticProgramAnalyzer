@@ -14,6 +14,7 @@
 #include <list>
 #include <sstream>
 #include <set>
+#include "baseRelation.h"
 using namespace std;
 
 
@@ -31,7 +32,7 @@ public:
     QueryEvaluator();
     string getQuery();
     list<string> processQuery(string query);
-    vector<QueryPreprocessor::designAbstraction> sort_desAbstr(QueryPreprocessor::designAbstraction desAbstr);
+    vector<designAbstraction> sort_desAbstr(designAbstraction desAbstr);
     vector<value_set>valueSet;
     /*
      priority:
@@ -74,20 +75,21 @@ public:
      */
     
 private:
+
+	map<string, set<string>> resultTable;
     vector<QueryPreprocessor::entityReff> entity;
-	vector<QueryPreprocessor::designAbstraction> desAbstr;
-	vector<QueryPreprocessor::pattern> pattern;
-    vector<QueryPreprocessor::attr_compare> attr_pairs;
 	vector<string> result;
+	list<baseRelation*> constant_relations;
+	list<list<baseRelation*>> * grouped_relations;
 	PKB* pkb;
 	bool has_pattern;
 	bool has_relation;
 	bool has_pattern_result;
 	QueryPreprocessor Qprocessor;
 	bool flag;
-    void processAttrParis(vector<QueryPreprocessor::attr_compare> attr_pairs);
+    void processAttrParis(vector<attr_compare> attr_pairs);
     void QueryEvaluator::initialzeValueTable(vector<QueryPreprocessor::entityReff> entity);
-    void processPattern(vector<QueryPreprocessor::pattern> pattern);
-    void processRelations(vector<QueryPreprocessor::designAbstraction> desAbstr);
+    void processPattern(vector<pattern> pattern);
+    void processRelations(vector<designAbstraction> desAbstr);
     
 };
