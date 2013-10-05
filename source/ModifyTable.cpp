@@ -297,7 +297,7 @@ vector<pair<string,string>> ModifyTable::getModifyPairList(vector<int> set1, vec
 			str1 = convert.str();
 			convert<<temp_stmt_row.varIndex;
 			str2 = convert.str();
-			Pair<string,string> myPair(str1, str2);
+			pair<string,string> myPair(str1, str2);
 			results.push_back(myPair);
 		}
 	}
