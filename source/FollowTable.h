@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include "Pair.h"
+#include <utility>
 #include "Util.h"
 
 using namespace std;
@@ -32,7 +32,7 @@ public:
 	vector<int> getFollowsList(string DE);
 	vector<int> getFollowedList(string DE);
 	bool checkFollow(vector<int> set1, vector<int> set2);
-	vector<Pair<string,string>> getFollowPairList(vector<int> set1, vector<int> set2);
+	vector<pair<string,string>> getFollowPairList(vector<int> set1, vector<int> set2);
 	int getSize();
 	void print();
 };

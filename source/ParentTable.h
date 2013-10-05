@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include "Pair.h"
+#include <utility>
 #include "Util.h"
 using namespace std;
 #ifndef PARENTTABLE_H
@@ -32,7 +32,7 @@ public:
 	vector<int> getChildrenList (string DE);
 	bool isParent(int stm1, int stm2);
 	bool checkParent(vector<int> set1, vector<int> set2);
-	vector<Pair<string,string>> getParentPairList(vector<int> set1, vector<int> set2);
+	vector<pair<string,string>> getParentPairList(vector<int> set1, vector<int> set2);
 	int getSize();
 	void print();
 };

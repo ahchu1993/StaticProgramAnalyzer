@@ -72,6 +72,7 @@ bool QueryEvaluator::processConstantRelations(){
 }
 
 bool processGroupedRelations(){
+    
 }
 //store all the possible values for each synonmy
 void QueryEvaluator::initialzeValueTable(vector<QueryPreprocessor::entityReff> entities){
