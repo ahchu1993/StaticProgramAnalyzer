@@ -18,7 +18,7 @@ list<string> QueryEvaluator::processQuery(string query){
         QueryEvaluator::Qprocessor.group_relations();//group the relations
 		entity = Qprocessor.declaration_reffs;//declaration type, name
 		result = Qprocessor.result_reffs;//select clause
-		constant_relations = Qprocessor.constant_relations;//all the relations
+		constant_relations = &Qprocessor.constant_relations;//all the relations
 		//grouped_relations = & Qprocessor.grouped_relations;
        
         //start to evaluate query
@@ -45,24 +45,10 @@ bool processGroupedRelations(){
 }
 //store all the possible values for each synonmy
 void QueryEvaluator::initialzeValueTable(vector<QueryPreprocessor::entityReff> entities){
-    for (int i =0; i<entity.size(); i++) {
-        QueryPreprocessor::entityReff entity;
-        QueryEvaluator::value_set temp;
-        temp.ref = entity.synonym;
-        temp.values = QueryEvaluator::pkb->getValues(entity.at(i).type);
-        valueSet.push_back(temp);
+    for (int i =0; i<entities.size(); i++) {
+        QueryPreprocessor::entityReff entity = entities.at(i);
+        valueTable[entity.synonym] = QueryEvaluator::pkb->getValues(entity.type);
     }
-
-
-}
-void processAttrPairs(vector<QueryPreprocessor::attr_compare> attr_pairs){
-
-
-
-}
-void processPattern(vector<pattern> pattern){
-
-
 }
 void QueryEvaluator::updateValueTable(string ref, vector<string> values){
     
@@ -81,6 +67,17 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
         
     }//for
 }
+void processAttrPairs(vector<QueryPreprocessor::attr_compare> attr_pairs){
+
+
+
+}
+void processPattern(vector<pattern> pattern){
+
+
+}
+
+
 void QueryEvaluator::processRelations(vector<designAbstraction> desAbstr){
     for (int i=0; i<desAbstr.size(); i++) {
         designAbstraction relation = desAbstr.at(i);
