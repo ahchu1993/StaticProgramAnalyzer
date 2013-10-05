@@ -62,12 +62,12 @@ bool QueryEvaluator::processConstantRelations(){
 			string ref;
 			if(da->ref1_type == "integer"){
 				for(unsigned i=0; i<res.size(); i++){
-					result.push_back(res.at(i).getFirst());
+					result.push_back(res.at(i).first);
 					ref = da->ref2;
 				}
 			}else if(da->ref2_type == "integer"){
 				for(unsigned i=0; i<res.size(); i++){
-					result.push_back(res.at(i).getSecond());
+					result.push_back(res.at(i).second);
 					ref = da->ref1;
 				}
 			}
