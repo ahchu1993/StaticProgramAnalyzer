@@ -179,7 +179,6 @@ public:
 	bool isMofiedBetween(int modifiedVarIndex,int currentLine,int target);
 
 	struct postfixNode{
-
 		string type;// if/while/assig
 		int lineNum; 
 		string varRef; //'a' as control variable ...bla
