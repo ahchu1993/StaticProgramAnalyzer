@@ -163,9 +163,29 @@ public:
 	// API for QE
 	vector<Pair> getNext(string arg1, string arg1Type, string arg2, string arg2Type);
 	vector<Pair> getNextT(string arg1, string arg1Type, string arg2, string arg2Type);
-	
+	bool checkNext(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkNextT(string arg1, string arg1Type, string arg2, string arg2Type);
 	/************************************************** Affect - Zhao Yang *************************************************/
 	bool isAffect(int stmtNo1, int stmtNo2);
 	bool isMofiedBetween(int modifiedVarIndex,int currentLine,int target);
+
+	struct postfixNode{
+
+		string type;// if/while/assig
+		int lineNum; 
+		string varRef; //'a' as control variable ...bla
+		string postfixExpr; //  2 5 *
+		postfixNode(string typeInput,int lineNumInput,string varRefInput, string postfixExprInput){
+			type=typeInput;
+			lineNum=lineNumInput;
+			varRef=varRefInput;
+			postfixExpr=postfixExprInput;
+		}
+	};
+
+	/************************************************** Flatten - Zhao Yang *************************************************/
+	vector<postfixNode> postfixExprList;
+	void flattenAST();
+	string createPostfix(TNode *node);
 };
 #endif
