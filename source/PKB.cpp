@@ -45,7 +45,7 @@ void PKB::printAST()
 }
 
 /************************************************** CallTable *************************************************/
-vector<Pair<string, string>> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type){	
+vector<pair<string, string>> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type){	
 	vector<string> set1, set2;
 	if(arg1Type.compare("procedure") == 0 || arg1Type.compare("_") == 0){
 		set1 = callTable.getCall("_");
@@ -58,20 +58,20 @@ vector<Pair<string, string>> PKB::getCall(string arg1, string arg1Type, string a
 	}else if(arg2Type.compare("String") == 0){
 		set2 = callTable.getCalled(arg2);
 	}
-	vector<Pair<string, string>> result = callTable.getCallPairList(set1, set2);
+	vector<pair<string, string>> result = callTable.getCallPairList(set1, set2);
 
 	for(unsigned i=0; i<result.size(); i++){
 		stringstream ss1,ss2;
-		string proc1_string = result.at(i).getFirst();
-		string proc2_string = result.at(i).getSecond();
+		string proc1_string = result.at(i).first;
+		string proc2_string = result.at(i).second;
 		int proc1 =	procTable.getProcIndex(proc1_string);
 		int proc2 =	procTable.getProcIndex(proc2_string);
 		ss1 << proc1;
 		ss2 << proc2;
 		proc1_string = ss1.str();
 		proc2_string = ss2.str();
-		result.at(i).setFirst(proc1_string);
-		result.at(i).setSecond(proc2_string);
+		result.at(i).first= proc1_string;
+		result.at(i).second = proc2_string;
 	}
 	return result;
 }
@@ -119,7 +119,7 @@ vector<int> PKB::getCallsList(int procIndex){
 	return result;
 }
 /************************************************** ParentTable *************************************************/
-vector<Pair<string, string>> PKB::getParent(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<pair<string, string>> PKB::getParent(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1, set2;
 	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
 		set1 = parentTable.getParentList("_");
@@ -171,7 +171,7 @@ void PKB::printParentTable(){
 }
 
 /************************************************** FollowTable *************************************************/
-vector<Pair<string, string>> PKB::getFollow(string arg1, string arg1Type, string arg2, string arg2Type){	
+vector<pair<string, string>> PKB::getFollow(string arg1, string arg1Type, string arg2, string arg2Type){	
 	vector<int> set1, set2;
 	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
 		set1 = followTable.getFollowsList("_");
@@ -226,7 +226,7 @@ void PKB::printFollowTable(){
 }
 
 /************************************************** ModifyTable *************************************************/
-vector<Pair<string, string>> PKB::getModify(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<pair<string, string>> PKB::getModify(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
 	int procIndex, varIndex;
@@ -353,7 +353,7 @@ void PKB::printModifyTable()
 }
 
 /************************************************** UseTable *************************************************/
-vector<Pair<string, string>> PKB::getUse(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<pair<string, string>> PKB::getUse(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
 	int procIndex, varIndex;
@@ -749,10 +749,10 @@ vector<int> PKB::getPrevT(int stmtNo)
 	return prevStarList;
 }
 
-vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2Type){
+vector<pair<string,string>> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2Type){
 	// synonym(prog_line|stmt|assign|if|while), _, integer
 	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<Pair<string,string>> result;
+	vector<pair<string,string>> result;
 	vector<int> list1;
 	vector<int> list2;
 	int type =0;
@@ -783,7 +783,7 @@ vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string ar
 			vector<int> nextList = getNext(stmtNo1);
 			for(unsigned int j=0;j<nextList.size();j++){
 				int stmtNo2 = nextList[j];
-				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+				pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -796,7 +796,7 @@ vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string ar
 				for(unsigned int i=0;i<prevList.size();i++){
 					int stmtNo1 = prevList[i];
 					if(contains(list1,stmtNo1)){
-						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+						pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -808,7 +808,7 @@ vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string ar
 				for(unsigned int j=0;j<nextList.size();j++){
 					int stmtNo2 = nextList[j];
 					if(contains(list2,stmtNo2)){
-						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+						pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -821,7 +821,7 @@ vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string ar
 		for(unsigned int i=0;i<prevList.size();i++){
 			int stmtNo1 = prevList[i];
 			if(contains(list1,stmtNo1)){
-				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+				pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -832,7 +832,7 @@ vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string ar
 			vector<int> nextList = getNext(stmtNo1);
 			for(unsigned int j=0;j<nextList.size();j++){
 				int stmtNo2 = nextList[j];
-				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+				pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -845,7 +845,7 @@ vector<Pair<string,string>> PKB::getNext(string arg1, string arg1Type, string ar
 bool PKB::checkNext(string arg1, string arg1Type, string arg2, string arg2Type){
 	// synonym(prog_line|stmt|assign|if|while), _, integer
 	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<Pair<string,string>> result;
+	vector<pair<string,string>> result;
 	vector<int> list1;
 	vector<int> list2;
 	int type =0;
@@ -876,7 +876,7 @@ bool PKB::checkNext(string arg1, string arg1Type, string arg2, string arg2Type){
 			vector<int> nextList = getNext(stmtNo1);
 			for(unsigned int j=0;j<nextList.size();j++){
 				int stmtNo2 = nextList[j];
-				Pair<string,string>p(stmtNo1+"", stmtNo2+"");
+				pair<string,string>p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 				return true;
 			}
@@ -890,7 +890,7 @@ bool PKB::checkNext(string arg1, string arg1Type, string arg2, string arg2Type){
 				for(unsigned int i=0;i<prevList.size();i++){
 					int stmtNo1 = prevList[i];
 					if(contains(list1,stmtNo1)){
-						Pair<string,string>p(stmtNo1+"", stmtNo2+"");
+						pair<string,string>p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 						return true;
 					}
@@ -903,7 +903,7 @@ bool PKB::checkNext(string arg1, string arg1Type, string arg2, string arg2Type){
 				for(unsigned int j=0;j<nextList.size();j++){
 					int stmtNo2 = nextList[j];
 					if(contains(list2,stmtNo2)){
-						Pair<string,string>p(stmtNo1+"", stmtNo2+"");
+						pair<string,string>p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 						return true;
 					}
@@ -917,7 +917,7 @@ bool PKB::checkNext(string arg1, string arg1Type, string arg2, string arg2Type){
 		for(unsigned int i=0;i<prevList.size();i++){
 			int stmtNo1 = prevList[i];
 			if(contains(list1,stmtNo1)){
-				Pair<string,string>p(stmtNo1+"", stmtNo2+"");
+				pair<string,string>p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 				return true;
 			}
@@ -929,7 +929,7 @@ bool PKB::checkNext(string arg1, string arg1Type, string arg2, string arg2Type){
 			vector<int> nextList = getNext(stmtNo1);
 			for(unsigned int j=0;j<nextList.size();j++){
 				int stmtNo2 = nextList[j];
-				Pair<string,string>p(stmtNo1+"", stmtNo2+"");
+				pair<string,string>p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 				return true;
 			}
@@ -947,11 +947,11 @@ bool PKB::contains(vector<int> list, int stmtNo)
 			return true;
 	return false;
 }
-vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg2Type)
+vector<pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 {
 	// synonym(prog_line|stmt|assign|if|while), _, integer
 	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<Pair<string,string>> result;
+	vector<pair<string,string>> result;
 	vector<int> list1;
 	vector<int> list2;
 	int type =0;
@@ -982,7 +982,7 @@ vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string a
 			vector<int> nextTList = getNextT(stmtNo1);
 			for(unsigned int j=0;j<nextTList.size();j++){
 				int stmtNo2 = nextTList[j];
-				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+				pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -995,7 +995,7 @@ vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string a
 				for(unsigned int i=0;i<prevTList.size();i++){
 					int stmtNo1 = prevTList[i];
 					if(contains(list1,stmtNo1)){
-						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+						pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -1007,7 +1007,7 @@ vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string a
 				for(unsigned int j=0;j<nextTList.size();j++){
 					int stmtNo2 = nextTList[j];
 					if(contains(list2,stmtNo2)){
-						Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+						pair<string,string> p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 					}
 				}
@@ -1020,7 +1020,7 @@ vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string a
 		for(unsigned int i=0;i<prevTList.size();i++){
 			int stmtNo1 = prevTList[i];
 			if(contains(list1,stmtNo1)){
-				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+				pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -1031,7 +1031,7 @@ vector<Pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string a
 			vector<int> nextTList = getNextT(stmtNo1);
 			for(unsigned int j=0;j<nextTList.size();j++){
 				int stmtNo2 = nextTList[j];
-				Pair<string,string> p(stmtNo1+"", stmtNo2+"");
+				pair<string,string> p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 			}
 		}
@@ -1045,7 +1045,7 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 {
 	// synonym(prog_line|stmt|assign|if|while), _, integer
 	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<Pair<string,string>> result;
+	vector<pair<string,string>> result;
 	vector<int> list1;
 	vector<int> list2;
 	int type =0;
@@ -1076,7 +1076,7 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 			vector<int> nextTList = getNextT(stmtNo1);
 			for(unsigned int j=0;j<nextTList.size();j++){
 				int stmtNo2 = nextTList[j];
-				Pair<string,string>p(stmtNo1+"", stmtNo2+"");
+				pair<string,string>p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 				return true;
 			}
@@ -1090,7 +1090,7 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 				for(unsigned int i=0;i<prevTList.size();i++){
 					int stmtNo1 = prevTList[i];
 					if(contains(list1,stmtNo1)){
-						Pair<string,string>p(stmtNo1+"", stmtNo2+"");
+						pair<string,string>p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 						return true;
 					}
@@ -1103,7 +1103,7 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 				for(unsigned int j=0;j<nextTList.size();j++){
 					int stmtNo2 = nextTList[j];
 					if(contains(list2,stmtNo2)){
-						Pair<string,string>p(stmtNo1+"", stmtNo2+"");
+						pair<string,string>p(stmtNo1+"", stmtNo2+"");
 						result.push_back(p);
 						return true;
 					}
@@ -1117,7 +1117,7 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 		for(unsigned int i=0;i<prevTList.size();i++){
 			int stmtNo1 = prevTList[i];
 			if(contains(list1,stmtNo1)){
-				Pair<string,string>p(stmtNo1+"", stmtNo2+"");
+				pair<string,string>p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 				return true;
 			}
@@ -1129,7 +1129,7 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 			vector<int> nextTList = getNextT(stmtNo1);
 			for(unsigned int j=0;j<nextTList.size();j++){
 				int stmtNo2 = nextTList[j];
-				Pair<string,string>p(stmtNo1+"", stmtNo2+"");
+				pair<string,string>p(stmtNo1+"", stmtNo2+"");
 				result.push_back(p);
 				return true;
 			}

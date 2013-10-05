@@ -122,11 +122,7 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
         
     }//for
 }
-void processAttrPairs(vector<QueryPreprocessor::attr_compare> attr_pairs){
 
-
-
-}
 void processPattern(vector<pattern> pattern){
 
 
