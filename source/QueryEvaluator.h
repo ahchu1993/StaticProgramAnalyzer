@@ -88,7 +88,7 @@ private:
 	QueryPreprocessor Qprocessor;
 	bool flag;
     void processAttrParis(vector<attr_compare> attr_pairs);
-    void QueryEvaluator::initialzeValueTable(vector<QueryPreprocessor::entityReff> entity);
+    void initialzeValueTable(vector<QueryPreprocessor::entityReff> entity);
     void processPattern(vector<pattern> pattern);
     void processRelations(vector<designAbstraction> desAbstr);
     
