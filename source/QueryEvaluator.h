@@ -25,15 +25,12 @@ public:
 		QueryPreprocessor::designAbstraction desAbstr;
 		int rating;
 	};
-	struct value_set{
-		string ref;
-		set<int> values;
-	};
+
     QueryEvaluator();
     string getQuery();
     list<string> processQuery(string query);
     vector<designAbstraction> sort_desAbstr(designAbstraction desAbstr);
-    vector<value_set>valueSet;
+    //vector<value_set>valueSet;
     /*
      priority:
      1. with unselected entity
@@ -91,5 +88,8 @@ private:
     void initialzeValueTable(vector<QueryPreprocessor::entityReff> entity);
     void processPattern(vector<pattern> pattern);
     void processRelations(vector<designAbstraction> desAbstr);
-    bool processConstantRelations()
+      void updateValueTable(string ref, vector<string> values);
+
+    bool processConstantRelations();
+
 };

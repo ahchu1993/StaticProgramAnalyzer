@@ -75,15 +75,27 @@ bool processGroupedRelations(){
 }
 //store all the possible values for each synonmy
 void QueryEvaluator::initialzeValueTable(vector<QueryPreprocessor::entityReff> entities){
-    for (int i =0; i<entity.size(); i++) {
-        QueryPreprocessor::entityReff entity;
-        QueryEvaluator::value_set temp;
-        temp.ref = entity.synonym;
-        temp.values = QueryEvaluator::pkb->getValues(entity.at(i).type);
-        valueSet.push_back(temp);
+    for (int i =0; i<entities.size(); i++) {
+        QueryPreprocessor::entityReff entity = entities.at(i);
+        valueTable[entity.synonym] = QueryEvaluator::pkb->getValues(entity.type);
     }
-
-
+}
+void QueryEvaluator::updateValueTable(string ref, vector<string> values){
+    
+    for (set<string>::iterator g = valueTable[ref].begin(); g != valueTable[ref].end(); g++) {
+        string value = *g;
+        bool flag_find = false;
+        for (int i =0; i<values.size(); i++) {
+            if (value.compare(values.at(i))==0) {
+                flag_find = true;
+                break;
+            }
+        }
+        if (!flag_find) {
+            valueTable[ref].erase(g);//if not match at all, delete this value from set
+        }
+        
+    }//for
 }
 void processAttrPairs(vector<QueryPreprocessor::attr_compare> attr_pairs){
 
@@ -94,6 +106,8 @@ void processPattern(vector<pattern> pattern){
 
 
 }
+
+
 void QueryEvaluator::processRelations(vector<designAbstraction> desAbstr){
     for (int i=0; i<desAbstr.size(); i++) {
         designAbstraction relation = desAbstr.at(i);
