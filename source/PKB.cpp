@@ -275,14 +275,14 @@ vector<pair<string, string>> PKB::getModifySpecific(vector<string> arg1List, str
 	// Get the set of possible values for argument 1
 	if (arg1Type.compare("procedure") == 0){
 		// arg1List will be vector of proc name
-		for (unsigned i; i<arg1List.size(); i++){
+		for (unsigned i = 0; i<arg1List.size(); i++){
 			procIndex = procTable.getProcIndex(arg1List.at(i));
 			if(procIndex != -1){
 				set1.push_back(procIndex);
 			}
 		}
 	} else if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0 || arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
-		for (unsigned i; i<arg1List.size(); i++){
+		for (unsigned i = 0; i<arg1List.size(); i++){
 			istringstream(arg1List.at(i))>>stmtNo;
 			set1.push_back(stmtNo);
 		}
@@ -296,7 +296,7 @@ vector<pair<string, string>> PKB::getModifySpecific(vector<string> arg1List, str
 	// Get the set of possible values for argument 1
 	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
 		// arg2List will be vector of var name
-		for (unsigned i; i<arg2List.size(); i++){
+		for (unsigned i = 0; i<arg2List.size(); i++){
 			varIndex = varTable.getVarIndex(arg2List.at(i));
 			if(varIndex != -1){
 				set2.push_back(varIndex);
@@ -442,14 +442,14 @@ vector<pair<string, string>> PKB::getUseSpecific(vector<string> arg1List, string
 	// Get the set of possible values for argument 1
 	if (arg1Type.compare("procedure") == 0){
 		// arg1List will be vector of proc name
-		for (unsigned i; i<arg1List.size(); i++){
+		for (unsigned i = 0; i<arg1List.size(); i++){
 			procIndex = procTable.getProcIndex(arg1List.at(i));
 			if(procIndex != -1){
 				set1.push_back(procIndex);
 			}
 		}
 	} else if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0 || arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
-		for (unsigned i; i<arg1List.size(); i++){
+		for (unsigned i = 0; i<arg1List.size(); i++){
 			istringstream(arg1List.at(i))>>stmtNo;
 			set1.push_back(stmtNo);
 		}
@@ -463,7 +463,7 @@ vector<pair<string, string>> PKB::getUseSpecific(vector<string> arg1List, string
 	// Get the set of possible values for argument 2
 	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
 		// arg2List will be vector of var name
-		for (unsigned i; i<arg2List.size(); i++){
+		for (unsigned i = 0; i<arg2List.size(); i++){
 			varIndex = varTable.getVarIndex(arg2List.at(i));
 			if(varIndex != -1){
 				set2.push_back(varIndex);
@@ -1298,7 +1298,7 @@ void PKB::flattenAST()
 	vector<TNode*> listOfRootNode = ast.getAST();
 	getchar();
 	
-	for(int i=0;i<listOfRootNode.size();i++){
+	for(unsigned i=0;i<listOfRootNode.size();i++){
 		string type ="";
 		int lineNum =-1;
 		string varRef="#";
