@@ -31,7 +31,7 @@ list<string> QueryEvaluator::processQuery(string query){
 }
 bool QueryEvaluator::processConstantRelations(){
 
-	for(list<baseRelation*>::iterator it=constant_relations.begin(); it<constant_relations.end(); it++){
+	for(list<baseRelation*>::iterator it=constant_relations.begin(); it!=constant_relations.end(); it++){
 		baseRelation* b = *it;
 		if(b->type=="desAbstraction")
 		{
