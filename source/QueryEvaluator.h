@@ -73,23 +73,21 @@ public:
 private:
 
 	map<string, set<string>> valueTable;
-    vector<QueryPreprocessor::entityReff> entity;
+    vector<QueryPreprocessor::entityReff> entities;
 	vector<string> result;
 	list<BaseRelation*> constant_relations;
-	list<list<BaseRelation*>> * grouped_relations;
+	list<list<BaseRelation*>> grouped_relations;
 	PKB* pkb;
-	bool has_pattern;
-	bool has_relation;
-	bool has_pattern_result;
+
 	QueryPreprocessor Qprocessor;
 	bool flag;
-    void processAttrParis(vector<attr_compare> attr_pairs);
-    void initialzeValueTable(vector<QueryPreprocessor::entityReff> entity);
-    void processPattern(vector<pattern> pattern);
-    void processRelations(vector<designAbstraction> desAbstr);
-      void updateValueTable(string ref, vector<string> values);
+    //void processAttrPair(attr_compare* attr_pair);
+    //void processPattern(pattern* p);
+    //void processDesignAbstraction(designAbstraction* desAbstr);
+	void initialzeValueTable();
+    void updateValueTable(string ref, vector<string> values);
 
     bool processConstantRelations();
-	bool QueryEvaluator::processTwoConstantsRelations(designAbstraction* da);
-	bool QueryEvaluator::processOneConstantRelations(designAbstraction* da);
+	bool processTwoConstantsRelation(designAbstraction* da);
+	bool processOneConstantRelation(designAbstraction* da);
 };

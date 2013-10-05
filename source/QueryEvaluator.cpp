@@ -16,13 +16,13 @@ list<string> QueryEvaluator::processQuery(string query){
     else{
         //store all the parsed query infomation
         QueryEvaluator::Qprocessor.group_relations();//group the relations
-		entity = Qprocessor.declaration_reffs;//declaration type, name
+		entities = Qprocessor.declaration_reffs;//declaration type, name
 		result = Qprocessor.result_reffs;//select clause
 		constant_relations = Qprocessor.constant_relations;//all the relations
 		//grouped_relations = & Qprocessor.grouped_relations;
        
         //start to evaluate query
-        initialzeValueTable(entity);
+        initialzeValueTable();
         processConstantRelations();
         
         processGroupedRelations();
@@ -37,18 +37,19 @@ bool QueryEvaluator::processConstantRelations(){
 		{
 			designAbstraction* da = static_cast<designAbstraction*>(b);
 			//Handle 2 integers case
+			
 			if((da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "_") 
 				&& (da->ref2_type == "integer" || da->ref2_type == "string" || da->ref2_type == "_")){
-				return processTwoConstantsRelations(da);
+				return processTwoConstantsRelation(da);
 			}
-			return 	processOneConstantRelations(da);
+			return 	processOneConstantRelation(da);
 		}
 		return false;
 	}
 		
 }
 
-bool QueryEvaluator::processOneConstantRelations(designAbstraction* da){
+bool QueryEvaluator::processOneConstantRelation(designAbstraction* da){
 	string relation = da->relation_type;
 	vector<pair<string, string>> res;
 
@@ -83,7 +84,7 @@ bool QueryEvaluator::processOneConstantRelations(designAbstraction* da){
 	//Update value table with result vector
 	updateValueTable(ref, result);
 }
-bool QueryEvaluator::processTwoConstantsRelations(designAbstraction* da){
+bool QueryEvaluator::processTwoConstantsRelation(designAbstraction* da){
 	string relation = da->relation_type;
 
 	if(relation == "Modify"){
@@ -104,7 +105,7 @@ bool processGroupedRelations(){
     
 }
 //store all the possible values for each synonmy
-void QueryEvaluator::initialzeValueTable(vector<QueryPreprocessor::entityReff> entities){
+void QueryEvaluator::initialzeValueTable(){
     for (int i =0; i<entities.size(); i++) {
         QueryPreprocessor::entityReff entity = entities.at(i);
         valueTable[entity.synonym] = QueryEvaluator::pkb->getValues(entity.type);
@@ -133,7 +134,7 @@ void processPattern(vector<pattern> pattern){
 
 }
 
-
+/*
 void QueryEvaluator::processRelations(vector<designAbstraction> desAbstr){
     for (int i=0; i<desAbstr.size(); i++) {
         designAbstraction relation = desAbstr.at(i);
@@ -171,4 +172,4 @@ void QueryEvaluator::processRelations(vector<designAbstraction> desAbstr){
         }
     }
 
-}
+} */
