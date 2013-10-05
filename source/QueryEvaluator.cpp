@@ -18,7 +18,7 @@ list<string> QueryEvaluator::processQuery(string query){
         QueryEvaluator::Qprocessor.group_relations();//group the relations
 		entity = Qprocessor.declaration_reffs;//declaration type, name
 		result = Qprocessor.result_reffs;//select clause
-		constant_relations = (Qprocessor.constant_relations);//all the relations
+		constant_relations = Qprocessor.constant_relations;//all the relations
 		//grouped_relations = & Qprocessor.grouped_relations;
        
         //start to evaluate query
