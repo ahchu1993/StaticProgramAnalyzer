@@ -519,9 +519,10 @@ bool QueryPreprocessor::relRef(string relation){
         arg1_type = get_type(arg1);
         arg1_list= e.arg1_list;
         for(unsigned int i=0;i<arg1_list.synonym_type.size();i++){
-            if (arg1_type == arg1_list.synonym_type[i])
+            if (arg1_type == arg1_list.synonym_type[i]){
                 arg1_flag = true;
                 break;
+			}
         }
     }else if(arg1=="_"&& arg1_list.underscore){
         arg1_type = "";
@@ -530,18 +531,21 @@ bool QueryPreprocessor::relRef(string relation){
         arg1_type = "integer";
         arg1_flag = true;
     }else{
-        if (arg1[0]=='"' && arg1[arg1.size()-1]=='"' && arg1_list.string_type)
+        if (arg1[0]=='"' && arg1[arg1.size()-1]=='"' && arg1_list.string_type){
+			arg1 = arg1.substr(1,arg1.size()-2);
             arg1_type = "string";
             arg1_flag = true;
+		}
     }
 
     if(check_synonym(arg2)){
         arg2_type = get_type(arg2);
         arg2_list= e.arg2_list;
         for(unsigned int i=0;i<arg2_list.synonym_type.size();i++){
-            if (arg2_type == arg2_list.synonym_type[i])
+            if (arg2_type == arg2_list.synonym_type[i]){
                 arg2_flag = true;
                 break;
+			}
         }
     }else if(arg2=="_"&& arg2_list.underscore){
         arg2_type = "";
@@ -550,9 +554,11 @@ bool QueryPreprocessor::relRef(string relation){
         arg2_type = "integer";
         arg2_flag = true;
     }else{
-        if (arg2[0]=='"' && arg2[arg2.size()-1]=='"' && arg2_list.string_type)
+        if (arg2[0]=='"' && arg2[arg2.size()-1]=='"' && arg2_list.string_type){
+			arg2 = arg2.substr(1,arg2.size()-2);
             arg2_type = "string";
             arg2_flag = true;
+		}
     }
 
     if(arg1_flag&&arg2_flag){
@@ -1100,8 +1106,10 @@ bool QueryPreprocessor::pattern_assign(string s){
 				varRef_type = "";
 			else if(check_synonym(varRef))
 				varRef_type = get_type(varRef_type);
-			else varRef_type = "string";
-
+			else {
+				varRef_type = "string";
+				varRef = varRef.substr(1,varRef.size()-2); // strip ""
+			}
 
 			unsigned int p2 = s.find_last_of(")");
 			if(p2>s.size()||(p2!=s.size()-1)) return false;
@@ -1176,8 +1184,10 @@ bool QueryPreprocessor::pattern_if(string s){
 				varRef_type = "";
 			else if(check_synonym(varRef))
 				varRef_type = get_type(varRef_type);
-			else varRef_type = "string";
-
+			else {
+				varRef_type = "string";
+				varRef = varRef.substr(1,varRef.size()-2);
+			}
 
 			p0 = s.find("_");
 			if(p0>s.size()) return false;
@@ -1247,8 +1257,10 @@ bool QueryPreprocessor::pattern_while(string s){
 				varRef_type = "";
 			else if(check_synonym(varRef))
 				varRef_type = get_type(varRef_type);
-			else varRef_type = "string";
-
+			else {
+				varRef_type = "string";
+				varRef = varRef.substr(1,varRef.size()-2);
+			}
 
 			p0 = s.find("_");
 			if(p0>s.size()) return false;
@@ -1351,7 +1363,7 @@ bool QueryPreprocessor::attrCompare(string s){
             }
         }else{
             if(ref1[0]=='"' && ref1[ref1.size()-1]=='"'){
-                ref1_prefix = ref1;
+				ref1_prefix = ref1.substr(1,ref1.size()-2); //strip ""
                 ref1_type = "string";
                 evaluation_type = "string";
                 flag1 = true;
@@ -1388,7 +1400,7 @@ bool QueryPreprocessor::attrCompare(string s){
             }
         }else{
             if(ref2[0]=='"' && ref2[ref2.size()-1]=='"'){
-                ref2_prefix = ref2;
+				ref2_prefix = ref2.substr(1,ref2.size()-2);
                 ref2_type = "string";
                 if(evaluation_type != "string")
                     return false;
