@@ -16,5 +16,5 @@ string Util::convertIntToString(int input){
 }
 
 int Util::convertStringToInt(string input){
-	return 0;
+	return atoi( input.c_str() );
 }

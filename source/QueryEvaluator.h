@@ -42,7 +42,9 @@ private:
 	QueryPreprocessor* Qprocessor;
 
     //void processAttrPair(attr_compare* attr_pair);
-    bool processPattern(pattern* p);
+    vector<pair<string,string>> processPattern(pattern* p);
+	vector<pair<string,string>> patternAssign(pattern *p);
+	vector<pair<string,string>> patternIfOrWhile(pattern *p);
     //void processDesignAbstraction(designAbstraction* desAbstr);
 	void initialzeValueTable();
     void updateValueTable(string ref, vector<string> values);
