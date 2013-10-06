@@ -1225,8 +1225,9 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 /************************************************** Affect -zy *************************************************/
 vector<int> PKB::getAffectList(int stmtNo)
 {
-	string var = 
-
+	string var = "";
+	vector<int> result;
+	return result;
 }
 // not used
 bool PKB::isAffect(int stmtNo1, int stmtNo2)
