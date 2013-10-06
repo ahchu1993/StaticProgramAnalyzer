@@ -28,8 +28,8 @@ list<string> QueryEvaluator::processQuery(string query){
        
         //start to evaluate query
         initialzeValueTable();
-        processConstantRelations();     
-        processGroupedRelations();
+        if(processConstantRelations())     
+			processGroupedRelations();
     }
 	results = getResults();
     return results;
@@ -44,27 +44,52 @@ bool QueryEvaluator::processConstantRelations(){
 		if(b->type=="desAbstraction")
 		{
 			designAbstraction* da = static_cast<designAbstraction*>(b);
-			//Handle 2 integers case
-			
-			if((da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "_") 
-				&& (da->ref2_type == "integer" || da->ref2_type == "string" || da->ref2_type == "_")){
-				return processTwoConstantsRelation(da);
+
+			//Handle 2 constants case
+			bool b1 = da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "_";
+			bool b2 = da->ref2_type == "integer" || da->ref2_type == "string" || da->ref2_type == "_";
+			if(b1&&b2){
+				bool pass =  processTwoConstantsDesignAbstraction(da);
+				if(!pass) return false;
+				else continue;
 			}
-			return 	processOneConstantRelation(da);
+
+			processDesignAbstraction(da);
 		}
 		else if(b->type=="pattern"){
 			
 			pattern* p = static_cast<pattern*>(b);
 			result_pairs  = processPattern(p);
+
+			//update valueTable
+			vector<string> temp;
+			for(unsigned int i=0;i<result_pairs.size();i++){
+				pair<string,string> t = result_pairs.at(i);
+				temp.push_back(t.first);
+			}
+			//update synonym valueTable
+			updateValueTable(p->synonym, temp);
+
+			if(p->varRef_type=="variable"){
+				vector<string> vars;
+				for(unsigned int i=0;i<result_pairs.size();i++){
+					pair<string,string> t = result_pairs.at(i);
+					vars.push_back(t.second);
+				}
+
+				updateValueTable(p->varRef, vars);
+			}
+
 		}else {	
 		}
 
-		return false;
+
+		return true;
 	}
 		
 }
 
-bool QueryEvaluator::processOneConstantRelation(designAbstraction* da){
+vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstraction* da){
 	string relation = da->relation_type;
 	vector<pair<string, string>> res;
 
@@ -80,9 +105,7 @@ bool QueryEvaluator::processOneConstantRelation(designAbstraction* da){
 		res = pkb-> getNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}
 
-	if(res.size() == 0)
-		return 0;
-
+	//update valueTable
 	vector<string> result;
 	string ref;
 	if(da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "_"){
@@ -98,8 +121,11 @@ bool QueryEvaluator::processOneConstantRelation(designAbstraction* da){
 	}
 	//Update value table with result vector
 	updateValueTable(ref, result);
+
+	return res;
+
 }
-bool QueryEvaluator::processTwoConstantsRelation(designAbstraction* da){
+bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da){
 	string relation = da->relation_type;
 
 	if(relation == "Modify"){

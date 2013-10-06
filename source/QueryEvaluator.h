@@ -42,16 +42,21 @@ private:
 	QueryPreprocessor* Qprocessor;
 
     //void processAttrPair(attr_compare* attr_pair);
-    vector<pair<string,string>> processPattern(pattern* p);
-	vector<pair<string,string>> patternAssign(pattern *p);
-	vector<pair<string,string>> patternIfOrWhile(pattern *p);
-    //void processDesignAbstraction(designAbstraction* desAbstr);
+	// init
 	void initialzeValueTable();
     void updateValueTable(string ref, vector<string> values);
 
+	// main method
     bool processConstantRelations();
 	bool processGroupedRelations();
-	bool processTwoConstantsRelation(designAbstraction* da);
-	bool processOneConstantRelation(designAbstraction* da);
+
+	// designAbstraction
+	bool processTwoConstantsDesignAbstraction(designAbstraction* da);
+	vector<pair<string,string>> processDesignAbstraction(designAbstraction* da);
+	// pattern
+	vector<pair<string,string>> processPattern(pattern* p);
+	vector<pair<string,string>> patternAssign(pattern *p);
+	vector<pair<string,string>> patternIfOrWhile(pattern *p);
+
 	list<string> getResults();
 };
