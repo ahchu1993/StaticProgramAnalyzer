@@ -54,7 +54,8 @@ bool QueryEvaluator::processConstantRelations(){
 				else continue;
 			}
 
-			processDesignAbstraction(da);
+			result_pairs = processDesignAbstraction(da);
+			if(result_pairs.empty()) return false; 
 		}
 		else if(b->type=="pattern"){
 			
@@ -80,13 +81,9 @@ bool QueryEvaluator::processConstantRelations(){
 				updateValueTable(p->varRef, vars);
 			}
 
-		}else {	
-		}
-
-
-		return true;
+		}else {}
 	}
-		
+	return true;
 }
 
 vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstraction* da){
