@@ -156,7 +156,7 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 	vector<pair<string,string>> result;
 	if(p->varRef_type=="string"){
 
-		set<string> s = valueTable[p->synonym]; //redeced set
+		set<string> s = *valueTable[p->synonym]; //redeced set
 
 		for(set<string>::iterator it =s.begin();it!=s.end();it++){
 
@@ -190,8 +190,8 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 			}
 		}
 	}else { //varRef =="variable"
-		set<string> s = valueTable[p->synonym]; //redeced set
-		set<string> vars = valueTable[p->varRef]; //redeced set for vars
+		set<string> s = *valueTable[p->synonym]; //redeced set
+		set<string> vars = *valueTable[p->varRef]; //redeced set for vars
 		for(set<string>::iterator it =s.begin();it!=s.end();it++){
 			string a = *it;
 			int aint = Util::convertStringToInt(a); 
@@ -231,7 +231,7 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 vector<pair<string,string>> QueryEvaluator::patternIfOrWhile(pattern* p){
 	map<int,PKB::postfixNode*> exp_list = pkb->postfixExprList;
 	vector<pair<string,string>> result;
-	set<string> s = valueTable[p->synonym];
+	set<string> s = *valueTable[p->synonym];
 	if(p->varRef_type=="string"){
 		for(set<string>::iterator it = s.begin();it!=s.end();it++){
 			string a = *it;
@@ -248,7 +248,7 @@ vector<pair<string,string>> QueryEvaluator::patternIfOrWhile(pattern* p){
 			}
 		}
 	}else{
-		set<string> vars = valueTable[p->varRef];
+		set<string> vars = *valueTable[p->varRef];
 		for(set<string>::iterator it = s.begin();it!=s.end();it++){
 			string a = *it;
 			int aint = Util::convertStringToInt(a); //if stmt#
@@ -275,32 +275,27 @@ void QueryEvaluator::initialzeValueTable(){
 		vector<int> stmts = QueryEvaluator::pkb->getStmtNo(entity.type);
 		
 		for(unsigned int i=0;i<stmts.size();i++){
-			valueTable[entity.synonym].insert(Util::convertIntToString(stmts.at(i)));
+			valueTable[entity.synonym]->insert(Util::convertIntToString(stmts.at(i)));
 		}
         
     }
 }
 void QueryEvaluator::updateValueTable(string ref, vector<string> values){
-    
-    for (set<string>::iterator g = valueTable[ref].begin(); g != valueTable[ref].end(); g++) {
-        string value = *g;
-        bool flag_find = false;
-        for (int i =0; i<values.size(); i++) {
-            if (value.compare(values.at(i))==0) {
-                flag_find = true;
-                break;
-            }
-        }
-        if (!flag_find) {
-            valueTable[ref].erase(g);//if not match at all, delete this value from set
-        }
+    set<string> s = *valueTable[ref];
+	set<string> * result = new set<string>;
+    for (set<string>::iterator g = s.begin(); g != s.end(); g++) {
+		for(unsigned int i=0;i<values.size();i++){
+			if(*g==values.at(i))
+				result->insert(*g);
+		}
         
-    }//for
+    }
+	valueTable[ref] = result;
 }
 
 list<string> QueryEvaluator::getResults(){
 	string r = result_refs.at(0);
-	set<string> s =valueTable[r];
+	set<string> s = *valueTable[r];
 	list<string> res;
 	for(set<string>::iterator it = s.begin();it!=s.end();it++){
 		res.push_back(*it);
