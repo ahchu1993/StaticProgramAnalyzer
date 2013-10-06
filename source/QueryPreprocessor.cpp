@@ -563,8 +563,8 @@ bool QueryPreprocessor::relRef(string relation){
 
     if(arg1_flag&&arg2_flag){
 
-        designAbstraction d(rel_type,arg1,arg1_type,arg2,arg2_type);
-        designAbstraction* da = &d;
+        //designAbstraction d;
+        designAbstraction* da = new designAbstraction(rel_type,arg1,arg1_type,arg2,arg2_type);
 
         bool t1 = arg1_type==""||arg1_type=="string"||arg1_type=="integer";
         bool t2 = arg2_type==""||arg2_type=="string"||arg2_type=="integer";
@@ -1067,6 +1067,7 @@ string QueryPreprocessor::flatten(QueryPreprocessor::tree_node* t){
     result += flatten(t->right);
     result += t->content;
     result += " ";
+	return result;
 }
 
 
@@ -1119,12 +1120,12 @@ bool QueryPreprocessor::pattern_assign(string s){
 
 				tree_node t = build_tree_expr("_");
 				string exp_tree = flatten(&t);	
-				pattern p("p_assign", synonym,varRef,varRef_type,false,exp_tree);
+				pattern* p = new pattern("p_assign", synonym,varRef,varRef_type,false,exp_tree);
 
 				if(varRef_type =="variable")
-					relations.push_front(&p);
+					relations.push_front(p);
 				else 
-					constant_relations.push_front(&p);
+					constant_relations.push_front(p);
 				return true;
 
 			}
@@ -1139,8 +1140,8 @@ bool QueryPreprocessor::pattern_assign(string s){
 						expr_spec = expr_spec.substr(p1+1,p2-p1-1);
 						tree_node t = build_tree(expr_spec);
 						string exp_tree = flatten(&t);
-						pattern patt("p_assign", synonym,varRef,varRef_type,true,exp_tree);
-						relations.push_back(&patt);
+						pattern* patt = new pattern("p_assign", synonym,varRef,varRef_type,true,exp_tree);
+						relations.push_back(patt);
 					}
 					else {
 						int p1 = expr_spec.find("\"");
@@ -1149,8 +1150,8 @@ bool QueryPreprocessor::pattern_assign(string s){
 						expr_spec = expr_spec.substr(p1+1,p2-p1-1);
 						tree_node t = build_tree(expr_spec);
 						string exp_tree = flatten(&t);
-						pattern patt("p_assign", synonym,varRef,varRef_type,false,exp_tree);
-						relations.push_back(&patt);
+						pattern* patt = new pattern("p_assign", synonym,varRef,varRef_type,false,exp_tree);
+						relations.push_back(patt);
 					}
 
 					return true;
@@ -1217,12 +1218,12 @@ bool QueryPreprocessor::pattern_if(string s){
 										else {
 											tree_node t = build_tree_expr("_");
 											string exp_tree = flatten(&t);
-											pattern p("p_if",synonym,varRef,varRef_type,false,exp_tree);
+											pattern* p = new pattern("p_if",synonym,varRef,varRef_type,false,exp_tree);
 
 											if(varRef_type =="variable")
-												relations.push_front(&p);
+												relations.push_front(p);
 											else 
-												constant_relations.push_front(&p);
+												constant_relations.push_front(p);
 											return true;
 										}
 									}
@@ -1276,12 +1277,12 @@ bool QueryPreprocessor::pattern_while(string s){
 						else {
 							tree_node t = build_tree_expr("_");
 							string exp_tree = flatten(&t);
-							pattern p("p_while",synonym,varRef,varRef_type,false,exp_tree);
+							pattern* p= new pattern("p_while",synonym,varRef,varRef_type,false,exp_tree);
 
 							if(varRef_type=="variable")
-								relations.push_front(&p);
+								relations.push_front(p);
 							else
-								constant_relations.push_front(&p);
+								constant_relations.push_front(p);
 							return true;
 						}
 					}
@@ -1294,7 +1295,17 @@ bool QueryPreprocessor::pattern_while(string s){
 }
 
 bool QueryPreprocessor::patternCond(string patternCond){
-	return pattern_assign(patternCond)||pattern_while(patternCond)||pattern_if(patternCond);
+	int p = patternCond.find("(");
+	string synonym = trim(patternCond.substr(0,p));
+	string p_type = get_type(synonym);
+	if(p_type =="assign")
+		return pattern_assign(patternCond);
+
+	else if(p_type =="while")
+		return pattern_while(patternCond);
+
+	else 
+		return pattern_if(patternCond);
 }
 
 
@@ -1411,14 +1422,14 @@ bool QueryPreprocessor::attrCompare(string s){
 
     if(flag1&&flag2){
        
-        attr_compare compare(ref1_prefix,ref1_type,ref2_prefix,ref2_type);
+        attr_compare* compare = new attr_compare(ref1_prefix,ref1_type,ref2_prefix,ref2_type);
 
 		bool b1 = ref1_type=="string"||ref1_type=="integer";
 		bool b2 = ref2_type=="string"||ref2_type=="integer";
 		if(b1||b2)
-			constant_relations.push_front(&compare);
+			constant_relations.push_front(compare);
         else 
-			relations.push_front(&compare);
+			relations.push_front(compare);
         return true;
     }
     else return false;
@@ -1702,9 +1713,10 @@ bool QueryPreprocessor::process_query(string query){
 	result_cl = query.substr(p0+6, p1-p0-6);
 	if(!validate_declaration(declaration_cl)||!validate_result(result_cl)) return false;
 
-	it++;
-	int p2 = it->first;
-
+	it++; 
+	int p2;
+	if(it!=positions.end())  //
+		p2 = it->first;
 
 
 	while ( it!=positions.end()){

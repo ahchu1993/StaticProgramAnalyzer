@@ -1330,12 +1330,12 @@ void PKB::flattenAST()
 		
 		postfixExpr = createPostfix(thisTnode->getRightChild());
 
-		cout<<endl;
+		/*cout<<endl;
 		cout<<"type: "<<type<<endl;
 		cout<<"lineNum: "<<lineNum<<endl;
 		cout<<"varRef: "<<varRef<<endl;
 		cout<<"postfixExpr: --"<<postfixExpr<<"--"<<endl;
-		cout<<endl;
+		cout<<endl; */
 
 		postfixNode node(type,lineNum,varRef,postfixExpr);
 
