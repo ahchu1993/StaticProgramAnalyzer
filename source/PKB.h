@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <map>
 #include <algorithm> 
 
 
@@ -193,7 +194,7 @@ public:
 	};
 
 	/************************************************** Flatten - Zhao Yang *************************************************/
-	vector<postfixNode> postfixExprList;
+	map<int,postfixNode*> postfixExprList;
 	void flattenAST();
 	string createPostfix(TNode *node);
 };

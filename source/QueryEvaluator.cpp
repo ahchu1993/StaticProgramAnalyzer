@@ -1,10 +1,3 @@
-//
-//  QueryEvaluator.cpp9
-//  cs3202
-//
-//  Created by Zhao Weixiang on 16/9/13.
-//  Copyright (c) 2013 Zhao Weixiang. All rights reserved.
-//
 
 #include "QueryEvaluator.h"
 
@@ -29,10 +22,14 @@ list<string> QueryEvaluator::processQuery(string query){
         //start to evaluate query
         initialzeValueTable();
         if(processConstantRelations())     
-			processGroupedRelations();
+			if(processGroupedRelations()){
+				results = getResults();
+				return results;
+			}
+		else return results; // empty list
+
     }
-	results = getResults();
-    return results;
+	
 }
 bool QueryEvaluator::processConstantRelations(){
 
@@ -155,7 +152,7 @@ vector<pair<string,string>> QueryEvaluator::processPattern(pattern* p){
 }
 
 vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
-	vector<PKB::postfixNode> exp_list = pkb->postfixExprList;
+	map<int,PKB::postfixNode*> exp_list = pkb->postfixExprList;
 	vector<pair<string,string>> result;
 	if(p->varRef_type=="string"){
 
@@ -165,27 +162,28 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 
 			string a = *it;
 			int aint = Util::convertStringToInt(a); 
-			PKB::postfixNode n = exp_list.at(aint);// get a node from the reduced set
+			PKB::postfixNode* n = exp_list[aint];
+			// get a node from the reduced set
 
-			if(n.type=="assign"&&p->varRef==n.varRef){ //assign stmt, same varRef
+			if(n->type=="assign"&&p->varRef==n->varRef){ //assign stmt, same varRef
 				string q_expr = p->expr_tree;
-				string p_expr = n.postfixExpr;
+				string p_expr = n->postfixExpr;
 
 				if(p->exact&&q_expr==p_expr){ //complete match, and found
-					string first = Util::convertIntToString(n.lineNum);
-					string second = n.varRef;
-					pair<string,string> p(first,second);
-					result.push_back(p);
+					string first = Util::convertIntToString(n->lineNum);
+					string second = n->varRef;
+					pair<string,string> * pa = new pair<string,string>(first,second);
+					result.push_back(*pa);
 					
 				}
 				else if(!(p->exact)){
 					int pint = p_expr.find(q_expr); //postfix expr string matching
 					if(pint<p_expr.size())
 					{
-						string first = Util::convertIntToString(n.lineNum);
-						string second = n.varRef;
-						pair<string,string> pa(first,second);
-						result.push_back(pa);
+						string first = Util::convertIntToString(n->lineNum);
+						string second = n->varRef;
+						pair<string,string> * pa = new pair<string,string>(first,second);
+						result.push_back(*pa);
 						
 					}
 				}else{}
@@ -197,27 +195,29 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 		for(set<string>::iterator it =s.begin();it!=s.end();it++){
 			string a = *it;
 			int aint = Util::convertStringToInt(a); 
-			PKB::postfixNode n = exp_list.at(aint); //get a node from reduced set
+
+			PKB::postfixNode* n = exp_list[aint]; //get a node from reduced set
+
 			string q_expr = p->expr_tree;
-			string p_expr = n.postfixExpr;
+			string p_expr = n->postfixExpr;
 			for(set<string>::iterator it_vars = vars.begin();it_vars!=vars.end();it_vars++){				
-				if(*it_vars==n.varRef){ // varRef from var_set match the node 
+				if(*it_vars==n->varRef){ // varRef from var_set match the node 
 					if(p->exact){					
 						if(q_expr==p_expr){
-							string first = Util::convertIntToString(n.lineNum);
-							string second = n.varRef;
-							pair<string,string> pa(first,second);
-							result.push_back(pa);
+							string first = Util::convertIntToString(n->lineNum);
+							string second = n->varRef;
+							pair<string,string> * pa = new pair<string,string>(first,second);
+							result.push_back(*pa);
 							break;
 						}
 					}
 					else {
 						int pint = p_expr.find(q_expr);
 						if(pint<p_expr.size()){
-							string first = Util::convertIntToString(n.lineNum);
-							string second = n.varRef;
-							pair<string,string> pa(first,second);
-							result.push_back(pa);
+							string first = Util::convertIntToString(n->lineNum);
+							string second = n->varRef;
+							pair<string,string> * pa = new pair<string,string>(first,second);
+							result.push_back(*pa);
 							break;
 						}
 					}
@@ -229,19 +229,21 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 }
 
 vector<pair<string,string>> QueryEvaluator::patternIfOrWhile(pattern* p){
-	vector<PKB::postfixNode> exp_list = pkb->postfixExprList;
+	map<int,PKB::postfixNode*> exp_list = pkb->postfixExprList;
 	vector<pair<string,string>> result;
 	set<string> s = valueTable[p->synonym];
 	if(p->varRef_type=="string"){
 		for(set<string>::iterator it = s.begin();it!=s.end();it++){
 			string a = *it;
 			int aint = Util::convertStringToInt(a); //if stmt#
-			PKB::postfixNode n = exp_list.at(aint);
-			if(p->varRef==n.varRef){
-				string first = Util::convertIntToString(n.lineNum);
-				string second = n.varRef;
-				pair<string,string> pa(first,second);
-				result.push_back(pa);
+
+			PKB::postfixNode* n = exp_list[aint];
+
+			if(p->varRef==n->varRef){
+				string first = Util::convertIntToString(n->lineNum);
+				string second = n->varRef;
+				pair<string,string> * pa = new pair<string,string>(first,second);
+				result.push_back(*pa);
 				
 			}
 		}
@@ -250,13 +252,15 @@ vector<pair<string,string>> QueryEvaluator::patternIfOrWhile(pattern* p){
 		for(set<string>::iterator it = s.begin();it!=s.end();it++){
 			string a = *it;
 			int aint = Util::convertStringToInt(a); //if stmt#
-			PKB::postfixNode n = exp_list.at(aint);
+
+			PKB::postfixNode* n = exp_list[aint];
+
 			for(set<string>::iterator it_vars = vars.begin();it_vars!=vars.end();it_vars++)
-				if(*it_vars==n.varRef){
-					string first = Util::convertIntToString(n.lineNum);
-					string second = n.varRef;
-					pair<string,string> pa(first,second);
-					result.push_back(pa);
+				if(*it_vars==n->varRef){
+					string first = Util::convertIntToString(n->lineNum);
+					string second = n->varRef;
+					pair<string,string> * pa = new pair<string,string>(first,second);
+					result.push_back(*pa);
 					break;
 				}
 		}

@@ -1,19 +1,13 @@
-//
-//  QueryEvaluator.h
-//  cs3202
-//
-//  Created by Zhao Weixiang on 16/9/13.
-//  Copyright (c) 2013 Zhao Weixiang. All rights reserved.
-//
+
 #pragma once
-#include "QueryPreprocessor.h"
 #include <iostream>
-#include "PKB.h"
 #include "string.h"
 #include <vector>
 #include <list>
 #include <sstream>
 #include <set>
+#include "PKB.h"
+#include "QueryPreprocessor.h"
 using namespace std;
 
 

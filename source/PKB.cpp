@@ -1330,9 +1330,9 @@ void PKB::flattenAST()
 		cout<<"postfixExpr: --"<<postfixExpr<<"--"<<endl;
 		cout<<endl; */
 
-		postfixNode node(type,lineNum,varRef,postfixExpr);
+		postfixNode* node = new postfixNode(type,lineNum,varRef,postfixExpr);
 
-		postfixExprList.push_back(node);
+		postfixExprList[lineNum] = node;
 	}
 
 	getchar();
