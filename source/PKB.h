@@ -177,7 +177,12 @@ public:
 	
 
 	/************************************************** Affect - Zhao Yang *************************************************/
+	
+	vector<int> getAffectList(int stmtNo);
+
+	// not used
 	bool isAffect(int stmtNo1, int stmtNo2);
+	// not used
 	bool isMofiedBetween(int modifiedVarIndex,int currentLine,int target);
 
 	struct postfixNode{

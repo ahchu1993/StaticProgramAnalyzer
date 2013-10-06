@@ -1222,11 +1222,18 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 }
 
 
-/************************************************** Affect *************************************************/
-
+/************************************************** Affect -zy *************************************************/
+vector<int> PKB::getAffectList(int stmtNo)
+{
+	string var = "";
+	vector<int> result;
+	return result;
+}
+// not used
 bool PKB::isAffect(int stmtNo1, int stmtNo2)
 {
 	int currentLine = stmtNo1;
+	// this is wrong !!!!!!!!************
 	int modifiedVarIndex = getModifiedStmt(stmtNo1)[0];
 
 	vector<int> modifiedStmts = getUsedList(modifiedVarIndex,"assign");
@@ -1253,6 +1260,7 @@ bool PKB::isAffect(int stmtNo1, int stmtNo2)
 	
 	return false;
 }
+// not used
 bool PKB::isMofiedBetween(int modifiedVarIndex,int currentLine,int target)
 {
 	if(currentLine==target)
@@ -1313,7 +1321,7 @@ void PKB::flattenAST()
 			type="if";
 		}else if(content==-3){
 			type="while";
-		}else type = ""; // default
+		}else if(content==-4) type = "call"; // call
 
 		// get varRef
 		int varIndex = thisTnode->getLeftChild()->getContent();

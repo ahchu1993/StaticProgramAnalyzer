@@ -197,7 +197,7 @@ int Parser::stmt(vector<int> stmtListNumber,vector < PairNumber > useModifyList)
 		}
 		processIf(useModifyList);
 	} else if(nextToken.compare("call") == 0) {
-
+		TNode* callNode = pkb->createRootNode("root", -4, line);
 		// follow
 		if (stmtListNumber.size()>1) {
 			int p = stmtListNumber[stmtListNumber.size()-2];
