@@ -273,9 +273,11 @@ void QueryEvaluator::initialzeValueTable(){
     for (int i =0; i<entities.size(); i++) {
         QueryPreprocessor::entityReff entity = entities.at(i);
 		vector<int> stmts = QueryEvaluator::pkb->getStmtNo(entity.type);
-		
+		set<string>* s = new set<string>;
 		for(unsigned int i=0;i<stmts.size();i++){
-			valueTable[entity.synonym]->insert(Util::convertIntToString(stmts.at(i)));
+			string a = Util::convertIntToString(stmts.at(i));		
+			s->insert(a);
+			valueTable[entity.synonym] = s;
 		}
         
     }

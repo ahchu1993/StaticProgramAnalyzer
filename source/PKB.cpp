@@ -1321,7 +1321,7 @@ void PKB::flattenAST()
 			type="if";
 		}else if(content==-3){
 			type="while";
-		}else if(content==-4) type = "call"; // call
+		}//else if(content==-4) type = "call"; // call
 
 		// get varRef
 		int varIndex = thisTnode->getLeftChild()->getContent();
