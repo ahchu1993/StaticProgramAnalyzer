@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <assert.h>
+#include <set>
 
 using namespace std;
 typedef struct var_row_t{
@@ -36,5 +37,8 @@ public:
 
 	// Print VarTable
 	void printVarTable();
+
+	/*************************************** New APIs *******************************************/
+	set<string> getAllVariables();
 };
 #endif

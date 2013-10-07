@@ -8,6 +8,9 @@
 #include <utility>
 #include <sstream>
 
+//#include <varTable.h>
+//#include <ProcTable.h>
+
 using namespace std;
 
 typedef struct modify_stmt_row_t{
@@ -65,9 +68,12 @@ public:
 	vector<int> getModifyVarList();
 
 	// Return pairs satisfying set1 and set2
-	vector<pair<string,string>> getModifyPairList(vector<int> set1, vector<int> set2);
+	vector<pair<string,string>> getModifyPairList(vector<int>* set1, vector<int>* set2);
 
 	// Return whether there exist a pair satisfying set1 and set2
 	bool checkModify(vector<int> set1, vector<int> set2);
+
+	vector<modify_proc_row> getModifyProcTable();
+	vector<modify_stmt_row> getModifyStmtTable();
 };
 #endif

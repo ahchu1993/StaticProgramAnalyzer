@@ -8,7 +8,7 @@
 #include <vector>
 #include <map>
 #include <algorithm> 
-
+#include <set>
 
 #include "VarTable.h"
 #include "ProcTable.h"
@@ -93,8 +93,7 @@ public:
 	void printFollowTable();
 
 	/************************************************** ModifyTable *************************************************/
-	vector<pair<string, string>> getModify(string arg1, string arg1Type, string arg2, string arg2Type);
-	vector<pair<string, string>> getModifySpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
+	vector<pair<string, string>> getModify(set<string>* arg1List, string arg1Type, set<string>* arg2List, string arg2Type);
 	bool checkModify(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateModify();
 
@@ -106,8 +105,8 @@ public:
 	void printModifyTable();
 
 	/************************************************** UseTable *************************************************/
-	vector<pair<string, string>> getUse(string arg1, string arg1Type, string arg2, string arg2Type);
-	vector<pair<string, string>> getUseSpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
+	vector<pair<string, string>> getUse(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	//vector<pair<string, string>> getUseSpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
 	bool checkUse(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateUse();
 
@@ -124,6 +123,7 @@ public:
 	int getVarIndex(string varName);
 	int getSizeVarTable();
 	void printVarTable();
+	set<string> getAllVars();
 
 	/************************************************** ProcTable *************************************************/
 	int insertProc(string procName);	
@@ -131,6 +131,7 @@ public:
 	int getProcIndex(string procName);
 	int getSizeProcTable();
 	void printProcTable();
+	set<string> getAllProcs(); 
 
 	/************************************************** StmtTable *************************************************/
 	int insertStmt(int stmtNo, string type);
@@ -138,6 +139,7 @@ public:
 	int getSizeStmtTable();
 	string getStmtType(int stmtNo);
 	void printStmtTable();
+	set<string> getAllStmts();
 
 	/************************************************** Constanttable *************************************************/
 	void insertConst(int stmtNo, int number);
@@ -145,6 +147,7 @@ public:
 	vector<int> getStmtForConst(int number);
 	vector<int> getAllStmtForConst();
 	void printConstTable();
+	set<string> getAllConstants();
 
 	/************************************************** CFG - Zhao Yang *************************************************/
 	void buildCFG();

@@ -5,16 +5,9 @@
 //  Created by Zhao Weixiang on 21/9/13.
 //  Copyright (c) 2013 Zhao Weixiang. All rights reserved.
 //
-
-
-#include <iostream>
-#include "QueryPreprocessor.h"
-#include <iostream>
-#include "PKB.h"
-#include "string.h"
 #include <vector>
+#include "string.h"
 #include <list>
-#include <sstream>
 #include <set>
 #include <utility>
 using namespace std;
@@ -28,18 +21,19 @@ public:
        // cell* next;
         string value;
        // int weights;
+      
 	};
     
-    struct Columns{
-		string ref;
-        list<cell*> links;
+    struct Table{
+		set<string> columns;
+        list<list<cell*>*> tuple_list;
 	};
     //static set<Columns*> columns;
     set<string> columns;
     //list<cell*> tuple;
     list<list<cell*>*> tuple_list;
     //Methods
-
+    Table table;
     
     //void joinTable(cell parent, cell child, bool flag);
     void initTable(pair<string, string> refs,vector<pair<string,string>> results);

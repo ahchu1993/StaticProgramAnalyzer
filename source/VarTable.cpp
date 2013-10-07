@@ -75,3 +75,16 @@ void VarTable::printVarTable()
 		cout<< temp_row.varIndex << "\t" << temp_row.var_name << endl;
 	}
 }
+
+/*************************************** New APIs *******************************************/
+set<string> VarTable::getAllVariables(){
+	set<string> result;
+	var_row temp_row;
+
+	for (unsigned i = 0; i < Var_Table.size(); i++){
+		temp_row = Var_Table.at(i);
+		result.insert(temp_row.var_name);
+	}
+
+	return result;
+}
