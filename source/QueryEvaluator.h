@@ -76,7 +76,7 @@ private:
     vector<QueryPreprocessor::entityReff> entity;
 	vector<string> result;
 	list<BaseRelation*> constant_relations;
-	list<list<BaseRelation*>> * grouped_relations;
+	list<list<BaseRelation*>> grouped_relations;
 	PKB* pkb;
 	bool has_pattern;
 	bool has_relation;
@@ -87,8 +87,8 @@ private:
     void initialzeValueTable(vector<QueryPreprocessor::entityReff> entity);
     void processPattern(vector<pattern> pattern);
     void processRelations(vector<designAbstraction> desAbstr);
-      void updateValueTable(string ref, vector<string> values);
-
+    void updateValueTable(string ref, vector<string> values);
+    void processGroupedRelations();
     bool processConstantRelations();
-	bool QueryEvaluator::processTwoConstantsRelations(designAbstraction* da);
+	bool processTwoConstantsRelations(designAbstraction* da);
 };

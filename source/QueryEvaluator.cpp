@@ -19,7 +19,7 @@ list<string> QueryEvaluator::processQuery(string query){
 		entity = Qprocessor.declaration_reffs;//declaration type, name
 		result = Qprocessor.result_reffs;//select clause
 		constant_relations = Qprocessor.constant_relations;//all the relations
-		//grouped_relations = & Qprocessor.grouped_relations;
+		grouped_relations = Qprocessor.grouped_relations;
        
         //start to evaluate query
         initialzeValueTable(entity);
@@ -75,7 +75,6 @@ bool QueryEvaluator::processConstantRelations(){
 			updateValueTable(ref, result);	
 		}
 	}
-		
 }
 
 bool QueryEvaluator::processTwoConstantsRelations(designAbstraction* da){
@@ -122,7 +121,12 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
         
     }//for
 }
+void QueryEvaluator::processGroupedRelations(){
+    
 
+
+
+}
 void processPattern(vector<pattern> pattern){
 
 
