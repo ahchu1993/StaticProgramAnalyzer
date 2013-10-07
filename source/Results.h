@@ -5,16 +5,9 @@
 //  Created by Zhao Weixiang on 21/9/13.
 //  Copyright (c) 2013 Zhao Weixiang. All rights reserved.
 //
-
-
-#include <iostream>
-#include "QueryPreprocessor.h"
-#include <iostream>
-#include "PKB.h"
-#include "string.h"
 #include <vector>
+#include "string.h"
 #include <list>
-#include <sstream>
 #include <set>
 #include <utility>
 using namespace std;
@@ -28,6 +21,7 @@ public:
        // cell* next;
         string value;
        // int weights;
+      
 	};
     
     struct Table{

@@ -394,7 +394,7 @@ void QueryEvaluator::updateValueTable(designAbstraction* da, vector<pair<string,
 }*/
 
 bool QueryEvaluator::processGroupedRelations(){
-   /*  Results results_table;
+     /*Results results_table;
     list<list<BaseRelation*>> group_relations = Qprocessor->grouped_relations;
     for(list<list<BaseRelation*>>::iterator it = group_relations.begin();it!=group_relations.end();it++){
         vector<pair<string,string>> result_pairs;
