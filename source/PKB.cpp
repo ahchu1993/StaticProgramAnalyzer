@@ -128,7 +128,6 @@ vector<pair<string, string>> PKB::getParent(set<string>* arg1_set, string arg1Ty
 	set<string> s1 = *arg1_set;
 	set<string> s2 = *arg2_set;
 
-	
 	for(set<string>::iterator it = s2.begin();it!=s2.end();it++){
 
 		string child = *it;
@@ -192,37 +191,54 @@ void PKB::printParentTable(){
 }
 
 /************************************************** FollowTable *************************************************/
-vector<pair<string, string>> PKB::getFollow(string arg1, string arg1Type, string arg2, string arg2Type){	
-	vector<int> set1, set2;
-	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
-		set1 = followTable.getFollowsList("_");
-	}else if(arg1Type.compare("while") == 0 || arg1Type.compare("if") == 0){
-		set1 = followTable.getFollowsList(arg1Type);
-	}
+vector<pair<string, string>> PKB::getFollow(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){	
+	vector<pair<string,string>> result;
+	
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> s1 = *arg1_set;
+	set<string> s2 = *arg2_set;
 
-	if(arg2Type.compare("prog_line") == 0 || arg2Type.compare("stmt") == 0 || arg2Type.compare("_") == 0){
-		set2 = followTable.getFollowedList("_");
-	}else if(arg2Type.compare("while") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("assign") == 0){
-		set2 = followTable.getFollowedList(arg2Type);
+	for(set<string>::iterator it = s1.begin();it!=s1.end();it++){
+
+		string first = *it;
+		int f = Util::convertStringToInt(first);
+		int s = findFollowed(f);
+		string second = Util::convertIntToString(s);
+		it1 = s2.find(second);
+		if(it1!=s2.end()){
+			pair<string,string> p(first,second);
+			result.push_back(p);
+		}
+		
 	}
 	
-	return followTable.getFollowPairList(set1, set2);
+	return result;
 }
 bool PKB::checkFollow(string arg1, string arg1Type, string arg2, string arg2Type){
-	vector<int> set1, set2;
-	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
-		set1 = followTable.getFollowsList("_");
-	}else if(arg1Type.compare("while") == 0 || arg1Type.compare("if") == 0){
-		set1 = followTable.getFollowsList(arg1Type);
+	if(arg1=="_"&&arg2=="_"){
+		int size = followTable.getSize();
+		if(size>0)
+			return true;
+		else return false;
+	}else if(arg1=="_"&&arg2Type=="integer"){
+		int second = Util::convertStringToInt(arg2);
+		int f = findFollows(second);
+		if(f>0) return true;
+		else return false;
+	}else if(arg1Type=="integer"&&arg2=="_"){
+		int f = Util::convertStringToInt(arg1);
+		int s = findFollowed(f);
+		if(s>0) return true;
+		else return false;
+	}else{
+		int s = Util::convertStringToInt(arg2);
+		int f = findFollows(s);
+		int first = Util::convertStringToInt(arg1);
+		if(first==f)
+			return true;
+		else return false;
 	}
-
-	if(arg2Type.compare("prog_line") == 0 || arg2Type.compare("stmt") == 0 || arg2Type.compare("_") == 0){
-		set2 = followTable.getFollowedList("_");
-	}else if(arg2Type.compare("while") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("assign") == 0){
-		set2 = followTable.getFollowedList(arg2Type);
-	}
-	
-	return followTable.checkFollow(set1, set2);
 }
 void PKB::insertFollow(int stm1, string DE1, int stm2, string DE2){
 	followTable.insertFollow(stm1, DE1, stm2, DE2);

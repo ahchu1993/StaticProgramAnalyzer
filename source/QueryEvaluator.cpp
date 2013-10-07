@@ -101,11 +101,19 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		ref1_set->insert(da->ref1);
 	}else {
 		if(da->relation_type=="Calls"||da->relation_type=="Calls*"){
-			s1 = pkb->getAllProcs();	
-			ref1_set = &s1;
+			s1 = pkb->getAllProcs();
+			set<string> *t = new set<string>;
+			for(set<string>::iterator it=s1.begin();it!=s1.end();it++){
+				t->insert(*it);
+			}
+			ref1_set = t;
 		}else {
 			s1 = pkb->getAllStmts();
-			ref1_set = &s1;
+			set<string> *t = new set<string>;
+			for(set<string>::iterator it=s1.begin();it!=s1.end();it++){
+				t->insert(*it);
+			}
+			ref1_set = t;
 		}
 	}
 
@@ -118,18 +126,30 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 	}
 	else { // ref2 ="_"
 		if(da->relation_type=="Uses"||da->relation_type=="Modifies"){
-			s2 = pkb->getAllVars(); 
-			ref2_set = &s2;
+			s2 = pkb->getAllVars();
+			set<string> *t = new set<string>;
+			for(set<string>::iterator it=s2.begin();it!=s2.end();it++){
+				t->insert(*it);
+			}
+			ref2_set = t;
 		}
 			
 		else if(da->relation_type=="Calls"||da->relation_type=="Calls*"){
-			s2 = pkb->getAllProcs();	
-			ref2_set = &s2;
+			s2 = pkb->getAllProcs();
+			set<string> *t = new set<string>;
+			for(set<string>::iterator it=s2.begin();it!=s2.end();it++){
+				t->insert(*it);
+			}
+			ref2_set = t;
 		}
 		
 		else {
 			s2 = pkb->getAllStmts();
-			ref2_set = &s2;
+			set<string> *t = new set<string>;
+			for(set<string>::iterator it=s2.begin();it!=s2.end();it++){
+				t->insert(*it);
+			}
+			ref2_set = t;
 		}
 			
 	}
@@ -143,6 +163,8 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		res = pkb-> getCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Parent"){
 		res = pkb-> getParent(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+	}else if(relation =="Follows"){
+		res = pkb->getFollow(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation =="Next"){
 		res = pkb-> getNext(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}
@@ -182,6 +204,8 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 		return pkb-> checkCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Parent"){
 		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation =="Follows"){
+		return pkb->checkFollow(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Next"){
 		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}

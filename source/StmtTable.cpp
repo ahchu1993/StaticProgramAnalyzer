@@ -108,6 +108,7 @@ set<string> StmtTable::getAllStatements(){
 		convert.str("");
 		convert<<temp_row.stmt_no;
 		str = convert.str();
+		result.insert(str);
 	}
 
 	return result;
