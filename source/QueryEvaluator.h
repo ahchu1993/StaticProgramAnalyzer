@@ -53,4 +53,5 @@ private:
 	vector<pair<string,string>> patternIfOrWhile(pattern *p);
 
 	list<string> getResults();
+
 };

@@ -13,11 +13,6 @@ list<string> QueryEvaluator::processQuery(string query){
     }
     else{
         //store all the parsed query infomation
-        Qprocessor->group_relations();//group the relations
-		entities = Qprocessor->declaration_reffs;//declaration type, name
-		result_refs = Qprocessor->result_reffs;//select clause
-		constant_relations = Qprocessor->constant_relations;//all the relations
-		//grouped_relations = & Qprocessor.grouped_relations;
        
         //start to evaluate query
         initialzeValueTable();
@@ -27,9 +22,7 @@ list<string> QueryEvaluator::processQuery(string query){
 				return results;
 			}
 		}else return results; // empty list
-
     }
-	
 }
 bool QueryEvaluator::processConstantRelations(){
 
@@ -82,7 +75,12 @@ bool QueryEvaluator::processConstantRelations(){
 
 		}else {}
 	}
+
 	return true;
+}
+
+bool QueryEvaluator::processGroupedRelations(){
+    return true;
 }
 
 vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstraction* da){
@@ -120,6 +118,7 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 
 	if(relation == "Modifies"){
 		res = pkb-> getModify(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+
 	}else if(relation == "Uses"){
 		res = pkb-> getUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Calls"){
@@ -171,9 +170,7 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 
 	
 }
-bool QueryEvaluator::processGroupedRelations(){
-    return true;
-}
+
 
 vector<pair<string,string>> QueryEvaluator::processPattern(pattern* p){
 	vector<pair<string,string>> result;	
@@ -370,6 +367,7 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
     }
 	valueTable[ref] = result;
 }
+
 
 list<string> QueryEvaluator::getResults(){
 	string r = result_refs.at(0);
