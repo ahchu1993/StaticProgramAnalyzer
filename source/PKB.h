@@ -174,16 +174,17 @@ public:
 
 	vector<pair<string,string>> getNext(string arg1, string arg1Type, string arg2, string arg2Type);
 	vector<pair<string,string>> getNextT(string arg1, string arg1Type, string arg2, string arg2Type);
-	
-
+	//***
+	vector<pair<string, string>> getNextSpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
+	vector<pair<string, string>> getNextTSpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
+	string toString(int num);
 	/************************************************** Affect - Zhao Yang *************************************************/
-	
+	vector<int> affectList; // for internal usage
+	void recusiveBuildAffectList(int stmtNo, int varIndex);
 	vector<int> getAffectList(int stmtNo);
+	//****
+	vector<pair<string, string>> getAffectSpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
 
-	// not used
-	bool isAffect(int stmtNo1, int stmtNo2);
-	// not used
-	bool isMofiedBetween(int modifiedVarIndex,int currentLine,int target);
 
 	struct postfixNode{
 		string type;// if/while/assig
