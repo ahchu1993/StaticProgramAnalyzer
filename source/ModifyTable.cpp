@@ -293,10 +293,10 @@ vector<pair<string,string>> ModifyTable::getModifyPairList(vector<int> set1, vec
 			}
 		}
 		if(flag1 && flag2){
-			convert<<temp_stmt_row.stmtNo;
-			//str1 = Util::convert;
-			convert<<temp_stmt_row.varIndex;
-			str2 = convert.str();
+			char* s;
+			itoa(temp_stmt_row.stmtNo,s,10);
+			str1 = string(s);
+			//str2 = getVarName(temp_stmt_row.varIndex);
 			pair<string,string> * myPair = new pair<string,string>(str1, str2);
 			results.push_back(*myPair);
 		}
@@ -356,4 +356,12 @@ bool ModifyTable::checkModify(vector<int> set1, vector<int> set2){
 	}
 
 	return false;
+}
+
+vector<modify_proc_row> ModifyTable::getModifyProcTable(){
+		return ModifyProcTable;
+}
+
+vector<modify_stmt_row> ModifyTable::getModifyStmtTable(){
+		return ModifyStmtTable;
 }

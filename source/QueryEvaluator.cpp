@@ -13,7 +13,11 @@ list<string> QueryEvaluator::processQuery(string query){
     }
     else{
         //store all the parsed query infomation
-       
+		Qprocessor->group_relations();
+		entities = Qprocessor->declaration_reffs;
+		result_refs = Qprocessor->result_reffs;
+		constant_relations = Qprocessor->constant_relations;
+		grouped_relations =  Qprocessor->grouped_relations;
         //start to evaluate query
         initialzeValueTable();
         if(processConstantRelations()){     

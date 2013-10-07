@@ -228,44 +228,57 @@ void PKB::printFollowTable(){
 /************************************************** ModifyTable *************************************************/
 
 
-vector<pair<string, string>> PKB::getModify(set<string>* arg1List, string arg1Type, set<string>* arg2List, string arg2Type){
-	vector<int> set1;
-	vector<int> set2;
-	int procIndex, varIndex, stmtNo;
+vector<pair<string, string>> PKB::getModify(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
 
-	// Get the set of possible values for argument 1
-	if (arg1Type.compare("procedure") == 0||arg1Type=="string"){
-		// arg1List will be vector of proc name
-		for (set<string>::iterator it = arg1List->begin();it!=arg1List->end();it++){
-			procIndex = procTable.getProcIndex(*it);
-			if(procIndex != -1){
-				set1.push_back(procIndex);
+	vector<pair<string,string>> result;
+	
+	
+
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> s1 = *arg1_set;
+	set<string> s2 = *arg2_set;
+
+	if(arg1Type=="procedure"||arg1Type =="string"){
+		vector<modify_proc_row> ModifyProcTable = modifyTable.getModifyProcTable();
+		for(unsigned int i=0;i<ModifyProcTable.size();i++){
+			modify_proc_row temp = ModifyProcTable.at(i);
+			int p_index = temp.procIndex;
+			int v_index = temp.varIndex;
+			string proc = procTable.getProcName(p_index);
+			string var = varTable.getVarName(v_index);
+			
+			it1 = s1.find(proc);
+			it2 = s2.find(var);
+
+			if(it1!=s1.end()&&it2!=s2.end()){
+				pair<string,string> p(proc,var);
+				result.push_back(p);
 			}
 		}
-	} else if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0 || arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
-		for (set<string>::iterator it = arg1List->begin();it!=arg1List->end();it++){
-			istringstream(*it)>>stmtNo;
-			set1.push_back(stmtNo);
-		}
-	} else if (arg1Type.compare("integer") == 0){
-		for (set<string>::iterator it = arg1List->begin();it!=arg1List->end();it++){
-			istringstream(*it)>>stmtNo;
-			set1.push_back(stmtNo);
+	}else {
+		vector<modify_stmt_row> ModifyStmtTable = modifyTable.getModifyStmtTable();
+		for(unsigned int i=0;i<ModifyStmtTable.size();i++){
+			
+			modify_stmt_row temp = ModifyStmtTable.at(i);
+
+			if(temp.DE == arg1Type||arg1Type=="stmt"){ // assign,if,while,stmt
+				int stmtNo = temp.stmtNo;
+				int v_index = temp.varIndex;
+				string stmt = Util::convertIntToString(stmtNo);
+				string var = varTable.getVarName(v_index);
+				
+				it1 = s1.find(stmt);
+				it2 = s2.find(var);
+
+				if(it1!=s1.end()&&it2!=s2.end()){
+					pair<string,string> p(stmt,var);
+					result.push_back(p);
+				}
+			}			
 		}
 	}
-
-	// Get the set of possible values for argument 1
-	
-		// arg2List will be vector of var name
-		for (set<string>::iterator it = arg2List->begin();it!=arg2List->end();it++){
-			varIndex = varTable.getVarIndex(*it);
-			if(varIndex != -1){
-				set2.push_back(varIndex);
-			}
-		}
-	
-
-	return modifyTable.getModifyPairList(set1, set2);
+	return result;
 }
 
 bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type){
@@ -351,6 +364,14 @@ vector<int> PKB::getModifiedList(int varIndex, string DE){
 void PKB::printModifyTable()
 {
 	modifyTable.printModifyTable();
+}
+
+vector<modify_stmt_row> PKB::getModifyStmtTable(){
+	return modifyTable.getModifyStmtTable();
+}
+
+vector<modify_proc_row> PKB::getModifyProcTable(){
+	return modifyTable.getModifyProcTable();
 }
 
 /************************************************** UseTable *************************************************/

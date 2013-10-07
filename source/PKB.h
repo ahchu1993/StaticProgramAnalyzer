@@ -104,7 +104,8 @@ public:
 	vector<int> getModifiedProc(int procIndex);
 	vector<int> getModifiedList(int varIndex, string DE);
 	void printModifyTable();
-
+	vector<modify_proc_row> PKB::getModifyProcTable();
+	vector<modify_stmt_row> getModifyStmtTable();
 	/************************************************** UseTable *************************************************/
 	vector<pair<string, string>> getUse(string arg1, string arg1Type, string arg2, string arg2Type);
 	vector<pair<string, string>> getUseSpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
