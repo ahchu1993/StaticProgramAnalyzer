@@ -15,4 +15,6 @@ string Util::convertIntToString(int input){
 	return convert.str();
 }
 
-static int convertStringToInt(string input);
+int Util::convertStringToInt(string input){
+	return atoi( input.c_str() );
+}

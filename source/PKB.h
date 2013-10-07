@@ -6,8 +6,9 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <map>
 #include <algorithm> 
-
+#include <set>
 
 #include "VarTable.h"
 #include "ProcTable.h"
@@ -92,8 +93,8 @@ public:
 	void printFollowTable();
 
 	/************************************************** ModifyTable *************************************************/
-	vector<pair<string, string>> getModify(string arg1, string arg1Type, string arg2, string arg2Type);
-	vector<pair<string, string>> getModifySpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
+	vector<pair<string, string>> getModify(set<string>* arg1List, string arg1Type, set<string>* arg2List, string arg2Type);
+	//vector<pair<string, string>> getModifySpecific();
 	bool checkModify(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateModify();
 
@@ -106,6 +107,7 @@ public:
 
 	/************************************************** UseTable *************************************************/
 	vector<pair<string, string>> getUse(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<pair<string, string>> getUseSpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
 	bool checkUse(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateUse();
 
@@ -175,11 +177,15 @@ public:
 	
 
 	/************************************************** Affect - Zhao Yang *************************************************/
+	
+	vector<int> getAffectList(int stmtNo);
+
+	// not used
 	bool isAffect(int stmtNo1, int stmtNo2);
+	// not used
 	bool isMofiedBetween(int modifiedVarIndex,int currentLine,int target);
 
 	struct postfixNode{
-
 		string type;// if/while/assig
 		int lineNum; 
 		string varRef; //'a' as control variable ...bla
@@ -193,7 +199,7 @@ public:
 	};
 
 	/************************************************** Flatten - Zhao Yang *************************************************/
-	vector<postfixNode> postfixExprList;
+	map<int,postfixNode*> postfixExprList;
 	void flattenAST();
 	string createPostfix(TNode *node);
 };
