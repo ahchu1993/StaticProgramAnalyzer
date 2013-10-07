@@ -8,6 +8,7 @@
 #include <set>
 #include "PKB.h"
 #include "QueryPreprocessor.h"
+#include "Results.h"
 using namespace std;
 
 
@@ -32,14 +33,14 @@ private:
 	list<BaseRelation*> constant_relations;
 	list<list<BaseRelation*>> grouped_relations;
 	PKB* pkb;
-
+    Results table;
 	QueryPreprocessor* Qprocessor;
 
     //void processAttrPair(attr_compare* attr_pair);
 	// init
 	void initialzeValueTable();
     void updateValueTable(string ref, vector<string> values);
-
+    void updateValueTable(designAbstraction* da, vector<pair<string,string>> values);
 	// main method
     bool processConstantRelations();
 	bool processGroupedRelations();
