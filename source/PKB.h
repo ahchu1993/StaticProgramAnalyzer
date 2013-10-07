@@ -147,6 +147,7 @@ public:
 	vector<int> getStmtForConst(int number);
 	vector<int> getAllStmtForConst();
 	void printConstTable();
+	set<string> getAllConstants();
 
 	/************************************************** CFG - Zhao Yang *************************************************/
 	void buildCFG();

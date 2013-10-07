@@ -232,8 +232,6 @@ vector<pair<string, string>> PKB::getModify(set<string>* arg1_set, string arg1Ty
 
 	vector<pair<string,string>> result;
 	
-	
-
 	set<string>::iterator it1;
 	set<string>::iterator it2;
 	set<string> s1 = *arg1_set;

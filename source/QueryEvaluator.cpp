@@ -341,6 +341,8 @@ void QueryEvaluator::initialzeValueTable(){
 			valueTable[entity.synonym] = &pkb->getAllProcs();
 		}else if(entity.type=="variable"){
 			valueTable[entity.synonym] = &pkb->getAllVars();
+		}else if(entity.type=="constant"){
+			valueTable[entity.synonym] = &pkb->getAllConstants();
 		}else{
 			vector<int> stmts;
 			if(entity.synonym=="prog_line")
