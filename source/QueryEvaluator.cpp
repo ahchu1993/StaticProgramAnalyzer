@@ -174,11 +174,11 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da){
 	string relation = da->relation_type;
 
-	if(relation == "Modify"){
+	if(relation == "Modifies"){
 		return pkb-> checkModify(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
-	}else if(relation == "Use"){
+	}else if(relation == "Uses"){
 		return pkb-> checkUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
-	}else if(relation == "Call"){
+	}else if(relation == "Calls"){
 		return pkb-> checkCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Parent"){
 		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);

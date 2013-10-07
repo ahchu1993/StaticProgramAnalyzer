@@ -106,3 +106,14 @@ void ConstantTable::printConstTable()
 		cout << temp_row.stmt_no << "\t" << temp_row.number << endl;
 	}
 }
+
+set<string> ConstantTable::getAllConstants(){
+	set<string> r;
+	for(unsigned int i=0;i<Const_Table.size();i++){
+		int num = Const_Table.at(i).number;
+		ostringstream convert;
+		convert << num;
+		r.insert(convert.str());
+	}
+	return r;
+}

@@ -638,6 +638,7 @@ void PKB::printConstTable()
 
 set<string> PKB::getAllConstants(){
 	set<string> r;
+	r = constTable.getAllConstants();
 	return r;
 }
 

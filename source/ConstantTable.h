@@ -5,6 +5,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <set>
+#include <sstream>
 #include <assert.h>
 
 using namespace std;
@@ -37,5 +39,7 @@ public:
 
 	// Print ConstantTable
 	void printConstTable();
+
+	set<string> getAllConstants();
 };
 #endif
