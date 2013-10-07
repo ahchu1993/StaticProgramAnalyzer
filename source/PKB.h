@@ -124,21 +124,21 @@ public:
 	int getVarIndex(string varName);
 	int getSizeVarTable();
 	void printVarTable();
-
+	set<string> getAllVars();
 	/************************************************** ProcTable *************************************************/
 	int insertProc(string procName);	
 	string getProcName(int index);
 	int getProcIndex(string procName);
 	int getSizeProcTable();
 	void printProcTable();
-
+	set<string> getAllProcs(); 
 	/************************************************** StmtTable *************************************************/
 	int insertStmt(int stmtNo, string type);
 	vector<int> getStmtNo(string type);
 	int getSizeStmtTable();
 	string getStmtType(int stmtNo);
 	void printStmtTable();
-
+	set<string> getAllStmts();
 	/************************************************** Constanttable *************************************************/
 	void insertConst(int stmtNo, int number);
 	vector<int> getConst(int stmtNo);

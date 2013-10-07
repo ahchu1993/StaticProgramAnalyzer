@@ -236,20 +236,20 @@ vector<pair<string, string>> PKB::getModify(set<string>* arg1List, string arg1Ty
 	// Get the set of possible values for argument 1
 	if (arg1Type.compare("procedure") == 0||arg1Type=="string"){
 		// arg1List will be vector of proc name
-		for (unsigned i = 0; i<arg1List->size(); i++){
-			procIndex = procTable.getProcIndex(arg1List->at(i));
+		for (set<string>::iterator it = arg1List->begin();it!=arg1List->end();it++){
+			procIndex = procTable.getProcIndex(*it);
 			if(procIndex != -1){
 				set1.push_back(procIndex);
 			}
 		}
 	} else if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0 || arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
-		for (unsigned i = 0; i<arg1List->size(); i++){
-			istringstream(arg1List->at(i))>>stmtNo;
+		for (set<string>::iterator it = arg1List->begin();it!=arg1List->end();it++){
+			istringstream(*it)>>stmtNo;
 			set1.push_back(stmtNo);
 		}
 	} else if (arg1Type.compare("integer") == 0){
-		if(arg1List->size() == (unsigned)1){
-			istringstream(arg1List->at(0))>>stmtNo;
+		for (set<string>::iterator it = arg1List->begin();it!=arg1List->end();it++){
+			istringstream(*it)>>stmtNo;
 			set1.push_back(stmtNo);
 		}
 	}
@@ -257,8 +257,8 @@ vector<pair<string, string>> PKB::getModify(set<string>* arg1List, string arg1Ty
 	// Get the set of possible values for argument 1
 	
 		// arg2List will be vector of var name
-		for (unsigned i = 0; i<arg2List->size(); i++){
-			varIndex = varTable.getVarIndex(arg2List->at(i));
+		for (set<string>::iterator it = arg2List->begin();it!=arg2List->end();it++){
+			varIndex = varTable.getVarIndex(*it);
 			if(varIndex != -1){
 				set2.push_back(varIndex);
 			}
@@ -537,7 +537,10 @@ void PKB::printVarTable()
 {
 	varTable.printVarTable();
 }
-
+set<string> PKB::getAllVars(){
+	set<string> result;
+	return result;
+}
 /************************************************** ProcTable *************************************************/
 int PKB::insertProc(string procName){
 	return procTable.insertProc(procName);
@@ -555,7 +558,10 @@ void PKB::printProcTable()
 {
 	procTable.printProcTable();
 }
-
+set<string> PKB::getAllProcs(){
+	set<string> result;
+	return result;
+}
 /************************************************** StmtTable *************************************************/
 int PKB::insertStmt(int stmtNo, string type)
 {
@@ -577,7 +583,10 @@ void PKB::printStmtTable()
 {
 	stmtTable.printStmtTable();
 }
-
+set<string> PKB::getAllStmts(){
+	set<string> result;
+	return result;
+}
 /************************************************** ConstantTable *************************************************/
 void PKB::insertConst(int stmtNo, int number)
 {
