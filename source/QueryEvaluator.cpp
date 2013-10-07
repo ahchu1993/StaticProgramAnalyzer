@@ -143,8 +143,8 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		res = pkb-> getCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Parents"){
 		res = pkb-> getParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
-	}else if(relation == "Nexts"){
-		res = pkb-> getNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation =="Nexts"){
+		res = pkb-> getNext(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}
 
 	//update valueTable
