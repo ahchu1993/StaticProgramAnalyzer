@@ -68,5 +68,8 @@ public:
 
 	// Return whether there exist a pair satisfying set1 and set2
 	bool checkUse(vector<int> set1, vector<int> set2);
+
+	vector<use_stmt_row> getUseStmtTable();
+	vector<use_proc_row> getUseProcTable();
 };
 #endif

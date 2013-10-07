@@ -121,7 +121,7 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		res = pkb-> getModify(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 
 	}else if(relation == "Uses"){
-		res = pkb-> getUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		res = pkb-> getUse(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation == "Calls"){
 		res = pkb-> getCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Parents"){

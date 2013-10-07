@@ -346,3 +346,11 @@ bool UseTable::checkUse(vector<int> set1, vector<int> set2){
 
 	return false;
 }
+
+vector<use_stmt_row> UseTable::getUseStmtTable(){
+	return UseStmtTable;
+}
+
+vector<use_proc_row> UseTable::getUseProcTable(){
+	return UseProcTable;
+}

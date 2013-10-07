@@ -105,8 +105,8 @@ public:
 	void printModifyTable();
 
 	/************************************************** UseTable *************************************************/
-	vector<pair<string, string>> getUse(string arg1, string arg1Type, string arg2, string arg2Type);
-	vector<pair<string, string>> getUseSpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
+	vector<pair<string, string>> getUse(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	//vector<pair<string, string>> getUseSpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
 	bool checkUse(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateUse();
 
