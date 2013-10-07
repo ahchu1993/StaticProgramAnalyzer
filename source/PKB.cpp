@@ -280,7 +280,6 @@ vector<pair<string, string>> PKB::getModify(set<string>* arg1_set, string arg1Ty
 	}
 	return result;
 }
-
 bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
@@ -366,13 +365,6 @@ void PKB::printModifyTable()
 	modifyTable.printModifyTable();
 }
 
-vector<modify_stmt_row> PKB::getModifyStmtTable(){
-	return modifyTable.getModifyStmtTable();
-}
-
-vector<modify_proc_row> PKB::getModifyProcTable(){
-	return modifyTable.getModifyProcTable();
-}
 
 /************************************************** UseTable *************************************************/
 vector<pair<string, string>> PKB::getUse(string arg1, string arg1Type, string arg2, string arg2Type){
@@ -559,9 +551,9 @@ void PKB::printVarTable()
 	varTable.printVarTable();
 }
 set<string> PKB::getAllVars(){
-	set<string> result;
-	return result;
+	return varTable.getAllVariables();
 }
+
 /************************************************** ProcTable *************************************************/
 int PKB::insertProc(string procName){
 	return procTable.insertProc(procName);
@@ -580,9 +572,9 @@ void PKB::printProcTable()
 	procTable.printProcTable();
 }
 set<string> PKB::getAllProcs(){
-	set<string> result;
-	return result;
+	return procTable.getAllProcedures();
 }
+
 /************************************************** StmtTable *************************************************/
 int PKB::insertStmt(int stmtNo, string type)
 {
@@ -605,9 +597,9 @@ void PKB::printStmtTable()
 	stmtTable.printStmtTable();
 }
 set<string> PKB::getAllStmts(){
-	set<string> result;
-	return result;
+	return stmtTable.getAllStatements();
 }
+
 /************************************************** ConstantTable *************************************************/
 void PKB::insertConst(int stmtNo, int number)
 {
