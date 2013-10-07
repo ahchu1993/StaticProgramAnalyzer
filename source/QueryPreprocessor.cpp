@@ -1141,7 +1141,10 @@ bool QueryPreprocessor::pattern_assign(string s){
 						tree_node t = build_tree(expr_spec);
 						string exp_tree = flatten(&t);
 						pattern* patt = new pattern("p_assign", synonym,varRef,varRef_type,true,exp_tree);
-						relations.push_back(patt);
+						if(varRef_type =="variable")
+							relations.push_front(patt);
+						else 
+							constant_relations.push_front(patt);
 					}
 					else {
 						int p1 = expr_spec.find("\"");
@@ -1151,7 +1154,10 @@ bool QueryPreprocessor::pattern_assign(string s){
 						tree_node t = build_tree(expr_spec);
 						string exp_tree = flatten(&t);
 						pattern* patt = new pattern("p_assign", synonym,varRef,varRef_type,false,exp_tree);
-						relations.push_back(patt);
+						if(varRef_type =="variable")
+							relations.push_front(patt);
+						else 
+							constant_relations.push_front(patt);
 					}
 
 					return true;
