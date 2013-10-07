@@ -826,8 +826,8 @@ vector<int> PKB::getPrevT(int stmtNo)
 	vector<int> prevStarList = cfg.getPrevStar(stmtNo);
 	return prevStarList;
 }
-
-vector<pair<string,string>> PKB::getNext(string arg1, string arg1Type, string arg2, string arg2Type){
+/*
+vector<pair<string, string>> getNext(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 	// synonym(prog_line|stmt|assign|if|while), _, integer
 	//					synonym(prog_line|stmt|assign|if|while), _, integer
 	vector<pair<string,string>> result;
@@ -919,7 +919,8 @@ vector<pair<string,string>> PKB::getNext(string arg1, string arg1Type, string ar
 
 
 	return result;
-}
+}*/
+
 bool PKB::checkNext(string arg1, string arg1Type, string arg2, string arg2Type){
 	// synonym(prog_line|stmt|assign|if|while), _, integer
 	//					synonym(prog_line|stmt|assign|if|while), _, integer
@@ -1019,20 +1020,23 @@ bool PKB::checkNext(string arg1, string arg1Type, string arg2, string arg2Type){
 
 	return false;
 }
-vector<pair<string, string>> PKB::getNextSpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type)
+vector<pair<string, string>> PKB::getNext(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
 	//what? _/integer
 
 	vector<pair<string,string>> result;
-	std::string myString = "45";
-	int value = atoi(myString.c_str()); 
 
-	for(int i=0;i<arg1List.size();i++){
-		string index1 = arg1List[i];
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> arg1List = *arg1_set;
+	set<string> arg2List = *arg2_set;
+
+	for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+		string index1 = *it1;
 		int stmtNo1 = atoi(index1.c_str());
 		vector<int> childrenList = getNext(stmtNo1);
-		for(int j=0;j<arg2List.size();j++){
-			string index2 = arg2List[j];
+		for(it2=arg2List.begin();it2!= arg2List.end();it2++){
+			string index2 = *it2;
 			int stmtNo2 = atoi(index2.c_str());
 			if(contains(childrenList,stmtNo2)){
 				pair<string,string> p(index1,index2);
@@ -1040,23 +1044,24 @@ vector<pair<string, string>> PKB::getNextSpecific(vector<string> arg1List, strin
 			}
 		}
 	}
-	if(arg1Type.compare("")==0 && arg2Type.compare("")==0){
-		;
-	}
 	return result;
 }
-vector<pair<string, string>> PKB::getNextTSpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type)
+vector<pair<string, string>> PKB::getNextT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
-	vector<pair<string,string>> result;
-	std::string myString = "45";
-	int value = atoi(myString.c_str()); 
 
-	for(int i=0;i<arg1List.size();i++){
-		string index1 = arg1List[i];
+	vector<pair<string,string>> result;
+
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> arg1List = *arg1_set;
+	set<string> arg2List = *arg2_set;
+
+	for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+		string index1 = *it1;
 		int stmtNo1 = atoi(index1.c_str());
 		vector<int> childrenList = getNextT(stmtNo1);
-		for(int j=0;j<arg2List.size();j++){
-			string index2 = arg2List[j];
+		for(it2=arg2List.begin();it2!= arg2List.end();it2++){
+			string index2 = *it2;
 			int stmtNo2 = atoi(index2.c_str());
 			if(contains(childrenList,stmtNo2)){
 				pair<string,string> p(index1,index2);
@@ -1073,6 +1078,7 @@ bool PKB::contains(vector<int> list, int stmtNo)
 			return true;
 	return false;
 }
+/*
 vector<pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 {
 	// synonym(prog_line|stmt|assign|if|while), _, integer
@@ -1167,6 +1173,7 @@ vector<pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string a
 
 	return result;
 }
+*/
 bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 {
 	// synonym(prog_line|stmt|assign|if|while), _, integer
