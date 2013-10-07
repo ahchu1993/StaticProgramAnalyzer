@@ -168,7 +168,7 @@ list<list<Results::cell*>*> Results::equiJoin(int join_index, int position,vecto
         list<cell*>::iterator j = next(tuple->begin(),join_index);
         //bool flag_find = false;
         cell* join_cell= *j;
-        for(int i =0; i<results.size();i++){
+        for(unsigned int i =0; i<results.size();i++){
             string compare;
             string add;
             if (position==1) {

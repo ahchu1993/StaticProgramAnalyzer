@@ -68,7 +68,7 @@ public:
 	vector<int> getCallsList(int procIndex);
 
 	/************************************************** ParentTable *************************************************/
-	vector<pair<string, string>> getParent(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<pair<string, string>> getParent(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	bool checkParent(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(int stm1, string DE1, int stm2, string DE2);
 	int getParent (int stm);

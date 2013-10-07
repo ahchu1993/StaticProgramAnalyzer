@@ -119,37 +119,58 @@ vector<int> PKB::getCallsList(int procIndex){
 	return result;
 }
 /************************************************** ParentTable *************************************************/
-vector<pair<string, string>> PKB::getParent(string arg1, string arg1Type, string arg2, string arg2Type){
-	vector<int> set1, set2;
-	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
-		set1 = parentTable.getParentList("_");
-	}else if(arg1Type.compare("while") == 0 || arg1Type.compare("if") == 0){
-		set1 = parentTable.getParentList(arg1Type);
-	}
+vector<pair<string, string>> PKB::getParent(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
+	
+	vector<pair<string,string>> result;
+	
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> s1 = *arg1_set;
+	set<string> s2 = *arg2_set;
 
-	if(arg2Type.compare("prog_line") == 0 || arg2Type.compare("stmt") == 0 || arg2Type.compare("_") == 0){
-		set2 = parentTable.getChildrenList("_");
-	}else if(arg2Type.compare("while") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("assign") == 0){
-		set2 = parentTable.getChildrenList(arg2Type);
+	
+	for(set<string>::iterator it = s2.begin();it!=s2.end();it++){
+
+		string child = *it;
+		int c = Util::convertStringToInt(child);
+		int p = getParent(c);
+		string parent = Util::convertIntToString(p);
+		it1 = s1.find(parent);
+		if(it1!=s1.end()){
+			pair<string,string> p(parent,child);
+			result.push_back(p);
+		}
+		
 	}
 	
-	return parentTable.getParentPairList(set1, set2);
+	return result;
 }
 bool PKB::checkParent(string arg1, string arg1Type, string arg2, string arg2Type){
-	vector<int> set1, set2;
-	if(arg1Type.compare("prog_line") == 0 || arg1Type.compare("stmt") == 0 || arg1Type.compare("_") == 0){
-		set1 = parentTable.getParentList("_");
-	}else if(arg1Type.compare("while") == 0 || arg1Type.compare("if") == 0){
-		set1 = parentTable.getParentList(arg1Type);
-	}
-
-	if(arg2Type.compare("prog_line") == 0 || arg2Type.compare("stmt") == 0 || arg2Type.compare("_") == 0){
-		set2 = parentTable.getChildrenList("_");
-	}else if(arg2Type.compare("while") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("assign") == 0){
-		set2 = parentTable.getChildrenList(arg2Type);
+	if(arg1=="_"&&arg2=="_"){
+		int size = parentTable.getSize();
+		if(size>0)
+			return true;
+		else return false;
+	}else if(arg1=="_"&&arg2Type=="integer"){
+		int c = Util::convertStringToInt(arg2);
+		int p = getParent(c);
+		if(p>0) return true;
+		else return false;
+	}else if(arg1Type=="integer"&&arg2=="_"){
+		int p = Util::convertStringToInt(arg1);
+		string type = getStmtType(p);
+		vector<int> children = getChildren(p,type);
+		if(children.size()>0) return true;
+		else return false;
+	}else{
+		int c = Util::convertStringToInt(arg2);
+		int p = getParent(c);
+		int parent = Util::convertStringToInt(arg1);
+		if(parent==p)
+			return true;
+		else return false;
 	}
 	
-	return parentTable.checkParent(set1, set2);
 }
 void PKB::insert(int stm1, string DE1, int stm2, string DE2){
 	parentTable.insert(stm1, DE1, stm2, DE2);

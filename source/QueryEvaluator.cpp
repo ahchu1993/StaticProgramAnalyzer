@@ -41,8 +41,8 @@ bool QueryEvaluator::processConstantRelations(){
 			designAbstraction* da = static_cast<designAbstraction*>(b);
 
 			//Handle 2 constants case
-			bool b1 = da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "_";
-			bool b2 = da->ref2_type == "integer" || da->ref2_type == "string" || da->ref2_type == "_";
+			bool b1 = da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "";
+			bool b2 = da->ref2_type == "integer" || da->ref2_type == "string" || da->ref2_type == "";
 			if(b1&&b2){
 				bool pass =  processTwoConstantsDesignAbstraction(da);
 				if(!pass) return false;
@@ -141,9 +141,9 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		res = pkb-> getUse(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation == "Calls"){
 		res = pkb-> getCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
-	}else if(relation == "Parents"){
-		res = pkb-> getParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
-	}else if(relation =="Nexts"){
+	}else if(relation == "Parent"){
+		res = pkb-> getParent(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+	}else if(relation =="Next"){
 		res = pkb-> getNext(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}
 
