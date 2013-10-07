@@ -226,46 +226,43 @@ void PKB::printFollowTable(){
 }
 
 /************************************************** ModifyTable *************************************************/
-
-
 vector<pair<string, string>> PKB::getModify(set<string>* arg1List, string arg1Type, set<string>* arg2List, string arg2Type){
 	vector<int> set1;
 	vector<int> set2;
 	int procIndex, varIndex, stmtNo;
 
 	// Get the set of possible values for argument 1
-	if (arg1Type.compare("procedure") == 0||arg1Type=="string"){
-		// arg1List will be vector of proc name
-		for (set<string>::iterator it = arg1List->begin();it!=arg1List->end();it++){
+	if (arg1Type.compare("procedure") == 0 || arg1Type.compare("string") == 0){
+		// arg1List will be set of proc name
+		for (set<string>::iterator it = arg1List->begin(); it!=arg1List->end(); it++){
 			procIndex = procTable.getProcIndex(*it);
 			if(procIndex != -1){
 				set1.push_back(procIndex);
 			}
 		}
 	} else if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0 || arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
-		for (set<string>::iterator it = arg1List->begin();it!=arg1List->end();it++){
+		for (set<string>::iterator it = arg1List->begin(); it!=arg1List->end(); it++){
 			istringstream(*it)>>stmtNo;
 			set1.push_back(stmtNo);
 		}
 	} else if (arg1Type.compare("integer") == 0){
-		for (set<string>::iterator it = arg1List->begin();it!=arg1List->end();it++){
+		for (set<string>::iterator it = arg1List->begin(); it!=arg1List->end(); it++){
 			istringstream(*it)>>stmtNo;
 			set1.push_back(stmtNo);
 		}
 	}
 
-	// Get the set of possible values for argument 1
-	
-		// arg2List will be vector of var name
-		for (set<string>::iterator it = arg2List->begin();it!=arg2List->end();it++){
-			varIndex = varTable.getVarIndex(*it);
-			if(varIndex != -1){
-				set2.push_back(varIndex);
-			}
+	// Get the set of possible values for argument 2
+	// arg2List will be set of var name
+	for (set<string>::iterator it = arg2List->begin(); it!=arg2List->end(); it++){
+		varIndex = varTable.getVarIndex(*it);
+		if(varIndex != -1){
+			set2.push_back(varIndex);
 		}
+	}
 	
 
-	return modifyTable.getModifyPairList(set1, set2);
+	return modifyTable.getModifyPairList(&set1, &set2);
 }
 
 bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type){
@@ -538,9 +535,9 @@ void PKB::printVarTable()
 	varTable.printVarTable();
 }
 set<string> PKB::getAllVars(){
-	set<string> result;
-	return result;
+	return varTable.getAllVariables();
 }
+
 /************************************************** ProcTable *************************************************/
 int PKB::insertProc(string procName){
 	return procTable.insertProc(procName);
@@ -559,9 +556,9 @@ void PKB::printProcTable()
 	procTable.printProcTable();
 }
 set<string> PKB::getAllProcs(){
-	set<string> result;
-	return result;
+	return procTable.getAllProcedures();
 }
+
 /************************************************** StmtTable *************************************************/
 int PKB::insertStmt(int stmtNo, string type)
 {
@@ -584,9 +581,9 @@ void PKB::printStmtTable()
 	stmtTable.printStmtTable();
 }
 set<string> PKB::getAllStmts(){
-	set<string> result;
-	return result;
+	return stmtTable.getAllStatements();
 }
+
 /************************************************** ConstantTable *************************************************/
 void PKB::insertConst(int stmtNo, int number)
 {

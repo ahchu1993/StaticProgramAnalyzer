@@ -78,6 +78,8 @@ void ProcTable::printProcTable()
 	}
 }
 
+/*************************************** New APIs *******************************************/
+
 vector<int> ProcTable::getProcList(){
 	vector<int> results;
 	proc_row temp_row;
@@ -88,4 +90,16 @@ vector<int> ProcTable::getProcList(){
 	}
 
 	return results;
+}
+
+set<string> ProcTable::getAllProcedures(){
+	set<string> result;
+	proc_row temp_row;
+
+	for (unsigned i=0; i<Proc_Table.size(); i++){
+		temp_row = Proc_Table.at(i);
+		result.insert(temp_row.proc_name);
+	}
+
+	return result;
 }

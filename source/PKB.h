@@ -94,7 +94,6 @@ public:
 
 	/************************************************** ModifyTable *************************************************/
 	vector<pair<string, string>> getModify(set<string>* arg1List, string arg1Type, set<string>* arg2List, string arg2Type);
-	//vector<pair<string, string>> getModifySpecific();
 	bool checkModify(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateModify();
 
@@ -125,6 +124,7 @@ public:
 	int getSizeVarTable();
 	void printVarTable();
 	set<string> getAllVars();
+
 	/************************************************** ProcTable *************************************************/
 	int insertProc(string procName);	
 	string getProcName(int index);
@@ -132,6 +132,7 @@ public:
 	int getSizeProcTable();
 	void printProcTable();
 	set<string> getAllProcs(); 
+
 	/************************************************** StmtTable *************************************************/
 	int insertStmt(int stmtNo, string type);
 	vector<int> getStmtNo(string type);
@@ -139,6 +140,7 @@ public:
 	string getStmtType(int stmtNo);
 	void printStmtTable();
 	set<string> getAllStmts();
+
 	/************************************************** Constanttable *************************************************/
 	void insertConst(int stmtNo, int number);
 	vector<int> getConst(int stmtNo);
