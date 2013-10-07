@@ -1330,7 +1330,7 @@ vector<pair<string, string>> PKB::getAffectSpecific(vector<string> arg1List, str
 			}
 		}
 	}
-
+	return result;
 }
 /************************************************** Flatten - Zhao Yang *************************************************/
 void PKB::flattenAST()
