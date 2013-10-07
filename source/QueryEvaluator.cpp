@@ -91,12 +91,12 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 	set<string> * ref1_set;
 	set<string> * ref2_set;
 	bool b1 = da->ref1_type=="string"||da->ref1_type=="integer"||da->ref1_type=="";
-	bool b2 = da->ref2_type=="string"||da->ref1_type=="integer"||da->ref2_type=="";
+	bool b2 = da->ref2_type=="string"||da->ref2_type=="integer"||da->ref2_type=="";
 
 	set<string> s1;
 	if(!b1) // ref1 is synonym
 		ref1_set = valueTable[da->ref1];
-	else if (da->ref2_type=="string"||da->ref2_type=="integer"){
+	else if (da->ref1_type=="string"||da->ref1_type=="integer"){
 		ref1_set = new set<string>;
 		ref1_set->insert(da->ref1);
 	}else {
@@ -355,11 +355,27 @@ void QueryEvaluator::initialzeValueTable(){
     for (int i =0; i<entities.size(); i++) {
         QueryPreprocessor::entityReff entity = entities.at(i);
 		if(entity.type=="procedure"){
-			valueTable[entity.synonym] = &pkb->getAllProcs();
+			set<string> s = pkb->getAllProcs();
+			set<string> *t = new set<string>;
+			for(set<string>::iterator it=s.begin();it!=s.end();it++){
+				t->insert(*it);
+			}
+			valueTable[entity.synonym] = t;
 		}else if(entity.type=="variable"){
-			valueTable[entity.synonym] = &pkb->getAllVars();
+			set<string> s = pkb->getAllVars();
+			set<string> *t = new set<string>;
+			for(set<string>::iterator it=s.begin();it!=s.end();it++){
+				t->insert(*it);
+			}
+			valueTable[entity.synonym] = t;
+			
 		}else if(entity.type=="constant"){
-			valueTable[entity.synonym] = &pkb->getAllConstants();
+			set<string> s = pkb->getAllConstants();
+			set<string> *t = new set<string>;
+			for(set<string>::iterator it=s.begin();it!=s.end();it++){
+				t->insert(*it);
+			}
+			valueTable[entity.synonym] = t;
 		}else{
 			vector<int> stmts;
 			if(entity.synonym=="prog_line")

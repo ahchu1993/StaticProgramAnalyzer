@@ -260,7 +260,7 @@ vector<pair<string, string>> PKB::getModify(set<string>* arg1_set, string arg1Ty
 			
 			modify_stmt_row temp = ModifyStmtTable.at(i);
 
-			if(temp.DE == arg1Type||arg1Type=="stmt"){ // assign,if,while,stmt
+			if(temp.DE == arg1Type||arg1Type=="stmt"||arg1Type=="prog_line"||arg1Type=="integer"){ // assign,if,while,stmt
 				int stmtNo = temp.stmtNo;
 				int v_index = temp.varIndex;
 				string stmt = Util::convertIntToString(stmtNo);
@@ -396,8 +396,8 @@ vector<pair<string, string>> PKB::getUse(set<string>* arg1_set, string arg1Type,
 		for(unsigned int i=0;i<UseStmtTable.size();i++){
 			
 			use_stmt_row temp = UseStmtTable.at(i);
-
-			if(temp.DE == arg1Type||arg1Type=="stmt"){ // assign,if,while,stmt
+			
+			if(temp.DE == arg1Type||arg1Type=="stmt"||arg1Type=="prog_line"||arg1Type=="integer"){ // assign,if,while,stmt
 				int stmtNo = temp.stmtNo;
 				int v_index = temp.varIndex;
 				string stmt = Util::convertIntToString(stmtNo);
@@ -410,7 +410,7 @@ vector<pair<string, string>> PKB::getUse(set<string>* arg1_set, string arg1Type,
 					pair<string,string> p(stmt,var);
 					result.push_back(p);
 				}
-			}			
+			}		
 		}
 	}
 	return result;
