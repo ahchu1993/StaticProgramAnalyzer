@@ -239,7 +239,7 @@ vector<int> ModifyTable::getModifyVarList(){
 	return results;
 }
 
-vector<pair<string,string>> ModifyTable::getModifyPairList(vector<int> set1, vector<int> set2){
+vector<pair<string,string>> ModifyTable::getModifyPairList(vector<int>* set1, vector<int>* set2){
 	modify_proc_row temp_proc_row;
 	modify_stmt_row temp_stmt_row;
 	bool flag1 = true;
@@ -253,25 +253,27 @@ vector<pair<string,string>> ModifyTable::getModifyPairList(vector<int> set1, vec
 		temp_proc_row = ModifyProcTable.at(i);
 		flag1 = false;
 		flag2 = false;
-		for (unsigned j = 0; j < set1.size(); j++){
-			if(temp_proc_row.procIndex == set1.at(j)){
+		for (unsigned j = 0; j < (*set1).size(); j++){
+			if(temp_proc_row.procIndex == (*set1).at(j)){
 				flag1 = true;
 				break;
 			}
 		}
-		for (unsigned j = 0; j < set2.size(); j++){
-			if(temp_proc_row.varIndex == set2.at(j)){
+		for (unsigned j = 0; j < (*set2).size(); j++){
+			if(temp_proc_row.varIndex == (*set2).at(j)){
 				flag2 = true;
 				break;
 			}
 		}
 		if(flag1 && flag2){
+			convert.str("");
 			convert<<temp_proc_row.procIndex;
 			str1 = convert.str();
+			convert.str("");
 			convert<<temp_proc_row.varIndex;
 			str2 = convert.str();
-			pair<string,string> myPair(str1, str2);
-			results.push_back(myPair);
+			pair<string,string> * myPair = new pair<string,string>(str1, str2);
+			results.push_back(*myPair);
 		}
 	}
 
@@ -280,25 +282,27 @@ vector<pair<string,string>> ModifyTable::getModifyPairList(vector<int> set1, vec
 		temp_stmt_row = ModifyStmtTable.at(i);
 		flag1 = false;
 		flag2 = false;
-		for (unsigned j = 0; j < set1.size(); j++){
-			if(temp_stmt_row.stmtNo == set1.at(j)){
+		for (unsigned j = 0; j < (*set1).size(); j++){
+			if(temp_stmt_row.stmtNo == (*set1).at(j)){
 				flag1 = true;
 				break;
 			}
 		}
-		for (unsigned j = 0; j < set2.size(); j++){
-			if(temp_stmt_row.varIndex == set2.at(j)){
+		for (unsigned j = 0; j < (*set2).size(); j++){
+			if(temp_stmt_row.varIndex == (*set2).at(j)){
 				flag2 = true;
 				break;
 			}
 		}
 		if(flag1 && flag2){
+			convert.str("");
 			convert<<temp_stmt_row.stmtNo;
 			str1 = convert.str();
+			convert.str("");
 			convert<<temp_stmt_row.varIndex;
 			str2 = convert.str();
-			pair<string,string> myPair(str1, str2);
-			results.push_back(myPair);
+			pair<string,string> * myPair = new pair<string,string>(str1, str2);
+			results.push_back(*myPair);
 		}
 	}
 

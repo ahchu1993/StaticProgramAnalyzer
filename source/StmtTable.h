@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 #include <assert.h>
+#include <set>
+#include <sstream>
 
 using namespace std;
 
@@ -39,5 +41,8 @@ public:
 
 	// Print StmtTable
 	void printStmtTable();
+
+	/*************************************** New APIs *******************************************/
+	set<string> getAllStatements();
 };
 #endif

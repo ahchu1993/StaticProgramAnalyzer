@@ -5,6 +5,7 @@
 #include <vector>
 #include <stdio.h>
 #include <assert.h>
+#include <set>
 
 using namespace std;
 typedef struct proc_row_t{
@@ -42,5 +43,8 @@ public:
 
 	// Return list of all proc index
 	vector<int> getProcList();
+
+	// Return name of all proc
+	set<string> getAllProcedures();
 };
 #endif

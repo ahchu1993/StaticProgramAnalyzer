@@ -94,3 +94,21 @@ void StmtTable::printStmtTable()
 		cout << temp_row.stmt_no << "\t" << temp_row.type << endl;
 	}
 }
+
+/*************************************** New APIs *******************************************/
+set<string> StmtTable::getAllStatements(){
+	set<string> result;
+	stmt_row temp_row;
+	ostringstream convert;
+	string str;
+
+	for (unsigned i = 0; i < Stmt_Table.size(); i++)
+	{
+		temp_row = Stmt_Table.at(i);
+		convert.str("");
+		convert<<temp_row.stmt_no;
+		str = convert.str();
+	}
+
+	return result;
+}

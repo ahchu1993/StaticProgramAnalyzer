@@ -83,9 +83,39 @@ bool QueryEvaluator::processConstantRelations(){
 vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstraction* da){
 	string relation = da->relation_type;
 	vector<pair<string, string>> res;
+	// get ref_set 
+	set<string> * ref1_set;
+	set<string> * ref2_set;
+	bool b1 = da->ref1_type=="string"||da->ref1_type=="integer"||da->ref1_type=="";
+	bool b2 = da->ref2_type=="string"||da->ref1_type=="integer"||da->ref2_type=="";
+
+	if(!b1) // ref1 is synonym
+		ref1_set = valueTable[da->ref1];
+	else if (da->ref2_type=="string"||da->ref2_type=="integer"){
+		ref1_set = new set<string>;
+		ref1_set->insert(da->ref1);
+	}else {
+	
+	}
+
+	if(!b2) //ref2 is synonym
+		ref2_set = valueTable[da->ref2];
+	else if (da->ref2_type=="string"||da->ref2_type=="integer"){
+		ref2_set = new set<string>;
+		ref2_set->insert(da->ref2);
+	}
+	else { // ref2 ="_"
+		if(da->relation_type=="Uses"||da->relation_type=="Modifies")
+			ref2_set = &pkb->getAllVars();
+		else if(da->relation_type=="Calls"||da->relation_type=="Calls*")
+			ref2_set = &pkb->getAllProcs();
+		else 
+			ref2_set = &pkb->getAllStmts();
+	}
 
 	if(relation == "Modifies"){
-		res = pkb-> getModify(valueTable[da->ref1], da->ref1_type, valueTable[da->ref2], da->ref2_type);
+		res = pkb-> getModify(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+
 	}else if(relation == "Uses"){
 		res = pkb-> getUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Calls"){
@@ -98,7 +128,7 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 
 	//update valueTable
 	
-	bool b1 = da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "";
+	
 	if(!b1){ //ref1 is a synonym
 		vector<string> result;
 		for(vector<pair<string,string>>::iterator it = res.begin();it!=res.end();it++){
@@ -108,7 +138,6 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		updateValueTable(da->ref1, result);
 	}
 	
-	bool b2 = da->ref2_type == "integer" || da->ref2_type == "string" || da->ref2_type == "";
 	if(!b2){ // ref2 is a synonym
 		vector<string> result;
 		for(vector<pair<string,string>>::iterator it = res.begin();it!=res.end();it++){
@@ -304,14 +333,22 @@ vector<pair<string,string>> QueryEvaluator::patternIfOrWhile(pattern* p){
 void QueryEvaluator::initialzeValueTable(){
     for (int i =0; i<entities.size(); i++) {
         QueryPreprocessor::entityReff entity = entities.at(i);
-		vector<int> stmts = QueryEvaluator::pkb->getStmtNo(entity.type);
-		set<string>* s = new set<string>;
-		for(unsigned int i=0;i<stmts.size();i++){
-			string a = Util::convertIntToString(stmts.at(i));		
-			s->insert(a);
-			valueTable[entity.synonym] = s;
+		if(entity.type=="procedure"){
+			valueTable[entity.synonym] = &pkb->getAllProcs();
+		}else if(entity.type=="variable"){
+			valueTable[entity.synonym] = &pkb->getAllVars();
+		}else{
+			vector<int> stmts;
+			if(entity.synonym=="prog_line")
+				stmts= QueryEvaluator::pkb->getStmtNo("stmt");
+			else stmts = QueryEvaluator::pkb->getStmtNo(entity.type);
+			set<string>* s = new set<string>;
+			for(unsigned int i=0;i<stmts.size();i++){
+				string a = Util::convertIntToString(stmts.at(i));		
+				s->insert(a);
+				valueTable[entity.synonym] = s;
+			}
 		}
-        
     }
 }
 void QueryEvaluator::updateValueTable(string ref, vector<string> values){
@@ -326,6 +363,7 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
     }
 	valueTable[ref] = result;
 }
+
 void QueryEvaluator::updateValueTable(designAbstraction* da, vector<pair<string,string>> values){
     set<string> f = *valueTable[da->ref1];
     set<string> s = *valueTable[da->ref2];
@@ -407,6 +445,7 @@ bool QueryEvaluator::processGroupedRelations(){
     }//for each group
     return true;
 }
+
 
 list<string> QueryEvaluator::getResults(){
 	string r = result_refs.at(0);
