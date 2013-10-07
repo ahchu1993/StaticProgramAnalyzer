@@ -93,15 +93,23 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 	bool b1 = da->ref1_type=="string"||da->ref1_type=="integer"||da->ref1_type=="";
 	bool b2 = da->ref2_type=="string"||da->ref1_type=="integer"||da->ref2_type=="";
 
+	set<string> s1;
 	if(!b1) // ref1 is synonym
 		ref1_set = valueTable[da->ref1];
 	else if (da->ref2_type=="string"||da->ref2_type=="integer"){
 		ref1_set = new set<string>;
 		ref1_set->insert(da->ref1);
 	}else {
-	
+		if(da->relation_type=="Calls"||da->relation_type=="Calls*"){
+			s1 = pkb->getAllProcs();	
+			ref1_set = &s1;
+		}else {
+			s1 = pkb->getAllStmts();
+			ref1_set = &s1;
+		}
 	}
 
+	set<string> s2;
 	if(!b2) //ref2 is synonym
 		ref2_set = valueTable[da->ref2];
 	else if (da->ref2_type=="string"||da->ref2_type=="integer"){
@@ -109,12 +117,21 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		ref2_set->insert(da->ref2);
 	}
 	else { // ref2 ="_"
-		if(da->relation_type=="Uses"||da->relation_type=="Modifies")
-			ref2_set = &pkb->getAllVars();
-		else if(da->relation_type=="Calls"||da->relation_type=="Calls*")
-			ref2_set = &pkb->getAllProcs();
-		else 
-			ref2_set = &pkb->getAllStmts();
+		if(da->relation_type=="Uses"||da->relation_type=="Modifies"){
+			s2 = pkb->getAllVars(); 
+			ref2_set = &s2;
+		}
+			
+		else if(da->relation_type=="Calls"||da->relation_type=="Calls*"){
+			s2 = pkb->getAllProcs();	
+			ref2_set = &s2;
+		}
+		
+		else {
+			s2 = pkb->getAllStmts();
+			ref2_set = &s2;
+		}
+			
 	}
 
 	if(relation == "Modifies"){

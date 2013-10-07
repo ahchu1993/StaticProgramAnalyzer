@@ -559,7 +559,9 @@ void PKB::printVarTable()
 	varTable.printVarTable();
 }
 set<string> PKB::getAllVars(){
-	return varTable.getAllVariables();
+	set<string> r;
+	r =  varTable.getAllVariables();
+	return r;
 }
 
 /************************************************** ProcTable *************************************************/
