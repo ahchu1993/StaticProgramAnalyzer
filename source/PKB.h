@@ -8,7 +8,7 @@
 #include <vector>
 #include <map>
 #include <algorithm> 
-
+#include <set>
 
 #include "VarTable.h"
 #include "ProcTable.h"
@@ -93,8 +93,8 @@ public:
 	void printFollowTable();
 
 	/************************************************** ModifyTable *************************************************/
-	vector<pair<string, string>> getModify(string arg1, string arg1Type, string arg2, string arg2Type);
-	vector<pair<string, string>> getModifySpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
+	vector<pair<string, string>> getModify(set<string>* arg1List, string arg1Type, set<string>* arg2List, string arg2Type);
+	//vector<pair<string, string>> getModifySpecific();
 	bool checkModify(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateModify();
 

@@ -9,7 +9,7 @@ QueryEvaluator::QueryEvaluator(PKB* p){
 list<string> QueryEvaluator::processQuery(string query){
     list<string> results;
     if( Qprocessor->process_query(query)!=true){
-        cout<<"invalid query/n";
+        cout<<"invalid query\n";
     }
     else{
         //store all the parsed query infomation
@@ -38,7 +38,7 @@ bool QueryEvaluator::processConstantRelations(){
 
 		vector<pair<string,string>> result_pairs; //store pairs of result for this relation
 
-		if(b->type=="desAbstraction")
+		if(b->type=="designAbstraction")
 		{
 			designAbstraction* da = static_cast<designAbstraction*>(b);
 
@@ -90,7 +90,7 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 	vector<pair<string, string>> res;
 
 	if(relation == "Modifies"){
-		res = pkb-> getModify(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		res = pkb-> getModify(valueTable[da->ref1], da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Uses"){
 		res = pkb-> getUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Calls"){
@@ -102,21 +102,26 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 	}
 
 	//update valueTable
-	vector<string> result;
-	string ref;
-	if(da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "_"){
-		for(unsigned i=0; i<res.size(); i++){
-			result.push_back(res.at(i).first);
-			ref = da->ref2;
+	
+	bool b1 = da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "";
+	if(!b1){ //ref1 is a synonym
+		vector<string> result;
+		for(vector<pair<string,string>>::iterator it = res.begin();it!=res.end();it++){
+			pair<string,string> p = *it;
+			result.push_back(p.first);
 		}
-	}else if(da->ref2_type == "integer" || da->ref2_type == "string" || da->ref2_type == "_"){
-		for(unsigned i=0; i<res.size(); i++){
-			result.push_back(res.at(i).second);
-			ref = da->ref1;
-		}
+		updateValueTable(da->ref1, result);
 	}
-	//Update value table with result vector
-	updateValueTable(ref, result);
+	
+	bool b2 = da->ref2_type == "integer" || da->ref2_type == "string" || da->ref2_type == "";
+	if(!b2){ // ref2 is a synonym
+		vector<string> result;
+		for(vector<pair<string,string>>::iterator it = res.begin();it!=res.end();it++){
+			pair<string,string> p = *it;
+			result.push_back(p.second);
+		}
+		updateValueTable(da->ref2, result);
+	}
 
 	return res;
 
