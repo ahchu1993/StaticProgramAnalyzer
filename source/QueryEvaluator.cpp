@@ -33,7 +33,7 @@ list<string> QueryEvaluator::processQuery(string query){
 			}
 		}//else return results; // empty list
     }
-	if(result_refs[0]=="BOOLEAN"){
+	if(result_refs.size()>0&&result_refs[0]=="BOOLEAN"){
 		if(constant_pass&&grouped_pass)
 			results.push_back("true");
 		else results.push_back("false");
