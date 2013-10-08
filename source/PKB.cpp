@@ -45,52 +45,55 @@ void PKB::printAST()
 }
 
 /************************************************** CallTable *************************************************/
-vector<pair<string, string>> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type){	
-	vector<string> set1, set2;
-	if(arg1Type.compare("procedure") == 0 || arg1Type.compare("_") == 0){
-		set1 = callTable.getCall("_");
-	}else if(arg1Type.compare("String") == 0){
-		set1 = callTable.getCall(arg1);
-	}
+vector<pair<string, string>> PKB::getCalls(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){	
+		vector<pair<string,string>> result;
+	
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> s1 = *arg1_set;
+	set<string> s2 = *arg2_set;
 
-	if(arg2Type.compare("procedure") == 0 || arg2Type.compare("_") == 0){
-		set2 = callTable.getCalled("_");
-	}else if(arg2Type.compare("String") == 0){
-		set2 = callTable.getCalled(arg2);
-	}
-	vector<pair<string, string>> result = callTable.getCallPairList(set1, set2);
-
-	for(unsigned i=0; i<result.size(); i++){
-		stringstream ss1,ss2;
-		string proc1_string = result.at(i).first;
-		string proc2_string = result.at(i).second;
-		int proc1 =	procTable.getProcIndex(proc1_string);
-		int proc2 =	procTable.getProcIndex(proc2_string);
-		ss1 << proc1;
-		ss2 << proc2;
-		proc1_string = ss1.str();
-		proc2_string = ss2.str();
-		result.at(i).first= proc1_string;
-		result.at(i).second = proc2_string;
-	}
+	for(set<string>::iterator it = s1.begin();it!=s1.end();it++){
+		string caller = *it;	
+		vector<string> callee = getCalledList(caller);
+		
+		for(unsigned int i=0;i<callee.size();i++){
+			it2 = s2.find(callee.at(i));
+			if(it2!=s2.end()){
+				pair<string,string> p(caller,*it2);
+				result.push_back(p);
+			}
+		}	
+	}	
 	return result;
 }
 
-bool PKB::checkCall(string arg1, string arg1Type, string arg2, string arg2Type){	
-	vector<string> set1, set2;
-	if(arg1Type.compare("procedure") == 0 || arg1Type.compare("_") == 0){
-		set1 = callTable.getCall("_");
-	}else if(arg1Type.compare("String") == 0){
-		set1 = callTable.getCall(arg1);
-	}
+bool PKB::checkCalls(string arg1, string arg1Type, string arg2, string arg2Type){	
+	if(arg1=="_"&&arg2=="_"){
+		int size = callTable.getSize();
+		if(size>0)
+			return true;
+		else return false;
+	}else if(arg1=="_"&&arg2Type=="string"){
 
-	if(arg2Type.compare("procedure") == 0 || arg2Type.compare("_") == 0){
-		set2 = callTable.getCalled("_");
-	}else if(arg2Type.compare("String") == 0){
-		set2 = callTable.getCalled(arg2);
+		vector<string> callers = getCallsList(arg2);
+		if(callers.size()>0) return true;
+		else return false;
+
+	}else if(arg1Type=="string"&&arg2=="_"){
+		
+		vector<string> callees = getCalledList(arg1);		
+		if(callees.size()>0) return true;
+		else return false;
+
+	}else{
+		bool called = isCalled(arg1,arg2);
+		if(called)
+			return true;
+		else return false;
 	}
-	return callTable.checkCall(set1, set2);
 }
+
 void PKB::insert(string proc1, string proc2){
 	callTable.insert(proc1,proc2);
 }
@@ -144,6 +147,38 @@ vector<pair<string, string>> PKB::getParent(set<string>* arg1_set, string arg1Ty
 	
 	return result;
 }
+
+vector<int> PKB::getParentT(int stmt){
+	return parentTable.getParentT(stmt);
+}
+
+vector<pair<string, string>> PKB::getParentT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
+	vector<pair<string,string>> result;
+	
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> s1 = *arg1_set;
+	set<string> s2 = *arg2_set;
+
+	for(set<string>::iterator it = s2.begin();it!=s2.end();it++){
+
+		string child = *it;
+		int c = Util::convertStringToInt(child);
+		vector<int> parents = getParentT(c);
+		for(unsigned int i=0;i<parents.size();i++){
+			int p = parents.at(i);
+			string p_string = Util::convertIntToString(p);
+			it1 = s1.find(p_string);
+			if(it1!=s1.end()){
+				pair<string,string> p(p_string,child);
+				result.push_back(p);
+			}
+		}	
+	}
+	
+	return result;
+}
+
 bool PKB::checkParent(string arg1, string arg1Type, string arg2, string arg2Type){
 	if(arg1=="_"&&arg2=="_"){
 		int size = parentTable.getSize();
@@ -171,15 +206,42 @@ bool PKB::checkParent(string arg1, string arg1Type, string arg2, string arg2Type
 	}
 	
 }
+
+bool PKB::checkParentT(string arg1, string arg1Type, string arg2, string arg2Type){
+	if(arg1=="_"&&arg2=="_"){
+		int size = parentTable.getSize();
+		if(size>0)
+			return true;
+		else return false;
+	}else if(arg1=="_"&&arg2Type=="integer"){
+		int c = Util::convertStringToInt(arg2);
+		vector<int> p = getParentT(c);
+		if(p.size()>0) return true;
+		else return false;
+	}else if(arg1Type=="integer"&&arg2=="_"){
+		int p = Util::convertStringToInt(arg1);
+		string type = getStmtType(p);
+		vector<int> children = getChildrenT(p,type);
+		if(children.size()>0) return true;
+		else return false;
+	}else{
+		int c = Util::convertStringToInt(arg2);
+		vector<int> p = getParentT(c);
+		int parent = Util::convertStringToInt(arg1);
+		for(unsigned int i=0;i<p.size();i++){
+			if(p.at(i)==parent)
+				return true;	
+		}
+		return false;
+	}
+}
 void PKB::insert(int stm1, string DE1, int stm2, string DE2){
 	parentTable.insert(stm1, DE1, stm2, DE2);
 }
 int PKB::getParent (int stm){
 	return parentTable.getParent(stm);
 }
-vector<int> PKB::getParentT(int stmt){
-	return parentTable.getParentT(stmt);
-}
+
 vector<int> PKB::getChildren(int stm, string DE){
 	return parentTable.getChildren(stm, DE);
 }
@@ -694,7 +756,7 @@ void PKB::buildCFG()
 	int procNum =  getSizeProcTable();
 	for(int i=0;i<procNum;i++){
 		buildTree(i);
-		getchar();
+		//getchar();
 	}
 
 	// build cfgparentlist   ->double linked list
@@ -811,9 +873,9 @@ void PKB::printCFG()
 		CFGNode* rootNode = cfg.CFGHeaderList[i];
 		printfTree(rootNode);
 	}
-	getchar();
+	//getchar();
 	cout<<"CFG END"<<endl;
-	getchar();
+	//getchar();
 }
 void PKB::printfTree(CFGNode *node)
 {
@@ -1488,7 +1550,7 @@ void PKB::recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList)
 void PKB::flattenAST()
 {
 	vector<TNode*> listOfRootNode = ast.getAST();
-	getchar();
+	
 	
 	for(unsigned i=0;i<listOfRootNode.size();i++){
 		string type ="";
@@ -1527,7 +1589,7 @@ void PKB::flattenAST()
 		postfixExprList[lineNum] = node;
 	}
 
-	getchar();
+	
 }
 string PKB::createPostfix(TNode *node)
 {

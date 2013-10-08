@@ -160,9 +160,11 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 	}else if(relation == "Uses"){
 		res = pkb-> getUse(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation == "Calls"){
-		res = pkb-> getCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		res = pkb-> getCalls(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation == "Parent"){
 		res = pkb-> getParent(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+	}else if(relation =="Parent*"){
+		res = pkb-> getParentT(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation =="Follows"){
 		res = pkb->getFollow(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation =="Next"){
@@ -201,8 +203,10 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 	}else if(relation == "Uses"){
 		return pkb-> checkUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Calls"){
-		return pkb-> checkCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		return pkb-> checkCalls(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Parent"){
+		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation=="Parent*"){
 		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation =="Follows"){
 		return pkb->checkFollow(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
@@ -426,10 +430,10 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
     }
 	valueTable[ref] = result;
 }
-/*
-void QueryEvaluator::updateValueTable(designAbstraction* da, vector<pair<string,string>> values){
-    set<string> f = *valueTable[da->ref1];
-    set<string> s = *valueTable[da->ref2];
+
+void QueryEvaluator::updateValueTable(pair<string,string> refs, vector<pair<string,string>> values){
+    set<string> f = *valueTable[refs.first];
+    set<string> s = *valueTable[refs.second];
 	set<string> * result1 = new set<string>;
     set<string> * result2 = new set<string>;
     for (set<string>::iterator g = f.begin(); g != f.end(); g++) {
@@ -437,7 +441,6 @@ void QueryEvaluator::updateValueTable(designAbstraction* da, vector<pair<string,
 			if(*g==values.at(i).first)
 				result1->insert(*g);
 		}
-        
     }
     for (set<string>::iterator m = s.begin(); m!= s.end(); m++) {
 		for(unsigned int i=0;i<values.size();i++){
@@ -446,12 +449,12 @@ void QueryEvaluator::updateValueTable(designAbstraction* da, vector<pair<string,
 		}
         
     }
-	valueTable[da->ref1] = result1;
-    valueTable[da->ref2] = result2;
-}*/
+	valueTable[refs.first] = result1;
+    valueTable[refs.second] = result2;
+}
 
 bool QueryEvaluator::processGroupedRelations(){
-     /*Results results_table;
+    Results results_table;
     list<list<BaseRelation*>> group_relations = Qprocessor->grouped_relations;
     for(list<list<BaseRelation*>>::iterator it = group_relations.begin();it!=group_relations.end();it++){
         vector<pair<string,string>> result_pairs;
@@ -464,17 +467,17 @@ bool QueryEvaluator::processGroupedRelations(){
                 designAbstraction* da = static_cast<designAbstraction*>(relation);
                 
                 result_pairs = processDesignAbstraction(da);
+                pair<string,string>ref_pair;
                 if(result_pairs.empty())
                     return false;
                 else{
-                    pair<string,string>ref_pair;
+
                     ref_pair.first = da->ref1;
                     ref_pair.second = da->ref2;
                     temp_table.join(ref_pair, result_pairs);
                 }
-                updateValueTable(da, result_pairs);
+                updateValueTable(ref_pair, result_pairs);
             }
-            /*
             else if(relation->type=="pattern"){
                 
                 pattern* p = static_cast<pattern*>(relation);
@@ -506,7 +509,7 @@ bool QueryEvaluator::processGroupedRelations(){
             results_table.merge(temp_table);
         }//for each relation
         table.merge(results_table);
-    }//for each group */
+    }//for each group
     return true;
 }
 

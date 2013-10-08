@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Zhao Weixiang. All rights reserved.
 //
 #include <vector>
-#include "string.h"
+#include "string"
 #include <list>
 #include <set>
 #include <utility>
@@ -15,32 +15,24 @@ class Results{
 public:
     //Attributes
     //template<class T>
-	struct cell{
-       // string ref;
-       // cell* before;
-       // cell* next;
-        string value;
-       // int weights;
-      
-	};
     
     struct Table{
 		set<string> columns;
-        list<list<cell*>*> tuple_list;
+        list<list<string>> tuple_list;
 	};
     //static set<Columns*> columns;
     set<string> columns;
     //list<cell*> tuple;
-    list<list<cell*>*> tuple_list;
+    list<list<string>> tuple_list;
     //Methods
     Table table;
     
     //void joinTable(cell parent, cell child, bool flag);
     void initTable(pair<string, string> refs,vector<pair<string,string>> results);
-    void validation(int parent_index, int child_index, vector<pair<string,string>> results);
+    list<list<string>> validation(int parent_index, int child_index, vector<pair<string,string>> results);
     int findColumn(string ref);
     void join(pair<string, string> refs, vector<pair<string,string>> results);
-    list<list<cell*>*> equiJoin(int join_index,int position, vector<pair<string,string>> results);
+    list<list<string>> equiJoin(int join_index,int position, vector<pair<string,string>> results);
     void merge(Results table);
     Results();
 };
