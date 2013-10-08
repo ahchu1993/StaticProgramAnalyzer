@@ -108,7 +108,7 @@ void FollowTable::print(){
 	}
 }
 
-vector<int> FollowTable::findFollowedT(int stmt, string DE){
+vector<int> FollowTable::findFollowedT(int stmt){
 	assert (stmt>=0);
 	
 	vector<int> result;
@@ -117,9 +117,7 @@ vector<int> FollowTable::findFollowedT(int stmt, string DE){
 	while((index = this->findFollowed(stmt)) != -1){
 		for(unsigned i=0; i<followTable.size(); i++){
 			if(followTable.at(i).col2 == index){
-				if(followTable.at(i).de2.compare(DE) == 0 || DE.compare("stmt") == 0){
 					result.push_back(followTable.at(i).col2);	
-				}
 			}
 		}
 		stmt = index;
@@ -128,7 +126,7 @@ vector<int> FollowTable::findFollowedT(int stmt, string DE){
 	return result;
 }
 
-vector<int> FollowTable::findFollowsT(int stmt, string DE){
+vector<int> FollowTable::findFollowsT(int stmt){
 	assert(stmt>=0);
 	vector<int> result;
 	int index;
@@ -136,9 +134,7 @@ vector<int> FollowTable::findFollowsT(int stmt, string DE){
 	while((index = this->findFollows(stmt)) != -1){
 		for(unsigned i=0; i<followTable.size(); i++){
 			if(followTable.at(i).col1 == index){
-				if(followTable.at(i).de1.compare(DE) == 0 || DE.compare("stmt") == 0){
 					result.push_back(followTable.at(i).col1);	
-				}
 			}
 		}
 		stmt = index;

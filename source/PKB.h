@@ -86,12 +86,14 @@ public:
 	//2. "while"
 	//3. "stmt"
 	vector<pair<string, string>> getFollow(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	vector<pair<string, string>> getFollowT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	bool checkFollow(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkFollowT(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insertFollow(int stm1, string DE1, int stm2, string DE2);
 	int findFollowed(int stm);
-	vector<int> findFollowedT(int stmt, string DE);
+	vector<int> findFollowedT(int stmt);
 	int findFollows(int stm);
-	vector<int> findFollowsT(int stmt, string DE);
+	vector<int> findFollowsT(int stmt);
 	bool isFollowed(int stm1,int stm2);
 	void printFollowTable();
 
@@ -172,7 +174,7 @@ public:
 	bool isNext(int stmtNo1,int stmtNo2);
 	bool isNextT(int stmtNo1, int stmtNo2);
 	bool contains(vector<int> list, int stmtNo);
-
+	bool intersect(vector<int> list1, vector<int> list2);
 	// API for QE
 
 	bool checkNext(string arg1, string arg1Type, string arg2, string arg2Type);
@@ -188,12 +190,12 @@ public:
 	vector<int> affectList; // for internal usage
 	vector<int> affectTList; // for internal usage
 	void recusiveBuildAffectList(int stmtNo, int varIndex);
-	void recusiveBuildAffectTList(int stmtNo, int varIndex);
+	void recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList);
 	vector<int> getAffectList(int stmtNo);
 	vector<int> getAffectTList(int stmtNo);
 	//****
 	vector<pair<string, string>> getAffect(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
-
+	vector<pair<string, string>> PKB::getAffectT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 
 	struct postfixNode{
 		string type;// if/while/assig
