@@ -58,8 +58,8 @@ public:
 	void printAST();
 
 	/************************************************** CallTable *************************************************/
-	vector<pair<string, string>> getCall(string arg1, string arg1Type, string arg2, string arg2Type);
-	bool checkCall(string arg1, string arg1Type, string arg2, string arg2Type);
+	vector<pair<string, string>> getCalls(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	bool checkCalls(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(string proc1, string proc2);
 	bool isCalled(string proc1, string proc2);
 	vector<string> getCallsList(string procName);

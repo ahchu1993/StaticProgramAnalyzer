@@ -45,38 +45,30 @@ void PKB::printAST()
 }
 
 /************************************************** CallTable *************************************************/
-vector<pair<string, string>> PKB::getCall(string arg1, string arg1Type, string arg2, string arg2Type){	
-	vector<string> set1, set2;
-	if(arg1Type.compare("procedure") == 0 || arg1Type.compare("_") == 0){
-		set1 = callTable.getCall("_");
-	}else if(arg1Type.compare("String") == 0){
-		set1 = callTable.getCall(arg1);
-	}
+vector<pair<string, string>> PKB::getCalls(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){	
+		vector<pair<string,string>> result;
+	
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> s1 = *arg1_set;
+	set<string> s2 = *arg2_set;
 
-	if(arg2Type.compare("procedure") == 0 || arg2Type.compare("_") == 0){
-		set2 = callTable.getCalled("_");
-	}else if(arg2Type.compare("String") == 0){
-		set2 = callTable.getCalled(arg2);
-	}
-	vector<pair<string, string>> result = callTable.getCallPairList(set1, set2);
-
-	for(unsigned i=0; i<result.size(); i++){
-		stringstream ss1,ss2;
-		string proc1_string = result.at(i).first;
-		string proc2_string = result.at(i).second;
-		int proc1 =	procTable.getProcIndex(proc1_string);
-		int proc2 =	procTable.getProcIndex(proc2_string);
-		ss1 << proc1;
-		ss2 << proc2;
-		proc1_string = ss1.str();
-		proc2_string = ss2.str();
-		result.at(i).first= proc1_string;
-		result.at(i).second = proc2_string;
-	}
+	for(set<string>::iterator it = s1.begin();it!=s1.end();it++){
+		string caller = *it;	
+		vector<string> callee = getCalledList(caller);
+		
+		for(unsigned int i=0;i<callee.size();i++){
+			it2 = s2.find(callee.at(i));
+			if(it2!=s2.end()){
+				pair<string,string> p(caller,*it2);
+				result.push_back(p);
+			}
+		}	
+	}	
 	return result;
 }
 
-bool PKB::checkCall(string arg1, string arg1Type, string arg2, string arg2Type){	
+bool PKB::checkCalls(string arg1, string arg1Type, string arg2, string arg2Type){	
 	vector<string> set1, set2;
 	if(arg1Type.compare("procedure") == 0 || arg1Type.compare("_") == 0){
 		set1 = callTable.getCall("_");
@@ -91,6 +83,7 @@ bool PKB::checkCall(string arg1, string arg1Type, string arg2, string arg2Type){
 	}
 	return callTable.checkCall(set1, set2);
 }
+
 void PKB::insert(string proc1, string proc2){
 	callTable.insert(proc1,proc2);
 }

@@ -160,7 +160,7 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 	}else if(relation == "Uses"){
 		res = pkb-> getUse(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation == "Calls"){
-		res = pkb-> getCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		res = pkb-> getCalls(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation == "Parent"){
 		res = pkb-> getParent(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation =="Follows"){
@@ -201,7 +201,7 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 	}else if(relation == "Uses"){
 		return pkb-> checkUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Calls"){
-		return pkb-> checkCall(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		return pkb-> checkCalls(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Parent"){
 		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation =="Follows"){
