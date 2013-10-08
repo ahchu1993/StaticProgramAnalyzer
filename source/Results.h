@@ -1,5 +1,5 @@
 //
-//  EvaluatorTree.h
+//  Results.h
 //  cs3202
 //
 //  Created by Zhao Weixiang on 21/9/13.
@@ -10,6 +10,7 @@
 #include <list>
 #include <set>
 #include <utility>
+#include <map>
 using namespace std;
 class Results{
 public:
@@ -34,5 +35,6 @@ public:
     void join(pair<string, string> refs, vector<pair<string,string>> results);
     list<list<string>> equiJoin(int join_index,int position, vector<pair<string,string>> results);
     void merge(Results table);
+    void eliminateColumns(vector<string>refs);
     Results();
 };

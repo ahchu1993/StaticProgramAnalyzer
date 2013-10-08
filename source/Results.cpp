@@ -157,5 +157,47 @@ void Results::join(pair<string, string> refs, vector<pair<string,string>> result
         }
     }
 }
+string makeKey(list<string>input){
+    string output;
+    for (list<string>::iterator g = input.begin(); g != input.end(); g++) {
+        string temp = *g;
+        output+=temp;
+    }
+    return output;
+}
+void Results::eliminateColumns(vector<string>refs){
+    vector<int> ref_index;
+    set<string> newColumns;
+    list<list<string>> newtuple_list;
+    for (int a=0; a<refs.size(); a++) {
+        int index = findColumn(refs.at(a));
+        if (index!=-1) {
+            ref_index.push_back(index);
+        }
+    }
+    map<string,bool> checkmap;
+    for (list<list<string>>::iterator g = tuple_list.begin(); g != tuple_list.end(); g++) {
+        list<string> tuple = *g;
+        list<string> newtuple;
+        for (int b=0; b<ref_index.size(); b++) {
+            int index = ref_index.at(b);
+            list<string>::iterator pit = next(tuple.begin(),index);
+            string cell= *pit;
+            newtuple.push_back(cell);
+        }//for one tulples
+        string key = makeKey(newtuple);
+        if (!checkmap[key]) {
+            checkmap[key]=true;
+            newtuple_list.push_back(newtuple);
+        }
+    }//for all the tuples
+    for (int c=0; c<ref_index.size(); c++) {
+        set<string>::iterator pits = next(columns.begin(),ref_index.at(c));
+        string temp = *pits;
+        newColumns.insert(temp);
+    }
+    tuple_list = newtuple_list;
+    columns = newColumns;
+}
 
 
