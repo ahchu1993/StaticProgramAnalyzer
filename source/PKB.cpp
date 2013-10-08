@@ -206,6 +206,35 @@ bool PKB::checkParent(string arg1, string arg1Type, string arg2, string arg2Type
 	}
 	
 }
+
+bool PKB::checkParentT(string arg1, string arg1Type, string arg2, string arg2Type){
+	if(arg1=="_"&&arg2=="_"){
+		int size = parentTable.getSize();
+		if(size>0)
+			return true;
+		else return false;
+	}else if(arg1=="_"&&arg2Type=="integer"){
+		int c = Util::convertStringToInt(arg2);
+		vector<int> p = getParentT(c);
+		if(p.size()>0) return true;
+		else return false;
+	}else if(arg1Type=="integer"&&arg2=="_"){
+		int p = Util::convertStringToInt(arg1);
+		string type = getStmtType(p);
+		vector<int> children = getChildrenT(p,type);
+		if(children.size()>0) return true;
+		else return false;
+	}else{
+		int c = Util::convertStringToInt(arg2);
+		vector<int> p = getParentT(c);
+		int parent = Util::convertStringToInt(arg1);
+		for(unsigned int i=0;i<p.size();i++){
+			if(p.at(i)==parent)
+				return true;	
+		}
+		return false;
+	}
+}
 void PKB::insert(int stm1, string DE1, int stm2, string DE2){
 	parentTable.insert(stm1, DE1, stm2, DE2);
 }
@@ -727,7 +756,7 @@ void PKB::buildCFG()
 	int procNum =  getSizeProcTable();
 	for(int i=0;i<procNum;i++){
 		buildTree(i);
-		getchar();
+		//getchar();
 	}
 
 	// build cfgparentlist   ->double linked list
@@ -844,9 +873,9 @@ void PKB::printCFG()
 		CFGNode* rootNode = cfg.CFGHeaderList[i];
 		printfTree(rootNode);
 	}
-	getchar();
+	//getchar();
 	cout<<"CFG END"<<endl;
-	getchar();
+	//getchar();
 }
 void PKB::printfTree(CFGNode *node)
 {
@@ -1483,7 +1512,7 @@ void PKB::recusiveBuildAffectTList(int stmtNo, int varIndex)
 void PKB::flattenAST()
 {
 	vector<TNode*> listOfRootNode = ast.getAST();
-	getchar();
+	
 	
 	for(unsigned i=0;i<listOfRootNode.size();i++){
 		string type ="";
@@ -1522,7 +1551,7 @@ void PKB::flattenAST()
 		postfixExprList[lineNum] = node;
 	}
 
-	getchar();
+	
 }
 string PKB::createPostfix(TNode *node)
 {

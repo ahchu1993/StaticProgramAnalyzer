@@ -14,14 +14,14 @@ Parser::Parser(PKB* p) {
 
 bool Parser::parseInput (string in) {
 	//cout<<CFGList.size()<<endl;
-	getchar();
+	//getchar();
 	initializeInput(in);
 	codeProcess();
 	pkb->buildCFG();
 	//***** not yet, minh
 	pkb->updateModify();
 	pkb->updateUse();
-	cout<<"!!!!out of parser!!!!!"<<endl;
+	//cout<<"!!!!out of parser!!!!!"<<endl;
 	pkb->flattenAST();
 	return true;
 }
