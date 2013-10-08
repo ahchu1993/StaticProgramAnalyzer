@@ -22,7 +22,9 @@ list<string> QueryEvaluator::processQuery(string query){
         initialzeValueTable();
         if(processConstantRelations()){     
 			if(processGroupedRelations()){
-				results = getResults();
+				if(result_refs.size()==1)
+					results = getResults();
+				else{ }
 				//return results;
 			}
 		}//else return results; // empty list
@@ -117,8 +119,17 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		res = pkb-> getNext(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}
 
+	if(da->ref1==da->ref2){  // ref1 is the same as ref2
+		vector<pair<string,string>> temp;
+		for(unsigned int i=0;i<res.size();i++){
+			pair<string,string> t = res.at(i);
+			if(t.first==t.second){
+				temp.push_back(pair<string,string>(t.first,t.second));
+			}
+		}
+		res = temp;
+	}
 	//update valueTable
-	
 	
 	if(!b1){ //ref1 is a synonym
 		vector<string> result;
