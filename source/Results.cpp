@@ -129,30 +129,32 @@ void Results::join(pair<string, string> refs, vector<pair<string,string>> result
     if (columns.size()==0){
         initTable(refs, results);
     }
-    int column_parent =findColumn(refs.first);
-    int column_child =findColumn(refs.second);
-    if (column_parent!=-1) {
-        flag_parent=true;
-    }
-    if (column_child!=-1) {
-        flag_child=true;
-    }
-    if (flag_parent&&flag_child) {
-        tuple_list = validation(column_parent, column_child, results);
-    }
-    else{// parent or child is not in the result table
-        if (flag_parent) {//parent is in the result table
-            columns.insert(refs.second);
-            tuple_list = equiJoin(column_parent, 1, results);
+    else {
+        int column_parent =findColumn(refs.first);
+        int column_child =findColumn(refs.second);
+        if (column_parent!=-1) {
+            flag_parent=true;
         }
-        else if(flag_child){
-            columns.insert(refs.first);
-            tuple_list = equiJoin(column_child, 2, results);
+        if (column_child!=-1) {
+            flag_child=true;
         }
-    }//else parent or child is not in the result table
-    if (tuple_list.size()==0) {
-        set<string> newset;
-        columns=newset;
+        if (flag_parent&&flag_child) {
+            tuple_list = validation(column_parent, column_child, results);
+        }
+        else{// parent or child is not in the result table
+            if (flag_parent) {//parent is in the result table
+                columns.insert(refs.second);
+                tuple_list = equiJoin(column_parent, 1, results);
+            }
+            else if(flag_child){
+                columns.insert(refs.first);
+                tuple_list = equiJoin(column_child, 2, results);
+            }
+        }//else parent or child is not in the result table
+        if (tuple_list.size()==0) {
+            set<string> newset;
+            columns=newset;
+        }
     }
 }
 

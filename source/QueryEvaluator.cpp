@@ -471,13 +471,13 @@ bool QueryEvaluator::processGroupedRelations(){
                 if(result_pairs.empty())
                     return false;
                 else{
+
                     ref_pair.first = da->ref1;
                     ref_pair.second = da->ref2;
                     temp_table.join(ref_pair, result_pairs);
                 }
                 updateValueTable(ref_pair, result_pairs);
             }
-            /*
             else if(relation->type=="pattern"){
                 
                 pattern* p = static_cast<pattern*>(relation);
@@ -505,7 +505,7 @@ bool QueryEvaluator::processGroupedRelations(){
                 }
                 
             }//
-             */
+             
             results_table.merge(temp_table);
         }//for each relation
         table.merge(results_table);
