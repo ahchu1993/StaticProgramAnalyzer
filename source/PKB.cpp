@@ -1324,6 +1324,7 @@ vector<int> PKB::getAffectList(int stmtNo)
 	affectList.clear();
 	int varIndex = getModifiedStmt(stmtNo)[0];
 	
+	visited.clear();
 
 	vector<int> childrenList = getNext(stmtNo);
 
@@ -1336,6 +1337,13 @@ vector<int> PKB::getAffectList(int stmtNo)
 }
 void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 {
+	while(visited.size()<=stmtNo)
+		visited.push_back(0);
+	//num of loops
+	if(visited[stmtNo]==1)//********** dont know
+		return;
+	else visited[stmtNo]=visited[stmtNo]+1;
+
 	vector<int> usedVarList = getUsedStmt(stmtNo);
 	string stmtType =  getStmtType(stmtNo);
 	//cout<<"no "<<stmtNo<<" type "<<stmtType<<endl;
@@ -1345,6 +1353,7 @@ void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 		if(!contains(affectList,stmtNo)){
 			
 			affectList.push_back(stmtNo);
+			visited.clear();
 		}
 	}
 	int currentVar = getModifiedStmt(stmtNo)[0]; // also wrong as used
@@ -1355,7 +1364,7 @@ void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 		vector<int> childrenList = getNext(stmtNo);
 		for(int i=0;i<childrenList.size();i++){
 			int childStmt = childrenList[i];
-			//cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
+			cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
 			recusiveBuildAffectList(childStmt,varIndex);
 		}
 	}
@@ -1390,59 +1399,88 @@ vector<pair<string, string>> PKB::getAffect(set<string>* arg1_set, string arg1Ty
 	return result;
 }
 
+vector<pair<string, string>> PKB::getAffectT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
+{
+	vector<pair<string,string>> result;
+
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> arg1List = *arg1_set;
+	set<string> arg2List = *arg2_set;
+
+	for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+		vector<int> list1;
+		int index1;
+		istringstream ( *it1 ) >> index1;
+
+		list1 = getAffectTList(index1);
+		for(it2=arg2List.begin();it2!=arg2List.end();it2++){
+			int index2;
+			istringstream (*it2) >> index2;
+			if(contains(list1,index2)){
+				pair<string,string> p (*it1,*it2);
+				result.push_back(p);
+			}
+		}
+	}
+
+	return result;
+
+}
 vector<int> PKB::getAffectTList(int stmtNo)
 {
 	visited.clear();
 	affectTList.clear();
 	int varIndex = getModifiedStmt(stmtNo)[0];
+	vector<int> varIndexList;
+	varIndexList.push_back(varIndex);
 
 	vector<int> childrenList = getNext(stmtNo);
 	for(int i=0;i<childrenList.size();i++){
 		int childStmt = childrenList[i];
-		recusiveBuildAffectTList(childStmt,varIndex);
+		recusiveBuildAffectTList(childStmt,varIndexList);
 	}
 
 	return affectTList;
 }
-void PKB::recusiveBuildAffectTList(int stmtNo, int varIndex)
+bool PKB::intersect(vector<int> list1, vector<int> list2){
+	for(int i=0;i<list1.size();i++)
+		for(int j=0;j<list2.size();j++){
+			if(list1[i]==list2[j])
+				return true;
+		}
+	return false;
+}
+// need to change it to , int stmtNo(current line), vector<int> varList(all varIndex that are using!!!)
+void PKB::recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList)
 {
-	cout<<"STMTNO "<<stmtNo<<"  varIndex  "<<varIndex<<endl; // how to solve loop!!
+	cout<<"STMTNO "<<stmtNo<<"  varIndex  "<<varIndexList[0]<<endl; // how to solve loop!!
+
 	while(visited.size()<=stmtNo)
 		visited.push_back(0);
 	//num of loops
-	if(visited[stmtNo]==6)//********** dont know
+	if(visited[stmtNo]==1)//********** dont know
 		return;
 	else visited[stmtNo]=visited[stmtNo]+1;
 	
 	string stmtType = getStmtType(stmtNo);
 
-	if(varIndex==2)
-		cout<<"STMTNO "<<stmtNo<<"  varIndex  "<<varIndex <<"t "<<stmtType<<endl;
-
 	vector<int> usedVarList = getUsedStmt(stmtNo);
-	if(stmtType.compare("assign")==0&&contains(usedVarList,varIndex)){
-		if(!contains(affectTList,stmtNo))
+	if(stmtType.compare("assign")==0&&intersect(usedVarList,varIndexList)){
+		if(!contains(affectTList,stmtNo)){
 			affectTList.push_back(stmtNo);
+			visited.clear();
+		}
 
-		int varIndex1 = getModifiedStmt(stmtNo)[0];
-		vector<int> childrenList = getNext(stmtNo);
-		for(int i=0;i<childrenList.size();i++){
-			int childStmt = childrenList[i];
-			recusiveBuildAffectTList(childStmt,varIndex1);
-		}
+		int currentVar = getModifiedStmt(stmtNo)[0];
+		if(!contains(varIndexList,currentVar))
+			varIndexList.push_back(currentVar);
 	}
-	int currentVar = getModifiedStmt(stmtNo)[0];
-	if(stmtType.compare("assign")==0&&currentVar==varIndex){// this var is being modified
-		
-		return ;
-	}else{
-		vector<int> childrenList = getNext(stmtNo);
-		for(int i=0;i<childrenList.size();i++){
-			int childStmt = childrenList[i];
-			if(varIndex==2)
-				cout<<"no "<<stmtNo<<"  child  "<<childStmt<<endl;
-			recusiveBuildAffectTList(childStmt,varIndex);
-		}
+
+	vector<int> childrenList = getNext(stmtNo);
+	for(int i=0;i<childrenList.size();i++){
+		int childStmt = childrenList[i];
+		recusiveBuildAffectTList(childStmt,varIndexList);
 	}
 
 }
