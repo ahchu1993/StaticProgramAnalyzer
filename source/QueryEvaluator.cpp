@@ -59,24 +59,7 @@ bool QueryEvaluator::processConstantRelations(){
 
 			if(result_pairs.empty())
 				return false;
-			//update valueTable
-			vector<string> temp;
-			for(unsigned int i=0;i<result_pairs.size();i++){
-				pair<string,string> t = result_pairs.at(i);
-				temp.push_back(t.first);
-			}
-			//update synonym valueTable
-			updateValueTable(p->synonym, temp);
-
-			if(p->varRef_type=="variable"){
-				vector<string> vars;
-				for(unsigned int i=0;i<result_pairs.size();i++){
-					pair<string,string> t = result_pairs.at(i);
-					vars.push_back(t.second);
-				}
-
-				updateValueTable(p->varRef, vars);
-			}
+			
 
 		}else {}
 	}
@@ -84,93 +67,54 @@ bool QueryEvaluator::processConstantRelations(){
 	return true;
 }
 
+set<string> QueryEvaluator::getValueSet(string ref,string ref_type,string relation_type){
+	set<string> ref_set;
+	bool b = ref_type=="string"||ref_type=="integer"||ref_type=="";
+	if(!b){
+		ref_set = *valueTable[ref];
+	}else if(ref_type =="string"||ref_type=="integer"){
+		ref_set.insert(ref);
+	}else{ // "_"
+		if(relation_type=="Uses"||relation_type=="Modifies"){
+			ref_set = pkb->getAllVars();
+		}		
+		else if(relation_type=="Calls"||relation_type=="Calls*"){
+			ref_set = pkb->getAllProcs();
+		}		
+		else 
+			ref_set = pkb->getAllStmts();		
+	}
+	return ref_set;
+}
 vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstraction* da){
 	string relation = da->relation_type;
 	vector<pair<string, string>> res;
 	// get ref_set 
-	set<string> * ref1_set;
-	set<string> * ref2_set;
+	set<string>  ref1_set;
+	set<string>  ref2_set;
 	bool b1 = da->ref1_type=="string"||da->ref1_type=="integer"||da->ref1_type=="";
 	bool b2 = da->ref2_type=="string"||da->ref2_type=="integer"||da->ref2_type=="";
 
-	set<string> s1;
-	if(!b1) // ref1 is synonym
-		ref1_set = valueTable[da->ref1];
-	else if (da->ref1_type=="string"||da->ref1_type=="integer"){
-		ref1_set = new set<string>;
-		ref1_set->insert(da->ref1);
-	}else {
-		if(da->relation_type=="Calls"||da->relation_type=="Calls*"){
-			s1 = pkb->getAllProcs();
-			set<string> *t = new set<string>;
-			for(set<string>::iterator it=s1.begin();it!=s1.end();it++){
-				t->insert(*it);
-			}
-			ref1_set = t;
-		}else {
-			s1 = pkb->getAllStmts();
-			set<string> *t = new set<string>;
-			for(set<string>::iterator it=s1.begin();it!=s1.end();it++){
-				t->insert(*it);
-			}
-			ref1_set = t;
-		}
-	}
-
-	set<string> s2;
-	if(!b2) //ref2 is synonym
-		ref2_set = valueTable[da->ref2];
-	else if (da->ref2_type=="string"||da->ref2_type=="integer"){
-		ref2_set = new set<string>;
-		ref2_set->insert(da->ref2);
-	}
-	else { // ref2 ="_"
-		if(da->relation_type=="Uses"||da->relation_type=="Modifies"){
-			s2 = pkb->getAllVars();
-			set<string> *t = new set<string>;
-			for(set<string>::iterator it=s2.begin();it!=s2.end();it++){
-				t->insert(*it);
-			}
-			ref2_set = t;
-		}
-			
-		else if(da->relation_type=="Calls"||da->relation_type=="Calls*"){
-			s2 = pkb->getAllProcs();
-			set<string> *t = new set<string>;
-			for(set<string>::iterator it=s2.begin();it!=s2.end();it++){
-				t->insert(*it);
-			}
-			ref2_set = t;
-		}
-		
-		else {
-			s2 = pkb->getAllStmts();
-			set<string> *t = new set<string>;
-			for(set<string>::iterator it=s2.begin();it!=s2.end();it++){
-				t->insert(*it);
-			}
-			ref2_set = t;
-		}
-			
-	}
+	ref1_set = getValueSet(da->ref1,da->ref1_type,da->relation_type);
+	ref2_set = getValueSet(da->ref2,da->ref2_type,da->relation_type);
 
 	if(relation == "Modifies"){
-		res = pkb-> getModify(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+		res = pkb-> getModify(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 
 	}else if(relation == "Uses"){
-		res = pkb-> getUse(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+		res = pkb-> getUse(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation == "Calls"){
-		res = pkb-> getCalls(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+		res = pkb-> getCalls(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation == "Parent"){
-		res = pkb-> getParent(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+		res = pkb-> getParent(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation =="Parent*"){
-		res = pkb-> getParentT(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+		res = pkb-> getParentT(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation =="Follows"){
-		res = pkb->getFollow(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+		res = pkb->getFollow(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation=="Follows*"){
-		res = pkb->getFollowT(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+		res = pkb->getFollowT(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation =="Next"){
-		res = pkb-> getNext(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+		res = pkb-> getNext(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}
 
 	//update valueTable
@@ -228,6 +172,25 @@ vector<pair<string,string>> QueryEvaluator::processPattern(pattern* p){
 	}
 	else{
 		result = patternIfOrWhile(p);
+	}
+
+	//update valueTable
+	vector<string> temp;
+	for(unsigned int i=0;i<result.size();i++){
+		pair<string,string> t = result.at(i);
+		temp.push_back(t.first);
+	}
+	//update synonym valueTable
+	updateValueTable(p->synonym, temp);
+
+	if(p->varRef_type=="variable"){
+		vector<string> vars;
+		for(unsigned int i=0;i<result.size();i++){
+			pair<string,string> t = result.at(i);
+			vars.push_back(t.second);
+		}
+
+		updateValueTable(p->varRef, vars);
 	}
 	return result;
 }

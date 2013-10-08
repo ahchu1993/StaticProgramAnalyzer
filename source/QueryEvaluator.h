@@ -39,6 +39,7 @@ private:
     //void processAttrPair(attr_compare* attr_pair);
 	// init
 	void initialzeValueTable();
+	set<string> getValueSet(string ref, string ref_type,string relation_type);
     void updateValueTable(string ref, vector<string> values);
     void updateValueTable(pair<string,string> refs, vector<pair<string,string>> values);
 	// main method
