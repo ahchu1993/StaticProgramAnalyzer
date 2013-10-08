@@ -206,6 +206,8 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 		return pkb-> checkCalls(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Parent"){
 		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation=="Parent*"){
+		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation =="Follows"){
 		return pkb->checkFollow(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Next"){
