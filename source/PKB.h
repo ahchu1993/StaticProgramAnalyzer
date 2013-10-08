@@ -183,10 +183,13 @@ public:
 	string toString(int num);
 	/************************************************** Affect - Zhao Yang *************************************************/
 	vector<int> affectList; // for internal usage
+	vector<int> affectTList; // for internal usage
 	void recusiveBuildAffectList(int stmtNo, int varIndex);
+	void recusiveBuildAffectTList(int stmtNo, int varIndex);
 	vector<int> getAffectList(int stmtNo);
+	vector<int> getAffectTList(int stmtNo);
 	//****
-	vector<pair<string, string>> getAffectSpecific(vector<string> arg1List, string arg1Type, vector<string> arg2List, string arg2Type);
+	vector<pair<string, string>> getAffect(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 
 
 	struct postfixNode{
