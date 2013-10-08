@@ -435,44 +435,43 @@ vector<pair<string, string>> PKB::getModify(set<string>* arg1_set, string arg1Ty
 	return result;
 }
 bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type){
-	vector<int> set1;
-	vector<int> set2;
-	int procIndex, varIndex;
-
-	// Get the set of possible values for argument 1
-	if (arg1Type.compare("procedure") == 0){
-		set1 = modifyTable.getModifyProcList();
-	} else if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0){
-		set1 = modifyTable.getModifyStmtList();
-	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
-		set1 = modifyTable.getModifyDEList(arg1Type);
-	} else if (arg1Type.compare("string") == 0){
-		procIndex = procTable.getProcIndex(arg1);
-		if(procIndex != -1){
-			set1.push_back(procIndex);
-		}
-	} else if (arg1Type.compare("integer") == 0){
-		int stmtNo;
-		istringstream(arg1)>>stmtNo;
-		set1.push_back(stmtNo);
-	}
-
-	// Get the set of possible values for argument 1
-	if (arg2Type.compare("variable") == 0 || arg2Type.compare("_") == 0){
-		set2 = modifyTable.getModifyVarList();
-	} else if (arg2Type.compare("string") == 0){
-		procIndex = procTable.getProcIndex(arg2);
-		if (procIndex != -1){
-			set2.push_back(procIndex);
-		} else{
-			varIndex = varTable.getVarIndex(arg2);
-			if (varIndex != -1){
-				set2.push_back(varIndex);
+	if(arg1Type =="string"){
+		vector<modify_proc_row> ModifyProcTable = modifyTable.getModifyProcTable();
+		for(unsigned int i=0;i<ModifyProcTable.size();i++){
+			modify_proc_row temp = ModifyProcTable.at(i);
+			int p_index = temp.procIndex;
+			int v_index = temp.varIndex;
+			string proc = procTable.getProcName(p_index);
+			string var = varTable.getVarName(v_index);
+			
+			if(arg2=="_"){
+				if(arg1==proc) 
+					return true;
+			}else if(arg1==proc&&arg2==var){
+				return true;
 			}
 		}
-	}
+		return false;
+	}else {
+		vector<modify_stmt_row> ModifyStmtTable = modifyTable.getModifyStmtTable();
+		for(unsigned int i=0;i<ModifyStmtTable.size();i++){
+			
+			modify_stmt_row temp = ModifyStmtTable.at(i);
+				
+			int stmtNo = temp.stmtNo;
+			int v_index = temp.varIndex;
+			string stmt = Util::convertIntToString(stmtNo);
+			string var = varTable.getVarName(v_index);
 
-	return modifyTable.checkModify(set1, set2);
+			if(arg2=="_"){
+				if(arg1==stmt) 
+					return true;
+			}else if(arg1 == stmt && arg2 == var){
+				return true;
+			}	
+		}
+		return false;
+	}
 }
 
 // Update ModifyTable using CallTable
