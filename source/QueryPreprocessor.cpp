@@ -1140,7 +1140,7 @@ bool QueryPreprocessor::pattern_assign(string s){
 						expr_spec = expr_spec.substr(p1+1,p2-p1-1);
 						tree_node t = build_tree(expr_spec);
 						string exp_tree = flatten(&t);
-						pattern* patt = new pattern("p_assign", synonym,varRef,varRef_type,true,exp_tree);
+						pattern* patt = new pattern("p_assign", synonym,varRef,varRef_type,false,exp_tree);
 						if(varRef_type =="variable")
 							relations.push_front(patt);
 						else 
@@ -1153,7 +1153,7 @@ bool QueryPreprocessor::pattern_assign(string s){
 						expr_spec = expr_spec.substr(p1+1,p2-p1-1);
 						tree_node t = build_tree(expr_spec);
 						string exp_tree = flatten(&t);
-						pattern* patt = new pattern("p_assign", synonym,varRef,varRef_type,false,exp_tree);
+						pattern* patt = new pattern("p_assign", synonym,varRef,varRef_type,true,exp_tree);
 						if(varRef_type =="variable")
 							relations.push_front(patt);
 						else 
@@ -1753,7 +1753,8 @@ bool QueryPreprocessor::process_query(string query){
 			else return false;
 		}
 		it++;
-		p2 = it->first;
+		if(it!=positions.end())
+			p2 = it->first;
 	}
 
 	if(cl_type == "such that"){

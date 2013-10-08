@@ -180,3 +180,7 @@ bool ParentTable::checkParent(vector<int> set1, vector<int> set2){
 
 	return false;
 }
+
+vector<parent_row> ParentTable::getParentTable(){
+	return parentTable;
+}

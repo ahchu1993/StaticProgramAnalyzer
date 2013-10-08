@@ -35,5 +35,6 @@ public:
 	vector<pair<string,string>> getParentPairList(vector<int> set1, vector<int> set2);
 	int getSize();
 	void print();
+	vector<parent_row> getParentTable();
 };
 #endif
