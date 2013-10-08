@@ -40,7 +40,7 @@ private:
 	// init
 	void initialzeValueTable();
     void updateValueTable(string ref, vector<string> values);
-   // void updateValueTable(designAbstraction* da, vector<pair<string,string>> values);
+    void updateValueTable(pair<string,string> refs, vector<pair<string,string>> values);
 	// main method
     bool processConstantRelations();
 	bool processGroupedRelations();

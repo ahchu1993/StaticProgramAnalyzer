@@ -428,10 +428,10 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
     }
 	valueTable[ref] = result;
 }
-/*
-void QueryEvaluator::updateValueTable(designAbstraction* da, vector<pair<string,string>> values){
-    set<string> f = *valueTable[da->ref1];
-    set<string> s = *valueTable[da->ref2];
+
+void QueryEvaluator::updateValueTable(pair<string,string> refs, vector<pair<string,string>> values){
+    set<string> f = *valueTable[refs.first];
+    set<string> s = *valueTable[refs.second];
 	set<string> * result1 = new set<string>;
     set<string> * result2 = new set<string>;
     for (set<string>::iterator g = f.begin(); g != f.end(); g++) {
@@ -439,7 +439,6 @@ void QueryEvaluator::updateValueTable(designAbstraction* da, vector<pair<string,
 			if(*g==values.at(i).first)
 				result1->insert(*g);
 		}
-        
     }
     for (set<string>::iterator m = s.begin(); m!= s.end(); m++) {
 		for(unsigned int i=0;i<values.size();i++){
@@ -448,9 +447,9 @@ void QueryEvaluator::updateValueTable(designAbstraction* da, vector<pair<string,
 		}
         
     }
-	valueTable[da->ref1] = result1;
-    valueTable[da->ref2] = result2;
-}*/
+	valueTable[refs.first] = result1;
+    valueTable[refs.second] = result2;
+}
 
 bool QueryEvaluator::processGroupedRelations(){
      /*Results results_table;
