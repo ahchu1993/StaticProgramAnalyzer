@@ -8,6 +8,8 @@ QueryEvaluator::QueryEvaluator(PKB* p){
 
 list<string> QueryEvaluator::processQuery(string query){
     list<string> results;
+	bool constant_pass;
+	bool grouped_pass;
     if( Qprocessor->process_query(query)!=true){
         cout<<"invalid query\n";
     }
@@ -20,8 +22,10 @@ list<string> QueryEvaluator::processQuery(string query){
 		grouped_relations =  Qprocessor->grouped_relations;
         //start to evaluate query
         initialzeValueTable();
-        if(processConstantRelations()){     
-			if(processGroupedRelations()){
+		constant_pass= processConstantRelations();
+        if(constant_pass){     
+			grouped_pass = processGroupedRelations();
+			if(grouped_pass){
 				if(result_refs.size()==1)
 					results = getResults();
 				else{ }
@@ -29,6 +33,11 @@ list<string> QueryEvaluator::processQuery(string query){
 			}
 		}//else return results; // empty list
     }
+	if(result_refs[0]=="BOOLEAN"){
+		if(constant_pass&&grouped_pass)
+			results.push_back("true");
+		else results.push_back("false");
+	}
     return results;
 }
 bool QueryEvaluator::processConstantRelations(){
@@ -494,8 +503,13 @@ bool QueryEvaluator::processGroupedRelations(){
 
 list<string> QueryEvaluator::getResults(){
 	string r = result_refs.at(0);
-	set<string> s = *valueTable[r];
 	list<string> res;
+	if(r=="BOOLEAN"){
+		res.push_back("true");
+		return res;
+	}
+	set<string> s = *valueTable[r];
+	
 	for(set<string>::iterator it = s.begin();it!=s.end();it++){
 		res.push_back(*it);
 	}
