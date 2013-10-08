@@ -163,6 +163,8 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		res = pkb-> getCalls(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation == "Parent"){
 		res = pkb-> getParent(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+	}else if(relation =="Parent*"){
+		res = pkb-> getParentT(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation =="Follows"){
 		res = pkb->getFollow(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation =="Next"){

@@ -69,19 +69,29 @@ vector<pair<string, string>> PKB::getCalls(set<string>* arg1_set, string arg1Typ
 }
 
 bool PKB::checkCalls(string arg1, string arg1Type, string arg2, string arg2Type){	
-	vector<string> set1, set2;
-	if(arg1Type.compare("procedure") == 0 || arg1Type.compare("_") == 0){
-		set1 = callTable.getCall("_");
-	}else if(arg1Type.compare("String") == 0){
-		set1 = callTable.getCall(arg1);
-	}
+	if(arg1=="_"&&arg2=="_"){
+		int size = callTable.getSize();
+		if(size>0)
+			return true;
+		else return false;
+	}else if(arg1=="_"&&arg2Type=="string"){
 
-	if(arg2Type.compare("procedure") == 0 || arg2Type.compare("_") == 0){
-		set2 = callTable.getCalled("_");
-	}else if(arg2Type.compare("String") == 0){
-		set2 = callTable.getCalled(arg2);
+		vector<string> callers = getCallsList(arg2);
+		if(callers.size()>0) return true;
+		else return false;
+
+	}else if(arg1Type=="string"&&arg2=="_"){
+		
+		vector<string> callees = getCalledList(arg1);		
+		if(callees.size()>0) return true;
+		else return false;
+
+	}else{
+		bool called = isCalled(arg1,arg2);
+		if(called)
+			return true;
+		else return false;
 	}
-	return callTable.checkCall(set1, set2);
 }
 
 void PKB::insert(string proc1, string proc2){
@@ -137,6 +147,38 @@ vector<pair<string, string>> PKB::getParent(set<string>* arg1_set, string arg1Ty
 	
 	return result;
 }
+
+vector<int> PKB::getParentT(int stmt){
+	return parentTable.getParentT(stmt);
+}
+
+vector<pair<string, string>> PKB::getParentT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
+	vector<pair<string,string>> result;
+	
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> s1 = *arg1_set;
+	set<string> s2 = *arg2_set;
+
+	for(set<string>::iterator it = s2.begin();it!=s2.end();it++){
+
+		string child = *it;
+		int c = Util::convertStringToInt(child);
+		vector<int> parents = getParentT(c);
+		for(unsigned int i=0;i<parents.size();i++){
+			int p = parents.at(i);
+			string p_string = Util::convertIntToString(p);
+			it1 = s1.find(p_string);
+			if(it1!=s1.end()){
+				pair<string,string> p(p_string,child);
+				result.push_back(p);
+			}
+		}	
+	}
+	
+	return result;
+}
+
 bool PKB::checkParent(string arg1, string arg1Type, string arg2, string arg2Type){
 	if(arg1=="_"&&arg2=="_"){
 		int size = parentTable.getSize();
@@ -170,9 +212,7 @@ void PKB::insert(int stm1, string DE1, int stm2, string DE2){
 int PKB::getParent (int stm){
 	return parentTable.getParent(stm);
 }
-vector<int> PKB::getParentT(int stmt){
-	return parentTable.getParentT(stmt);
-}
+
 vector<int> PKB::getChildren(int stm, string DE){
 	return parentTable.getChildren(stm, DE);
 }

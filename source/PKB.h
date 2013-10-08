@@ -69,10 +69,12 @@ public:
 
 	/************************************************** ParentTable *************************************************/
 	vector<pair<string, string>> getParent(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	vector<pair<string, string>> getParentT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	vector<int> getParentT(int stmt);
 	bool checkParent(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(int stm1, string DE1, int stm2, string DE2);
 	int getParent (int stm);
-	vector<int> getParentT(int stmt);
+	
 	vector<int> getChildren(int stm, string DE);
 	vector<int> getChildrenT(int stmt,string DE);
 	void printParentTable(); 
