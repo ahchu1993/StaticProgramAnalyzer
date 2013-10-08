@@ -454,7 +454,7 @@ void QueryEvaluator::updateValueTable(pair<string,string> refs, vector<pair<stri
 }
 
 bool QueryEvaluator::processGroupedRelations(){
-     /*Results results_table;
+    Results results_table;
     list<list<BaseRelation*>> group_relations = Qprocessor->grouped_relations;
     for(list<list<BaseRelation*>>::iterator it = group_relations.begin();it!=group_relations.end();it++){
         vector<pair<string,string>> result_pairs;
@@ -467,15 +467,15 @@ bool QueryEvaluator::processGroupedRelations(){
                 designAbstraction* da = static_cast<designAbstraction*>(relation);
                 
                 result_pairs = processDesignAbstraction(da);
+                pair<string,string>ref_pair;
                 if(result_pairs.empty())
                     return false;
                 else{
-                    pair<string,string>ref_pair;
                     ref_pair.first = da->ref1;
                     ref_pair.second = da->ref2;
                     temp_table.join(ref_pair, result_pairs);
                 }
-                updateValueTable(da, result_pairs);
+                updateValueTable(ref_pair, result_pairs);
             }
             /*
             else if(relation->type=="pattern"){
@@ -505,11 +505,11 @@ bool QueryEvaluator::processGroupedRelations(){
                 }
                 
             }//
-             
+             */
             results_table.merge(temp_table);
         }//for each relation
         table.merge(results_table);
-    }//for each group */
+    }//for each group
     return true;
 }
 
