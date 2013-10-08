@@ -277,6 +277,33 @@ vector<pair<string, string>> PKB::getFollow(set<string>* arg1_set, string arg1Ty
 	
 	return result;
 }
+vector<pair<string, string>> PKB::getFollowT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
+	vector<pair<string,string>> result;
+	
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> s1 = *arg1_set;
+	set<string> s2 = *arg2_set;
+
+	for(set<string>::iterator it = s1.begin();it!=s1.end();it++){
+
+		string first = *it;
+		int f = Util::convertStringToInt(first);
+		vector<int> s = findFollowedT(f);
+		
+		for(unsigned int i=0;i<s.size();i++){
+			string second = Util::convertIntToString(s.at(i));
+			it1 = s2.find(second);
+			if(it1!=s2.end()){
+				pair<string,string> p(first,second);
+				result.push_back(p);
+			}
+		}		
+	}
+	
+	return result;
+}
+
 bool PKB::checkFollow(string arg1, string arg1Type, string arg2, string arg2Type){
 	if(arg1=="_"&&arg2=="_"){
 		int size = followTable.getSize();
@@ -302,20 +329,50 @@ bool PKB::checkFollow(string arg1, string arg1Type, string arg2, string arg2Type
 		else return false;
 	}
 }
+
+bool PKB::checkFollowT(string arg1, string arg1Type, string arg2, string arg2Type){
+	if(arg1=="_"&&arg2=="_"){
+		int size = followTable.getSize();
+		if(size>0)
+			return true;
+		else return false;
+	}else if(arg1=="_"&&arg2Type=="integer"){
+		int second = Util::convertStringToInt(arg2);
+		vector<int> f = findFollowsT(second);
+		if(f.size()>0) return true;
+		else return false;
+	}else if(arg1Type=="integer"&&arg2=="_"){
+		int f = Util::convertStringToInt(arg1);
+		vector<int> s = findFollowedT(f);
+		if(s.size()>0) return true;
+		else return false;
+	}else{
+		int s = Util::convertStringToInt(arg2);
+		vector<int> f = findFollowsT(s);
+		int first = Util::convertStringToInt(arg1);
+		for(unsigned int i=0;i<f.size();i++){		
+			if(f.at(i) == first)
+				return true;
+		}
+		
+		return false;
+	}
+}
+
 void PKB::insertFollow(int stm1, string DE1, int stm2, string DE2){
 	followTable.insertFollow(stm1, DE1, stm2, DE2);
 }
 int PKB::findFollowed(int stm){
 	return followTable.findFollowed(stm);
 }
-vector<int> PKB::findFollowedT(int stmt, string DE){
-	return followTable.findFollowedT(stmt, DE);
+vector<int> PKB::findFollowedT(int stmt){
+	return followTable.findFollowedT(stmt);
 }
 int PKB::findFollows(int stm){
 	return followTable.findFollows(stm);
 }
-vector<int> PKB::findFollowsT(int stmt, string DE){
-	return followTable.findFollowsT(stmt, DE);
+vector<int> PKB::findFollowsT(int stmt){
+	return followTable.findFollowsT(stmt);
 }
 bool PKB::isFollowed(int stm1,int stm2){
 	return followTable.isFollowed(stm1,stm2);

@@ -27,8 +27,8 @@ public:
 	int findFollowed(int stm);
 	int findFollows(int stm);
 	bool isFollowed(int stm1,int stm2);
-	vector<int> findFollowedT(int stmt, string DE);
-	vector<int> findFollowsT(int stmt, string DE);
+	vector<int> findFollowedT(int stmt);
+	vector<int> findFollowsT(int stmt);
 	vector<int> getFollowsList(string DE);
 	vector<int> getFollowedList(string DE);
 	bool checkFollow(vector<int> set1, vector<int> set2);

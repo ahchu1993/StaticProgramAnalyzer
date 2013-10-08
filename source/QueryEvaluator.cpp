@@ -167,6 +167,8 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		res = pkb-> getParentT(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation =="Follows"){
 		res = pkb->getFollow(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
+	}else if(relation=="Follows*"){
+		res = pkb->getFollowT(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}else if(relation =="Next"){
 		res = pkb-> getNext(ref1_set, da->ref1_type, ref2_set, da->ref2_type);
 	}
@@ -210,6 +212,8 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation =="Follows"){
 		return pkb->checkFollow(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation =="Follows*"){
+		return pkb->checkFollowT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Next"){
 		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}

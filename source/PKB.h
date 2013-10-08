@@ -86,12 +86,14 @@ public:
 	//2. "while"
 	//3. "stmt"
 	vector<pair<string, string>> getFollow(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	vector<pair<string, string>> getFollowT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	bool checkFollow(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkFollowT(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insertFollow(int stm1, string DE1, int stm2, string DE2);
 	int findFollowed(int stm);
-	vector<int> findFollowedT(int stmt, string DE);
+	vector<int> findFollowedT(int stmt);
 	int findFollows(int stm);
-	vector<int> findFollowsT(int stmt, string DE);
+	vector<int> findFollowsT(int stmt);
 	bool isFollowed(int stm1,int stm2);
 	void printFollowTable();
 
