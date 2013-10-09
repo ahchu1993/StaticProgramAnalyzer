@@ -121,6 +121,7 @@ vector<int> PKB::getCallsList(int procIndex){
 	}
 	return result;
 }
+
 /************************************************** ParentTable *************************************************/
 vector<pair<string, string>> PKB::getParent(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
 	
@@ -540,7 +541,6 @@ void PKB::printModifyTable()
 	}
 }
 
-
 /************************************************** UseTable *************************************************/
 vector<pair<string, string>> PKB::getUse(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
 	
@@ -593,8 +593,7 @@ vector<pair<string, string>> PKB::getUse(set<string>* arg1_set, string arg1Type,
 	return result;
 }
 
-bool PKB::checkUse(string arg1, string arg1Type, string arg2, string arg2Type){
-	
+bool PKB::checkUse(string arg1, string arg1Type, string arg2, string arg2Type){	
 	if(arg1Type =="string"){
 		vector<use_proc_row> UseProcTable = useTable.getUseProcTable();
 		for(unsigned int i=0;i<UseProcTable.size();i++){
