@@ -2,6 +2,7 @@
 
 #ifndef CONSTANTTABLE_H
 #define CONSTANTTABLE_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -28,18 +29,20 @@ public:
 	// Insert constant with the corresponding stmt number to the table
 	void insertConst(int stmtNo, int number);
 
+	// Print ConstantTable
+	void printConstTable();
+
+	// Return all constants in table
+	set<string> getAllConstants();
+
+	/*************************************** Unused APIs *******************************************/
 	// Returns the list of all constants in the given stmt
 	vector<int> getConst(int stmtNo);
 
 	// Return the list of all stmt having the given constant
 	vector<int> getStmt(int number);
 
-	// Return the list of all stt having constant
+	// Return the list of all stmt having constant
 	vector<int> getAllStmt();
-
-	// Print ConstantTable
-	void printConstTable();
-
-	set<string> getAllConstants();
 };
 #endif

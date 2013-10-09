@@ -1,5 +1,6 @@
 #ifndef AST_H
 #define AST_H
+
 #include <vector>
 #include "TNode.h"
 #include <assert.h>
