@@ -182,7 +182,7 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}
 
-	
+	return false;
 }
 
 vector<pair<string,string>> QueryEvaluator::processPattern(pattern* p){
@@ -441,11 +441,11 @@ void QueryEvaluator::updateValueTable(pair<string,string> refs, vector<pair<stri
 }
 
 bool QueryEvaluator::processGroupedRelations(){
-    Results results_table;
+    ResultsTable temp_results_table;
     list<list<BaseRelation*>> group_relations = Qprocessor->grouped_relations;
     for(list<list<BaseRelation*>>::iterator it = group_relations.begin();it!=group_relations.end();it++){
         vector<pair<string,string>> result_pairs;
-        Results temp_table;//for each group
+        ResultsTable temp_table;//for each group
         list<BaseRelation*> relations = *it;//for each group
         for(list<BaseRelation*>::iterator iter = relations.begin();iter!=relations.end();iter++){//for each relation
             BaseRelation* relation = *iter;
@@ -494,9 +494,9 @@ bool QueryEvaluator::processGroupedRelations(){
             }//
         }//for each relation
         temp_table.eliminateColumns(result_refs);
-        results_table.merge(temp_table);
+        temp_results_table.merge(temp_table);
     }//for each group
-    table=results_table;
+    resultTable=temp_results_table;
     return true;
 }
 

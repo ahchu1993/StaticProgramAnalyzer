@@ -195,7 +195,7 @@ public:
 	vector<int> getAffectTList(int stmtNo);
 	//****
 	vector<pair<string, string>> getAffect(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
-	vector<pair<string, string>> PKB::getAffectT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	vector<pair<string, string>> getAffectT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 
 	struct postfixNode{
 		string type;// if/while/assig
