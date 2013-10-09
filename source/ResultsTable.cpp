@@ -213,7 +213,10 @@ list<string> ResultsTable::toList(){
         string temp;
         vector<string> tuple= tuples.at(i);
         for (int j=0; j<tuple.size(); j++) {
-            temp = tuple.at(j) + " ";
+            temp = tuple.at(j);
+            if (j!=tuple.size()-1) {
+                temp+=" ";
+            }
         }
         if (i!=tuples.size()-1) {
             temp +=",";
