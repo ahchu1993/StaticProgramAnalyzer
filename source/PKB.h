@@ -191,9 +191,9 @@ public:
 	void recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList);
 	vector<int> getAffectList(int stmtNo);
 	vector<int> getAffectTList(int stmtNo);
-	//****
+	//API for QE
 	vector<pair<string, string>> getAffect(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
-	vector<pair<string, string>> PKB::getAffectT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	vector<pair<string, string>> getAffectT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 
 	struct postfixNode{
 		string type;// if/while/assig
@@ -212,5 +212,13 @@ public:
 	map<int,postfixNode*> postfixExprList;
 	void flattenAST();
 	string createPostfix(TNode *node);
+
+	/************************************/
+	/*               Testing next/nextT/affects/affectT   -zy                                                   */
+	/************************************/
+	void printNext();
+	void printNextT();
+	void printAffects();
+	void printAffectsT();
 };
 #endif

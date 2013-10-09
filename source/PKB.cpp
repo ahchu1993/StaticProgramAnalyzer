@@ -1426,7 +1426,7 @@ void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 		vector<int> childrenList = getNext(stmtNo);
 		for(int i=0;i<childrenList.size();i++){
 			int childStmt = childrenList[i];
-			cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
+			//cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
 			recusiveBuildAffectList(childStmt,varIndex);
 		}
 	}
@@ -1516,12 +1516,12 @@ bool PKB::intersect(vector<int> list1, vector<int> list2){
 // need to change it to , int stmtNo(current line), vector<int> varList(all varIndex that are using!!!)
 void PKB::recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList)
 {
-	cout<<"STMTNO "<<stmtNo<<"  varIndex  "<<varIndexList[0]<<endl; // how to solve loop!!
+	//cout<<"STMTNO "<<stmtNo<<"  varIndex  "<<varIndexList[0]<<endl; // how to solve loop!!
 
 	while(visited.size()<=stmtNo)
 		visited.push_back(0);
 	//num of loops
-	if(visited[stmtNo]==1)//********** dont know
+	if(visited[stmtNo]==1)//********** need to change to NUM, each time modify, num++;
 		return;
 	else visited[stmtNo]=visited[stmtNo]+1;
 	
@@ -1622,4 +1622,67 @@ string PKB::createPostfix(TNode *node)
 	}
 	result += " ";
 	return result;
+}
+
+
+/************************************/
+/*               Testing next/nextT/affects/affectT   -zy                                                   */
+/************************************/
+
+void PKB::printNext()
+{
+	int stmtNum = getSizeStmtTable();
+	cout<<"StmtNumber   "<<"  nextStmt"<<endl;
+	for(int i=1;i<=stmtNum;i++){
+		vector<int> nextList = getNext(i);
+		sort (nextList.begin(), nextList.end());
+		for(unsigned int j=0;j<nextList.size();j++){
+			cout<<i<<"         "<<nextList[j]<<endl;
+		}
+	}
+
+}
+void PKB::printNextT()
+{
+	int stmtNum = getSizeStmtTable();
+	cout<<"StmtNumber   "<<"  nextTStmt"<<endl;
+	for(int i=1;i<=stmtNum;i++){
+		vector<int> nextTList = getNextT(i);
+		sort (nextTList.begin(), nextTList.end());
+		for(unsigned int j=0;j<nextTList.size();j++){
+			cout<<i<<"         "<<nextTList[j]<<endl;
+		}
+	}
+
+}
+void PKB::printAffects()
+{
+	int stmtNum = getSizeStmtTable();
+	cout<<"StmtNumber   "<<"  affectsStmt"<<endl;
+	for(int i=1;i<=stmtNum;i++){
+		if(getStmtType(i).compare("assign")!=0)
+			continue;
+		vector<int> affectList = getAffectList(i);
+		sort (affectList.begin(), affectList.end());
+		for(unsigned int j=0;j<affectList.size();j++){
+			cout<<i<<"                   "<<affectList[j]<<endl;
+		}
+	}
+
+}
+void PKB::printAffectsT()
+{
+	// affect only assignment?>
+	int stmtNum = getSizeStmtTable();
+	cout<<"StmtNumber   "<<"  affectsTStmt"<<endl;
+	for(int i=1;i<=stmtNum;i++){
+		if(getStmtType(i).compare("assign")!=0)
+			continue;
+		vector<int> affectTList = getAffectTList(i);
+		sort (affectTList.begin(), affectTList.end());
+		for(unsigned int j=0;j<affectTList.size();j++){
+			cout<<i<<"                   "<<affectTList[j]<<endl;
+		}
+	}
+
 }
