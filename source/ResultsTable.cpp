@@ -157,7 +157,7 @@ void ResultsTable::join(pair<string, string> refs, vector<pair<string,string>> r
 string makeKey(vector<string>input){
     string output;
     for (int g =0; g<input.size(); g++) {
-        string temp = input.at(g);
+        string temp = input.at(g)+" ";
         output+=temp;
     }
     return output;
@@ -195,5 +195,36 @@ void ResultsTable::eliminateColumns(vector<string>refs){
     tuples = newtuples;
     columns = newColumns;
 }
+void print_vector(vector<string> input){
+    for (int i =0; i<input.size(); i++) {
+        std::cout << input.at(i)<<" ";
+    }
+    cout<<"\n";
+}
+void print_vectors(vector<vector<string>> input){
+    for (int i =0; i<input.size(); i++) {
+        print_vector(input.at(i));
+    }
+}
+list<string> ResultsTable::toList(){
+    //list<list<string>> lists;
+    list<string> list;
+    for (int i =0; i<tuples.size(); i++) {
+        string temp;
+        vector<string> tuple= tuples.at(i);
+        for (int j=0; j<tuple.size(); j++) {
+            temp = tuple.at(j) + " ";
+        }
+        if (i!=tuples.size()-1) {
+            temp +=",";
+        }
+        list.push_back(temp);
+    }
+    return list;
+}
+void ResultsTable::printResults(){
+    print_vector(columns);
+    print_vectors(tuples);
 
+}
 

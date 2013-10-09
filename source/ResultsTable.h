@@ -14,7 +14,9 @@
 #include <vector>
 #include <set>
 #include <utility>
+#include <list>
 #include <map>
+#include <iostream>
 using namespace std;
 class ResultsTable{
 public:
@@ -41,6 +43,8 @@ public:
     void merge(ResultsTable table);
     void eliminateColumns(vector<string>refs);
     ResultsTable();
+    list<string> toList();
+    void printResults();
 };
 
 #endif /* defined(__cs3202__ResultsTable__) */
