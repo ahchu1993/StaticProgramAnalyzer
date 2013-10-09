@@ -500,6 +500,7 @@ bool QueryEvaluator::processGroupedRelations(){
         temp_results_table.merge(temp_table);
     }//for each group
     resultTable=temp_results_table;
+    resultTable.eliminateColumns(result_refs);
     return true;
 }
 
