@@ -131,11 +131,11 @@ void UseTable::printUseTable()
 	use_stmt_row temp_row;
 
 	cout<< "UseStmtTable:" << endl;
-	cout<< "stmtNo" << "\t" << "varIndex" << "\t" << "DE" << endl;
+	cout<< "stmtNo" << "\t" << "type" << "\t" << "varIndex" << endl;
 	for (unsigned i = 0; i < UseStmtTable.size(); i++)
 	{
 		temp_row = UseStmtTable.at(i);
-		cout << temp_row.stmtNo << "\t" << temp_row.varIndex << "\t" << temp_row.DE << endl;
+		cout << temp_row.stmtNo << "\t" << temp_row.DE << "\t" << temp_row.varIndex << endl;
 	}
 
 	use_proc_row temp_row_2;

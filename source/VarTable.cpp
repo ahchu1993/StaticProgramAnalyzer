@@ -1,4 +1,5 @@
 #include "VarTable.h"
+
 VarTable::VarTable(void)
 {
 }
@@ -67,8 +68,7 @@ void VarTable::printVarTable()
 {
 	var_row temp_row;
 
-	cout<< "VarTable:" << Var_Table.size()<<endl;
-	//cout<< "varIndex" << "\t" << "var_name" << endl;
+	cout<< "VarTable:" << Var_Table.size() <<endl;
 	for (unsigned i = 0; i < Var_Table.size(); i++)
 	{
 		temp_row = Var_Table.at(i);

@@ -1,5 +1,6 @@
 #ifndef VARTABLE_H
 #define VARTABLE_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -7,6 +8,7 @@
 #include <set>
 
 using namespace std;
+
 typedef struct var_row_t{
 	string var_name;
 	int varIndex;
@@ -26,7 +28,7 @@ public:
 	int insertVar(string varName);
 
 	// Returns the name of a variable at VarTable [index]					
-	// If ‘index?is out of range, error
+	// If index is out of range, error
 	string getVarName(int index);
 
 	// If varName is in VarTable, returns its index; else, returns -1

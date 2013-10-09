@@ -1,5 +1,6 @@
 #ifndef PROCTABLE_H
 #define PROCTABLE_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -8,6 +9,7 @@
 #include <set>
 
 using namespace std;
+
 typedef struct proc_row_t{
 	string proc_name;
 	int procIndex;
