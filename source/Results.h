@@ -22,9 +22,9 @@ public:
         list<list<string>> tuple_list;
 	};
     //static set<Columns*> columns;
-    set<string> columns;
+    vector<string> columns;
     //list<cell*> tuple;
-    list<list<string>> tuple_list;
+    vector<vector<<#class _Tp#>>(<#_ForwardIterator __first#>, <#_ForwardIterator __last#>, <#const allocator_type &__a#>)<string>> tuple_list;
     //Methods
     Table table;
     
