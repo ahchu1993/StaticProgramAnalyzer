@@ -142,11 +142,11 @@ void ModifyTable::printModifyTable()
 	modify_stmt_row temp_row;
 
 	cout<< "ModifyStmtTable:" << endl;
-	cout<< "stmtNo" << "\t" << "varIndex" << "\t" << "DE" << endl;
+	cout<< "stmtNo" << "\t" << "DE" << "\t" << "varIndex" << endl;
 	for (unsigned i = 0; i < ModifyStmtTable.size(); i++)
 	{
 		temp_row = ModifyStmtTable.at(i);
-		cout << temp_row.stmtNo << "\t" << temp_row.varIndex << "\t" << temp_row.DE << endl;
+		cout << temp_row.stmtNo << "\t" << temp_row.DE << "\t" << temp_row.varIndex << endl;
 	}
 
 	modify_proc_row temp_row_2;

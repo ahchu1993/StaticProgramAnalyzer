@@ -121,6 +121,7 @@ vector<int> PKB::getCallsList(int procIndex){
 	}
 	return result;
 }
+
 /************************************************** ParentTable *************************************************/
 vector<pair<string, string>> PKB::getParent(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
 	
@@ -382,10 +383,7 @@ void PKB::printFollowTable(){
 }
 
 /************************************************** ModifyTable *************************************************/
-
-
 vector<pair<string, string>> PKB::getModify(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
-
 	vector<pair<string,string>> result;
 	
 	set<string>::iterator it1;
@@ -434,6 +432,7 @@ vector<pair<string, string>> PKB::getModify(set<string>* arg1_set, string arg1Ty
 	}
 	return result;
 }
+
 bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type){
 	if(arg1Type =="string"){
 		vector<modify_proc_row> ModifyProcTable = modifyTable.getModifyProcTable();
@@ -515,9 +514,32 @@ vector<int> PKB::getModifiedList(int varIndex, string DE){
 }
 void PKB::printModifyTable()
 {
-	modifyTable.printModifyTable();
-}
+	vector<modify_proc_row> ModifyProcTable = modifyTable.getModifyProcTable();
+	vector<modify_stmt_row> ModifyStmtTable = modifyTable.getModifyStmtTable();
+	modify_proc_row temp_proc_row;
+	modify_stmt_row temp_stmt_row;
+	string type;
+	int procIndex, stmtNo, varIndex;
 
+	cout<< "ModifyProcTable:" << endl;
+	cout<< "procName" << "\t" << "varName" << endl;
+	for (unsigned i = 0; i<ModifyProcTable.size(); i++){
+		temp_proc_row = ModifyProcTable.at(i);
+		procIndex = temp_proc_row.procIndex;
+		varIndex = temp_proc_row.varIndex;
+		cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
+	}
+
+	cout<< "ModifyStmtTable:" << endl;
+	cout<< "stmtNo" << "\t" << "Type" << "\t" << "varName" << endl;
+	for (unsigned i = 0; i<ModifyStmtTable.size(); i++){
+		temp_stmt_row = ModifyStmtTable.at(i);
+		stmtNo = temp_stmt_row.stmtNo;
+		type = temp_stmt_row.DE;
+		varIndex = temp_stmt_row.varIndex;
+		cout<<stmtNo<<"\t"<<type<<"\t"<<varTable.getVarName(varIndex)<<endl;
+	}
+}
 
 /************************************************** UseTable *************************************************/
 vector<pair<string, string>> PKB::getUse(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
@@ -571,8 +593,7 @@ vector<pair<string, string>> PKB::getUse(set<string>* arg1_set, string arg1Type,
 	return result;
 }
 
-bool PKB::checkUse(string arg1, string arg1Type, string arg2, string arg2Type){
-	
+bool PKB::checkUse(string arg1, string arg1Type, string arg2, string arg2Type){	
 	if(arg1Type =="string"){
 		vector<use_proc_row> UseProcTable = useTable.getUseProcTable();
 		for(unsigned int i=0;i<UseProcTable.size();i++){
@@ -653,7 +674,31 @@ vector<int> PKB::getUsedList(int varIndex, string DE){
 }
 void PKB::printUseTable()
 {
-	useTable.printUseTable();
+	vector<use_proc_row> UseProcTable = useTable.getUseProcTable();
+	vector<use_stmt_row> UseStmtTable = useTable.getUseStmtTable();
+	use_proc_row temp_proc_row;
+	use_stmt_row temp_stmt_row;
+	string type;
+	int procIndex, stmtNo, varIndex;
+
+	cout<< "UseProcTable:" << endl;
+	cout<< "procName" << "\t" << "varName" << endl;
+	for (unsigned i = 0; i<UseProcTable.size(); i++){
+		temp_proc_row = UseProcTable.at(i);
+		procIndex = temp_proc_row.procIndex;
+		varIndex = temp_proc_row.varIndex;
+		cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
+	}
+
+	cout<< "UseStmtTable:" << endl;
+	cout<< "stmtNo" << "\t" << "Type" << "\t" << "varName" << endl;
+	for (unsigned i = 0; i<UseStmtTable.size(); i++){
+		temp_stmt_row = UseStmtTable.at(i);
+		stmtNo = temp_stmt_row.stmtNo;
+		type = temp_stmt_row.DE;
+		varIndex = temp_stmt_row.varIndex;
+		cout<<stmtNo<<"\t"<<type<<"\t"<<varTable.getVarName(varIndex)<<endl;
+	}
 }
 
 /************************************************** VarTable *************************************************/

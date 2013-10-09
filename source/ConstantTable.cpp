@@ -28,6 +28,31 @@ void ConstantTable::insertConst(int stmtNo, int number)
 	Const_Table.push_back(new_row);
 }
 
+void ConstantTable::printConstTable()
+{
+	const_row temp_row;
+
+	cout<< "ConstantTable:" << endl;
+	cout<< "stmt_no" << "\t" << "constant" << endl;
+	for (unsigned i = 0; i < Const_Table.size(); i++)
+	{
+		temp_row = Const_Table.at(i);
+		cout << temp_row.stmt_no << "\t" << temp_row.number << endl;
+	}
+}
+
+set<string> ConstantTable::getAllConstants(){
+	set<string> r;
+	for(unsigned int i=0;i<Const_Table.size();i++){
+		int num = Const_Table.at(i).number;
+		ostringstream convert;
+		convert << num;
+		r.insert(convert.str());
+	}
+	return r;
+}
+
+/*************************************** Unused APIs *******************************************/
 vector<int> ConstantTable:: getConst(int stmtNo)
 {
 	assert(stmtNo >= 0);
@@ -92,28 +117,4 @@ vector<int> ConstantTable::getAllStmt()
 	}
 
 	return ans;
-}
-
-void ConstantTable::printConstTable()
-{
-	const_row temp_row;
-
-	cout<< "ConstantTable:" << endl;
-	cout<< "stmt_no" << "\t" << "constant" << endl;
-	for (unsigned i = 0; i < Const_Table.size(); i++)
-	{
-		temp_row = Const_Table.at(i);
-		cout << temp_row.stmt_no << "\t" << temp_row.number << endl;
-	}
-}
-
-set<string> ConstantTable::getAllConstants(){
-	set<string> r;
-	for(unsigned int i=0;i<Const_Table.size();i++){
-		int num = Const_Table.at(i).number;
-		ostringstream convert;
-		convert << num;
-		r.insert(convert.str());
-	}
-	return r;
 }
