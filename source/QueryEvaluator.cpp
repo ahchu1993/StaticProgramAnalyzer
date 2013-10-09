@@ -116,11 +116,12 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 
 	if(relation == "Modifies"){
 		res = pkb-> getModify(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
-
 	}else if(relation == "Uses"){
 		res = pkb-> getUse(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation == "Calls"){
 		res = pkb-> getCalls(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+	}else if(relation=="Calls*"){
+		res = pkb-> getCallsT(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation == "Parent"){
 		res = pkb-> getParent(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation =="Parent*"){
@@ -131,6 +132,12 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		res = pkb->getFollowT(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation =="Next"){
 		res = pkb-> getNext(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+	}else if(relation=="Next*"){
+		res = pkb-> getNextT(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+	}else if(relation=="Affects"){
+		res = pkb-> getAffects(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+	}else if(relation=="Affects*"){
+		res = pkb-> getAffectsT(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}
 
 	if(da->ref1==da->ref2){  // ref1 is the same as ref2
@@ -175,9 +182,11 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 		return pkb-> checkUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Calls"){
 		return pkb-> checkCalls(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Calls*"){
+		return pkb-> checkCallsT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Parent"){
 		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
-	}else if(relation=="Parent*"){
+	}else if(relation == "Parent*"){
 		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation =="Follows"){
 		return pkb->checkFollow(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
@@ -185,6 +194,12 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 		return pkb->checkFollowT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Next"){
 		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Next*"){
+		return pkb-> checkNextT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Affects"){
+		return pkb-> checkAffects(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Affects*"){
+		return pkb-> checkAffectsT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}
 
 	return false;
