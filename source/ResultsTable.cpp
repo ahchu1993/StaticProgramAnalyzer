@@ -218,9 +218,9 @@ list<string> ResultsTable::toList(){
                 temp+=" ";
             }
         }
-        if (i!=tuples.size()-1) {
-            temp +=",";
-        }
+        //if (i!=tuples.size()-1) {
+          //  temp +=",";
+        //}
         list.push_back(temp);
     }
     return list;
