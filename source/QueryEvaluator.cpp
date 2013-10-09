@@ -51,10 +51,10 @@ bool QueryEvaluator::processConstantRelations(){
 		{
 			designAbstraction* da = static_cast<designAbstraction*>(b);
 
-			//Handle 2 constants case
+			
 			bool b1 = da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "";
 			bool b2 = da->ref2_type == "integer" || da->ref2_type == "string" || da->ref2_type == "";
-			if(b1&&b2){
+			if(b1&&b2){ //Handle 2 constants case
 				bool pass =  processTwoConstantsDesignAbstraction(da);
 				if(!pass) return false;
 				else continue;
@@ -72,7 +72,12 @@ bool QueryEvaluator::processConstantRelations(){
 				return false;
 			
 
-		}else {}
+		}else if(b->type=="attr_compare"){
+			attr_compare* attr_pairs = static_cast<attr_compare*>(b);
+			result_pairs = processAttrCompare(attr_pairs);
+			if(result_pairs.empty())
+				return false;
+		}
 	}
 
 	return true;
@@ -365,6 +370,44 @@ vector<pair<string,string>> QueryEvaluator::patternIfOrWhile(pattern* p){
 	return result;
 }
 
+
+vector<pair<string,string>> QueryEvaluator::processAttrCompare(attr_compare* a){
+	vector<pair<string,string>> result;
+	set<string> s1 = getValueSet(a->left_ref,a->left_ref_type,"");
+	set<string> s2 = getValueSet(a->right_ref,a->right_ref_type,"");
+	set<string>::iterator it2;
+	for(set<string>::iterator it = s1.begin();it!=s1.end();it++){
+		it2 = s2.find(*it);
+		if(it2!=s2.end()){
+			pair<string,string> p(*it,*it);
+		}
+	}
+
+	string type1 = a->left_ref_type;
+	string type2 = a->right_ref_type;
+	bool b1 = type1=="integer"||type1=="string";
+	bool b2 = type2=="integer"||type2=="string";
+	if(!b1){
+		vector<string> temp;
+		for(unsigned int i=0;i<result.size();i++){
+			pair<string,string> t = result.at(i);
+			temp.push_back(t.first);
+		}
+		//update synonym valueTable
+		updateValueTable(a->left_ref, temp);
+	}
+
+	if(!b2){
+		vector<string> temp;
+		for(unsigned int i=0;i<result.size();i++){
+			pair<string,string> t = result.at(i);
+			temp.push_back(t.second);
+		}
+		//update synonym valueTable
+		updateValueTable(a->right_ref, temp);
+	}
+	return result;
+}
 //store all the possible values for each synonmy
 void QueryEvaluator::initialzeValueTable(){
     for (int i =0; i<entities.size(); i++) {
@@ -418,32 +461,11 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
 	valueTable[ref] = result;
 }
 
-void QueryEvaluator::updateValueTable(pair<string,string> refs, vector<pair<string,string>> values){
-    set<string> f = *valueTable[refs.first];
-    set<string> s = *valueTable[refs.second];
-	set<string> * result1 = new set<string>;
-    set<string> * result2 = new set<string>;
-    for (set<string>::iterator g = f.begin(); g != f.end(); g++) {
-		for(unsigned int i=0;i<values.size();i++){
-			if(*g==values.at(i).first)
-				result1->insert(*g);
-		}
-    }
-    for (set<string>::iterator m = s.begin(); m!= s.end(); m++) {
-		for(unsigned int i=0;i<values.size();i++){
-			if(*m==values.at(i).second)
-				result2->insert(*m);
-		}
-        
-    }
-	valueTable[refs.first] = result1;
-    valueTable[refs.second] = result2;
-}
 
 bool QueryEvaluator::processGroupedRelations(){
     ResultsTable temp_results_table;
-    list<list<BaseRelation*>> group_relations = Qprocessor->grouped_relations;
-    for(list<list<BaseRelation*>>::iterator it = group_relations.begin();it!=group_relations.end();it++){
+    
+    for(list<list<BaseRelation*>>::iterator it = grouped_relations.begin();it!=grouped_relations.end();it++){
         vector<pair<string,string>> result_pairs;
         ResultsTable temp_table;//for each group
         list<BaseRelation*> relations = *it;//for each group
@@ -458,12 +480,11 @@ bool QueryEvaluator::processGroupedRelations(){
                 if(result_pairs.empty())
                     return false;
                 else{
-
                     ref_pair.first = da->ref1;
                     ref_pair.second = da->ref2;
                     temp_table.join(ref_pair, result_pairs);
                 }
-                updateValueTable(ref_pair, result_pairs);
+
             }
             else if(relation->type=="pattern"){
                 
@@ -472,25 +493,7 @@ bool QueryEvaluator::processGroupedRelations(){
                 
                 if(result_pairs.empty())
                     return false;
-                //update valueTable
-                vector<string> temp;
-                for(unsigned int i=0;i<result_pairs.size();i++){
-                    pair<string,string> t = result_pairs.at(i);
-                    temp.push_back(t.first);
-                }
-                //update synonym valueTable
-                updateValueTable(p->synonym, temp);
-                
-                if(p->varRef_type=="variable"){
-                    vector<string> vars;
-                    for(unsigned int i=0;i<result_pairs.size();i++){
-                        pair<string,string> t = result_pairs.at(i);
-                        vars.push_back(t.second);
-                    }
-                    
-                    updateValueTable(p->varRef, vars);
-                }
-                
+                           
             }//
         }//for each relation
         temp_table.eliminateColumns(result_refs);
