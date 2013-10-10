@@ -58,5 +58,6 @@ private:
 	vector<pair<string,string>> processAttrCompare(attr_compare* a);
 
 	list<string> getResults();
+	list<string> getResultsFromValueTable();
 
 };
