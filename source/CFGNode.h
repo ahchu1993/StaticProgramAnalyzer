@@ -14,7 +14,9 @@ public:
 	int numOfParent;
 	vector<CFGNode *> childList;
 	vector<CFGNode *> parentList;
-
+	int callNode;
+	void setCallNode();
+	bool isCallNode();
 };
 
 #endif

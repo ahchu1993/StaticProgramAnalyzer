@@ -865,6 +865,10 @@ CFGNode* PKB::buildLink(int stmtNo)
 	currentIndex++;
 	string stmtType =   getStmtType(stmtNo);
 
+	if(stmtType.compare("call")==0){
+		CFGNode *currentNode = cfg.CFGNodes[stmtNo];
+		currentNode->setCallNode();
+	}
 	cout<<"stmtType: "<<stmtType<<"  "<<stmtNo<<endl;
 	//cout<<"followed: "<< findFollowed(1)<<endl; // find after
 	//cout<<"follows: "<< findFollows(1)<<endl;  // find prev
