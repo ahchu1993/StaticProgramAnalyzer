@@ -7,9 +7,19 @@
 //
 
 #include "ResultsTable.h"
-
 ResultsTable::ResultsTable(){
+
+};
+ResultsTable::ResultsTable(string ref, set<string> value){
     //constructor
+    this->columns.push_back(ref);
+    
+    for (set<string>::iterator g = value.begin(); g != value.end(); g++) {
+        vector<string> temp;
+        temp.push_back(*g);
+        this->tuples.push_back(temp);
+    }
+    
 }
 int ResultsTable::findColumn(string ref){
     int counter = 0;
@@ -213,7 +223,7 @@ list<string> ResultsTable::toList(){
         string temp;
         vector<string> tuple= tuples.at(i);
         for (int j=0; j<tuple.size(); j++) {
-            temp = tuple.at(j);
+            temp += tuple.at(j);
             if (j!=tuple.size()-1) {
                 temp+=" ";
             }

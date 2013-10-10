@@ -28,7 +28,13 @@ list<string> QueryEvaluator::processQuery(string query){
 			if(grouped_pass){
 				if(result_refs.size()==1)
 					results = getResults();
-				else{ }
+				else{ 
+					if(grouped_relations.size()>0)
+						results = resultTable.toList();
+					else 
+						results = getResultsFromValueTable();
+					
+				}
 				//return results;
 			}
 		}//else return results; // empty list
@@ -51,10 +57,10 @@ bool QueryEvaluator::processConstantRelations(){
 		{
 			designAbstraction* da = static_cast<designAbstraction*>(b);
 
-			//Handle 2 constants case
+			
 			bool b1 = da->ref1_type == "integer" || da->ref1_type == "string" || da->ref1_type == "";
 			bool b2 = da->ref2_type == "integer" || da->ref2_type == "string" || da->ref2_type == "";
-			if(b1&&b2){
+			if(b1&&b2){ //Handle 2 constants case
 				bool pass =  processTwoConstantsDesignAbstraction(da);
 				if(!pass) return false;
 				else continue;
@@ -72,31 +78,81 @@ bool QueryEvaluator::processConstantRelations(){
 				return false;
 			
 
-		}else {}
+		}else if(b->type=="attr_compare"){
+			attr_compare* attr_pairs = static_cast<attr_compare*>(b);
+			result_pairs = processAttrCompare(attr_pairs);
+			if(result_pairs.empty())
+				return false;
+		}
 	}
 
 	return true;
 }
 
-set<string> QueryEvaluator::getValueSet(string ref,string ref_type,string relation_type){
-	set<string> ref_set;
-	bool b = ref_type=="string"||ref_type=="integer"||ref_type=="";
-	if(!b){
-		ref_set = *valueTable[ref];
-	}else if(ref_type =="string"||ref_type=="integer"){
-		ref_set.insert(ref);
-	}else{ // "_"
-		if(relation_type=="Uses"||relation_type=="Modifies"){
-			ref_set = pkb->getAllVars();
-		}		
-		else if(relation_type=="Calls"||relation_type=="Calls*"){
-			ref_set = pkb->getAllProcs();
-		}		
-		else 
-			ref_set = pkb->getAllStmts();		
-	}
-	return ref_set;
+void QueryEvaluator::validateResults(){
+
+   // if (resultTable.columns.size()<result_refs.size()) {
+    for (int i=0; i<result_refs.size(); i++) {
+        string ref = result_refs.at(i);
+        if (resultTable.findColumn(ref)==-1) {
+            ResultsTable tempTable(ref,*valueTable[ref]);
+            resultTable.merge(tempTable);
+        }
+    }
+    //}
+    resultTable.eliminateColumns(result_refs);
+
+
 }
+bool QueryEvaluator::processGroupedRelations(){
+    ResultsTable temp_results_table;
+    
+    for(list<list<BaseRelation*>>::iterator it = grouped_relations.begin();it!=grouped_relations.end();it++){
+        vector<pair<string,string>> result_pairs;
+        ResultsTable temp_table;//for each group
+        list<BaseRelation*> relations = *it;//for each group
+        for(list<BaseRelation*>::iterator iter = relations.begin();iter!=relations.end();iter++){//for each relation
+            BaseRelation* relation = *iter;
+            if(relation->type=="designAbstraction")
+            {
+                designAbstraction* da = static_cast<designAbstraction*>(relation);
+                
+                result_pairs = processDesignAbstraction(da);
+                pair<string,string>ref_pair;
+                if(result_pairs.empty())
+                    return false;
+                else{
+                    ref_pair.first = da->ref1;
+                    ref_pair.second = da->ref2;
+                    temp_table.join(ref_pair, result_pairs);
+                }
+
+            }
+            else if(relation->type=="pattern"){
+                
+                pattern* p = static_cast<pattern*>(relation);
+                result_pairs  = processPattern(p);
+                
+                if(result_pairs.empty())
+                    return false;
+                           
+            }else if(relation->type=="attr_compare"){
+				attr_compare* attr_pairs = static_cast<attr_compare*>(relation);
+				result_pairs = processAttrCompare(attr_pairs);
+				if(result_pairs.empty())
+					return false;
+			}
+        }//for each relation
+        temp_table.eliminateColumns(result_refs);
+        temp_results_table.merge(temp_table);
+    }//for each group
+    resultTable=temp_results_table;
+    validateResults();
+    return true;
+}
+
+
+
 vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstraction* da){
 	string relation = da->relation_type;
 	vector<pair<string, string>> res;
@@ -111,11 +167,12 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 
 	if(relation == "Modifies"){
 		res = pkb-> getModify(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
-
 	}else if(relation == "Uses"){
 		res = pkb-> getUse(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation == "Calls"){
 		res = pkb-> getCalls(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+	}else if(relation=="Calls*"){
+		res = pkb-> getCallsT(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation == "Parent"){
 		res = pkb-> getParent(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation =="Parent*"){
@@ -126,6 +183,12 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		res = pkb->getFollowT(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation =="Next"){
 		res = pkb-> getNext(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+	}else if(relation=="Next*"){
+		res = pkb-> getNextT(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+	}else if(relation=="Affects"){
+		res = pkb-> getAffects(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+	}else if(relation=="Affects*"){
+		res = pkb-> getAffectsT(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}
 
 	if(da->ref1==da->ref2){  // ref1 is the same as ref2
@@ -170,9 +233,11 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 		return pkb-> checkUse(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Calls"){
 		return pkb-> checkCalls(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Calls*"){
+		return pkb-> checkCallsT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Parent"){
 		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
-	}else if(relation=="Parent*"){
+	}else if(relation == "Parent*"){
 		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation =="Follows"){
 		return pkb->checkFollow(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
@@ -180,6 +245,12 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 		return pkb->checkFollowT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Next"){
 		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Next*"){
+		return pkb-> checkNextT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Affects"){
+		return pkb-> checkAffects(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "Affects*"){
+		return pkb-> checkAffectsT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}
 
 	return false;
@@ -365,6 +436,65 @@ vector<pair<string,string>> QueryEvaluator::patternIfOrWhile(pattern* p){
 	return result;
 }
 
+
+vector<pair<string,string>> QueryEvaluator::processAttrCompare(attr_compare* a){
+	vector<pair<string,string>> result;
+	set<string> s1 = getValueSet(a->left_ref,a->left_ref_type,"");
+	set<string> s2 = getValueSet(a->right_ref,a->right_ref_type,"");
+	set<string>::iterator it2;
+	for(set<string>::iterator it = s1.begin();it!=s1.end();it++){
+		it2 = s2.find(*it);
+		if(it2!=s2.end()){
+			pair<string,string> p(*it,*it);
+		}
+	}
+
+	string type1 = a->left_ref_type;
+	string type2 = a->right_ref_type;
+	bool b1 = type1=="integer"||type1=="string";
+	bool b2 = type2=="integer"||type2=="string";
+	if(!b1){
+		vector<string> temp;
+		for(unsigned int i=0;i<result.size();i++){
+			pair<string,string> t = result.at(i);
+			temp.push_back(t.first);
+		}
+		//update synonym valueTable
+		updateValueTable(a->left_ref, temp);
+	}
+
+	if(!b2){
+		vector<string> temp;
+		for(unsigned int i=0;i<result.size();i++){
+			pair<string,string> t = result.at(i);
+			temp.push_back(t.second);
+		}
+		//update synonym valueTable
+		updateValueTable(a->right_ref, temp);
+	}
+	return result;
+}
+
+set<string> QueryEvaluator::getValueSet(string ref,string ref_type,string relation_type){
+	set<string> ref_set;
+	bool b = ref_type=="string"||ref_type=="integer"||ref_type=="";
+	if(!b){
+		ref_set = *valueTable[ref];
+	}else if(ref_type =="string"||ref_type=="integer"){
+		ref_set.insert(ref);
+	}else{ // "_"
+		if(relation_type=="Uses"||relation_type=="Modifies"){
+			ref_set = pkb->getAllVars();
+		}		
+		else if(relation_type=="Calls"||relation_type=="Calls*"){
+			ref_set = pkb->getAllProcs();
+		}		
+		else 
+			ref_set = pkb->getAllStmts();		
+	}
+	return ref_set;
+}
+
 //store all the possible values for each synonmy
 void QueryEvaluator::initialzeValueTable(){
     for (int i =0; i<entities.size(); i++) {
@@ -418,87 +548,6 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
 	valueTable[ref] = result;
 }
 
-void QueryEvaluator::updateValueTable(pair<string,string> refs, vector<pair<string,string>> values){
-    set<string> f = *valueTable[refs.first];
-    set<string> s = *valueTable[refs.second];
-	set<string> * result1 = new set<string>;
-    set<string> * result2 = new set<string>;
-    for (set<string>::iterator g = f.begin(); g != f.end(); g++) {
-		for(unsigned int i=0;i<values.size();i++){
-			if(*g==values.at(i).first)
-				result1->insert(*g);
-		}
-    }
-    for (set<string>::iterator m = s.begin(); m!= s.end(); m++) {
-		for(unsigned int i=0;i<values.size();i++){
-			if(*m==values.at(i).second)
-				result2->insert(*m);
-		}
-        
-    }
-	valueTable[refs.first] = result1;
-    valueTable[refs.second] = result2;
-}
-
-bool QueryEvaluator::processGroupedRelations(){
-    ResultsTable temp_results_table;
-    list<list<BaseRelation*>> group_relations = Qprocessor->grouped_relations;
-    for(list<list<BaseRelation*>>::iterator it = group_relations.begin();it!=group_relations.end();it++){
-        vector<pair<string,string>> result_pairs;
-        ResultsTable temp_table;//for each group
-        list<BaseRelation*> relations = *it;//for each group
-        for(list<BaseRelation*>::iterator iter = relations.begin();iter!=relations.end();iter++){//for each relation
-            BaseRelation* relation = *iter;
-            if(relation->type=="designAbstraction")
-            {
-                designAbstraction* da = static_cast<designAbstraction*>(relation);
-                
-                result_pairs = processDesignAbstraction(da);
-                pair<string,string>ref_pair;
-                if(result_pairs.empty())
-                    return false;
-                else{
-
-                    ref_pair.first = da->ref1;
-                    ref_pair.second = da->ref2;
-                    temp_table.join(ref_pair, result_pairs);
-                }
-                updateValueTable(ref_pair, result_pairs);
-            }
-            else if(relation->type=="pattern"){
-                
-                pattern* p = static_cast<pattern*>(relation);
-                result_pairs  = processPattern(p);
-                
-                if(result_pairs.empty())
-                    return false;
-                //update valueTable
-                vector<string> temp;
-                for(unsigned int i=0;i<result_pairs.size();i++){
-                    pair<string,string> t = result_pairs.at(i);
-                    temp.push_back(t.first);
-                }
-                //update synonym valueTable
-                updateValueTable(p->synonym, temp);
-                
-                if(p->varRef_type=="variable"){
-                    vector<string> vars;
-                    for(unsigned int i=0;i<result_pairs.size();i++){
-                        pair<string,string> t = result_pairs.at(i);
-                        vars.push_back(t.second);
-                    }
-                    
-                    updateValueTable(p->varRef, vars);
-                }
-                
-            }//
-        }//for each relation
-        temp_table.eliminateColumns(result_refs);
-        temp_results_table.merge(temp_table);
-    }//for each group
-    resultTable=temp_results_table;
-    return true;
-}
 
 
 list<string> QueryEvaluator::getResults(){
@@ -516,3 +565,33 @@ list<string> QueryEvaluator::getResults(){
 	return res;
 }
 
+list<string> QueryEvaluator::getResultsFromValueTable(){
+	
+	list<string> res;
+	string first = result_refs[0];
+	set<string> s = *valueTable[first];
+
+	for(set<string>::iterator it = s.begin();it!=s.end();it++){
+		res.push_back(*it);
+	}
+
+	
+	for(unsigned int i=1;i<result_refs.size();i++){
+		list<string> temp;
+		string ref = result_refs[i];
+		set<string> ref_set = *valueTable[ref];
+		for(set<string>::iterator it = ref_set.begin();it!=ref_set.end();it++){
+			for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+				
+				string ref1 = *it_list;
+				string ref2 = *it;
+				ref1.append(" ");
+				ref1.append(ref2);
+				temp.push_back(ref1);
+			}
+		}
+		res = temp;
+	}
+
+	return res;
+}

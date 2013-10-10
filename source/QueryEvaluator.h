@@ -41,7 +41,8 @@ private:
 	void initialzeValueTable();
 	set<string> getValueSet(string ref, string ref_type,string relation_type);
     void updateValueTable(string ref, vector<string> values);
-    void updateValueTable(pair<string,string> refs, vector<pair<string,string>> values);
+    //void updateValueTable(BaseRelation* b, vector<pair<string,string>> values);
+    
 	// main method
     bool processConstantRelations();
 	bool processGroupedRelations();
@@ -49,11 +50,15 @@ private:
 	// designAbstraction
 	bool processTwoConstantsDesignAbstraction(designAbstraction* da);
 	vector<pair<string,string>> processDesignAbstraction(designAbstraction* da);
+    void validateResults();
 	// pattern
 	vector<pair<string,string>> processPattern(pattern* p);
 	vector<pair<string,string>> patternAssign(pattern *p);
 	vector<pair<string,string>> patternIfOrWhile(pattern *p);
+	// attr_compare
+	vector<pair<string,string>> processAttrCompare(attr_compare* a);
 
 	list<string> getResults();
+	list<string> getResultsFromValueTable();
 
 };

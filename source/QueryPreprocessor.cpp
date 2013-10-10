@@ -411,7 +411,7 @@ bool QueryPreprocessor::check_process_tuple(string t){
 			int p = t.find(".");
 			string s = t.substr(0,p);
 			if(exists(s)){
-				result_reffs.push_back(t);
+				result_reffs.push_back(s);
 				return true;
 			}
 			else return false;

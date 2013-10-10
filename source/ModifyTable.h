@@ -67,9 +67,6 @@ public:
 	// Return index of all variables in ModifyTable
 	vector<int> getModifyVarList();
 
-	// Return pairs satisfying set1 and set2
-	vector<pair<string,string>> getModifyPairList(vector<int>* set1, vector<int>* set2);
-
 	// Return whether there exist a pair satisfying set1 and set2
 	bool checkModify(vector<int> set1, vector<int> set2);
 
