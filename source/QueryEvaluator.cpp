@@ -499,8 +499,7 @@ bool QueryEvaluator::processGroupedRelations(){
         temp_table.eliminateColumns(result_refs);
         temp_results_table.merge(temp_table);
     }//for each group
-    resultTable=temp_results_table;
-    resultTable.eliminateColumns(result_refs);
+    resultTable=temp_results_table;y
     return true;
 }
 
