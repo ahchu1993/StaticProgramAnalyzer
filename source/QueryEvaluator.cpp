@@ -89,7 +89,21 @@ bool QueryEvaluator::processConstantRelations(){
 	return true;
 }
 
+void QueryEvaluator::validateResults(){
 
+    if (resultTable.columns.size()<result_refs.size()) {
+        for (int i=0; i<result_refs.size(); i++) {
+            string ref = result_refs.at(i);
+            if (resultTable.findColumn(ref)==-1) {
+                ResultsTable tempTable(ref,*valueTable[ref]);
+                resultTable.merge(tempTable);
+            }
+        }
+    }
+    resultTable.eliminateColumns(result_refs);
+
+
+}
 bool QueryEvaluator::processGroupedRelations(){
     ResultsTable temp_results_table;
     
@@ -133,7 +147,7 @@ bool QueryEvaluator::processGroupedRelations(){
         temp_results_table.merge(temp_table);
     }//for each group
     resultTable=temp_results_table;
-    resultTable.eliminateColumns(result_refs);
+    validateResults();
     return true;
 }
 
@@ -535,50 +549,6 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
 }
 
 
-<<<<<<< HEAD
-bool QueryEvaluator::processGroupedRelations(){
-    ResultsTable temp_results_table;
-    
-    for(list<list<BaseRelation*>>::iterator it = grouped_relations.begin();it!=grouped_relations.end();it++){
-        vector<pair<string,string>> result_pairs;
-        ResultsTable temp_table;//for each group
-        list<BaseRelation*> relations = *it;//for each group
-        for(list<BaseRelation*>::iterator iter = relations.begin();iter!=relations.end();iter++){//for each relation
-            BaseRelation* relation = *iter;
-            if(relation->type=="designAbstraction")
-            {
-                designAbstraction* da = static_cast<designAbstraction*>(relation);
-                
-                result_pairs = processDesignAbstraction(da);
-                pair<string,string>ref_pair;
-                if(result_pairs.empty())
-                    return false;
-                else{
-                    ref_pair.first = da->ref1;
-                    ref_pair.second = da->ref2;
-                    temp_table.join(ref_pair, result_pairs);
-                }
-
-            }
-            else if(relation->type=="pattern"){
-                
-                pattern* p = static_cast<pattern*>(relation);
-                result_pairs  = processPattern(p);
-                
-                if(result_pairs.empty())
-                    return false;
-                           
-            }//
-        }//for each relation
-        temp_table.eliminateColumns(result_refs);
-        temp_results_table.merge(temp_table);
-    }//for each group
-    resultTable=temp_results_table;y
-    return true;
-}
-
-=======
->>>>>>> 63225fac35d4b5dc337397ea3c9048baabb87977
 
 list<string> QueryEvaluator::getResults(){
 	string r = result_refs.at(0);

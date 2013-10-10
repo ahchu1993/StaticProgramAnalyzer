@@ -42,6 +42,7 @@ public:
     vector<vector<string>> equiJoin(int join_index,int position, vector<pair<string,string>> results);
     void merge(ResultsTable table);
     void eliminateColumns(vector<string>refs);
+    ResultsTable(string ref, set<string> value);
     ResultsTable();
     list<string> toList();
     void printResults();
