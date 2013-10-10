@@ -13,11 +13,12 @@ ResultsTable::ResultsTable(){
 ResultsTable::ResultsTable(string ref, set<string> value){
     //constructor
     this->columns.push_back(ref);
-    vector<string> temp;
+    
     for (set<string>::iterator g = value.begin(); g != value.end(); g++) {
+        vector<string> temp;
         temp.push_back(*g);
+        this->tuples.push_back(temp);
     }
-    this->tuples.push_back(temp);
     
 }
 int ResultsTable::findColumn(string ref){
