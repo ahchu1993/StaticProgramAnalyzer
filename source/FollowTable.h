@@ -32,7 +32,7 @@ public:
 	vector<int> getFollowsList(string DE);
 	vector<int> getFollowedList(string DE);
 	bool checkFollow(vector<int> set1, vector<int> set2);
-	vector<pair<string,string>> getFollowPairList(vector<int> set1, vector<int> set2);
+	
 	int getSize();
 	void print();
 };

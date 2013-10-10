@@ -46,7 +46,7 @@ void PKB::printAST()
 
 /************************************************** CallTable *************************************************/
 vector<pair<string, string>> PKB::getCalls(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){	
-		vector<pair<string,string>> result;
+	vector<pair<string,string>> result;
 	
 	set<string>::iterator it1;
 	set<string>::iterator it2;
@@ -68,6 +68,28 @@ vector<pair<string, string>> PKB::getCalls(set<string>* arg1_set, string arg1Typ
 	return result;
 }
 
+vector<pair<string, string>> PKB::getCallsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
+	vector<pair<string,string>> result;
+	
+	/*set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> s1 = *arg1_set;
+	set<string> s2 = *arg2_set;
+
+	for(set<string>::iterator it = s1.begin();it!=s1.end();it++){
+		string caller = *it;	
+		vector<string> callee = getCalledList(caller);
+		
+		for(unsigned int i=0;i<callee.size();i++){
+			it2 = s2.find(callee.at(i));
+			if(it2!=s2.end()){
+				pair<string,string> p(caller,*it2);
+				result.push_back(p);
+			}
+		}	
+	}	*/
+	return result;
+}
 bool PKB::checkCalls(string arg1, string arg1Type, string arg2, string arg2Type){	
 	if(arg1=="_"&&arg2=="_"){
 		int size = callTable.getSize();
@@ -94,6 +116,9 @@ bool PKB::checkCalls(string arg1, string arg1Type, string arg2, string arg2Type)
 	}
 }
 
+bool PKB::checkCallsT(string arg1, string arg1Type, string arg2, string arg2Type){
+	return true;
+}
 void PKB::insert(string proc1, string proc2){
 	callTable.insert(proc1,proc2);
 }
@@ -987,199 +1012,29 @@ vector<int> PKB::getPrevT(int stmtNo)
 	vector<int> prevStarList = cfg.getPrevStar(stmtNo);
 	return prevStarList;
 }
-/*
-vector<pair<string, string>> getNext(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
-	// synonym(prog_line|stmt|assign|if|while), _, integer
-	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<pair<string,string>> result;
-	vector<int> list1;
-	vector<int> list2;
-	int type =0;
-	// Get the set of possible values for argument 1
-	if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0){
-		type=1;
-		list1 = getStmtNo("stmt");
-	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
-		type=2;
-		list1 = getStmtNo(arg1Type);
-	} else if (arg1Type.compare("integer") == 0){
-		type=3;
-		int stmtNo;
-		istringstream(arg1)>>stmtNo;
-		list1.push_back(stmtNo);
-	} else if(arg1Type.compare("_")==0){
-		type=4;
-		// ***** what?
-		list1 = getStmtNo("stmt");
-	}
-
-	//************ need optimize according to arg2type
-
-	// Get the set of possible values for argument 2
-	if (arg2Type.compare("stmt") == 0 || arg2Type.compare("prog_line") == 0){
-		for(unsigned int i=0;i<list1.size();i++){
-			int stmtNo1 = list1[i];
-			vector<int> nextList = getNext(stmtNo1);
-			for(unsigned int j=0;j<nextList.size();j++){
-				int stmtNo2 = nextList[j];
-				pair<string,string> p(toString(stmtNo1), toString(stmtNo2));
-				result.push_back(p);
-			}
-		}
-	} else if (arg2Type.compare("assign") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("while") == 0){
-		list2 = getStmtNo(arg2Type);
-		if(type!=3){
-			for(unsigned int j=0;j<list2.size();j++){
-				int stmtNo2=list2[j];
-				vector<int> prevList = getPrev(stmtNo2);
-				for(unsigned int i=0;i<prevList.size();i++){
-					int stmtNo1 = prevList[i];
-					if(contains(list1,stmtNo1)){
-						pair<string,string> p(toString(stmtNo1), toString(stmtNo2));
-						result.push_back(p);
-					}
-				}
-			}
-		}else{ // arg1type==integer
-			for(unsigned int i=0;i<list1.size();i++){
-				int stmtNo1 = list1[i];
-				vector<int> nextList = getNext(stmtNo1);
-				for(unsigned int j=0;j<nextList.size();j++){
-					int stmtNo2 = nextList[j];
-					if(contains(list2,stmtNo2)){
-						pair<string,string> p(toString(stmtNo1), toString(stmtNo2));
-						result.push_back(p);
-					}
-				}
-			}
-		}
-	} else if (arg2Type.compare("integer") == 0){
-		int stmtNo2;
-		istringstream(arg2)>>stmtNo2;
-		vector<int> prevList = getPrev(stmtNo2);
-		for(unsigned int i=0;i<prevList.size();i++){
-			int stmtNo1 = prevList[i];
-			if(contains(list1,stmtNo1)){
-				pair<string,string> p(toString(stmtNo1), toString(stmtNo2));
-				result.push_back(p);
-			}
-		}
-	} else if(arg2Type.compare("_")==0){
-		// ***** what?
-		for(unsigned int i=0;i<list1.size();i++){
-			int stmtNo1 = list1[i];
-			vector<int> nextList = getNext(stmtNo1);
-			for(unsigned int j=0;j<nextList.size();j++){
-				int stmtNo2 = nextList[j];
-				pair<string,string> p(toString(stmtNo1), toString(stmtNo2));
-				result.push_back(p);
-			}
-		}
-	}
-
-
-
-	return result;
-}*/
 
 bool PKB::checkNext(string arg1, string arg1Type, string arg2, string arg2Type){
-	// synonym(prog_line|stmt|assign|if|while), _, integer
-	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<pair<string,string>> result;
-	vector<int> list1;
-	vector<int> list2;
-	int type =0;
-	// Get the set of possible values for argument 1
-	if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0){
-		type=1;
-		list1 = getStmtNo("stmt");
-	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
-		type=2;
-		list1 = getStmtNo(arg1Type);
-	} else if (arg1Type.compare("integer") == 0){
-		type=3;
-		int stmtNo;
-		istringstream(arg1)>>stmtNo;
-		list1.push_back(stmtNo);
-	} else if(arg1Type.compare("_")==0){
-		type=4;
-		// ***** what?
-		list1 = getStmtNo("stmt");
+	if(arg1=="_"&&arg2=="_"){
+		int size = stmtTable.getSize();
+		if(size>0)
+			return true;
+		else return false;
+	}else if(arg1=="_"&&arg2Type=="integer"){
+		int second = Util::convertStringToInt(arg2);
+		vector<int> f = getPrev(second);
+		if(f.size()>0) return true;
+		else return false;
+	}else if(arg1Type=="integer"&&arg2=="_"){
+		int f = Util::convertStringToInt(arg1);
+		vector<int> s = getNext(f);
+		if(s.size()>0) return true;
+		else return false;
+	}else{
+		int first = Util::convertStringToInt(arg1);
+		int second = Util::convertStringToInt(arg2);
+		
+		return isNext(first,second);
 	}
-
-	//************ need optimize according to arg2type
-
-	// Get the set of possible values for argument 2
-	if (arg2Type.compare("stmt") == 0 || arg2Type.compare("prog_line") == 0){
-		for(unsigned int i=0;i<list1.size();i++){
-			int stmtNo1 = list1[i];
-			vector<int> nextList = getNext(stmtNo1);
-			for(unsigned int j=0;j<nextList.size();j++){
-				int stmtNo2 = nextList[j];
-
-				pair<string,string>p(toString(stmtNo1), toString(stmtNo2));
-				result.push_back(p);
-				return true;
-			}
-		}
-	} else if (arg2Type.compare("assign") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("while") == 0){
-		list2 = getStmtNo(arg2Type);
-		if(type!=3){
-			for(unsigned int j=0;j<list2.size();j++){
-				int stmtNo2=list2[j];
-				vector<int> prevList = getPrev(stmtNo2);
-				for(unsigned int i=0;i<prevList.size();i++){
-					int stmtNo1 = prevList[i];
-					if(contains(list1,stmtNo1)){
-						pair<string,string>p(toString(stmtNo1), toString(stmtNo2));
-						result.push_back(p);
-						return true;
-					}
-				}
-			}
-		}else{ // arg1type==integer
-			for(unsigned int i=0;i<list1.size();i++){
-				int stmtNo1 = list1[i];
-				vector<int> nextList = getNext(stmtNo1);
-				for(unsigned int j=0;j<nextList.size();j++){
-					int stmtNo2 = nextList[j];
-					if(contains(list2,stmtNo2)){
-						pair<string,string>p(toString(stmtNo1), toString(stmtNo2));
-						result.push_back(p);
-						return true;
-					}
-				}
-			}
-		}
-	} else if (arg2Type.compare("integer") == 0){
-		int stmtNo2;
-		istringstream(arg2)>>stmtNo2;
-		vector<int> prevList = getPrev(stmtNo2);
-		for(unsigned int i=0;i<prevList.size();i++){
-			int stmtNo1 = prevList[i];
-			if(contains(list1,stmtNo1)){
-				pair<string,string> p(toString(stmtNo1), toString(stmtNo2));
-				result.push_back(p);
-				return true;
-			}
-		}
-	} else if(arg2Type.compare("_")==0){
-		// ***** what?
-		for(unsigned int i=0;i<list1.size();i++){
-			int stmtNo1 = list1[i];
-			vector<int> nextList = getNext(stmtNo1);
-			for(unsigned int j=0;j<nextList.size();j++){
-				int stmtNo2 = nextList[j];
-				pair<string,string> p(toString(stmtNo1), toString(stmtNo2));
-				result.push_back(p);
-				return true;
-			}
-		}
-	}
-
-
-
-	return false;
 }
 vector<pair<string, string>> PKB::getNext(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
@@ -1239,200 +1094,30 @@ bool PKB::contains(vector<int> list, int stmtNo)
 			return true;
 	return false;
 }
-/*
-vector<pair<string,string>> PKB::getNextT(string arg1, string arg1Type, string arg2, string arg2Type)
-{
-	// synonym(prog_line|stmt|assign|if|while), _, integer
-	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<pair<string,string>> result;
-	vector<int> list1;
-	vector<int> list2;
-	int type =0;
-	// Get the set of possible values for argument 1
-	if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0){
-		type=1;
-		list1 = getStmtNo("stmt");
-	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
-		type=2;
-		list1 = getStmtNo(arg1Type);
-	} else if (arg1Type.compare("integer") == 0){
-		type=3;
-		int stmtNo;
-		istringstream(arg1)>>stmtNo;
-		list1.push_back(stmtNo);
-	} else if(arg1Type.compare("_")==0){
-		type=4;
-		// ***** what?
-		list1 = getStmtNo("stmt");
-	}
 
-	//************ need optimize according to arg2type
-
-	// Get the set of possible values for argument 2
-	if (arg2Type.compare("stmt") == 0 || arg2Type.compare("prog_line") == 0){
-		for(unsigned int i=0;i<list1.size();i++){
-			int stmtNo1 = list1[i];
-			vector<int> nextTList = getNextT(stmtNo1);
-			for(unsigned int j=0;j<nextTList.size();j++){
-				int stmtNo2 = nextTList[j];
-				pair<string,string> p(toString(stmtNo1), toString(stmtNo2));
-				result.push_back(p);
-			}
-		}
-	} else if (arg2Type.compare("assign") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("while") == 0){
-		list2 = getStmtNo(arg2Type);
-		if(type!=3){
-			for(unsigned int j=0;j<list2.size();j++){
-				int stmtNo2=list2[j];
-				vector<int> prevTList = getPrevT(stmtNo2);
-				for(unsigned int i=0;i<prevTList.size();i++){
-					int stmtNo1 = prevTList[i];
-					if(contains(list1,stmtNo1)){
-						pair<string,string> p(toString(stmtNo1), toString(stmtNo2));
-						result.push_back(p);
-					}
-				}
-			}
-		}else{ // arg1type==integer
-			for(unsigned int i=0;i<list1.size();i++){
-				int stmtNo1 = list1[i];
-				vector<int> nextTList = getNextT(stmtNo1);
-				for(unsigned int j=0;j<nextTList.size();j++){
-					int stmtNo2 = nextTList[j];
-					if(contains(list2,stmtNo2)){
-						pair<string,string> p(toString(stmtNo1), toString(stmtNo2));
-						result.push_back(p);
-					}
-				}
-			}
-		}
-	} else if (arg2Type.compare("integer") == 0){
-		int stmtNo2;
-		istringstream(arg2)>>stmtNo2;
-		vector<int> prevTList = getPrevT(stmtNo2);
-		for(unsigned int i=0;i<prevTList.size();i++){
-			int stmtNo1 = prevTList[i];
-			if(contains(list1,stmtNo1)){
-				pair<string,string> p(toString(stmtNo1), toString(stmtNo2));
-				result.push_back(p);
-			}
-		}
-	} else if(arg2Type.compare("_")==0){
-		// ***** what?
-		for(unsigned int i=0;i<list1.size();i++){
-			int stmtNo1 = list1[i];
-			vector<int> nextTList = getNextT(stmtNo1);
-			for(unsigned int j=0;j<nextTList.size();j++){
-				int stmtNo2 = nextTList[j];
-				pair<string,string> p(toString(stmtNo1), toString(stmtNo2));
-				result.push_back(p);
-			}
-		}
-	}
-
-
-
-	return result;
-}
-*/
 bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 {
-	// synonym(prog_line|stmt|assign|if|while), _, integer
-	//					synonym(prog_line|stmt|assign|if|while), _, integer
-	vector<pair<string,string>> result;
-	vector<int> list1;
-	vector<int> list2;
-	int type =0;
-	// Get the set of possible values for argument 1
-	if (arg1Type.compare("stmt") == 0 || arg1Type.compare("prog_line") == 0){
-		type=1;
-		list1 = getStmtNo("stmt");
-	} else if (arg1Type.compare("assign") == 0 || arg1Type.compare("if") == 0 || arg1Type.compare("while") == 0){
-		type=2;
-		list1 = getStmtNo(arg1Type);
-	} else if (arg1Type.compare("integer") == 0){
-		type=3;
-		int stmtNo;
-		istringstream(arg1)>>stmtNo;
-		list1.push_back(stmtNo);
-	} else if(arg1Type.compare("_")==0){
-		type=4;
-		// ***** what?
-		list1 = getStmtNo("stmt");
+	if(arg1=="_"&&arg2=="_"){
+		int size = stmtTable.getSize();
+		if(size>0)
+			return true;
+		else return false;
+	}else if(arg1=="_"&&arg2Type=="integer"){
+		int second = Util::convertStringToInt(arg2);
+		vector<int> f = getPrevT(second);
+		if(f.size()>0) return true;
+		else return false;
+	}else if(arg1Type=="integer"&&arg2=="_"){
+		int f = Util::convertStringToInt(arg1);
+		vector<int> s = getNextT(f);
+		if(s.size()>0) return true;
+		else return false;
+	}else{
+		int first = Util::convertStringToInt(arg1);
+		int second = Util::convertStringToInt(arg2);
+		
+		return isNextT(first,second);
 	}
-
-	//************ need optimize according to arg2type
-
-	// Get the set of possible values for argument 2
-	if (arg2Type.compare("stmt") == 0 || arg2Type.compare("prog_line") == 0){
-		for(unsigned int i=0;i<list1.size();i++){
-			int stmtNo1 = list1[i];
-			vector<int> nextTList = getNextT(stmtNo1);
-			for(unsigned int j=0;j<nextTList.size();j++){
-				int stmtNo2 = nextTList[j];
-				pair<string,string>p(toString(stmtNo1), toString(stmtNo2));
-				result.push_back(p);
-				return true;
-			}
-		}
-	} else if (arg2Type.compare("assign") == 0 || arg2Type.compare("if") == 0 || arg2Type.compare("while") == 0){
-		list2 = getStmtNo(arg2Type);
-		if(type!=3){
-			for(unsigned int j=0;j<list2.size();j++){
-				int stmtNo2=list2[j];
-				vector<int> prevTList = getPrevT(stmtNo2);
-				for(unsigned int i=0;i<prevTList.size();i++){
-					int stmtNo1 = prevTList[i];
-					if(contains(list1,stmtNo1)){
-						pair<string,string>p(toString(stmtNo1), toString(stmtNo2));
-						result.push_back(p);
-						return true;
-					}
-				}
-			}
-		}else{ // arg1type==integer
-			for(unsigned int i=0;i<list1.size();i++){
-				int stmtNo1 = list1[i];
-				vector<int> nextTList = getNextT(stmtNo1);
-				for(unsigned int j=0;j<nextTList.size();j++){
-					int stmtNo2 = nextTList[j];
-					if(contains(list2,stmtNo2)){
-						pair<string,string>p(toString(stmtNo1), toString(stmtNo2));
-						result.push_back(p);
-						return true;
-					}
-				}
-			}
-		}
-	} else if (arg2Type.compare("integer") == 0){
-		int stmtNo2;
-		istringstream(arg2)>>stmtNo2;
-		vector<int> prevTList = getPrevT(stmtNo2);
-		for(unsigned int i=0;i<prevTList.size();i++){
-			int stmtNo1 = prevTList[i];
-			if(contains(list1,stmtNo1)){
-				pair<string,string>p(toString(stmtNo1), toString(stmtNo2));
-				result.push_back(p);
-				return true;
-			}
-		}
-	} else if(arg2Type.compare("_")==0){
-		// ***** what?
-		for(unsigned int i=0;i<list1.size();i++){
-			int stmtNo1 = list1[i];
-			vector<int> nextTList = getNextT(stmtNo1);
-			for(unsigned int j=0;j<nextTList.size();j++){
-				int stmtNo2 = nextTList[j];
-				pair<string,string>p(toString(stmtNo1), toString(stmtNo2));
-				result.push_back(p);
-				return true;
-			}
-		}
-	}
-
-
-
-	return false;
 }
 
 string PKB::toString(int num){
@@ -1493,7 +1178,7 @@ void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 	}
 }
 
-vector<pair<string, string>> PKB::getAffect(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
+vector<pair<string, string>> PKB::getAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
 	// _/integer??.
 	vector<pair<string,string>> result;
@@ -1522,7 +1207,7 @@ vector<pair<string, string>> PKB::getAffect(set<string>* arg1_set, string arg1Ty
 	return result;
 }
 
-vector<pair<string, string>> PKB::getAffectT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
+vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
 	vector<pair<string,string>> result;
 
@@ -1550,6 +1235,15 @@ vector<pair<string, string>> PKB::getAffectT(set<string>* arg1_set, string arg1T
 	return result;
 
 }
+
+bool PKB::checkAffects(string arg1, string arg1Type, string arg2, string arg2Type){
+	return true;
+}
+
+bool PKB::checkAffectsT(string arg1, string arg1Type, string arg2, string arg2Type){
+	return true;
+}
+
 vector<int> PKB::getAffectTList(int stmtNo)
 {
 	visited.clear();
@@ -1607,6 +1301,7 @@ void PKB::recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList)
 	}
 
 }
+
 /************************************************** Flatten - Zhao Yang *************************************************/
 void PKB::flattenAST()
 {

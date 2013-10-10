@@ -59,7 +59,9 @@ public:
 
 	/************************************************** CallTable *************************************************/
 	vector<pair<string, string>> getCalls(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	vector<pair<string, string>> getCallsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	bool checkCalls(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkCallsT(string arg1, string arg1Type, string arg2, string arg2Type);
 	void insert(string proc1, string proc2);
 	bool isCalled(string proc1, string proc2);
 	vector<string> getCallsList(string procName);
@@ -191,9 +193,10 @@ public:
 	vector<int> getAffectList(int stmtNo);
 	vector<int> getAffectTList(int stmtNo);
 	//API for QE
-	vector<pair<string, string>> getAffect(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
-	vector<pair<string, string>> getAffectT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
-
+	vector<pair<string, string>> getAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	vector<pair<string, string>> getAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	bool checkAffects(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkAffectsT(string arg1, string arg1Type, string arg2, string arg2Type);
 	struct postfixNode{
 		string type;// if/while/assig
 		int lineNum; 
