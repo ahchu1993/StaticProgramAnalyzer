@@ -474,6 +474,7 @@ bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type
 }
 
 // Update ModifyTable using CallTable
+// INCOMPLETE, NEED TO UPDATE MORE
 void PKB::updateModify(){
 	vector<int> procList;
 	int currentProcIndex;
