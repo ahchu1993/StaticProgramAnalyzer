@@ -91,15 +91,15 @@ bool QueryEvaluator::processConstantRelations(){
 
 void QueryEvaluator::validateResults(){
 
-    if (resultTable.columns.size()<result_refs.size()) {
-        for (int i=0; i<result_refs.size(); i++) {
-            string ref = result_refs.at(i);
-            if (resultTable.findColumn(ref)==-1) {
-                ResultsTable tempTable(ref,*valueTable[ref]);
-                resultTable.merge(tempTable);
-            }
+   // if (resultTable.columns.size()<result_refs.size()) {
+    for (int i=0; i<result_refs.size(); i++) {
+        string ref = result_refs.at(i);
+        if (resultTable.findColumn(ref)==-1) {
+            ResultsTable tempTable(ref,*valueTable[ref]);
+            resultTable.merge(tempTable);
         }
     }
+    //}
     resultTable.eliminateColumns(result_refs);
 
 
