@@ -1145,16 +1145,16 @@ vector<int> PKB::getAffectList(int stmtNo)
 }
 void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 {
-	while(visited.size()<=stmtNo)
+	while(visited.size()<=stmtNo+1)
 		visited.push_back(0);
 	//num of loops
-	if(visited[stmtNo]==1)//********** dont know
+	if(visited[stmtNo]==1)
 		return;
 	else visited[stmtNo]=visited[stmtNo]+1;
 
 	vector<int> usedVarList = getUsedStmt(stmtNo);
 	string stmtType =  getStmtType(stmtNo);
-	//cout<<"no "<<stmtNo<<" type "<<stmtType<<endl;
+	
 
 	// problem matic!!!! while situation, i only need assignment vars
 	if(stmtType.compare("assign")==0&&contains(usedVarList,varIndex)){
@@ -1164,7 +1164,9 @@ void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 			visited.clear();
 		}
 	}
-	int currentVar = getModifiedStmt(stmtNo)[0]; // also wrong as used
+	int currentVar= -1;
+	if(getModifiedStmt(stmtNo).size()>0)
+		currentVar= getModifiedStmt(stmtNo)[0]; 
 
 	if(stmtType.compare("assign")==0&&currentVar==varIndex){// this var is being modified
 		return ;
