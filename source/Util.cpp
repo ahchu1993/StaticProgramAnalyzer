@@ -1,6 +1,5 @@
 #include "Util.h"
 
-
 Util::Util(void)
 {
 }
@@ -17,4 +16,10 @@ string Util::convertIntToString(int input){
 
 int Util::convertStringToInt(string input){
 	return atoi( input.c_str() );
+}
+vector<string> Util::removeDuplicate(vector<string> a){
+	set<string> s(a.begin(), a.end());
+	vector<string> result;
+	result.assign(s.begin(), s.end());
+	return result;
 }

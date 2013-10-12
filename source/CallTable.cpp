@@ -1,5 +1,6 @@
 #include "CallTable.h"
 #include <algorithm>
+#include "Util.h"
 CallTable::CallTable() {
 }
 
@@ -54,26 +55,33 @@ vector<string> CallTable::getCalledList(string procName){
 	return result;
 }
 
-vector<string> CallTable::getCall(string procName){
+
+vector<string> CallTable::getCalledT(string proc){
 	vector<string> result;
-	for(unsigned i=0; i<callTable.size(); i++){
-		if(callTable.at(i).callingProc.compare(procName) == 0 || procName.compare("_") == 0)
-			result.push_back(callTable.at(i).callingProc);
+	vector<string> calledList = getCalledList(proc);
+	if(calledList.size() == 0)
+		return result;
+	for(unsigned i=0; i<calledList.size(); i++){
+		vector<string> tmp = getCalledT(calledList.at(i));
+		result.push_back(calledList.at(i));
+		result.insert(result.end(), tmp.begin(), tmp.end());
 	}
-	return result;
+	return Util::removeDuplicate(result);
+
 }
 
-vector<string> CallTable::getCalled(string procName){
+vector<string> CallTable::getCallsT(string proc){
 	vector<string> result;
-	for(unsigned i=0; i<callTable.size(); i++){
-		for(unsigned j=0; j<callTable.at(i).calledProcs.size(); j++){
-			if(callTable.at(i).calledProcs.at(j).compare(procName) == 0 || procName.compare("_") == 0)
-				result.push_back(callTable.at(i).calledProcs.at(j));
-		}
+	vector<string> callsList = getCallsList(proc);
+	if(callsList.size() == 0)
+		return result;
+	for(unsigned i=0; i<callsList.size(); i++){
+		vector<string> tmp = getCallsT(callsList.at(i));
+		result.push_back(callsList.at(i));
+		result.insert(result.end(), tmp.begin(), tmp.end());
 	}
-	return result;
+	return Util::removeDuplicate(result);
 }
-
 
 bool CallTable::checkCall(vector<string> set1, vector<string> set2){
 	vector<pair<string, string>> result;
