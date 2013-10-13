@@ -66,6 +66,7 @@ public:
 	bool isCalled(string proc1, string proc2);
 	vector<string> getCallsList(string procName);
 	vector<string> getCalledList(string procName);
+	vector<int> getCallsStmT(int procIndex);
 	void printCallTable();
 	vector<int> getCallsList(int procIndex);
 	vector<int> getCallsT(int procIndex);

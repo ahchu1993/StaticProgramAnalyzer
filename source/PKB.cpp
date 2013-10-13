@@ -119,16 +119,19 @@ bool PKB::checkCalls(string arg1, string arg1Type, string arg2, string arg2Type)
 bool PKB::checkCallsT(string arg1, string arg1Type, string arg2, string arg2Type){
 	return true;
 }
+//Insert into call table
+//stmNo: stmNo in proc1 that called proc2
 void PKB::insert(int stmNo, string proc1, string proc2){
 	callTable.insert(stmNo, proc1, proc2);
 }
 bool PKB::isCalled(string proc1, string proc2){
 	return callTable.isCalled(proc1,proc2);
 }
-
+//return all procedures that called procName directly
 vector<string> PKB::getCallsList(string procName){
 	return callTable.getCallsList(procName);
 }
+//return all procedures that were called by procName directly
 vector<string> PKB::getCalledList(string procName){
 	return callTable.getCalledList(procName);
 }
@@ -136,6 +139,12 @@ void PKB::printCallTable(){
 	callTable.print();
 }
 //Api for Khue
+//Input: procIndex
+//Output: vector of all procedure indexes that call* procIndex
+vector<int> PKB::getCallsStmT(int procIndex){
+	string procName = procTable.getProcName(procIndex);
+	return callTable.getCallsStmT(procName);
+}
 vector<int> PKB::getCallsList(int procIndex){
 	vector<int> result;
 	string procName = procTable.getProcName(procIndex);
@@ -146,6 +155,9 @@ vector<int> PKB::getCallsList(int procIndex){
 	}
 	return result;
 }
+
+//Input:procedure index
+//Output: vector of all proc indexes that call* input procedure
 vector<int> PKB::getCallsT(int procIndex){
 	vector<int> result;
 	string procName = procTable.getProcName(procIndex);
@@ -157,7 +169,8 @@ vector<int> PKB::getCallsT(int procIndex){
 
 	return result;
 }
-
+//Input:procedure index
+//Output: vector of all proc indexes that were call* by input procedure
 vector<int> PKB::getCalledT(int procIndex){
 	vector<int> result;
 	string procName = procTable.getProcName(procIndex);
