@@ -140,7 +140,7 @@ void PKB::printCallTable(){
 }
 //Api for Khue
 //Input: procIndex
-//Output: vector of all procedure indexes that call* procIndex
+//Output: vector of all stmNo that call* procIndex
 vector<int> PKB::getCallsStmT(int procIndex){
 	string procName = procTable.getProcName(procIndex);
 	return callTable.getCallsStmT(procName);
