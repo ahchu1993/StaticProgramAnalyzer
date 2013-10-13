@@ -62,13 +62,14 @@ public:
 	vector<pair<string, string>> getCallsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	bool checkCalls(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkCallsT(string arg1, string arg1Type, string arg2, string arg2Type);
-	void insert(string proc1, string proc2);
+	void insert(int stmNo, string proc1, string proc2);
 	bool isCalled(string proc1, string proc2);
 	vector<string> getCallsList(string procName);
 	vector<string> getCalledList(string procName);
 	void printCallTable();
 	vector<int> getCallsList(int procIndex);
-
+	vector<int> getCallsT(int procIndex);
+	vector<int> getCalledT(int procIndex);
 	/************************************************** ParentTable *************************************************/
 	vector<pair<string, string>> getParent(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string, string>> getParentT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);

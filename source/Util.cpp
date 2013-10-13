@@ -23,3 +23,10 @@ vector<string> Util::removeDuplicate(vector<string> a){
 	result.assign(s.begin(), s.end());
 	return result;
 }
+
+vector<int> Util::removeDuplicateInt(vector<int> a){
+	set<int> s(a.begin(), a.end());
+	vector<int> result;
+	result.assign(s.begin(), s.end());
+	return result;
+}

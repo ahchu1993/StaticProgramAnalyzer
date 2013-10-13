@@ -16,6 +16,7 @@ public:
 	static string convertIntToString(int input);
 	static int convertStringToInt(string input);
 	static vector<string> removeDuplicate(vector<string> a);
+	static vector<int> removeDuplicateInt(vector<int> a);
 };
 
 #endif

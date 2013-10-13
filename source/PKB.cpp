@@ -119,8 +119,8 @@ bool PKB::checkCalls(string arg1, string arg1Type, string arg2, string arg2Type)
 bool PKB::checkCallsT(string arg1, string arg1Type, string arg2, string arg2Type){
 	return true;
 }
-void PKB::insert(string proc1, string proc2){
-	callTable.insert(proc1,proc2);
+void PKB::insert(int stmNo, string proc1, string proc2){
+	callTable.insert(stmNo, proc1, proc2);
 }
 bool PKB::isCalled(string proc1, string proc2){
 	return callTable.isCalled(proc1,proc2);
@@ -144,6 +144,29 @@ vector<int> PKB::getCallsList(int procIndex){
 	for(unsigned i=0; i<callList.size(); i++){
 		result.push_back(procTable.getProcIndex(callList.at(i)));
 	}
+	return result;
+}
+vector<int> PKB::getCallsT(int procIndex){
+	vector<int> result;
+	string procName = procTable.getProcName(procIndex);
+	vector<string> procNameList = callTable.getCallsT(procName);
+
+	for(unsigned i=0; i<procNameList.size(); i++){
+		result.push_back(procTable.getProcIndex(procNameList.at(i)));
+	}
+
+	return result;
+}
+
+vector<int> PKB::getCalledT(int procIndex){
+	vector<int> result;
+	string procName = procTable.getProcName(procIndex);
+	vector<string> procNameList = callTable.getCalledT(procName);
+
+	for(unsigned i=0; i<procNameList.size(); i++){
+		result.push_back(procTable.getProcIndex(procNameList.at(i)));
+	}
+
 	return result;
 }
 

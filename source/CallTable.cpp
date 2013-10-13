@@ -4,13 +4,14 @@
 CallTable::CallTable() {
 }
 
-void CallTable::insert(string proc1, string proc2){
+void CallTable::insert(int stmNo, string proc1, string proc2){
 	for(unsigned i=0; i<callTable.size(); i++){
 		if(callTable.at(i).callingProc.compare(proc1) == 0){
 			if(find(callTable.at(i).calledProcs.begin(), callTable.at(i).calledProcs.end(), proc2) != callTable.at(i).calledProcs.end()){
 				return;
 			}else{
 				callTable.at(i).calledProcs.push_back(proc2);
+				callTable.at(i).callStmNo.push_back(stmNo);
 				return;
 			}
 		}	
@@ -19,6 +20,7 @@ void CallTable::insert(string proc1, string proc2){
 	call_row row;
 	row.callingProc = proc1;
 	row.calledProcs.push_back(proc2);
+	row.callStmNo.push_back(stmNo);
 	callTable.push_back(row);
 }
 bool CallTable::isCalled(string proc1, string proc2){
@@ -83,6 +85,31 @@ vector<string> CallTable::getCallsT(string proc){
 	return Util::removeDuplicate(result);
 }
 
+vector<int> CallTable::getCallsStmT(string proc){
+	vector<int> result;
+	vector<string> callsList = getCallsList(proc);
+	vector<int> callsStmList = getCallsStmtList(proc);
+	if(callsList.size() == 0)
+		return result;
+	for(unsigned i=0; i<callsList.size(); i++){
+		vector<int> tmp = getCallsStmT(callsList.at(i));
+		result.push_back(callsStmList.at(i));
+		result.insert(result.end(), tmp.begin(), tmp.end());
+	}
+	return Util::removeDuplicateInt(result);
+}
+
+vector<int> CallTable::getCallsStmtList(string procName){
+	vector<int> result;
+	for(unsigned i=0; i<callTable.size(); i++){
+		for(unsigned j=0; j<callTable.at(i).calledProcs.size(); j++){
+			if(callTable.at(i).calledProcs.at(j).compare(procName) == 0 || procName.compare("_") == 0){
+				result.push_back(callTable.at(i).callStmNo.at(j));
+			}
+		}
+	}
+	return result;
+}
 bool CallTable::checkCall(vector<string> set1, vector<string> set2){
 	vector<pair<string, string>> result;
 	for(unsigned i=0; i<set1.size(); i++){
