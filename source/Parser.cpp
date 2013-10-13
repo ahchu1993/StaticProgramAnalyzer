@@ -214,7 +214,7 @@ int Parser::stmt(vector<int> stmtListNumber,vector < PairNumber > useModifyList)
 
 		getToken();
 		string calledProcedure = nextToken;
-		pkb->insert(procName,calledProcedure);
+		pkb->insert(line,procName,calledProcedure);
 		getToken();
 		match(";");
 		// zhao yang, procName call calledProcedure;
