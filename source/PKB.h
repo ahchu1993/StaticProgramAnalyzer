@@ -22,6 +22,9 @@
 #include "AST.h"
 #include "CFG.h"
 
+#include <time.h>
+//#include <Windows.h>
+
 using namespace std;
 typedef short PROC;
 

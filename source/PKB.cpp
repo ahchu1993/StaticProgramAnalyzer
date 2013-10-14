@@ -1287,8 +1287,13 @@ bool PKB::checkAffectsT(string arg1, string arg1Type, string arg2, string arg2Ty
 	return true;
 }
 
+
 vector<int> PKB::getAffectTList(int stmtNo)
 {
+	//DWORD start = GetTickCount();
+	clock_t t;
+	t = clock();
+
 	visited.clear();
 	affectTList.clear();
 	int varIndex = getModifiedStmt(stmtNo)[0];
@@ -1300,7 +1305,12 @@ vector<int> PKB::getAffectTList(int stmtNo)
 		int childStmt = childrenList[i];
 		recusiveBuildAffectTList(childStmt,varIndexList);
 	}
+	//DWORD finish = GetTickCount()-start;
 
+	//
+	t = clock() - t;
+	//cout<<"This affectT takes "<<finish<<endl;
+	printf ("It took me %d clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
 	return affectTList;
 }
 bool PKB::intersect(vector<int> list1, vector<int> list2){
