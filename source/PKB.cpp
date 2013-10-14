@@ -140,7 +140,7 @@ void PKB::printCallTable(){
 }
 //Api for Khue
 //Input: procIndex
-//Output: vector of all procedure indexes that call* procIndex
+//Output: vector of all stmNo that call* procIndex
 vector<int> PKB::getCallsStmT(int procIndex){
 	string procName = procTable.getProcName(procIndex);
 	return callTable.getCallsStmT(procName);
@@ -535,25 +535,38 @@ bool PKB::checkModify(string arg1, string arg1Type, string arg2, string arg2Type
 }
 
 // Update ModifyTable using CallTable
-// INCOMPLETE, NEED TO UPDATE MORE
 void PKB::updateModify(){
 	vector<int> procList;
 	int currentProcIndex;
 	int tempProcIndex;
+	int tempStmtNo;
 	int tempVarIndex;
 	vector<int> callingProc;
+	vector<int> callingStmt;
 	vector<int> modifiedVar;
 
 	procList = procTable.getProcList();
 	for (unsigned i=0; i<procList.size(); i++){
 		currentProcIndex = procList.at(i);
-		callingProc = getCallsList(currentProcIndex);
+
+		callingProc = getCallsT(currentProcIndex);
+		callingStmt = getCallsStmT(currentProcIndex);
+
 		modifiedVar = modifyTable.getModifiedProc(currentProcIndex);
+
 		for (unsigned j=0; j<callingProc.size(); j++){
 			tempProcIndex = callingProc.at(j);
 			for (unsigned k=0; k<modifiedVar.size(); k++){
 				tempVarIndex = modifiedVar.at(k);
 				modifyTable.insertModifyProc(tempProcIndex, tempVarIndex);
+			}
+		}
+
+		for (unsigned j =0; j<callingStmt.size(); j++){
+			tempStmtNo = callingStmt.at(j);
+			for (unsigned k=0; k<modifiedVar.size(); k++){
+				tempVarIndex = modifiedVar.at(k);
+				modifyTable.insertModifyStmt(tempStmtNo, tempVarIndex, "call");
 			}
 		}
 	}
@@ -700,20 +713,34 @@ void PKB::updateUse(){
 	vector<int> procList;
 	int currentProcIndex;
 	int tempProcIndex;
+	int tempStmtNo;
 	int tempVarIndex;
 	vector<int> callingProc;
+	vector<int> callingStmt;
 	vector<int> usedVar;
 
 	procList = procTable.getProcList();
 	for (unsigned i=0; i<procList.size(); i++){
 		currentProcIndex = procList.at(i);
-		callingProc = getCallsList(currentProcIndex);
+
+		callingProc = getCallsT(currentProcIndex);
+		callingStmt = getCallsStmT(currentProcIndex);
+
 		usedVar = useTable.getUsedProc(currentProcIndex);
+
 		for (unsigned j=0; j<callingProc.size(); j++){
 			tempProcIndex = callingProc.at(j);
 			for (unsigned k=0; k<usedVar.size(); k++){
 				tempVarIndex = usedVar.at(k);
 				useTable.insertUseProc(tempProcIndex, tempVarIndex);
+			}
+		}
+
+		for (unsigned j =0; j<callingStmt.size(); j++){
+			tempStmtNo = callingStmt.at(j);
+			for (unsigned k=0; k<usedVar.size(); k++){
+				tempVarIndex = usedVar.at(k);
+				useTable.insertUseStmt(tempStmtNo, tempVarIndex, "call");
 			}
 		}
 	}
