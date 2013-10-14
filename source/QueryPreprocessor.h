@@ -142,22 +142,6 @@ public:
 	bool process_query(string st_clause);
 	void group_relations();
 
-	///----------helper functions to print info--------------
-	void print_declaration();
-	void print_result();
-	void print_relations();
-	void print_tree(tree_node t);
-	void print_patterns();
-	void print_attr_pairs();
-	void print_query();
-
-	/*///---------------------getters ---------------------------
-	vector<entityReff> getSymbols();
-	vector<string> getResults();
-	vector<designAbstraction> getRelations();
-	vector<pattern> getPatterns();
-	vector<attr_compare> getAttrPairs();  */
-
 	
 private:
 

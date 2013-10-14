@@ -1599,12 +1599,14 @@ void QueryPreprocessor::group_relations(){
         list<BaseRelation*> group;
 
 		//get the first relation not processed and mark its dependence
+		std::list<BaseRelation*>::iterator it = relations.begin();
         for(unsigned j =0;j<relation_map.size();j++){ 
-			std::list<BaseRelation*>::iterator it = relations.begin();
+			
+			BaseRelation* f = *it;
+			++it;
             if(relation_map[j]==0){
 
-				BaseRelation* f = *it;
-				++it;
+				
 
 				if(f->type=="designAbstraction"){
 					designAbstraction* first_da= static_cast<designAbstraction*>(f);
@@ -1644,8 +1646,11 @@ void QueryPreprocessor::group_relations(){
             before = c;
 			int i=0;
             for (std::list<BaseRelation*>::iterator it=relations.begin();it!=relations.end();++it){
-                if(relation_map[i]==1) continue; //relation processed
-
+				if(relation_map[i]==1) {
+					i++;
+					continue; //relation processed
+				}
+				
 				BaseRelation* re = *it;
 
 				string r1,r2;
@@ -1679,7 +1684,7 @@ void QueryPreprocessor::group_relations(){
                     total_count--;
                     relation_map[i] =1;
                 }
-				i++;
+				
             }
         }while(c!=before);
         //clear  dependence map
@@ -1771,63 +1776,6 @@ bool QueryPreprocessor::process_query(string query){
 	}
 
 }
-
-/// -----print functions-------------------------
-void QueryPreprocessor::print_declaration(){
-	for(unsigned int i=0;i<declaration_reffs.size();i++){
-		cout<<declaration_reffs.at(i).type<<" "<<declaration_reffs.at(i).synonym<<"\n";
-	}
-}
-
-void QueryPreprocessor::print_result(){
-	for(unsigned int i=0;i<result_reffs.size();i++){
-		cout<<result_reffs.at(i)<<" ";
-	}
-	cout<<"\n";
-}
-/*
-void QueryPreprocessor::print_relations(){
-    for(unsigned int i=0;i<relations.size();i++){
-            BaseRelation* d = relations.at(i);
-			designAbstraction* da = static_cast<designAbstraction*>(da);
-            cout<<da->relation_type<<" "<<da->ref1<<" "<<da->ref1_type<<" "<<da->ref2<<" "<<da->ref2_type<<"\n";
-    }
-}
-
-void QueryPreprocessor::print_tree(tree_node t){
-
-	cout<< t.content<<" ";
-	if(t.left!=NULL) print_tree(*(t.left));
-	if(t.right!=NULL) print_tree(*(t.right));
-
-}
-
-void QueryPreprocessor::print_patterns(){
-	for(unsigned int i=0;i<patterns.size();i++){
-		/*cout<<patterns.at(i).type<<" "<<patterns.at(i).synonym<<" "<<patterns.at(i).varRef<<" "<<patterns.at(i).exact<<"\n";
-		tree_node* t = patterns.at(i).expr_tree;
-		//print_tree(t); 
-	}
-}
-
-void QueryPreprocessor::print_attr_pairs(){
-    /*for(unsigned int i=0;i<attr_pairs.size();i++){
-            attr_compare compare = attr_pairs.at(i);
-            attrRef left = compare.left_ref;
-            attrRef right = compare.right_ref;
-            cout<<left.prefix<<"  "<<left.postfix<<" "
-            <<right.prefix<<" "<<right.postfix<<"\n"; 
-    }
-} */
-
-void QueryPreprocessor::print_query(){
-	print_declaration();
-	print_result();
-	/*print_relations();
-	print_patterns();
-	print_attr_pairs(); */
-}
-
 
 
 
