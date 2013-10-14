@@ -1250,6 +1250,8 @@ void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 
 vector<pair<string, string>> PKB::getAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
+	clock_t t;
+	t = clock();
 	// _/integer??.
 	vector<pair<string,string>> result;
 
@@ -1273,12 +1275,18 @@ vector<pair<string, string>> PKB::getAffects(set<string>* arg1_set, string arg1T
 			}
 		}
 	}
-	
+	t = clock() - t;
+	//cout<<"This affectT takes "<<finish<<endl;
+	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 	return result;
 }
 
 vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
+	cout<<"Into affectT"<<endl;
+
+	clock_t t;
+	t = clock();
 	vector<pair<string,string>> result;
 
 	set<string>::iterator it1;
@@ -1291,17 +1299,24 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 		int index1;
 		istringstream ( *it1 ) >> index1;
 
+		string type = getStmtType(index1);
+		if(type.compare("assign")!=0)
+			continue;
+
 		list1 = getAffectTList(index1);
 		for(it2=arg2List.begin();it2!=arg2List.end();it2++){
 			int index2;
 			istringstream (*it2) >> index2;
+			//cout<<"index1 "<<index1<<" index2 "<<index2<<" size "<<result.size()<<endl;
 			if(contains(list1,index2)){
 				pair<string,string> p (*it1,*it2);
 				result.push_back(p);
 			}
 		}
 	}
-
+	t = clock() - t;
+	//cout<<"This affectT takes "<<finish<<endl;
+	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 	return result;
 
 }
@@ -1317,9 +1332,7 @@ bool PKB::checkAffectsT(string arg1, string arg1Type, string arg2, string arg2Ty
 
 vector<int> PKB::getAffectTList(int stmtNo)
 {
-	//DWORD start = GetTickCount();
-	clock_t t;
-	t = clock();
+
 
 	visited.clear();
 	affectTList.clear();
@@ -1334,10 +1347,7 @@ vector<int> PKB::getAffectTList(int stmtNo)
 	}
 	//DWORD finish = GetTickCount()-start;
 
-	//
-	t = clock() - t;
-	//cout<<"This affectT takes "<<finish<<endl;
-	printf ("It took me %d clicks (%f seconds).\n",t,((float)t)/CLOCKS_PER_SEC);
+
 	return affectTList;
 }
 bool PKB::intersect(vector<int> list1, vector<int> list2){
