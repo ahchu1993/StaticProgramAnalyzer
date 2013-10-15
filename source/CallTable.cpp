@@ -128,9 +128,9 @@ int CallTable::getSize(){
 void CallTable::print(){
 	vector<string>::iterator ite;
 	for(unsigned i=0; i<callTable.size(); i++){
-		cout << callTable.at(i).callingProc << ":";
+		cout << callTable.at(i).callingProc << " : ";
 		for(unsigned j=0; j<callTable.at(i).calledProcs.size(); j++){
-			cout << callTable.at(i).calledProcs.at(j) << " ";
+			cout << callTable.at(i).calledProcs.at(j) << ", ";
 		}
 		cout << "\n";
 	}

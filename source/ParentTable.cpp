@@ -135,12 +135,12 @@ int ParentTable::getSize(){
 
 void ParentTable::print(){
 	unsigned i;
-	cout << "Parent Table: Size:" << parentTable.size() << "\n";
+	cout << "Parent Table: Size: " << parentTable.size() << "\n";
 
 	for (it=parentTable.begin(); it<parentTable.end(); it++){
-		cout << ((parent_row)*it).parent <<" : ";
+		cout << ((parent_row)*it).parent <<": ";
 		for(i=0;i<((parent_row)*it).children.size();i++){
-			cout << ((parent_row)*it).children.at(i).stm << " ";
+			cout << ((parent_row)*it).children.at(i).stm << ", ";
 		}
 		cout << "\n";
 	}

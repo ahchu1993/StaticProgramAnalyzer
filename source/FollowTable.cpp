@@ -87,10 +87,10 @@ int FollowTable::getSize(){
 }
 
 void FollowTable::print(){
-	cout << "Follow Table: Size:" << followTable.size() << "\n";
+	cout << "Follow Table: Size: " << followTable.size() << "\n";
 
 	for(unsigned i=0; i<followTable.size(); i++){
-		cout << followTable.at(i).col1 << followTable.at(i).de1 <<" : " << followTable.at(i).col2 << followTable.at(i).de2 << "\n";
+		cout << followTable.at(i).col1 << " : "<<followTable.at(i).de1 <<", " << followTable.at(i).col2 << " : "<<followTable.at(i).de2 << "\n";
 	}
 }
 
