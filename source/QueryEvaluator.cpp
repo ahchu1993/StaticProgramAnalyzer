@@ -446,6 +446,7 @@ vector<pair<string,string>> QueryEvaluator::processAttrCompare(attr_compare* a){
 		it2 = s2.find(*it);
 		if(it2!=s2.end()){
 			pair<string,string> p(*it,*it);
+			result.push_back(p);
 		}
 	}
 

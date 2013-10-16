@@ -1323,16 +1323,16 @@ void QueryPreprocessor::build_attr_table(){
     attr_table["procName"] =e;
 
    attr_entry e2 = { "variable","string"};
-    attr_table["varName"] = e;
+    attr_table["varName"] = e2;
 
     attr_entry e3 = {"constant","integer"};
-    attr_table["value"] = e;
+    attr_table["value"] = e3;
 
     attr_entry e4 = {"stmt","integer"};
-    attr_table["stmt#"] = e;
+    attr_table["stmt#"] = e4;
 
     attr_entry e5 = {"prog_line","integer"};
-    attr_table["prog_line"];
+    attr_table["prog_line"] = e5;
 
     /*e = {"integer","integer"};
     attr_table["integer"] = e ;
@@ -1358,7 +1358,7 @@ bool QueryPreprocessor::attrCompare(string s){
         ref1_prefix = trim(ref1.substr(0,p1));
         ref1_postfix = trim(ref1.substr(p1+1,ref1.size()-p1-1));
         attr_entry e = attr_table[ref1_postfix];
-        string ref1_type = get_type(ref1_prefix);
+        ref1_type = get_type(ref1_prefix);
         if(ref1_type == e.prefix_type){
             flag1 = true;
             evaluation_type = e.evaluation_type;
@@ -1393,7 +1393,7 @@ bool QueryPreprocessor::attrCompare(string s){
         ref2_prefix = trim(ref2.substr(0,p2));
         ref2_postfix = trim(ref2.substr(p2+1,ref2.size()-p2-1));
         attr_entry e = attr_table[ref2_postfix];
-        string ref2_type = get_type(ref2_prefix);
+        ref2_type = get_type(ref2_prefix);
         if(ref2_type == e.prefix_type){
             if(evaluation_type!=e.evaluation_type)
                 return false;
@@ -1408,7 +1408,7 @@ bool QueryPreprocessor::attrCompare(string s){
                 return false;
             flag2 = true;
         }else if(check_synonym(ref2)){
-            string ref2_type = get_type(ref2);
+            ref2_type = get_type(ref2);
             if(ref2_type == "prog_line"){
                 ref2_prefix = ref2;
                 if(evaluation_type != "integer")
