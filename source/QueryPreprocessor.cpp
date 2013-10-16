@@ -587,10 +587,10 @@ bool QueryPreprocessor::relRef(string relation){
 }
 
 bool QueryPreprocessor::relCond(string s){
-	unsigned int p = s.find("and");
+	unsigned int p = s.find(" and ");
 	if(p<s.size()){
 		string s1 = trim(s.substr(0,p));
-		string s2 = trim(s.substr(p+3,s.size()-p-3));
+		string s2 = trim(s.substr(p+5,s.size()-p-5));
 		return relRef(s1)&&relCond(s2);
 	}
 	else return relRef(s);

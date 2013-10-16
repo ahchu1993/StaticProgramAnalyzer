@@ -71,14 +71,14 @@ vector<pair<string, string>> PKB::getCalls(set<string>* arg1_set, string arg1Typ
 vector<pair<string, string>> PKB::getCallsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
 	vector<pair<string,string>> result;
 	
-	/*set<string>::iterator it1;
+	set<string>::iterator it1;
 	set<string>::iterator it2;
 	set<string> s1 = *arg1_set;
 	set<string> s2 = *arg2_set;
 
 	for(set<string>::iterator it = s1.begin();it!=s1.end();it++){
 		string caller = *it;	
-		vector<string> callee = getCalledList(caller);
+		vector<string> callee = callTable.getCalledT(caller);
 		
 		for(unsigned int i=0;i<callee.size();i++){
 			it2 = s2.find(callee.at(i));
@@ -87,7 +87,7 @@ vector<pair<string, string>> PKB::getCallsT(set<string>* arg1_set, string arg1Ty
 				result.push_back(p);
 			}
 		}	
-	}	*/
+	}	
 	return result;
 }
 bool PKB::checkCalls(string arg1, string arg1Type, string arg2, string arg2Type){	
@@ -117,6 +117,29 @@ bool PKB::checkCalls(string arg1, string arg1Type, string arg2, string arg2Type)
 }
 
 bool PKB::checkCallsT(string arg1, string arg1Type, string arg2, string arg2Type){
+	if(arg1=="_"&&arg2=="_"){
+		int size = callTable.getSize();
+		if(size>0)
+			return true;
+		else return false;
+	}else if(arg1=="_"&&arg2Type=="string"){
+
+		vector<string> callers = callTable.getCallsT(arg2);
+		if(callers.size()>0) return true;
+		else return false;
+
+	}else if(arg1Type=="string"&&arg2=="_"){
+		
+		vector<string> callees = callTable.getCalledT(arg1);		
+		if(callees.size()>0) return true;
+		else return false;
+
+	}else{
+		bool called = isCalled(arg1,arg2);
+		if(called)
+			return true;
+		else return false;
+	}
 	return true;
 }
 //Insert into call table

@@ -106,6 +106,8 @@ void QueryEvaluator::validateResults(){
 }
 bool QueryEvaluator::processGroupedRelations(){
     ResultsTable temp_results_table;
+	if(grouped_relations.size()==0)
+		return true;
     
     for(list<list<BaseRelation*>>::iterator it = grouped_relations.begin();it!=grouped_relations.end();it++){
         vector<pair<string,string>> result_pairs;
