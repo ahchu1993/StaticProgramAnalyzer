@@ -5,10 +5,16 @@
 //  Created by Zhao Weixiang on 9/10/13.
 //  Copyright (c) 2013 Zhao Weixiang. All rights reserved.
 //
-
+/*
+ create a map to store the relation result
+ use a list to implement table
+ add deletion
+ 
+ 
+ */
 #include "ResultsTable.h"
 ResultsTable::ResultsTable(){
-
+    
 };
 ResultsTable::ResultsTable(string ref, set<string> value){
     //constructor
@@ -176,31 +182,34 @@ void ResultsTable::eliminateColumns(vector<string>refs){
     vector<int> ref_index;
     vector<string> newColumns;
     vector<vector<string>> newtuples;
-    for (int a=0; a<refs.size(); a++) {
-        int index = findColumn(refs.at(a));
-        if (index!=-1) {
-            ref_index.push_back(index);
-        }
-    }
-    map<string,bool> checkmap;
-    for (int i =0; i<tuples.size(); i++) {
-        vector<string> tuple = tuples.at(i);
-        vector<string> newtuple;
-        for (int b=0; b<ref_index.size(); b++) {
-            int index = ref_index.at(b);
-            string cell= tuple.at(index);
-            newtuple.push_back(cell);
-        }//for one tulples
-        string key = makeKey(newtuple);
-        if (!checkmap[key]) {
-            checkmap[key]=true;
-            newtuples.push_back(newtuple);
-        }
-    }//for all the tuples
-    for (int c=0; c<ref_index.size(); c++) {
+    if (refs.at(0)!="BOOLEAN") {
         
-        string temp = columns.at(ref_index.at(c));
-        newColumns.push_back(temp);
+        for (int a=0; a<refs.size(); a++) {
+            int index = findColumn(refs.at(a));
+            if (index!=-1) {
+                ref_index.push_back(index);
+            }
+        }
+        map<string,bool> checkmap;
+        for (int i =0; i<tuples.size(); i++) {
+            vector<string> tuple = tuples.at(i);
+            vector<string> newtuple;
+            for (int b=0; b<ref_index.size(); b++) {
+                int index = ref_index.at(b);
+                string cell= tuple.at(index);
+                newtuple.push_back(cell);
+            }//for one tulples
+            string key = makeKey(newtuple);
+            if (!checkmap[key]) {
+                checkmap[key]=true;
+                newtuples.push_back(newtuple);
+            }
+        }//for all the tuples
+        for (int c=0; c<ref_index.size(); c++) {
+            
+            string temp = columns.at(ref_index.at(c));
+            newColumns.push_back(temp);
+        }
     }
     tuples = newtuples;
     columns = newColumns;
@@ -219,6 +228,7 @@ void print_vectors(vector<vector<string>> input){
 list<string> ResultsTable::toList(){
     //list<list<string>> lists;
     list<string> list;
+    
     for (int i =0; i<tuples.size(); i++) {
         string temp;
         vector<string> tuple= tuples.at(i);
@@ -229,7 +239,7 @@ list<string> ResultsTable::toList(){
             }
         }
         //if (i!=tuples.size()-1) {
-          //  temp +=",";
+        //  temp +=",";
         //}
         list.push_back(temp);
     }
@@ -238,6 +248,6 @@ list<string> ResultsTable::toList(){
 void ResultsTable::printResults(){
     print_vector(columns);
     print_vectors(tuples);
-
+    
 }
 

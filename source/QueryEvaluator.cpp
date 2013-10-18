@@ -90,18 +90,33 @@ bool QueryEvaluator::processConstantRelations(){
 }
 
 void QueryEvaluator::validateResults(){
-
-   // if (resultTable.columns.size()<result_refs.size()) {
-    for (int i=0; i<result_refs.size(); i++) {
-        string ref = result_refs.at(i);
-        if (resultTable.findColumn(ref)==-1) {
-            ResultsTable tempTable(ref,*valueTable[ref]);
-            resultTable.merge(tempTable);
+    
+    // if (resultTable.columns.size()<result_refs.size()) {
+    if (result_refs.at(0)=="BOOLEAN") {
+        string node;
+        vector<string> tuple;
+        vector<vector<string>> tuples;
+        if (resultTable.tuples.size()>0) {
+            node = "TRUE";
         }
+        else{
+            node = "FALSE";
+        }
+        tuple.push_back(node);
+        tuples.push_back(tuple);
+        resultTable.tuples=tuples;
     }
-    //}
-    resultTable.eliminateColumns(result_refs);
-
+    else{
+        for (int i=0; i<result_refs.size(); i++) {
+            string ref = result_refs.at(i);
+            if (resultTable.findColumn(ref)==-1) {
+                ResultsTable tempTable(ref,*valueTable[ref]);
+                resultTable.merge(tempTable);
+            }
+        }
+        //}
+        resultTable.eliminateColumns(result_refs);
+    }
 
 }
 bool QueryEvaluator::processGroupedRelations(){
