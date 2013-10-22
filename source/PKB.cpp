@@ -921,6 +921,9 @@ void PKB::buildCFG()
 	for(int i=0;i< getSizeStmtTable()+1;i++)
 	{
 		CFGNode * newNode = new CFGNode(i); // 0 is dummy
+		string type = getStmtType(i);
+		if(type.compare("call")==0)
+			newNode->setCallNode();
 		cfg.CFGNodes.push_back(newNode);
 		
 		visited.push_back(0);
@@ -928,7 +931,7 @@ void PKB::buildCFG()
 	cout<<"size proc table "<< getSizeProcTable()<<endl;
 	int procNum =  getSizeProcTable();
 	for(int i=0;i<procNum;i++){
-		buildTree(i);
+		buildTree(i);  // build cfg's next
 		//getchar();
 	}
 
@@ -955,6 +958,10 @@ CFGNode* PKB::buildLink(int stmtNo)
 	if(stmtType.compare("call")==0){
 		CFGNode *currentNode = cfg.CFGNodes[stmtNo];
 		currentNode->setCallNode();
+		
+		// ****go to the call proceudre!@!
+		// how to get the first stmt using procedure call stmtNo;
+		
 	}
 	cout<<"stmtType: "<<stmtType<<"  "<<stmtNo<<endl;
 	//cout<<"followed: "<< findFollowed(1)<<endl; // find after

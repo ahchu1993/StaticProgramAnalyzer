@@ -14,9 +14,21 @@ public:
 	int numOfParent;
 	vector<CFGNode *> childList;
 	vector<CFGNode *> parentList;
+
+
+	// for inter-procedure
 	int callNode;
+	int calledNode;
+	void setCalledNode();
 	void setCallNode();
 	bool isCallNode();
+	bool isCalledNode();
+	int numOfChildrenBIP;
+	int numOfParentBIP;
+	vector<CFGNode *> childBIPList;
+	vector<CFGNode *> parentBIPList;
+	void addChildBIP(CFGNode *node);
+	void addParentBIP(CFGNode *node);
 };
 
 #endif
