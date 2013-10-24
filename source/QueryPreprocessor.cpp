@@ -1359,6 +1359,10 @@ bool QueryPreprocessor::attrCompare(string s){
         ref1_postfix = trim(ref1.substr(p1+1,ref1.size()-p1-1));
         attr_entry e = attr_table[ref1_postfix];
         ref1_type = get_type(ref1_prefix);
+		if(e.prefix_type == "stmt"&&(ref1_type=="assign"||ref1_type =="if"||ref1_type=="while")){
+			flag1 = true;
+            evaluation_type = e.evaluation_type;
+		}
         if(ref1_type == e.prefix_type){
             flag1 = true;
             evaluation_type = e.evaluation_type;
@@ -1394,6 +1398,10 @@ bool QueryPreprocessor::attrCompare(string s){
         ref2_postfix = trim(ref2.substr(p2+1,ref2.size()-p2-1));
         attr_entry e = attr_table[ref2_postfix];
         ref2_type = get_type(ref2_prefix);
+		if(e.prefix_type == "stmt"&&(ref2_type=="assign"||ref2_type =="if"||ref2_type=="while")){
+			flag1 = true;
+            evaluation_type = e.evaluation_type;
+		}
         if(ref2_type == e.prefix_type){
             if(evaluation_type!=e.evaluation_type)
                 return false;
@@ -1442,10 +1450,10 @@ bool QueryPreprocessor::attrCompare(string s){
 }
 
 bool QueryPreprocessor::attrCond(string s){
-	unsigned int p = s.find("and");
+	unsigned int p = s.find(" and ");
 	if(p<s.size()){
 		string s1 = trim(s.substr(0,p));
-		string s2 = trim(s.substr(p+3, s.size()-p-3));
+		string s2 = trim(s.substr(p+5, s.size()-p-5));
 		return attrCompare(s1)&&attrCond(s2);
 	}
 	else return attrCompare(s);
@@ -1722,7 +1730,9 @@ bool QueryPreprocessor::process_query(string query){
 	string cl_type = it->second;
 
 	result_cl = query.substr(p0+6, p1-p0-6);
-	if(!validate_declaration(declaration_cl)||!validate_result(result_cl)) return false;
+	if(validate_declaration(declaration_cl)){
+		if(!validate_result(result_cl)) return false;
+	}else return false;
 
 	it++; 
 	int p2;
