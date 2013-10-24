@@ -9,7 +9,7 @@
 #include <map>
 #include <algorithm> 
 #include <set>
-
+#include <list>
 #include "VarTable.h"
 #include "ProcTable.h"
 #include "StmtTable.h"
@@ -180,6 +180,7 @@ public:
 	bool isNext(int stmtNo1,int stmtNo2);
 	bool isNextT(int stmtNo1, int stmtNo2);
 	bool contains(vector<int> list, int stmtNo);
+	bool contains(list<int> list, int stmtNo);
 	bool intersect(vector<int> list1, vector<int> list2);
 	// API for QE
 
@@ -192,16 +193,23 @@ public:
 	string toString(int num);
 	/************************************************** Affect - Zhao Yang *************************************************/
 	vector<int> affectList; // for internal usage
+	vector<int> affectedList;
 	vector<int> affectTList; // for internal usage
 	void recusiveBuildAffectList(int stmtNo, int varIndex);
+	void recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes);
 	void recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList);
 	vector<int> getAffectList(int stmtNo);
+	vector<int> getAffectedList(int stmtNo);  // all stmts that affect this stmtNo
+
 	vector<int> getAffectTList(int stmtNo);
+	
+	vector<int> listToVector(list<int> lis);
 	//API for QE
 	vector<pair<string, string>> getAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string, string>> getAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	bool checkAffects(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkAffectsT(string arg1, string arg1Type, string arg2, string arg2Type);
+	
 	struct postfixNode{
 		string type;// if/while/assig
 		int lineNum; 

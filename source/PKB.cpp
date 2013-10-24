@@ -959,13 +959,11 @@ CFGNode* PKB::buildLink(int stmtNo)
 		CFGNode *currentNode = cfg.CFGNodes[stmtNo];
 		currentNode->setCallNode();
 		
-		// ****go to the call proceudre!@!
+		// ****go to the call proceudre!@! for BIP
 		// how to get the first stmt using procedure call stmtNo;
 		
 	}
-	cout<<"stmtType: "<<stmtType<<"  "<<stmtNo<<endl;
-	//cout<<"followed: "<< findFollowed(1)<<endl; // find after
-	//cout<<"follows: "<< findFollows(1)<<endl;  // find prev
+
 
 	if(stmtType.compare("while")==0){
 
@@ -1192,6 +1190,13 @@ bool PKB::contains(vector<int> list, int stmtNo)
 			return true;
 	return false;
 }
+bool PKB::contains(list<int> list, int stmtNo)
+{
+	for (std::list<int>::iterator it=list.begin(); it!=list.end(); ++it)
+		if(*it==stmtNo)
+			return true;
+	return false;
+}
 
 bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 {
@@ -1228,6 +1233,9 @@ string PKB::toString(int num){
 vector<int> PKB::getAffectList(int stmtNo)
 {
 	affectList.clear();
+	string type = getStmtType(stmtNo);
+	if(type.compare("assign")!=0)
+		return affectList;
 	int varIndex = getModifiedStmt(stmtNo)[0];
 	
 	visited.clear();
@@ -1240,6 +1248,68 @@ vector<int> PKB::getAffectList(int stmtNo)
 	}
 
 	return affectList;
+}
+vector<int> PKB::listToVector(list<int> lis)
+{
+	vector<int> vec;
+	for (std::list<int>::iterator it=lis.begin(); it!=lis.end(); ++it)
+		vec.push_back(*it);
+	return vec;
+}
+vector<int> PKB::getAffectedList(int stmtNo)
+{
+	affectedList.clear();
+	string type = getStmtType(stmtNo);
+	if(type.compare("assign")!=0)
+		return affectedList;
+	vector<int> varIndexes = getUsedStmt(stmtNo); // all var-s that modified this stmt
+
+	visited.clear();
+	vector<int> parentList = getPrev(stmtNo);
+	for(int i=0;i<parentList.size();i++){
+		int parentStmt = parentList[i];
+		recusiveBuildAffectedList(parentStmt,varIndexes);
+	}
+	return affectedList;
+}
+void PKB::recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes)
+{
+	while(visited.size()<=stmtNo+1)
+		visited.push_back(0);
+	//num of loops
+	if(visited[stmtNo]==1)
+		return;
+	else visited[stmtNo]=visited[stmtNo]+1;
+
+	string type = getStmtType(stmtNo);
+	if(type.compare("assign")!=0){
+
+	}else{
+		int modifiedVar = getModifiedStmt(stmtNo)[0];
+		if(contains(varIndexes,modifiedVar)){
+			if(!contains(affectedList,stmtNo)){
+				affectedList.push_back(stmtNo);
+				visited.clear();
+			}
+			vector<int>::iterator it = std::find(varIndexes.begin(),varIndexes.end(),modifiedVar);
+			if (it != varIndexes.end()) {
+				
+				string var = getVarName(*it);
+				if(varIndexes.size()>1)
+					varIndexes.erase(it);
+				else varIndexes.clear();
+			}
+		}
+	}
+	if(varIndexes.size()==0)return;
+
+	vector<int> parentList = getPrev(stmtNo);
+	for(int i=0;i<parentList.size();i++){
+		int parentStmt = parentList[i];
+		//cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
+		recusiveBuildAffectedList(parentStmt,varIndexes);
+	}
+
 }
 void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 {
@@ -1291,18 +1361,37 @@ vector<pair<string, string>> PKB::getAffects(set<string>* arg1_set, string arg1T
 	set<string> arg1List = *arg1_set;
 	set<string> arg2List = *arg2_set;
 
-	for(it1=arg1List.begin();it1!=arg1List.end();it1++){
-		vector<int> list1;
-		int index1;
-		istringstream ( *it1 ) >> index1;
-			
-		list1 = getAffectList(index1);
+	// if set1 is smaller , we find next
+	if(arg1_set->size()<=arg2_set->size())
+	{
+		for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+			vector<int> list1;
+			int index1;
+			istringstream ( *it1 ) >> index1;
+
+			list1 = getAffectList(index1);
+			for(it2=arg2List.begin();it2!=arg2List.end();it2++){
+				int index2;
+				istringstream (*it2) >> index2;
+				if(contains(list1,index2)){
+					pair<string,string> p (*it1,*it2);
+					result.push_back(p);
+				}
+			}
+		}
+	}else{
 		for(it2=arg2List.begin();it2!=arg2List.end();it2++){
+			vector<int> list2;
 			int index2;
-			istringstream (*it2) >> index2;
-			if(contains(list1,index2)){
-				pair<string,string> p (*it1,*it2);
-				result.push_back(p);
+			istringstream ( *it2 ) >> index2;
+			list2=getAffectedList(index2);
+			for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+				int index1;
+				istringstream (*it1)>>index1;
+				if(contains(list2,index1)){
+					pair<string,string> p (*it1,*it2);
+					result.push_back(p);
+				}
 			}
 		}
 	}
@@ -1325,25 +1414,31 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 	set<string> arg1List = *arg1_set;
 	set<string> arg2List = *arg2_set;
 
-	for(it1=arg1List.begin();it1!=arg1List.end();it1++){
-		vector<int> list1;
-		int index1;
-		istringstream ( *it1 ) >> index1;
+	// if set1 is smaller , we find next
+	if(arg1_set->size()<=arg2_set->size())
+	{
+		for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+			vector<int> list1;
+			int index1;
+			istringstream ( *it1 ) >> index1;
 
-		string type = getStmtType(index1);
-		if(type.compare("assign")!=0)
-			continue;
+			string type = getStmtType(index1);
+			if(type.compare("assign")!=0)
+				continue;
 
-		list1 = getAffectTList(index1);
-		for(it2=arg2List.begin();it2!=arg2List.end();it2++){
-			int index2;
-			istringstream (*it2) >> index2;
-			//cout<<"index1 "<<index1<<" index2 "<<index2<<" size "<<result.size()<<endl;
-			if(contains(list1,index2)){
-				pair<string,string> p (*it1,*it2);
-				result.push_back(p);
+			list1 = getAffectTList(index1);
+			for(it2=arg2List.begin();it2!=arg2List.end();it2++){
+				int index2;
+				istringstream (*it2) >> index2;
+				//cout<<"index1 "<<index1<<" index2 "<<index2<<" size "<<result.size()<<endl;
+				if(contains(list1,index2)){
+					pair<string,string> p (*it1,*it2);
+					result.push_back(p);
+				}
 			}
 		}
+	}else{ // set2 is smaller , find prev
+		//********
 	}
 	t = clock() - t;
 	//cout<<"This affectT takes "<<finish<<endl;
