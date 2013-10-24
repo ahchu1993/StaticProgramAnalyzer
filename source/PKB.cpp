@@ -1253,8 +1253,9 @@ void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 	vector<int> usedVarList = getUsedStmt(stmtNo);
 	string stmtType =  getStmtType(stmtNo);
 	
+	//**** check if it's call stmt
 
-	// problem matic!!!! while situation, i only need assignment vars
+	// problematic!!!! while situation, i only need assignment vars
 	if(stmtType.compare("assign")==0&&contains(usedVarList,varIndex)){
 		if(!contains(affectList,stmtNo)){
 			
