@@ -449,12 +449,12 @@ bool QueryPreprocessor::check_process_tuple(string t){
 						int p = t1.find(".");
 						string s = t1.substr(0,p);
 						if(exists(s)){
-							result_reffs.push_back(t1);
-							return true;
+							result_reffs.push_back(s);
+							//return true;
 						}
 						else return false;
 					}
-					if(exists(t1))
+					else if(exists(t1))
 						result_reffs.push_back(t1);
 					else return false;
 				}
@@ -470,12 +470,12 @@ bool QueryPreprocessor::check_process_tuple(string t){
 							int p = t1.find(".");
 							string s = t1.substr(0,p);
 							if(exists(s)){
-								result_reffs.push_back(t1);
-								return true;
+								result_reffs.push_back(s);
+								//return true;
 							}
 							else return false;
 						}
-						if(exists(t1))
+						else if(exists(t1))
 							result_reffs.push_back(t1);
 						else return false;
 					}
