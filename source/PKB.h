@@ -184,14 +184,18 @@ public:
 	bool intersect(vector<int> list1, vector<int> list2);
 	// API for QE
 
+	// will be deleted ******
 	bool checkNext(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkNextT(string arg1, string arg1Type, string arg2, string arg2Type);
+
+	bool checkNext(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	bool checkNextT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 
 	vector<pair<string, string>> getNext(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string,string>> getNextT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	
-	bool checkNextBip(string arg1, string arg1Type, string arg2, string arg2Type);
-	bool checkNextTBip(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkNextBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	bool checkNextTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 
 	vector<pair<string, string>> getNextBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string,string>> getNextTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
@@ -216,11 +220,16 @@ public:
 	//API for QE
 	vector<pair<string, string>> getAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string, string>> getAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	bool checkAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	bool checkAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	
+	// will be deleted *****
 	bool checkAffects(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkAffectsT(string arg1, string arg1Type, string arg2, string arg2Type);
 	
-	bool checkAffectsBip(string arg1, string arg1Type, string arg2, string arg2Type);
-	bool checkAffectsTBip(string arg1, string arg1Type, string arg2, string arg2Type);
+
+	bool checkAffectsBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	bool checkAffectsTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string, string>> getAffectsBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string, string>> getAffectsTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	struct postfixNode{

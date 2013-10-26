@@ -1371,6 +1371,7 @@ void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 
 vector<pair<string, string>> PKB::getAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
+	cout<<"Into affects "<<endl;
 	clock_t t;
 	t = clock();
 	// _/integer??.
@@ -1486,15 +1487,158 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 
 }
 
-bool PKB::checkAffects(string arg1, string arg1Type, string arg2, string arg2Type){
-	return true;
+bool PKB::checkAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
+	cout<<"into check affect"<<endl;
+	clock_t t;
+	t = clock();
+	// _/integer??.
+	vector<pair<string,string>> result;
+
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> arg1List = *arg1_set;
+	set<string> arg2List = *arg2_set;
+
+	// if set1 is smaller , we find next
+	if(arg1_set->size()<=arg2_set->size())
+	{
+		for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+			vector<int> list1;
+			int index1;
+			istringstream ( *it1 ) >> index1;
+
+			list1 = getAffectList(index1);
+			for(it2=arg2List.begin();it2!=arg2List.end();it2++){
+				int index2;
+				istringstream (*it2) >> index2;
+				if(contains(list1,index2)){
+					return true;
+					pair<string,string> p (*it1,*it2);
+					result.push_back(p);
+				}
+			}
+		}
+	}else{
+		for(it2=arg2List.begin();it2!=arg2List.end();it2++){
+			vector<int> list2;
+			int index2;
+			istringstream ( *it2 ) >> index2;
+			list2=getAffectedList(index2);
+			for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+				int index1;
+				istringstream (*it1)>>index1;
+				if(contains(list2,index1)){
+					return true;
+					pair<string,string> p (*it1,*it2);
+					result.push_back(p);
+				}
+			}
+		}
+	}
+	t = clock() - t;
+	//cout<<"This affectT takes "<<finish<<endl;
+	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
+	//return result;
+	
+	return false;
 }
 
-bool PKB::checkAffectsT(string arg1, string arg1Type, string arg2, string arg2Type){
-	return true;
+bool PKB::checkAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
+	
+	cout<<"into check affect*"<<endl;
+	clock_t t;
+	t = clock();
+	vector<pair<string,string>> result;
+
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> arg1List = *arg1_set;
+	set<string> arg2List = *arg2_set;
+
+	// if set1 is smaller , we find next
+	if(arg1_set->size()<=arg2_set->size())
+	{
+		for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+			vector<int> list1;
+			int index1;
+			istringstream ( *it1 ) >> index1;
+
+			string type = getStmtType(index1);
+			if(type.compare("assign")!=0)
+				continue;
+
+			list1 = getAffectTList(index1);
+			for(it2=arg2List.begin();it2!=arg2List.end();it2++){
+				int index2;
+				istringstream (*it2) >> index2;
+				//cout<<"index1 "<<index1<<" index2 "<<index2<<" size "<<result.size()<<endl;
+				if(contains(list1,index2)){
+					return true;
+					pair<string,string> p (*it1,*it2);
+					result.push_back(p);
+				}
+			}
+		}
+	}else{ // set2 is smaller , find prev
+		for(it2=arg2List.begin();it2!=arg2List.end();it2++){
+			vector<int> list2;
+			int index2;
+			istringstream ( *it2 ) >> index2;
+
+			string type = getStmtType(index2);
+			if(type.compare("assign")!=0)
+				continue;
+
+			list2 = getAffectedTList(index2);
+			for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+				int index1;
+				istringstream (*it1) >> index1;
+
+				if(contains(list2,index1)){
+					return true;
+					pair<string,string> p (*it1,*it2);
+					result.push_back(p);
+				}
+			}
+		}
+	}
+	t = clock() - t;
+	//cout<<"This affectT takes "<<finish<<endl;
+	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
+
+	return false;
 }
 
 
+bool PKB::checkAffects(string arg1, string arg1Type, string arg2, string arg2Type)
+{
+	int stmtNo1,stmtNo2;
+	istringstream (arg1) >> stmtNo1;
+	istringstream (arg2) >> stmtNo2;
+	
+	vector<int> affectResult = getAffectList(stmtNo1);
+	for(int i=0;i<affectResult.size();i++){
+		if(stmtNo2==affectResult[i])
+			return true;  
+	}
+	return false;
+
+	//****** will be deleted
+}
+bool PKB::checkAffectsT(string arg1, string arg1Type, string arg2, string arg2Type)
+{
+	//******** will be deleted
+	int stmtNo1,stmtNo2;
+	istringstream (arg1) >> stmtNo1;
+	istringstream (arg2) >> stmtNo2;
+
+	vector<int> affectTResult = getAffectTList(stmtNo1);
+	for(int i=0;i<affectTResult.size();i++){
+		if(stmtNo2==affectTResult[i])
+			return true;  
+	}
+	return false;
+}
 vector<int> PKB::getAffectTList(int stmtNo)
 {
 
