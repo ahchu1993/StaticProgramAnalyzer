@@ -72,8 +72,12 @@ public:
 	void addFollowsTEntry();
 	void addNextEntry();
 	void addNextTEntry();
+	void addNextBipEntry();
+	void addNextTBipEntry();
 	void addAffectsEntry();
 	void addAffectsTEntry();
+	void addAffectsBipEntry();
+	void addAffectsTBipEntry();
 	void buildTable();
 	void print_relation(string r);
 	void print_table();

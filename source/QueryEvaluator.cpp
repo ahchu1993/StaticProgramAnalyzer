@@ -26,15 +26,13 @@ list<string> QueryEvaluator::processQuery(string query){
         if(constant_pass){     
 			grouped_pass = processGroupedRelations();
 			if(grouped_pass){
-				if(result_refs.size()==1)
-					results = getResults();
-				else{ 
-					if(grouped_relations.size()>0)
-						results = resultTable.toList();
-					else 
-						results = getResultsFromValueTable();
+				
+				if(grouped_relations.size()>0)
+					results = resultTable.toList();
+				else 
+					results = getResultsFromValueTable();
 					
-				}
+			
 				//return results;
 			}
 		}//else return results; // empty list
@@ -206,6 +204,14 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		res = pkb-> getAffects(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation=="Affects*"){
 		res = pkb-> getAffectsT(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+	}else if(relation =="NextBip"){
+		res = pkb-> getNext(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+	}else if(relation =="NextBip*"){
+		res = pkb-> getNext(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+	}else if(relation =="AffectsBip"){
+		res = pkb-> getNext(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+	}else if(relation =="AffectsBip*"){
+		res = pkb-> getNext(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}
 
 	if(da->ref1==da->ref2){  // ref1 is the same as ref2
@@ -268,6 +274,14 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 		return pkb-> checkAffects(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Affects*"){
 		return pkb-> checkAffectsT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "NextBip"){
+		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "NextBip*"){
+		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "AffectsBip"){
+		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+	}else if(relation == "AffectsBip*"){
+		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}
 
 	return false;
@@ -568,7 +582,7 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
 
 
 
-list<string> QueryEvaluator::getResults(){
+/*list<string> QueryEvaluator::getResults(){
 	string r = result_refs.at(0);
 	list<string> res;
 	if(r=="BOOLEAN"){
@@ -581,12 +595,19 @@ list<string> QueryEvaluator::getResults(){
 		res.push_back(*it);
 	}
 	return res;
-}
+} */
 
 list<string> QueryEvaluator::getResultsFromValueTable(){
 	
 	list<string> res;
+
 	string first = result_refs[0];
+	
+	if(first=="BOOLEAN"){
+		res.push_back("true");
+		return res;
+
+	}
 	set<string> s = *valueTable[first];
 
 	for(set<string>::iterator it = s.begin();it!=s.end();it++){
