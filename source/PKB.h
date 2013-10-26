@@ -193,16 +193,18 @@ public:
 	string toString(int num);
 	/************************************************** Affect - Zhao Yang *************************************************/
 	vector<int> affectList; // for internal usage
-	vector<int> affectedList;
+	vector<int> affectedList; // for internal usage
 	vector<int> affectTList; // for internal usage
+	vector<int> affectedTList; // for internal usage
 	void recusiveBuildAffectList(int stmtNo, int varIndex);
 	void recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes);
 	void recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList);
+	void recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes);
 	vector<int> getAffectList(int stmtNo);
 	vector<int> getAffectedList(int stmtNo);  // all stmts that affect this stmtNo
 
 	vector<int> getAffectTList(int stmtNo);
-	
+	vector<int> getAffectedTList(int stmtNo);
 	vector<int> listToVector(list<int> lis);
 	//API for QE
 	vector<pair<string, string>> getAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);

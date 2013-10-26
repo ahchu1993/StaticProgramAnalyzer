@@ -1458,7 +1458,26 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 			}
 		}
 	}else{ // set2 is smaller , find prev
-		//********
+		for(it2=arg2List.begin();it2!=arg2List.end();it2++){
+			vector<int> list2;
+			int index2;
+			istringstream ( *it2 ) >> index2;
+
+			string type = getStmtType(index2);
+			if(type.compare("assign")!=0)
+				continue;
+
+			list2 = getAffectedTList(index2);
+			for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+				int index1;
+				istringstream (*it1) >> index1;
+				
+				if(contains(list2,index1)){
+					pair<string,string> p (*it1,*it2);
+					result.push_back(p);
+				}
+			}
+		}
 	}
 	t = clock() - t;
 	//cout<<"This affectT takes "<<finish<<endl;
@@ -1495,6 +1514,71 @@ vector<int> PKB::getAffectTList(int stmtNo)
 
 
 	return affectTList;
+}
+vector<int> PKB::getAffectedTList(int stmtNo)
+{
+
+	visited.clear();
+	affectedTList.clear();
+
+	string type = getStmtType(stmtNo);
+	if(type.compare("assign")!=0)
+		return affectedTList;
+
+	vector<int> varIndexes = getUsedStmt(stmtNo);
+
+
+	vector<int> parentList = getPrev(stmtNo);
+	for(int i=0;i<parentList.size();i++){
+		int parentStmt = parentList[i];
+		recusiveBuildAffectedTList(parentStmt,varIndexes);
+	}
+	//DWORD finish = GetTickCount()-start;
+	return affectedTList;
+}
+void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes)
+{
+	//cout<<"STMTNO "<<stmtNo<<endl; 
+	//for(int i=0;i<varIndexes.size();i++){
+		//cout<<"used  "<<getVarName(varIndexes[i])<<endl;
+	//}
+	while(visited.size()<=stmtNo)
+		visited.push_back(0);
+	//num of loops
+	if(visited[stmtNo]>=1)//********** need to change to NUM, each time modify, num++;
+		return;
+	else visited[stmtNo]=visited[stmtNo]+1;
+	
+	string stmtType = getStmtType(stmtNo);
+
+	int modifiedVar = getModifiedStmt(stmtNo)[0];
+	if(stmtType.compare("assign")==0&&contains(varIndexes,modifiedVar)){
+		if(!contains(affectedList,stmtNo)){
+			affectedTList.push_back(stmtNo);
+			//visited.clear();
+
+
+		}
+
+		vector<int> usedVarList = getUsedStmt(stmtNo);
+		for(int i=0;i<usedVarList.size();i++){
+			int usedVar = usedVarList[i];
+			if(!contains(varIndexes,usedVar)){
+				varIndexes.push_back(usedVar);
+
+				//cout<<"add new used var "<<getVarName(usedVar)<<endl;
+				//getchar();
+				visited.clear();
+			}
+		}
+	}
+
+	vector<int> parentList = getPrev(stmtNo);
+	for(int i=0;i<parentList.size();i++){
+		int parentStmt = parentList[i];
+		recusiveBuildAffectedTList(parentStmt,varIndexes);
+	}
+
 }
 bool PKB::intersect(vector<int> list1, vector<int> list2){
 	for(int i=0;i<list1.size();i++)
