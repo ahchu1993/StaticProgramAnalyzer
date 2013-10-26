@@ -661,6 +661,25 @@ bool QueryPreprocessor::check_expr_f(string s){
 	std::map<int,string> op_positions;
 	std::map<int,string>::reverse_iterator rit;
 	unsigned int p;
+	int count_left_paren=0;
+	int count_right_paren = 0;
+
+	p = s.find("(");
+	while(p<s.size()){
+		count_left_paren++;
+		op_positions.insert(std::pair<int,string>(p,"("));
+		p = s.find("(",p+1);
+	}
+
+	p = s.find(")");
+	while(p<s.size()){
+		count_right_paren++;
+		op_positions.insert(std::pair<int,string>(p,")"));
+		p = s.find(")",p+1);
+	}
+
+	if(count_left_paren!=count_right_paren)
+		return false;
 
 	p= s.find("+");
 	while(p<s.size()){
@@ -680,17 +699,7 @@ bool QueryPreprocessor::check_expr_f(string s){
 		p = s.find("*",p+1);
 	}
 
-	p = s.find("(");
-	while(p<s.size()){
-		op_positions.insert(std::pair<int,string>(p,"("));
-		p = s.find("(",p+1);
-	}
-
-	p = s.find(")");
-	while(p<s.size()){
-		op_positions.insert(std::pair<int,string>(p,")"));
-		p = s.find(")",p+1);
-	}
+	
 
 	rit = op_positions.rbegin();
 	if(op_positions.empty()) return check_factor(s);
