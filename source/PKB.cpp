@@ -974,6 +974,8 @@ CFGNode* PKB::buildLink(int stmtNo)
 		int followedIndex =  findFollowed(stmtNo);
 		if(followedIndex>0){
 			whileNode->addChild(buildLink(followedIndex));
+		}else{
+			whileNode->addChild(findNext(stmtNo));
 		}
 
 		return whileNode;
@@ -1051,6 +1053,8 @@ void PKB::printCFG()
 	}
 	cout<<" CFGList size "<<cfg.CFGHeaderList.size()<<endl;
 	for(unsigned int i=0;i<cfg.CFGHeaderList.size();i++){
+		if(i!=cfg.CFGHeaderList.size()-1)continue; //***
+
 		cout<<" procedure "<<(i+1)<<endl;
 		CFGNode* rootNode = cfg.CFGHeaderList[i];
 		printfTree(rootNode);
@@ -1100,7 +1104,13 @@ bool PKB::isNextT(int stmtNo1, int stmtNo2)
 
 vector<int> PKB::getNextT(int stmtNo)
 {	
+	printf("Enter next star \n");
+	clock_t t;
+	t = clock();
 	vector<int> nextStarList = cfg.getNextStar(stmtNo);
+	t = clock() - t;
+	//cout<<"This affectT takes "<<finish<<endl;
+	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 	return nextStarList;
 }
 vector<int> PKB::getPrevT(int stmtNo)
@@ -1168,14 +1178,24 @@ vector<pair<string, string>> PKB::getNextT(set<string>* arg1_set, string arg1Typ
 	set<string> arg1List = *arg1_set;
 	set<string> arg2List = *arg2_set;
 
+	//** check size , next/prev
+
 	for(it1=arg1List.begin();it1!=arg1List.end();it1++){
 		string index1 = *it1;
+		cout<<"search "<<index1<<endl;
 		int stmtNo1 = atoi(index1.c_str());
 		vector<int> childrenList = getNextT(stmtNo1);
+		
+		if(stmtNo1==103){
+			for(int i=0;i<childrenList.size();i++)
+				cout<<stmtNo1<<"  next "<<childrenList[i]<<endl;
+		}
+
 		for(it2=arg2List.begin();it2!= arg2List.end();it2++){
 			string index2 = *it2;
 			int stmtNo2 = atoi(index2.c_str());
 			if(contains(childrenList,stmtNo2)){
+				
 				pair<string,string> p(index1,index2);
 				result.push_back(p);
 			}

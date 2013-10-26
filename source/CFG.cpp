@@ -84,10 +84,11 @@ void CFG::getPrevStarRecursive(int stmtNo)
 }
 void CFG::getNextStarRecursive(int stmtNo)
 {
+	//cout<<"stmtNo "<<stmtNo<<endl;
 	vector<int> childrenList = getNext(stmtNo);
+
 	for(unsigned int i=0;i<childrenList.size();i++){
 		int childStmtNo = childrenList[i];
-
 		// add size in case over flow
 		while(visited.size()<=(unsigned int)childStmtNo){
 			visited.push_back(0);
@@ -95,7 +96,9 @@ void CFG::getNextStarRecursive(int stmtNo)
 		// loop detection
 		if(visited[childStmtNo]==0){
 			visited[childStmtNo]=1;
-		}else return;
+		}else{
+			continue;
+		}
 		resultList.push_back(childStmtNo);
 		getNextStarRecursive(childStmtNo);
 	}
