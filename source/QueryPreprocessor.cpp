@@ -181,6 +181,44 @@ void QueryPreprocessor::addNextTEntry(){
 	table["Next*"] = e;
 }
 
+void QueryPreprocessor::addNextBipEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("prog_line");
+	arg1.synonym_type.push_back("stmt");
+	arg1.synonym_type.push_back("assign");
+	arg1.synonym_type.push_back("if");
+	arg1.synonym_type.push_back("while");
+	fillArg(&arg1,true,true,false);
+
+	arg2.synonym_type.push_back("prog_line");
+	arg2.synonym_type.push_back("stmt");
+	arg2.synonym_type.push_back("assign");
+	arg2.synonym_type.push_back("if");
+	arg2.synonym_type.push_back("while");
+	fillArg(&arg2,true,true,false);
+	entry e = {arg1,arg2};
+	table["NextBip"] = e;
+}
+
+void QueryPreprocessor::addNextTBipEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("prog_line");
+	arg1.synonym_type.push_back("stmt");
+	arg1.synonym_type.push_back("assign");
+	arg1.synonym_type.push_back("if");
+	arg1.synonym_type.push_back("while");
+	fillArg(&arg1,true,true,false);
+
+	arg2.synonym_type.push_back("prog_line");
+	arg2.synonym_type.push_back("stmt");
+	arg2.synonym_type.push_back("assign");
+	arg2.synonym_type.push_back("if");
+	arg2.synonym_type.push_back("while");
+	fillArg(&arg2,true,true,false);
+	entry e = {arg1,arg2};
+	table["NextBip*"] = e;
+}
+
 void QueryPreprocessor::addAffectsEntry(){
 	arg_type_list arg1,arg2;
 	arg1.synonym_type.push_back("stmt");
@@ -209,6 +247,36 @@ void QueryPreprocessor::addAffectsTEntry(){
 	fillArg(&arg2,true,true,false);
 	entry e = {arg1,arg2};
 	table["Affects*"] = e;
+}
+
+void QueryPreprocessor::addAffectsBipEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("stmt");
+	arg1.synonym_type.push_back("assign");
+	arg1.synonym_type.push_back("prog_line");
+	fillArg(&arg1,true,true,false);
+
+	arg2.synonym_type.push_back("stmt");
+	arg2.synonym_type.push_back("assign");
+	arg2.synonym_type.push_back("prog_line");
+	fillArg(&arg2,true,true,false);
+	entry e = {arg1,arg2};
+	table["AffectsBip"] = e;
+}
+
+void QueryPreprocessor::addAffectsTBipEntry(){
+	arg_type_list arg1,arg2;
+	arg1.synonym_type.push_back("stmt");
+	arg1.synonym_type.push_back("assign");
+	arg1.synonym_type.push_back("prog_line");
+	fillArg(&arg1,true,true,false);
+
+	arg2.synonym_type.push_back("stmt");
+	arg2.synonym_type.push_back("assign");
+	arg2.synonym_type.push_back("prog_line");
+	fillArg(&arg2,true,true,false);
+	entry e = {arg1,arg2};
+	table["AffectsBip*"] = e;
 }
 
 void QueryPreprocessor::buildTable(){
@@ -709,17 +777,17 @@ bool QueryPreprocessor::check_expr_f(string s){
 
 		if(rit->second==")"){
 			int p1 = rit->first;
+			balance++;
 			rit++;
 
 			while(rit!=op_positions.rend()){
 				//cout<<rit->first<<" "<<rit->second<<"\n";
-				if(rit->second==")"){
+				if(rit->second == ")"){
 					balance++;
 					rit++;
 				}
 
 				else if(rit->second=="("&&balance!=0){
-					balance--;
 					rit++;
 				}
 
@@ -728,18 +796,25 @@ bool QueryPreprocessor::check_expr_f(string s){
 				else rit++;
 
 			}
-
-			if(rit==op_positions.rend()) return false;
+			rit--;
+			if(rit==op_positions.rend())
+				return false;
 
 			int p2 = rit->first;
-			string s1 = s.substr(p2+1,p1-p2-1);
+			string s1;
+			if(p2==0) //"(" at start
+				s1= trim(s.substr(p2+1,p1-p2-1));
+			else  
+				s1 = trim(s.substr(p2+1,p1-p2));
 			unsigned int p_bracket = s1.find("(");
 			if(p_bracket>s1.size()) {
 
-				if(!check_expr(s1)) return false;
+				if(!check_expr(s1))
+					return false;
 
 			}else {
-				if(!check_expr_f(s1)) return false;
+				if(!check_expr_f(s1)) 
+					return false;
 			}
 
 
