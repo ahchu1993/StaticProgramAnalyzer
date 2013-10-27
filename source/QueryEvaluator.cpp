@@ -118,7 +118,7 @@ void QueryEvaluator::validateResults(){
 
 }
 bool QueryEvaluator::processGroupedRelations(){
-    ResultsTable temp_results_table;
+   // ResultsTable temp_results_table;
 	if(grouped_relations.size()==0)
 		return true;
     
@@ -159,9 +159,9 @@ bool QueryEvaluator::processGroupedRelations(){
 			}
         }//for each relation
         temp_table.eliminateColumns(result_refs);
-        temp_results_table.merge(temp_table);
+        resultTable.merge(temp_table);
     }//for each group
-    resultTable=temp_results_table;
+    //resultTable=temp_results_table;
     validateResults();
     return true;
 }
