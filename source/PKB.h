@@ -216,6 +216,8 @@ public:
 	vector<int> getAffectedTList(int stmtNo);
 	vector<int> listToVector(list<int> lis);
 
+	map<pair<int,int>,int> cache;
+
 
 	//API for QE
 	vector<pair<string, string>> getAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
