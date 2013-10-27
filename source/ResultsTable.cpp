@@ -62,13 +62,9 @@ vector<vector<string>> ResultsTable::validation(int parent_index, int child_inde
         //compare the parent child pair with values from results
         for(int i =0; i<results.size();i++){
             if(parent_cell.compare(results.at(i).first)==0 && child_cell.compare(results.at(i).second)==0){
-                string newCell1;
-                string newCell2;
-                newCell1 = parent_cell;
-                newCell2 = child_cell;
+               
                 vector<string> newvector;
-                newvector.push_back(newCell1);//add the additional tuple with original tuples in a temp vector
-                newvector.push_back(newCell2);
+				newvector = tuple;
                 output.push_back(newvector);//save the tuple in a table
             }
         }
