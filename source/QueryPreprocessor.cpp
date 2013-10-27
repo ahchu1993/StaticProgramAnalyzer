@@ -1697,7 +1697,7 @@ void QueryPreprocessor::group_relations(){
         for(unsigned j =0;j<relation_map.size();j++){ 
 			
 			BaseRelation* f = *it;
-			++it;
+			
             if(relation_map[j]==0){
 
 				if(f->type=="designAbstraction"){
@@ -1731,6 +1731,7 @@ void QueryPreprocessor::group_relations(){
 					break;
 				} 
             }
+			++it;
         }
 
 		///----- main loop-----------
@@ -1775,9 +1776,9 @@ void QueryPreprocessor::group_relations(){
                     c++;
                     total_count--;
                     relation_map[i] =1;
-					i++;
+					
                 }
-				
+				i++;
             }
         }while(c!=before);
         //clear  dependence map
