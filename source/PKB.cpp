@@ -619,23 +619,23 @@ void PKB::printModifyTable()
 	string type;
 	int procIndex, stmtNo, varIndex;
 
-	cout<< "ModifyProcTable:" << endl;
-	cout<< "procName" << "\t" << "varName" << endl;
+	//cout<< "ModifyProcTable:" << endl;
+	//cout<< "procName" << "\t" << "varName" << endl;
 	for (unsigned i = 0; i<ModifyProcTable.size(); i++){
 		temp_proc_row = ModifyProcTable.at(i);
 		procIndex = temp_proc_row.procIndex;
 		varIndex = temp_proc_row.varIndex;
-		cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
+		//cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
 	}
 
-	cout<< "ModifyStmtTable:" << endl;
-	cout<< "stmtNo" << "\t" << "Type" << "\t" << "varName" << endl;
+	//cout<< "ModifyStmtTable:" << endl;
+	//cout<< "stmtNo" << "\t" << "Type" << "\t" << "varName" << endl;
 	for (unsigned i = 0; i<ModifyStmtTable.size(); i++){
 		temp_stmt_row = ModifyStmtTable.at(i);
 		stmtNo = temp_stmt_row.stmtNo;
 		type = temp_stmt_row.DE;
 		varIndex = temp_stmt_row.varIndex;
-		cout<<stmtNo<<"\t"<<type<<"\t"<<varTable.getVarName(varIndex)<<endl;
+		//cout<<stmtNo<<"\t"<<type<<"\t"<<varTable.getVarName(varIndex)<<endl;
 	}
 }
 
@@ -793,23 +793,23 @@ void PKB::printUseTable()
 	string type;
 	int procIndex, stmtNo, varIndex;
 
-	cout<< "UseProcTable:" << endl;
-	cout<< "procName" << "\t" << "varName" << endl;
+	//cout<< "UseProcTable:" << endl;
+	//cout<< "procName" << "\t" << "varName" << endl;
 	for (unsigned i = 0; i<UseProcTable.size(); i++){
 		temp_proc_row = UseProcTable.at(i);
 		procIndex = temp_proc_row.procIndex;
 		varIndex = temp_proc_row.varIndex;
-		cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
+		//cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
 	}
 
-	cout<< "UseStmtTable:" << endl;
-	cout<< "stmtNo" << "\t" << "Type" << "\t" << "varName" << endl;
+	//cout<< "UseStmtTable:" << endl;
+	//cout<< "stmtNo" << "\t" << "Type" << "\t" << "varName" << endl;
 	for (unsigned i = 0; i<UseStmtTable.size(); i++){
 		temp_stmt_row = UseStmtTable.at(i);
 		stmtNo = temp_stmt_row.stmtNo;
 		type = temp_stmt_row.DE;
 		varIndex = temp_stmt_row.varIndex;
-		cout<<stmtNo<<"\t"<<type<<"\t"<<varTable.getVarName(varIndex)<<endl;
+		//cout<<stmtNo<<"\t"<<type<<"\t"<<varTable.getVarName(varIndex)<<endl;
 	}
 }
 
@@ -928,7 +928,7 @@ void PKB::buildCFG()
 		
 		visited.push_back(0);
 	}
-	cout<<"size proc table "<< getSizeProcTable()<<endl;
+	//cout<<"size proc table "<< getSizeProcTable()<<endl;
 	int procNum =  getSizeProcTable();
 	for(int i=0;i<procNum;i++){
 		buildTree(i);  // build cfg's next
@@ -942,7 +942,7 @@ void PKB::buildCFG()
 
 void PKB::buildTree(int procIndex)
 {
-	cout<<"current index "<<currentIndex<<endl;
+	//cout<<"current index "<<currentIndex<<endl;
 	cfg.CFGHeaderList.push_back(cfg.CFGNodes[currentIndex]);
 	buildLink(currentIndex);
 }
@@ -983,7 +983,7 @@ CFGNode* PKB::buildLink(int stmtNo)
 		CFGNode *ifNode=cfg.CFGNodes[stmtNo];
 
 		vector<int> childrenList =  getChildren(stmtNo,"stmt"); // *** why?
-		cout<<"child "<<childrenList.size()<<"  stmtNo: "<<stmtNo<<endl;
+		//cout<<"child "<<childrenList.size()<<"  stmtNo: "<<stmtNo<<endl;
 		
 		// find else stmtList
 		int afterElseStmtNo=0;
@@ -997,7 +997,7 @@ CFGNode* PKB::buildLink(int stmtNo)
 			}
 		}
 
-		cout<<"haha found: "<<"  "<<afterElseStmtNo<<endl;
+		//cout<<"haha found: "<<"  "<<afterElseStmtNo<<endl;
 
 		ifNode->addChild(buildLink(stmtNo+1)); // then
 		ifNode->addChild(buildLink(afterElseStmtNo)); // else
@@ -1051,16 +1051,16 @@ void PKB::printCFG()
 	for(unsigned int i=0;i<visited.size();i++){
 		visited[i]=0;
 	}
-	cout<<" CFGList size "<<cfg.CFGHeaderList.size()<<endl;
+	//cout<<" CFGList size "<<cfg.CFGHeaderList.size()<<endl;
 	for(unsigned int i=0;i<cfg.CFGHeaderList.size();i++){
 		if(i!=cfg.CFGHeaderList.size()-1)continue; //***
 
-		cout<<" procedure "<<(i+1)<<endl;
+		//cout<<" procedure "<<(i+1)<<endl;
 		CFGNode* rootNode = cfg.CFGHeaderList[i];
 		printfTree(rootNode);
 	}
 	//getchar();
-	cout<<"CFG END"<<endl;
+	//cout<<"CFG END"<<endl;
 	//getchar();
 }
 void PKB::printfTree(CFGNode *node)
@@ -1071,12 +1071,12 @@ void PKB::printfTree(CFGNode *node)
 	else return;
 	for(unsigned int i=0;i<node->childList.size();i++)
 	{
-		cout<<node->stmtNum<<" to "<<node->childList[i]->stmtNum<<endl;
+		//cout<<node->stmtNum<<" to "<<node->childList[i]->stmtNum<<endl;
 		printfTree(node->childList[i]);
 	}
 	if(node->childList.size()==0)
 	{
-		cout<<node->stmtNum<<" to "<<"NO-WHERE"<<endl;
+		//cout<<node->stmtNum<<" to "<<"NO-WHERE"<<endl;
 	}
 }
 
@@ -1109,7 +1109,7 @@ vector<int> PKB::getNextT(int stmtNo)
 	t = clock();
 	vector<int> nextStarList = cfg.getNextStar(stmtNo);
 	t = clock() - t;
-	//cout<<"This affectT takes "<<finish<<endl;
+	////cout<<"This affectT takes "<<finish<<endl;
 	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 	return nextStarList;
 }
@@ -1182,14 +1182,11 @@ vector<pair<string, string>> PKB::getNextT(set<string>* arg1_set, string arg1Typ
 
 	for(it1=arg1List.begin();it1!=arg1List.end();it1++){
 		string index1 = *it1;
-		cout<<"search "<<index1<<endl;
+		////cout<<"search "<<index1<<endl;
 		int stmtNo1 = atoi(index1.c_str());
 		vector<int> childrenList = getNextT(stmtNo1);
 		
-		if(stmtNo1==103){
-			for(int i=0;i<childrenList.size();i++)
-				cout<<stmtNo1<<"  next "<<childrenList[i]<<endl;
-		}
+	
 
 		for(it2=arg2List.begin();it2!= arg2List.end();it2++){
 			string index2 = *it2;
@@ -1326,7 +1323,7 @@ void PKB::recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes)
 	vector<int> parentList = getPrev(stmtNo);
 	for(int i=0;i<parentList.size();i++){
 		int parentStmt = parentList[i];
-		//cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
+		////cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
 		recusiveBuildAffectedList(parentStmt,varIndexes);
 	}
 
@@ -1363,7 +1360,7 @@ void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 		vector<int> childrenList = getNext(stmtNo);
 		for(int i=0;i<childrenList.size();i++){
 			int childStmt = childrenList[i];
-			//cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
+			////cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
 			recusiveBuildAffectList(childStmt,varIndex);
 		}
 	}
@@ -1371,7 +1368,7 @@ void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 
 vector<pair<string, string>> PKB::getAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
-	cout<<"Into affects "<<endl;
+	//cout<<"Into affects "<<endl;
 	clock_t t;
 	t = clock();
 	// _/integer??.
@@ -1417,7 +1414,7 @@ vector<pair<string, string>> PKB::getAffects(set<string>* arg1_set, string arg1T
 		}
 	}
 	t = clock() - t;
-	//cout<<"This affectT takes "<<finish<<endl;
+	////cout<<"This affectT takes "<<finish<<endl;
 	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 	return result;
 }
@@ -1426,7 +1423,7 @@ vector<pair<string, string>> PKB::getAffects(set<string>* arg1_set, string arg1T
 
 vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
-	cout<<"Into affectT"<<endl;
+	//cout<<"Into affectT"<<endl;
 
 	clock_t t;
 	t = clock();
@@ -1453,7 +1450,7 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 			for(it2=arg2List.begin();it2!=arg2List.end();it2++){
 				int index2;
 				istringstream (*it2) >> index2;
-				//cout<<"index1 "<<index1<<" index2 "<<index2<<" size "<<result.size()<<endl;
+				////cout<<"index1 "<<index1<<" index2 "<<index2<<" size "<<result.size()<<endl;
 				if(contains(list1,index2)){
 					pair<string,string> p (*it1,*it2);
 					result.push_back(p);
@@ -1483,14 +1480,14 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 		}
 	}
 	t = clock() - t;
-	//cout<<"This affectT takes "<<finish<<endl;
+	////cout<<"This affectT takes "<<finish<<endl;
 	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 	return result;
 
 }
 
 bool PKB::checkAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
-	cout<<"into check affect"<<endl;
+	//cout<<"into check affect"<<endl;
 	clock_t t;
 	t = clock();
 	// _/integer??.
@@ -1538,7 +1535,7 @@ bool PKB::checkAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2
 		}
 	}
 	t = clock() - t;
-	//cout<<"This affectT takes "<<finish<<endl;
+	////cout<<"This affectT takes "<<finish<<endl;
 	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 	//return result;
 	
@@ -1547,7 +1544,7 @@ bool PKB::checkAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2
 
 bool PKB::checkAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
 	
-	cout<<"into check affect*"<<endl;
+	//cout<<"into check affect*"<<endl;
 	clock_t t;
 	t = clock();
 	vector<pair<string,string>> result;
@@ -1573,7 +1570,7 @@ bool PKB::checkAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg
 			for(it2=arg2List.begin();it2!=arg2List.end();it2++){
 				int index2;
 				istringstream (*it2) >> index2;
-				//cout<<"index1 "<<index1<<" index2 "<<index2<<" size "<<result.size()<<endl;
+				////cout<<"index1 "<<index1<<" index2 "<<index2<<" size "<<result.size()<<endl;
 				if(contains(list1,index2)){
 					return true;
 					pair<string,string> p (*it1,*it2);
@@ -1605,7 +1602,7 @@ bool PKB::checkAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg
 		}
 	}
 	t = clock() - t;
-	//cout<<"This affectT takes "<<finish<<endl;
+	////cout<<"This affectT takes "<<finish<<endl;
 	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 
 	return false;
@@ -1684,9 +1681,9 @@ vector<int> PKB::getAffectedTList(int stmtNo)
 }
 void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes)
 {
-	//cout<<"STMTNO "<<stmtNo<<endl; 
+	////cout<<"STMTNO "<<stmtNo<<endl; 
 	//for(int i=0;i<varIndexes.size();i++){
-		//cout<<"used  "<<getVarName(varIndexes[i])<<endl;
+		////cout<<"used  "<<getVarName(varIndexes[i])<<endl;
 	//}
 	while(visited.size()<=stmtNo)
 		visited.push_back(0);
@@ -1712,7 +1709,7 @@ void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes)
 			if(!contains(varIndexes,usedVar)){
 				varIndexes.push_back(usedVar);
 
-				//cout<<"add new used var "<<getVarName(usedVar)<<endl;
+				////cout<<"add new used var "<<getVarName(usedVar)<<endl;
 				//getchar();
 				visited.clear();
 			}
@@ -1737,7 +1734,7 @@ bool PKB::intersect(vector<int> list1, vector<int> list2){
 // need to change it to , int stmtNo(current line), vector<int> varList(all varIndex that are using!!!)
 void PKB::recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList)
 {
-	//cout<<"STMTNO "<<stmtNo<<"  varIndex  "<<varIndexList[0]<<endl; // how to solve loop!!
+	////cout<<"STMTNO "<<stmtNo<<"  varIndex  "<<varIndexList[0]<<endl; // how to solve loop!!
 
 	while(visited.size()<=stmtNo)
 		visited.push_back(0);
@@ -1799,12 +1796,12 @@ void PKB::flattenAST()
 		
 		postfixExpr = createPostfix(thisTnode->getRightChild());
 
-		/*cout<<endl;
-		cout<<"type: "<<type<<endl;
-		cout<<"lineNum: "<<lineNum<<endl;
-		cout<<"varRef: "<<varRef<<endl;
-		cout<<"postfixExpr: --"<<postfixExpr<<"--"<<endl;
-		cout<<endl; */
+		/*//cout<<endl;
+		//cout<<"type: "<<type<<endl;
+		//cout<<"lineNum: "<<lineNum<<endl;
+		//cout<<"varRef: "<<varRef<<endl;
+		//cout<<"postfixExpr: --"<<postfixExpr<<"--"<<endl;
+		//cout<<endl; */
 
 		postfixNode* node = new postfixNode(type,lineNum,varRef,postfixExpr);
 
@@ -1854,12 +1851,12 @@ string PKB::createPostfix(TNode *node)
 void PKB::printNext()
 {
 	int stmtNum = getSizeStmtTable();
-	cout<<"StmtNumber   "<<"  nextStmt"<<endl;
+	//cout<<"StmtNumber   "<<"  nextStmt"<<endl;
 	for(int i=1;i<=stmtNum;i++){
 		vector<int> nextList = getNext(i);
 		sort (nextList.begin(), nextList.end());
 		for(unsigned int j=0;j<nextList.size();j++){
-			cout<<i<<"         "<<nextList[j]<<endl;
+			//cout<<i<<"         "<<nextList[j]<<endl;
 		}
 	}
 
@@ -1867,12 +1864,12 @@ void PKB::printNext()
 void PKB::printNextT()
 {
 	int stmtNum = getSizeStmtTable();
-	cout<<"StmtNumber   "<<"  nextTStmt"<<endl;
+	//cout<<"StmtNumber   "<<"  nextTStmt"<<endl;
 	for(int i=1;i<=stmtNum;i++){
 		vector<int> nextTList = getNextT(i);
 		sort (nextTList.begin(), nextTList.end());
 		for(unsigned int j=0;j<nextTList.size();j++){
-			cout<<i<<"         "<<nextTList[j]<<endl;
+			//cout<<i<<"         "<<nextTList[j]<<endl;
 		}
 	}
 
@@ -1880,14 +1877,14 @@ void PKB::printNextT()
 void PKB::printAffects()
 {
 	int stmtNum = getSizeStmtTable();
-	cout<<"StmtNumber   "<<"  affectsStmt"<<endl;
+	//cout<<"StmtNumber   "<<"  affectsStmt"<<endl;
 	for(int i=1;i<=stmtNum;i++){
 		if(getStmtType(i).compare("assign")!=0)
 			continue;
 		vector<int> affectList = getAffectList(i);
 		sort (affectList.begin(), affectList.end());
 		for(unsigned int j=0;j<affectList.size();j++){
-			cout<<i<<"                   "<<affectList[j]<<endl;
+			//cout<<i<<"                   "<<affectList[j]<<endl;
 		}
 	}
 
@@ -1896,14 +1893,14 @@ void PKB::printAffectsT()
 {
 	// affect only assignment?>
 	int stmtNum = getSizeStmtTable();
-	cout<<"StmtNumber   "<<"  affectsTStmt"<<endl;
+	//cout<<"StmtNumber   "<<"  affectsTStmt"<<endl;
 	for(int i=1;i<=stmtNum;i++){
 		if(getStmtType(i).compare("assign")!=0)
 			continue;
 		vector<int> affectTList = getAffectTList(i);
 		sort (affectTList.begin(), affectTList.end());
 		for(unsigned int j=0;j<affectTList.size();j++){
-			cout<<i<<"                   "<<affectTList[j]<<endl;
+			//cout<<i<<"                   "<<affectTList[j]<<endl;
 		}
 	}
 
