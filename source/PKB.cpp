@@ -954,6 +954,7 @@ set<string> PKB::getAllConstants(){
 /************************************************** CFG - Zhao Yang *************************************************/
 void PKB::buildCFG()
 {
+	visited.clear();
 	currentIndex=1;
 	for(int i=0;i< getSizeStmtTable()+1;i++)
 	{
@@ -973,18 +974,22 @@ void PKB::buildCFG()
 	}
 
 	// build cfgparentlist   ->double linked list
-	for(unsigned int i=0;i<cfg.CFGHeaderList.size();i++)
+	for(unsigned int i=0;i<cfg.CFGHeaderList.size();i++){
+		//cout<<" root node, stmt "<<cfg.CFGHeaderList[i]->stmtNum<<endl;
 		cfg.buildCFGParentList(cfg.CFGHeaderList[i]->stmtNum);
+	}
 }
 
-void PKB::buildTree(int procIndex)
+void PKB::buildTree(int procIndex)  // build cfg tree
 {
 	//cout<<"current index "<<currentIndex<<endl;
+	CFGNode* thisNode = cfg.CFGNodes[currentIndex];
+	thisNode->setCalledNode();
 	cfg.CFGHeaderList.push_back(cfg.CFGNodes[currentIndex]);
 	buildLink(currentIndex);
 }
 // top down approach
-CFGNode* PKB::buildLink(int stmtNo)
+CFGNode* PKB::buildLink(int stmtNo)  // build cfg link
 {
 	if(visited[stmtNo]==0)
 		visited[stmtNo]=1;
@@ -993,10 +998,22 @@ CFGNode* PKB::buildLink(int stmtNo)
 	string stmtType =   getStmtType(stmtNo);
 
 	if(stmtType.compare("call")==0){
-		CFGNode *currentNode = cfg.CFGNodes[stmtNo];
-		currentNode->setCallNode();
+		// this is callNode
 		
-		// ****go to the call proceudre!@! for BIP
+		string calledProcName = procAtLine[stmtNo];
+		//cout<<"proc At Line "<<calledProcName<<endl;
+		int calledProcIndex = getProcIndex(calledProcName);
+		int firstStmtInThatProc=-1;
+		if(procFirstStmt.size()>calledProcIndex)
+			firstStmtInThatProc= procFirstStmt[calledProcIndex];
+		//cout<<"first prc "<<firstStmtInThatProc<<endl;
+		if(firstStmtInThatProc>0){
+			CFGNode* thisNode  = cfg.CFGNodes[stmtNo];
+			CFGNode* thatNode = cfg.CFGNodes[firstStmtInThatProc];
+			thisNode->addChildBip(thatNode);
+			thatNode->addParentBip(thisNode);
+		}
+		// ****go to the call proceudre!@! for Bip
 		// how to get the first stmt using procedure call stmtNo;
 		
 	}
@@ -1083,6 +1100,26 @@ CFGNode* PKB::findNext(int stmtNo)
 	return cfg.CFGNodes[0];
 }
 
+void PKB::printCFGBip()
+{
+	for(int i=0;i<cfg.CFGNodes.size();i++){
+		CFGNode* thisNode = cfg.CFGNodes[i];
+		if(thisNode->isCallNode()){
+			string procName = procAtLine[i];
+			int procIndex = getProcIndex(procName);
+			int firstStmt=-1;
+			if(procFirstStmt.size()>procIndex)
+				firstStmt= procFirstStmt[procIndex];
+			cout<<"callNode stmtNo: "<<i<<" procName: "<<procName<<" calledSTMT: "<<firstStmt<<endl;
+		}
+	}
+	for(int i=0;i<cfg.CFGNodes.size();i++){
+		CFGNode* thisNode = cfg.CFGNodes[i];
+		if(thisNode->isCalledNode()){
+			cout<<"calledNode stmtNo: "<<i<<" type: "<<getStmtType(i)<<endl;
+		}
+	}
+}
 void PKB::printCFG()
 {
 	for(unsigned int i=0;i<visited.size();i++){
@@ -1124,6 +1161,22 @@ vector<int> PKB::getNext(int stmtNo){
 
 vector<int> PKB::getPrev(int stmtNo){
 	return cfg.getPrev(stmtNo);
+}
+vector<int> PKB::getNextBip(int stmtNo)
+{
+	return cfg.getNextBip(stmtNo);
+}
+vector<int> PKB::getPrevBip(int stmtNo)
+{
+	return cfg.getPrevBip(stmtNo);
+}
+vector<int> PKB::getNextTBip(int stmtNo)
+{
+	return cfg.getNextStarBip(stmtNo);
+}
+vector<int> PKB::getPrevTBip(int stmtNo)
+{
+	return cfg.getPrevStarBip(stmtNo);
 }
 bool PKB::isNext(int stmtNo1,int stmtNo2)
 {
@@ -1276,7 +1329,14 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 		return isNextT(first,second);
 	}
 }
-
+bool checkNextBip(string arg1, string arg1Type, string arg2, string arg2Type)
+{
+	return true; ///********
+}
+bool checkNextTBip(string arg1, string arg1Type, string arg2, string arg2Type)
+{
+	return true; ///**********
+}
 string PKB::toString(int num){
 	stringstream ss;
 	ss << num;
@@ -1526,7 +1586,14 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 	return result;
 
 }
-
+bool checkAffectsBip(string arg1, string arg1Type, string arg2, string arg2Type)
+{
+	return true; ///*******
+}
+bool checkAffectsTBip(string arg1, string arg1Type, string arg2, string arg2Type)
+{
+	return true;//******
+}
 bool PKB::checkAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
 	//cout<<"into check affect"<<endl;
 	clock_t t;
@@ -1725,10 +1792,10 @@ vector<int> PKB::getAffectedTList(int stmtNo)
 }
 void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes)
 {
-	cout<<"STMTNO "<<stmtNo<<endl; 
-	for(int i=0;i<varIndexes.size();i++){
-		cout<<"used  "<<getVarName(varIndexes[i])<<endl;
-	}
+	//cout<<"STMTNO "<<stmtNo<<endl; 
+	//for(int i=0;i<varIndexes.size();i++){
+		//cout<<"used  "<<getVarName(varIndexes[i])<<endl;
+	//}
 	while(visited.size()<=stmtNo)
 		visited.push_back(0);
 	//num of loops

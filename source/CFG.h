@@ -21,12 +21,12 @@ public:
 
 	
 	// for next BIP  
-	vector<int> getNextBIP(int stmtNo);
-	vector<int> getPrevBIP(int stmtNo);
-	vector<int> getNextStarBIP(int stmtNo);
-	vector<int> getPrevStarBIP(int stmtNo);
-	bool isNextBIP(int stmtNo1, int stmtNo2);
-	bool isNextStarBIP(int stmtNo1,int stmtNo2);
+	vector<int> getNextBip(int stmtNo);
+	vector<int> getPrevBip(int stmtNo);
+	vector<int> getNextStarBip(int stmtNo);
+	vector<int> getPrevStarBip(int stmtNo);
+	bool isNextBip(int stmtNo1, int stmtNo2);
+	bool isNextStarBip(int stmtNo1,int stmtNo2);
 	//void buildCFGParentListBIP(int stmtNo);
 
 	vector<int> visited;
@@ -38,8 +38,8 @@ private:
 	void getPrevStarRecursive(int stmtNo);
 
 	// next BIP
-	void getNextStarBIPRecursive(int stmtNo);
-	void getPrevStarBIPRecursive(int stmtNo);
+	void getNextStarBipRecursive(int stmtNo);
+	void getPrevStarBipRecursive(int stmtNo);
 
 	bool contains(vector<int> list, int stmtNo);
 };

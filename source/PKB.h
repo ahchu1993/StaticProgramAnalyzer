@@ -169,11 +169,17 @@ public:
 	CFGNode* findNext(int stmtNo);
 	void printCFG();
 	void printfTree(CFGNode *node);
-
+	void printCFGBip();
+	vector<string> procAtLine;
+	vector<int> procFirstStmt;
 	/************************************************** Next - Zhao Yang *************************************************/
 	// utilities
 	vector<int> getNext(int stmtNo);
 	vector<int> getPrev(int stmtNo);
+	vector<int> getNextBip(int stmtNo);
+	vector<int> getPrevBip(int stmtNo);
+	vector<int> getNextTBip(int stmtNo);
+	vector<int> getPrevTBip(int stmtNo);
 	vector<int> v;
 	vector<int> getNextT(int stmtNo);
 	vector<int> getPrevT(int stmtNo);
@@ -188,14 +194,18 @@ public:
 	bool checkNext(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkNextT(string arg1, string arg1Type, string arg2, string arg2Type);
 
+	// NOt used
 	bool checkNext(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	bool checkNextT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 
 	vector<pair<string, string>> getNext(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string,string>> getNextT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	
-	bool checkNextBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
-	bool checkNextTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	bool checkNextBip(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkNextTBip(string arg1, string arg1Type, string arg2, string arg2Type);
+
+	//bool checkNextBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	//bool checkNextTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 
 	vector<pair<string, string>> getNextBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string,string>> getNextTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
@@ -225,13 +235,15 @@ public:
 	bool checkAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	bool checkAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	
-	// will be deleted *****
+	
 	bool checkAffects(string arg1, string arg1Type, string arg2, string arg2Type);
 	bool checkAffectsT(string arg1, string arg1Type, string arg2, string arg2Type);
 	
-
-	bool checkAffectsBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
-	bool checkAffectsTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	bool checkAffectsBip(string arg1, string arg1Type, string arg2, string arg2Type);
+	bool checkAffectsTBip(string arg1, string arg1Type, string arg2, string arg2Type);
+	// NOT used
+	//bool checkAffectsBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	//bool checkAffectsTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string, string>> getAffectsBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string, string>> getAffectsTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	struct postfixNode{
