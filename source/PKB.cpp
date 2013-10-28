@@ -1368,7 +1368,7 @@ void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 
 vector<pair<string, string>> PKB::getAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
-	//cout<<"Into affects "<<endl;
+	cout<<"Into affects "<<endl;
 	clock_t t;
 	t = clock();
 	// _/integer??.
@@ -1423,7 +1423,7 @@ vector<pair<string, string>> PKB::getAffects(set<string>* arg1_set, string arg1T
 
 vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
-	//cout<<"Into affectT"<<endl;
+	cout<<"Into affectT"<<endl;
 
 	clock_t t;
 	t = clock();
@@ -1467,11 +1467,15 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 			if(type.compare("assign")!=0)
 				continue;
 
+			//cout<<"index 2 "<<index2<<endl;
+
 			list2 = getAffectedTList(index2);
 			for(it1=arg1List.begin();it1!=arg1List.end();it1++){
 				int index1;
 				istringstream (*it1) >> index1;
 				
+				//cout<<"index 1 "<<index1<<endl;
+
 				if(contains(list2,index1)){
 					pair<string,string> p (*it1,*it2);
 					result.push_back(p);
@@ -1681,9 +1685,9 @@ vector<int> PKB::getAffectedTList(int stmtNo)
 }
 void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes)
 {
-	////cout<<"STMTNO "<<stmtNo<<endl; 
+	//cout<<"STMTNO "<<stmtNo<<endl; 
 	//for(int i=0;i<varIndexes.size();i++){
-		////cout<<"used  "<<getVarName(varIndexes[i])<<endl;
+		//cout<<"used  "<<getVarName(varIndexes[i])<<endl;
 	//}
 	while(visited.size()<=stmtNo)
 		visited.push_back(0);
@@ -1694,7 +1698,11 @@ void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes)
 	
 	string stmtType = getStmtType(stmtNo);
 
-	int modifiedVar = getModifiedStmt(stmtNo)[0];
+	int modifiedVar=-1;
+	if(stmtType.compare("assign")==0)
+		modifiedVar= getModifiedStmt(stmtNo)[0];
+	else modifiedVar = -1;
+
 	if(stmtType.compare("assign")==0&&contains(varIndexes,modifiedVar)){
 		if(!contains(affectedList,stmtNo)){
 			affectedTList.push_back(stmtNo);

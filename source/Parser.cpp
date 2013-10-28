@@ -38,6 +38,8 @@ bool Parser::match(string token) {
 		getToken();
 		return true;
 	} else {
+		cout<<" not match "<<line<<endl;
+		getchar();
 		error();
 		return false;
 	}
@@ -279,6 +281,8 @@ bool Parser::w(vector < PairNumber > useModifyList) {
 	int whileLine = line;
 	stmtLst(useModifyList);
 	if (whileLine == line) {
+		cout<<" while line match "<<line<<endl;
+		getchar();
 		error();
 	}
 	match ("}");
@@ -309,6 +313,9 @@ bool Parser::ifProcess(vector < PairNumber > useModifyList) {
 	int ifLine = line;
 	stmtLst(useModifyList);  // tell parent
 	if (ifLine == line) {
+
+		cout<<" if line match "<<line<<endl;
+		getchar();
 		error();
 	}
 	match ("}");
@@ -333,6 +340,8 @@ string Parser::getFactorListString () {
 		getToken();
 	}
 	if (factorList.length() == 0) {
+		cout<<" factor length match "<<line<<endl;
+		getchar();
 		error();
 	}
 	return factorList;
@@ -487,15 +496,21 @@ TNode* Parser::expr (vector < PairNumber > useModifyList, string factorList) {
 
 string Parser::checkVariable(string variable) {
 	if (variable.compare("while") == 0 || variable.compare("if") == 0 || variable.compare(procName) == 0) {
+		cout<<" invalid variable "<<endl;
+		getchar();
 		error();
 	}
 	char* variableArray = new char[variable.size()];
 	memcpy(variableArray,variable.c_str(), variable.size());
 	if (!isalpha(variableArray[0])) {
+		cout<<" not alpha variable "<<endl;
+		getchar();
 		error();
 	}
 	for (unsigned i = 0; i < variable.size(); i++) {
 		if (!isdigit(variableArray[i]) && !isalpha(variableArray[i])) {
+			cout<<" not digit variable "<<line<<"   "<<variable<<endl;
+			getchar();
 			error();
 		}
 	}
@@ -503,7 +518,9 @@ string Parser::checkVariable(string variable) {
 }
 
 void Parser::error() {
-	cout << "ERROR" << endl;
+	
+	cout << "ERROR" <<line<<endl;
+	getchar();
 	exit(1);
 }
 
