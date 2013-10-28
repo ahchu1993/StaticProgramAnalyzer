@@ -172,6 +172,8 @@ public:
 	void printCFGBip();
 	vector<string> procAtLine;
 	vector<int> procFirstStmt;
+	vector<vector<int>> lastStmtsInProc;
+	int currentProc;
 	/************************************************** Next - Zhao Yang *************************************************/
 	// utilities
 	vector<int> getNext(int stmtNo);

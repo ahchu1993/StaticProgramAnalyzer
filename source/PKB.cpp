@@ -954,6 +954,13 @@ set<string> PKB::getAllConstants(){
 /************************************************** CFG - Zhao Yang *************************************************/
 void PKB::buildCFG()
 {
+	int procTableSize = getSizeProcTable()+2;
+	while(lastStmtsInProc.size()<=procTableSize){
+		vector<int> lists;
+		lastStmtsInProc.push_back(lists);
+	}
+	currentProc=-1;
+
 	visited.clear();
 	currentIndex=1;
 	for(int i=0;i< getSizeStmtTable()+1;i++)
@@ -986,6 +993,15 @@ void PKB::buildTree(int procIndex)  // build cfg tree
 	CFGNode* thisNode = cfg.CFGNodes[currentIndex];
 	thisNode->setCalledNode();
 	cfg.CFGHeaderList.push_back(cfg.CFGNodes[currentIndex]);
+
+	int rootStmtNum = cfg.CFGNodes[currentIndex]->stmtNum;
+	for(int i=0;i<procFirstStmt.size();i++){
+		if(rootStmtNum==procFirstStmt[i]){
+			currentProc = i;
+			cout<<"procNum-->>>  "<<getProcName(i)<<"  at stmt "<<rootStmtNum<<endl;
+		}
+	}
+
 	buildLink(currentIndex);
 }
 // top down approach
@@ -1032,6 +1048,14 @@ CFGNode* PKB::buildLink(int stmtNo)  // build cfg link
 			whileNode->addChild(findNext(stmtNo));
 		}
 
+		// for bip, last stmt in that proc
+		// find nextFollow of stmtNo, stmtNo no parent
+		if(findFollowed(stmtNo)<0&&getParent(stmtNo)<0){
+			//***********wrong! what if parent is if.. ifhas no parent
+			cout<<"Last while in the proc "<<stmtNo<<endl;
+			lastStmtsInProc[currentProc].push_back(stmtNo);
+		}
+
 		return whileNode;
 	}else if(stmtType.compare("if")==0){
 		CFGNode *ifNode=cfg.CFGNodes[stmtNo];
@@ -1067,9 +1091,15 @@ CFGNode* PKB::buildLink(int stmtNo)  // build cfg link
 			node->addChild(buildLink(afterStmtNo));
 		}else{
 			CFGNode* nextNode= findNext(stmtNo);
-			if(nextNode->stmtNum==0)
+			if(nextNode->stmtNum==0){
+				// last assign or call in the proc
+
+				//***** if is called, findLast in another pro
+				cout<<"last Stmt in the proc "<<stmtNo<<endl;
+				lastStmtsInProc[currentProc].push_back(stmtNo);
+
 				return node;
-			else node->addChild(nextNode);
+			}else node->addChild(nextNode);
 		}
 		return node;
 	}

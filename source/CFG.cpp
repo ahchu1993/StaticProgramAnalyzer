@@ -153,9 +153,19 @@ vector<int> CFG::getPrevBip(int stmtNo){
 	CFGNode *currentNode = CFGNodes[stmtNo];
 	vector<CFGNode *> parentList;
 	if(currentNode->isCalledNode())
-		parentList= currentNode->parentList;
-	else parentList = currentNode->parentBipList;
+		parentList= currentNode->parentBipList;
+	else {
+		vector<CFGNode*> temp = currentNode->parentList;
+		// the prev is callNode
+		for(int i=0;i<temp.size();i++){
+			if(temp[i]->isCallNode()){
+				//*********** get prevbip from the last stmt in calledproc
+			}else{
+				parentList.push_back(temp[i]);
+			}
 
+		}
+	}
 	for(unsigned int i=0;i<parentList.size();i++)
 		results.push_back(parentList[i]->stmtNum);
 	sort (results.begin(), results.end());
@@ -179,7 +189,7 @@ bool CFG::isNextStarBip(int stmtNo1,int stmtNo2)
 	return false;
 }
 vector<int> CFG::getNextStarBip(int stmtNo)
-{
+{//*******
 	for(unsigned int i=0;i<visited.size();i++)
 		visited[i]=0;
 	resultList.clear();
@@ -189,7 +199,7 @@ vector<int> CFG::getNextStarBip(int stmtNo)
 	return resultList;
 }
 vector<int> CFG::getPrevStarBip(int stmtNo)
-{
+{//*******@@!!!
 	for(unsigned int i=0;i<visited.size();i++)
 		visited[i]=0;
 	resultList.clear();
@@ -198,7 +208,7 @@ vector<int> CFG::getPrevStarBip(int stmtNo)
 	return resultList;
 }
 void CFG::getPrevStarBipRecursive(int stmtNo)
-{
+{//*******
 	vector<int> prevList = getPrevBip(stmtNo);
 	for(unsigned int i=0;i<prevList.size();i++){
 		int prevStmtNo = prevList[i];
@@ -217,7 +227,7 @@ void CFG::getPrevStarBipRecursive(int stmtNo)
 	}
 }
 void CFG::getNextStarBipRecursive(int stmtNo)
-{
+{//*******
 	vector<int> childrenList = getNextBip(stmtNo);
 	for(unsigned int i=0;i<childrenList.size();i++){
 		int childStmtNo = childrenList[i];
