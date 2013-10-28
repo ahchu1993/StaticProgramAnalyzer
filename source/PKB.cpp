@@ -564,19 +564,27 @@ void PKB::updateModify(){
 	int tempProcIndex;
 	int tempStmtNo;
 	int tempVarIndex;
+	int tempParent;
+	string type;
 	vector<int> callingProc;
 	vector<int> callingStmt;
 	vector<int> modifiedVar;
+	vector<int> parentList;
+	vector<int> modifiedVarInside;
 
 	procList = procTable.getProcList();
 	for (unsigned i=0; i<procList.size(); i++){
 		currentProcIndex = procList.at(i);
 
+		// Get all proc that call the current proc
 		callingProc = getCallsT(currentProcIndex);
+		// Get all stmtNo of the calling stmt
 		callingStmt = getCallsStmT(currentProcIndex);
 
+		// Get all variables modified in the current proc
 		modifiedVar = modifyTable.getModifiedProc(currentProcIndex);
 
+		// Update all proc that call the current proc
 		for (unsigned j=0; j<callingProc.size(); j++){
 			tempProcIndex = callingProc.at(j);
 			for (unsigned k=0; k<modifiedVar.size(); k++){
@@ -585,11 +593,24 @@ void PKB::updateModify(){
 			}
 		}
 
+		// Update all call stmt that call the current proc
 		for (unsigned j =0; j<callingStmt.size(); j++){
 			tempStmtNo = callingStmt.at(j);
 			for (unsigned k=0; k<modifiedVar.size(); k++){
 				tempVarIndex = modifiedVar.at(k);
 				modifyTable.insertModifyStmt(tempStmtNo, tempVarIndex, "call");
+			}
+
+			// Update all parents of the current call stmt
+			parentList = getParentT(tempStmtNo);
+			modifiedVarInside = modifyTable.getModifiedStmt(tempStmtNo);
+			for (unsigned k=0; k<parentList.size(); k++){
+				tempParent = parentList.at(k);
+				type = stmtTable.getStmtType(tempParent);
+				for (unsigned l=0; l<modifiedVarInside.size(); l++){
+					tempVarIndex = modifiedVarInside.at(l);
+					modifyTable.insertModifyStmt(tempParent, tempVarIndex, type);
+				}
 			}
 		}
 	}
@@ -738,9 +759,13 @@ void PKB::updateUse(){
 	int tempProcIndex;
 	int tempStmtNo;
 	int tempVarIndex;
+	int tempParent;
+	string type;
 	vector<int> callingProc;
 	vector<int> callingStmt;
 	vector<int> usedVar;
+	vector<int> parentList;
+	vector<int> usedVarInside;
 
 	procList = procTable.getProcList();
 	for (unsigned i=0; i<procList.size(); i++){
@@ -764,6 +789,18 @@ void PKB::updateUse(){
 			for (unsigned k=0; k<usedVar.size(); k++){
 				tempVarIndex = usedVar.at(k);
 				useTable.insertUseStmt(tempStmtNo, tempVarIndex, "call");
+			}
+
+			// Update all parents of the current call stmt
+			parentList = getParentT(tempStmtNo);
+			usedVarInside = useTable.getUsedStmt(tempStmtNo);
+			for (unsigned k=0; k<parentList.size(); k++){
+				tempParent = parentList.at(k);
+				type = stmtTable.getStmtType(tempParent);
+				for (unsigned l=0; l<usedVarInside.size(); l++){
+					tempVarIndex = usedVarInside.at(l);
+					useTable.insertUseStmt(tempParent, tempVarIndex, type);
+				}
 			}
 		}
 	}
