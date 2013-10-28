@@ -1343,7 +1343,7 @@ void PKB::recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes)
 		if(contains(varIndexes,modifiedVar)){
 			if(!contains(affectedList,stmtNo)){
 				affectedList.push_back(stmtNo);
-				visited.clear();
+				//visited.clear();
 			}
 			vector<int>::iterator it = std::find(varIndexes.begin(),varIndexes.end(),modifiedVar);
 			if (it != varIndexes.end()) {
@@ -1718,14 +1718,17 @@ vector<int> PKB::getAffectedTList(int stmtNo)
 		recusiveBuildAffectedTList(parentStmt,varIndexes);
 	}
 	//DWORD finish = GetTickCount()-start;
+	//for(int i=0;i<affectedTList.size();i++)
+	//	cout<<"?   "<<affectedTList[i]<<endl;
+	//getchar();
 	return affectedTList;
 }
 void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes)
 {
-	//cout<<"STMTNO "<<stmtNo<<endl; 
-	//for(int i=0;i<varIndexes.size();i++){
-		//cout<<"used  "<<getVarName(varIndexes[i])<<endl;
-	//}
+	cout<<"STMTNO "<<stmtNo<<endl; 
+	for(int i=0;i<varIndexes.size();i++){
+		cout<<"used  "<<getVarName(varIndexes[i])<<endl;
+	}
 	while(visited.size()<=stmtNo)
 		visited.push_back(0);
 	//num of loops
@@ -1741,7 +1744,7 @@ void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes)
 	else modifiedVar = -1;
 
 	if(stmtType.compare("assign")==0&&contains(varIndexes,modifiedVar)){
-		if(!contains(affectedList,stmtNo)){
+		if(!contains(affectedTList,stmtNo)){
 			affectedTList.push_back(stmtNo);
 			//visited.clear();
 
