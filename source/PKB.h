@@ -219,7 +219,7 @@ public:
 	vector<int> affectedTList; // for internal usage
 	void recusiveBuildAffectList(int stmtNo, int varIndex);
 	void recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes);
-	void recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList);
+	vector<int> recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList);
 	void recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes);
 	vector<int> getAffectList(int stmtNo);
 	vector<int> getAffectedList(int stmtNo);  // all stmts that affect this stmtNo
@@ -228,6 +228,12 @@ public:
 	vector<int> getAffectedTList(int stmtNo);
 	vector<int> listToVector(list<int> lis);
 
+	vector<int> merge(vector<int> v1,vector<int> v2);
+
+	vector<int> processStmtListAffectsT(int stmtNo, vector<int> varIndexList);
+	vector<int> processStmtListAffectedT(int stmtNo, vector<int> varIndexList);
+
+	void error(string msg);
 	map<pair<int,int>,int> cache;
 
 
@@ -273,5 +279,6 @@ public:
 	void printNextT();
 	void printAffects();
 	void printAffectsT();
+	void printAffectedT();
 };
 #endif
