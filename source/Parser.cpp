@@ -184,6 +184,12 @@ void Parser::processAssignment (vector < PairNumber > useModifyList) {
 }
 
 int Parser::stmt(vector<int> stmtListNumber,vector < PairNumber > useModifyList) {
+	int procIndexForBip = pkb->getProcIndex(procName);
+	while(pkb->procFirstStmt.size()<=procIndexForBip)
+		pkb->procFirstStmt.push_back(-1);
+	if(pkb->procFirstStmt[procIndexForBip]==-1)
+		pkb->procFirstStmt[procIndexForBip]=line;
+
 	if (nextToken.compare("while") == 0) {
 		if (stmtListNumber.size()>1) {
 			int p = stmtListNumber[stmtListNumber.size()-2];
@@ -217,6 +223,13 @@ int Parser::stmt(vector<int> stmtListNumber,vector < PairNumber > useModifyList)
 		getToken();
 		string calledProcedure = nextToken;
 		pkb->insert(line,procName,calledProcedure);
+
+		//for Bip
+		while(pkb->procAtLine.size()<=line){
+			pkb->procAtLine.push_back("");
+		}
+		pkb->procAtLine[line]=calledProcedure;
+
 		getToken();
 		match(";");
 		// zhao yang, procName call calledProcedure;
