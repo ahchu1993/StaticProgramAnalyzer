@@ -830,6 +830,11 @@ void PKB::printUseTable()
 	string type;
 	int procIndex, stmtNo, varIndex;
 
+
+
+
+
+
 	//cout<< "UseProcTable:" << endl;
 	//cout<< "procName" << "\t" << "varName" << endl;
 	for (unsigned i = 0; i<UseProcTable.size(); i++){
