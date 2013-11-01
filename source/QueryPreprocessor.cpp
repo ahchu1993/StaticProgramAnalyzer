@@ -1193,7 +1193,7 @@ bool QueryPreprocessor::pattern_assign(string s){
 			if(varRef=="_")
 				varRef_type = "";
 			else if(check_synonym(varRef))
-				varRef_type = get_type(varRef_type);
+				varRef_type = get_type(varRef);
 			else {
 				varRef_type = "string";
 				varRef = varRef.substr(1,varRef.size()-2); // strip ""
@@ -1277,7 +1277,7 @@ bool QueryPreprocessor::pattern_if(string s){
 			if(varRef=="_")
 				varRef_type = "";
 			else if(check_synonym(varRef))
-				varRef_type = get_type(varRef_type);
+				varRef_type = get_type(varRef);
 			else {
 				varRef_type = "string";
 				varRef = varRef.substr(1,varRef.size()-2);
@@ -1350,7 +1350,7 @@ bool QueryPreprocessor::pattern_while(string s){
 			if(varRef=="_")
 				varRef_type = "";
 			else if(check_synonym(varRef))
-				varRef_type = get_type(varRef_type);
+				varRef_type = get_type(varRef);
 			else {
 				varRef_type = "string";
 				varRef = varRef.substr(1,varRef.size()-2);
