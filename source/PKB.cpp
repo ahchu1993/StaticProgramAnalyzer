@@ -564,19 +564,27 @@ void PKB::updateModify(){
 	int tempProcIndex;
 	int tempStmtNo;
 	int tempVarIndex;
+	int tempParent;
+	string type;
 	vector<int> callingProc;
 	vector<int> callingStmt;
 	vector<int> modifiedVar;
+	vector<int> parentList;
+	vector<int> modifiedVarInside;
 
 	procList = procTable.getProcList();
 	for (unsigned i=0; i<procList.size(); i++){
 		currentProcIndex = procList.at(i);
 
+		// Get all proc that call the current proc
 		callingProc = getCallsT(currentProcIndex);
+		// Get all stmtNo of the calling stmt
 		callingStmt = getCallsStmT(currentProcIndex);
 
+		// Get all variables modified in the current proc
 		modifiedVar = modifyTable.getModifiedProc(currentProcIndex);
 
+		// Update all proc that call the current proc
 		for (unsigned j=0; j<callingProc.size(); j++){
 			tempProcIndex = callingProc.at(j);
 			for (unsigned k=0; k<modifiedVar.size(); k++){
@@ -585,11 +593,24 @@ void PKB::updateModify(){
 			}
 		}
 
+		// Update all call stmt that call the current proc
 		for (unsigned j =0; j<callingStmt.size(); j++){
 			tempStmtNo = callingStmt.at(j);
 			for (unsigned k=0; k<modifiedVar.size(); k++){
 				tempVarIndex = modifiedVar.at(k);
 				modifyTable.insertModifyStmt(tempStmtNo, tempVarIndex, "call");
+			}
+
+			// Update all parents of the current call stmt
+			parentList = getParentT(tempStmtNo);
+			modifiedVarInside = modifyTable.getModifiedStmt(tempStmtNo);
+			for (unsigned k=0; k<parentList.size(); k++){
+				tempParent = parentList.at(k);
+				type = stmtTable.getStmtType(tempParent);
+				for (unsigned l=0; l<modifiedVarInside.size(); l++){
+					tempVarIndex = modifiedVarInside.at(l);
+					modifyTable.insertModifyStmt(tempParent, tempVarIndex, type);
+				}
 			}
 		}
 	}
@@ -619,23 +640,23 @@ void PKB::printModifyTable()
 	string type;
 	int procIndex, stmtNo, varIndex;
 
-	cout<< "ModifyProcTable:" << endl;
-	cout<< "procName" << "\t" << "varName" << endl;
+	//cout<< "ModifyProcTable:" << endl;
+	//cout<< "procName" << "\t" << "varName" << endl;
 	for (unsigned i = 0; i<ModifyProcTable.size(); i++){
 		temp_proc_row = ModifyProcTable.at(i);
 		procIndex = temp_proc_row.procIndex;
 		varIndex = temp_proc_row.varIndex;
-		cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
+		//cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
 	}
 
-	cout<< "ModifyStmtTable:" << endl;
-	cout<< "stmtNo" << "\t" << "Type" << "\t" << "varName" << endl;
+	//cout<< "ModifyStmtTable:" << endl;
+	//cout<< "stmtNo" << "\t" << "Type" << "\t" << "varName" << endl;
 	for (unsigned i = 0; i<ModifyStmtTable.size(); i++){
 		temp_stmt_row = ModifyStmtTable.at(i);
 		stmtNo = temp_stmt_row.stmtNo;
 		type = temp_stmt_row.DE;
 		varIndex = temp_stmt_row.varIndex;
-		cout<<stmtNo<<"\t"<<type<<"\t"<<varTable.getVarName(varIndex)<<endl;
+		//cout<<stmtNo<<"\t"<<type<<"\t"<<varTable.getVarName(varIndex)<<endl;
 	}
 }
 
@@ -738,9 +759,13 @@ void PKB::updateUse(){
 	int tempProcIndex;
 	int tempStmtNo;
 	int tempVarIndex;
+	int tempParent;
+	string type;
 	vector<int> callingProc;
 	vector<int> callingStmt;
 	vector<int> usedVar;
+	vector<int> parentList;
+	vector<int> usedVarInside;
 
 	procList = procTable.getProcList();
 	for (unsigned i=0; i<procList.size(); i++){
@@ -764,6 +789,18 @@ void PKB::updateUse(){
 			for (unsigned k=0; k<usedVar.size(); k++){
 				tempVarIndex = usedVar.at(k);
 				useTable.insertUseStmt(tempStmtNo, tempVarIndex, "call");
+			}
+
+			// Update all parents of the current call stmt
+			parentList = getParentT(tempStmtNo);
+			usedVarInside = useTable.getUsedStmt(tempStmtNo);
+			for (unsigned k=0; k<parentList.size(); k++){
+				tempParent = parentList.at(k);
+				type = stmtTable.getStmtType(tempParent);
+				for (unsigned l=0; l<usedVarInside.size(); l++){
+					tempVarIndex = usedVarInside.at(l);
+					useTable.insertUseStmt(tempParent, tempVarIndex, type);
+				}
 			}
 		}
 	}
@@ -793,23 +830,23 @@ void PKB::printUseTable()
 	string type;
 	int procIndex, stmtNo, varIndex;
 
-	cout<< "UseProcTable:" << endl;
-	cout<< "procName" << "\t" << "varName" << endl;
+	//cout<< "UseProcTable:" << endl;
+	//cout<< "procName" << "\t" << "varName" << endl;
 	for (unsigned i = 0; i<UseProcTable.size(); i++){
 		temp_proc_row = UseProcTable.at(i);
 		procIndex = temp_proc_row.procIndex;
 		varIndex = temp_proc_row.varIndex;
-		cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
+		//cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
 	}
 
-	cout<< "UseStmtTable:" << endl;
-	cout<< "stmtNo" << "\t" << "Type" << "\t" << "varName" << endl;
+	//cout<< "UseStmtTable:" << endl;
+	//cout<< "stmtNo" << "\t" << "Type" << "\t" << "varName" << endl;
 	for (unsigned i = 0; i<UseStmtTable.size(); i++){
 		temp_stmt_row = UseStmtTable.at(i);
 		stmtNo = temp_stmt_row.stmtNo;
 		type = temp_stmt_row.DE;
 		varIndex = temp_stmt_row.varIndex;
-		cout<<stmtNo<<"\t"<<type<<"\t"<<varTable.getVarName(varIndex)<<endl;
+		//cout<<stmtNo<<"\t"<<type<<"\t"<<varTable.getVarName(varIndex)<<endl;
 	}
 }
 
@@ -917,6 +954,14 @@ set<string> PKB::getAllConstants(){
 /************************************************** CFG - Zhao Yang *************************************************/
 void PKB::buildCFG()
 {
+	int procTableSize = getSizeProcTable()+2;
+	while(lastStmtsInProc.size()<=procTableSize){
+		vector<int> lists;
+		lastStmtsInProc.push_back(lists);
+	}
+	currentProc=-1;
+
+	visited.clear();
 	currentIndex=1;
 	for(int i=0;i< getSizeStmtTable()+1;i++)
 	{
@@ -928,7 +973,7 @@ void PKB::buildCFG()
 		
 		visited.push_back(0);
 	}
-	cout<<"size proc table "<< getSizeProcTable()<<endl;
+	//cout<<"size proc table "<< getSizeProcTable()<<endl;
 	int procNum =  getSizeProcTable();
 	for(int i=0;i<procNum;i++){
 		buildTree(i);  // build cfg's next
@@ -936,18 +981,31 @@ void PKB::buildCFG()
 	}
 
 	// build cfgparentlist   ->double linked list
-	for(unsigned int i=0;i<cfg.CFGHeaderList.size();i++)
+	for(unsigned int i=0;i<cfg.CFGHeaderList.size();i++){
+		//cout<<" root node, stmt "<<cfg.CFGHeaderList[i]->stmtNum<<endl;
 		cfg.buildCFGParentList(cfg.CFGHeaderList[i]->stmtNum);
+	}
 }
 
-void PKB::buildTree(int procIndex)
+void PKB::buildTree(int procIndex)  // build cfg tree
 {
-	cout<<"current index "<<currentIndex<<endl;
+	//cout<<"current index "<<currentIndex<<endl;
+	CFGNode* thisNode = cfg.CFGNodes[currentIndex];
+	thisNode->setCalledNode();
 	cfg.CFGHeaderList.push_back(cfg.CFGNodes[currentIndex]);
+
+	int rootStmtNum = cfg.CFGNodes[currentIndex]->stmtNum;
+	for(int i=0;i<procFirstStmt.size();i++){
+		if(rootStmtNum==procFirstStmt[i]){
+			currentProc = i;
+			cout<<"procNum-->>>  "<<getProcName(i)<<"  at stmt "<<rootStmtNum<<endl;
+		}
+	}
+
 	buildLink(currentIndex);
 }
 // top down approach
-CFGNode* PKB::buildLink(int stmtNo)
+CFGNode* PKB::buildLink(int stmtNo)  // build cfg link
 {
 	if(visited[stmtNo]==0)
 		visited[stmtNo]=1;
@@ -956,10 +1014,22 @@ CFGNode* PKB::buildLink(int stmtNo)
 	string stmtType =   getStmtType(stmtNo);
 
 	if(stmtType.compare("call")==0){
-		CFGNode *currentNode = cfg.CFGNodes[stmtNo];
-		currentNode->setCallNode();
+		// this is callNode
 		
-		// ****go to the call proceudre!@! for BIP
+		string calledProcName = procAtLine[stmtNo];
+		//cout<<"proc At Line "<<calledProcName<<endl;
+		int calledProcIndex = getProcIndex(calledProcName);
+		int firstStmtInThatProc=-1;
+		if(procFirstStmt.size()>calledProcIndex)
+			firstStmtInThatProc= procFirstStmt[calledProcIndex];
+		//cout<<"first prc "<<firstStmtInThatProc<<endl;
+		if(firstStmtInThatProc>0){
+			CFGNode* thisNode  = cfg.CFGNodes[stmtNo];
+			CFGNode* thatNode = cfg.CFGNodes[firstStmtInThatProc];
+			thisNode->addChildBip(thatNode);
+			thatNode->addParentBip(thisNode);
+		}
+		// ****go to the call proceudre!@! for Bip
 		// how to get the first stmt using procedure call stmtNo;
 		
 	}
@@ -978,12 +1048,20 @@ CFGNode* PKB::buildLink(int stmtNo)
 			whileNode->addChild(findNext(stmtNo));
 		}
 
+		// for bip, last stmt in that proc
+		// find nextFollow of stmtNo, stmtNo no parent
+		if(findFollowed(stmtNo)<0&&getParent(stmtNo)<0){
+			//***********wrong! what if parent is if.. ifhas no parent
+			cout<<"Last while in the proc "<<stmtNo<<endl;
+			lastStmtsInProc[currentProc].push_back(stmtNo);
+		}
+
 		return whileNode;
 	}else if(stmtType.compare("if")==0){
 		CFGNode *ifNode=cfg.CFGNodes[stmtNo];
 
 		vector<int> childrenList =  getChildren(stmtNo,"stmt"); // *** why?
-		cout<<"child "<<childrenList.size()<<"  stmtNo: "<<stmtNo<<endl;
+		//cout<<"child "<<childrenList.size()<<"  stmtNo: "<<stmtNo<<endl;
 		
 		// find else stmtList
 		int afterElseStmtNo=0;
@@ -997,7 +1075,7 @@ CFGNode* PKB::buildLink(int stmtNo)
 			}
 		}
 
-		cout<<"haha found: "<<"  "<<afterElseStmtNo<<endl;
+		//cout<<"haha found: "<<"  "<<afterElseStmtNo<<endl;
 
 		ifNode->addChild(buildLink(stmtNo+1)); // then
 		ifNode->addChild(buildLink(afterElseStmtNo)); // else
@@ -1013,9 +1091,15 @@ CFGNode* PKB::buildLink(int stmtNo)
 			node->addChild(buildLink(afterStmtNo));
 		}else{
 			CFGNode* nextNode= findNext(stmtNo);
-			if(nextNode->stmtNum==0)
+			if(nextNode->stmtNum==0){
+				// last assign or call in the proc
+
+				//***** if is called, findLast in another pro
+				cout<<"last Stmt in the proc "<<stmtNo<<endl;
+				lastStmtsInProc[currentProc].push_back(stmtNo);
+
 				return node;
-			else node->addChild(nextNode);
+			}else node->addChild(nextNode);
 		}
 		return node;
 	}
@@ -1046,21 +1130,41 @@ CFGNode* PKB::findNext(int stmtNo)
 	return cfg.CFGNodes[0];
 }
 
+void PKB::printCFGBip()
+{
+	for(int i=0;i<cfg.CFGNodes.size();i++){
+		CFGNode* thisNode = cfg.CFGNodes[i];
+		if(thisNode->isCallNode()){
+			string procName = procAtLine[i];
+			int procIndex = getProcIndex(procName);
+			int firstStmt=-1;
+			if(procFirstStmt.size()>procIndex)
+				firstStmt= procFirstStmt[procIndex];
+			cout<<"callNode stmtNo: "<<i<<" procName: "<<procName<<" calledSTMT: "<<firstStmt<<endl;
+		}
+	}
+	for(int i=0;i<cfg.CFGNodes.size();i++){
+		CFGNode* thisNode = cfg.CFGNodes[i];
+		if(thisNode->isCalledNode()){
+			cout<<"calledNode stmtNo: "<<i<<" type: "<<getStmtType(i)<<endl;
+		}
+	}
+}
 void PKB::printCFG()
 {
 	for(unsigned int i=0;i<visited.size();i++){
 		visited[i]=0;
 	}
-	cout<<" CFGList size "<<cfg.CFGHeaderList.size()<<endl;
+	//cout<<" CFGList size "<<cfg.CFGHeaderList.size()<<endl;
 	for(unsigned int i=0;i<cfg.CFGHeaderList.size();i++){
 		if(i!=cfg.CFGHeaderList.size()-1)continue; //***
 
-		cout<<" procedure "<<(i+1)<<endl;
+		//cout<<" procedure "<<(i+1)<<endl;
 		CFGNode* rootNode = cfg.CFGHeaderList[i];
 		printfTree(rootNode);
 	}
 	//getchar();
-	cout<<"CFG END"<<endl;
+	//cout<<"CFG END"<<endl;
 	//getchar();
 }
 void PKB::printfTree(CFGNode *node)
@@ -1071,12 +1175,12 @@ void PKB::printfTree(CFGNode *node)
 	else return;
 	for(unsigned int i=0;i<node->childList.size();i++)
 	{
-		cout<<node->stmtNum<<" to "<<node->childList[i]->stmtNum<<endl;
+		//cout<<node->stmtNum<<" to "<<node->childList[i]->stmtNum<<endl;
 		printfTree(node->childList[i]);
 	}
 	if(node->childList.size()==0)
 	{
-		cout<<node->stmtNum<<" to "<<"NO-WHERE"<<endl;
+		//cout<<node->stmtNum<<" to "<<"NO-WHERE"<<endl;
 	}
 }
 
@@ -1087,6 +1191,22 @@ vector<int> PKB::getNext(int stmtNo){
 
 vector<int> PKB::getPrev(int stmtNo){
 	return cfg.getPrev(stmtNo);
+}
+vector<int> PKB::getNextBip(int stmtNo)
+{
+	return cfg.getNextBip(stmtNo);
+}
+vector<int> PKB::getPrevBip(int stmtNo)
+{
+	return cfg.getPrevBip(stmtNo);
+}
+vector<int> PKB::getNextTBip(int stmtNo)
+{
+	return cfg.getNextStarBip(stmtNo);
+}
+vector<int> PKB::getPrevTBip(int stmtNo)
+{
+	return cfg.getPrevStarBip(stmtNo);
 }
 bool PKB::isNext(int stmtNo1,int stmtNo2)
 {
@@ -1109,7 +1229,7 @@ vector<int> PKB::getNextT(int stmtNo)
 	t = clock();
 	vector<int> nextStarList = cfg.getNextStar(stmtNo);
 	t = clock() - t;
-	//cout<<"This affectT takes "<<finish<<endl;
+	////cout<<"This affectT takes "<<finish<<endl;
 	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 	return nextStarList;
 }
@@ -1182,14 +1302,11 @@ vector<pair<string, string>> PKB::getNextT(set<string>* arg1_set, string arg1Typ
 
 	for(it1=arg1List.begin();it1!=arg1List.end();it1++){
 		string index1 = *it1;
-		cout<<"search "<<index1<<endl;
+		////cout<<"search "<<index1<<endl;
 		int stmtNo1 = atoi(index1.c_str());
 		vector<int> childrenList = getNextT(stmtNo1);
 		
-		if(stmtNo1==103){
-			for(int i=0;i<childrenList.size();i++)
-				cout<<stmtNo1<<"  next "<<childrenList[i]<<endl;
-		}
+	
 
 		for(it2=arg2List.begin();it2!= arg2List.end();it2++){
 			string index2 = *it2;
@@ -1242,7 +1359,14 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 		return isNextT(first,second);
 	}
 }
-
+bool checkNextBip(string arg1, string arg1Type, string arg2, string arg2Type)
+{
+	return true; ///********
+}
+bool checkNextTBip(string arg1, string arg1Type, string arg2, string arg2Type)
+{
+	return true; ///**********
+}
 string PKB::toString(int num){
 	stringstream ss;
 	ss << num;
@@ -1309,7 +1433,7 @@ void PKB::recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes)
 		if(contains(varIndexes,modifiedVar)){
 			if(!contains(affectedList,stmtNo)){
 				affectedList.push_back(stmtNo);
-				visited.clear();
+				//visited.clear();
 			}
 			vector<int>::iterator it = std::find(varIndexes.begin(),varIndexes.end(),modifiedVar);
 			if (it != varIndexes.end()) {
@@ -1326,7 +1450,7 @@ void PKB::recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes)
 	vector<int> parentList = getPrev(stmtNo);
 	for(int i=0;i<parentList.size();i++){
 		int parentStmt = parentList[i];
-		//cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
+		////cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
 		recusiveBuildAffectedList(parentStmt,varIndexes);
 	}
 
@@ -1363,7 +1487,7 @@ void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 		vector<int> childrenList = getNext(stmtNo);
 		for(int i=0;i<childrenList.size();i++){
 			int childStmt = childrenList[i];
-			//cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
+			////cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
 			recusiveBuildAffectList(childStmt,varIndex);
 		}
 	}
@@ -1417,7 +1541,7 @@ vector<pair<string, string>> PKB::getAffects(set<string>* arg1_set, string arg1T
 		}
 	}
 	t = clock() - t;
-	//cout<<"This affectT takes "<<finish<<endl;
+	////cout<<"This affectT takes "<<finish<<endl;
 	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 	return result;
 }
@@ -1438,6 +1562,7 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 	set<string> arg2List = *arg2_set;
 
 	// if set1 is smaller , we find next
+	//*******tem
 	if(arg1_set->size()<=arg2_set->size())
 	{
 		for(it1=arg1List.begin();it1!=arg1List.end();it1++){
@@ -1453,7 +1578,7 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 			for(it2=arg2List.begin();it2!=arg2List.end();it2++){
 				int index2;
 				istringstream (*it2) >> index2;
-				//cout<<"index1 "<<index1<<" index2 "<<index2<<" size "<<result.size()<<endl;
+				////cout<<"index1 "<<index1<<" index2 "<<index2<<" size "<<result.size()<<endl;
 				if(contains(list1,index2)){
 					pair<string,string> p (*it1,*it2);
 					result.push_back(p);
@@ -1470,11 +1595,15 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 			if(type.compare("assign")!=0)
 				continue;
 
+			//cout<<"index 2 "<<index2<<endl;
+
 			list2 = getAffectedTList(index2);
 			for(it1=arg1List.begin();it1!=arg1List.end();it1++){
 				int index1;
 				istringstream (*it1) >> index1;
 				
+				//cout<<"index 1 "<<index1<<endl;
+
 				if(contains(list2,index1)){
 					pair<string,string> p (*it1,*it2);
 					result.push_back(p);
@@ -1483,14 +1612,30 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 		}
 	}
 	t = clock() - t;
-	//cout<<"This affectT takes "<<finish<<endl;
+	////cout<<"This affectT takes "<<finish<<endl;
 	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 	return result;
 
 }
-
+bool checkAffectsBip(string arg1, string arg1Type, string arg2, string arg2Type)
+{
+	return true; ///*******
+}
+bool checkAffectsTBip(string arg1, string arg1Type, string arg2, string arg2Type)
+{
+	return true;//******
+}
+bool PKB::intersect(vector<int> list1, vector<int> list2){
+	for(int i=0;i<list1.size();i++)
+		for(int j=0;j<list2.size();j++){
+			if(list1[i]==list2[j])
+				return true;
+		}
+		return false;
+}
+/*
 bool PKB::checkAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
-	cout<<"into check affect"<<endl;
+	//cout<<"into check affect"<<endl;
 	clock_t t;
 	t = clock();
 	// _/integer??.
@@ -1538,7 +1683,7 @@ bool PKB::checkAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2
 		}
 	}
 	t = clock() - t;
-	//cout<<"This affectT takes "<<finish<<endl;
+	////cout<<"This affectT takes "<<finish<<endl;
 	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 	//return result;
 	
@@ -1547,7 +1692,7 @@ bool PKB::checkAffects(set<string>* arg1_set, string arg1Type, set<string>* arg2
 
 bool PKB::checkAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
 	
-	cout<<"into check affect*"<<endl;
+	//cout<<"into check affect*"<<endl;
 	clock_t t;
 	t = clock();
 	vector<pair<string,string>> result;
@@ -1573,7 +1718,7 @@ bool PKB::checkAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg
 			for(it2=arg2List.begin();it2!=arg2List.end();it2++){
 				int index2;
 				istringstream (*it2) >> index2;
-				//cout<<"index1 "<<index1<<" index2 "<<index2<<" size "<<result.size()<<endl;
+				////cout<<"index1 "<<index1<<" index2 "<<index2<<" size "<<result.size()<<endl;
 				if(contains(list1,index2)){
 					return true;
 					pair<string,string> p (*it1,*it2);
@@ -1605,12 +1750,12 @@ bool PKB::checkAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg
 		}
 	}
 	t = clock() - t;
-	//cout<<"This affectT takes "<<finish<<endl;
+	////cout<<"This affectT takes "<<finish<<endl;
 	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 
 	return false;
 }
-
+*/
 
 bool PKB::checkAffects(string arg1, string arg1Type, string arg2, string arg2Type)
 {
@@ -1640,132 +1785,6 @@ bool PKB::checkAffectsT(string arg1, string arg1Type, string arg2, string arg2Ty
 			return true;  
 	}
 	return false;
-}
-vector<int> PKB::getAffectTList(int stmtNo)
-{
-
-
-	visited.clear();
-	affectTList.clear();
-	int varIndex = getModifiedStmt(stmtNo)[0];
-	vector<int> varIndexList;
-	varIndexList.push_back(varIndex);
-
-	vector<int> childrenList = getNext(stmtNo);
-	for(int i=0;i<childrenList.size();i++){
-		int childStmt = childrenList[i];
-		recusiveBuildAffectTList(childStmt,varIndexList);
-	}
-	//DWORD finish = GetTickCount()-start;
-
-
-	return affectTList;
-}
-vector<int> PKB::getAffectedTList(int stmtNo)
-{
-
-	visited.clear();
-	affectedTList.clear();
-
-	string type = getStmtType(stmtNo);
-	if(type.compare("assign")!=0)
-		return affectedTList;
-
-	vector<int> varIndexes = getUsedStmt(stmtNo);
-
-
-	vector<int> parentList = getPrev(stmtNo);
-	for(int i=0;i<parentList.size();i++){
-		int parentStmt = parentList[i];
-		recusiveBuildAffectedTList(parentStmt,varIndexes);
-	}
-	//DWORD finish = GetTickCount()-start;
-	return affectedTList;
-}
-void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes)
-{
-	//cout<<"STMTNO "<<stmtNo<<endl; 
-	//for(int i=0;i<varIndexes.size();i++){
-		//cout<<"used  "<<getVarName(varIndexes[i])<<endl;
-	//}
-	while(visited.size()<=stmtNo)
-		visited.push_back(0);
-	//num of loops
-	if(visited[stmtNo]>=1)//********** need to change to NUM, each time modify, num++;
-		return;
-	else visited[stmtNo]=visited[stmtNo]+1;
-	
-	string stmtType = getStmtType(stmtNo);
-
-	int modifiedVar = getModifiedStmt(stmtNo)[0];
-	if(stmtType.compare("assign")==0&&contains(varIndexes,modifiedVar)){
-		if(!contains(affectedList,stmtNo)){
-			affectedTList.push_back(stmtNo);
-			//visited.clear();
-
-
-		}
-
-		vector<int> usedVarList = getUsedStmt(stmtNo);
-		for(int i=0;i<usedVarList.size();i++){
-			int usedVar = usedVarList[i];
-			if(!contains(varIndexes,usedVar)){
-				varIndexes.push_back(usedVar);
-
-				//cout<<"add new used var "<<getVarName(usedVar)<<endl;
-				//getchar();
-				visited.clear();
-			}
-		}
-	}
-
-	vector<int> parentList = getPrev(stmtNo);
-	for(int i=0;i<parentList.size();i++){
-		int parentStmt = parentList[i];
-		recusiveBuildAffectedTList(parentStmt,varIndexes);
-	}
-
-}
-bool PKB::intersect(vector<int> list1, vector<int> list2){
-	for(int i=0;i<list1.size();i++)
-		for(int j=0;j<list2.size();j++){
-			if(list1[i]==list2[j])
-				return true;
-		}
-	return false;
-}
-// need to change it to , int stmtNo(current line), vector<int> varList(all varIndex that are using!!!)
-void PKB::recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList)
-{
-	//cout<<"STMTNO "<<stmtNo<<"  varIndex  "<<varIndexList[0]<<endl; // how to solve loop!!
-
-	while(visited.size()<=stmtNo)
-		visited.push_back(0);
-	//num of loops
-	if(visited[stmtNo]==1)//********** need to change to NUM, each time modify, num++;
-		return;
-	else visited[stmtNo]=visited[stmtNo]+1;
-	
-	string stmtType = getStmtType(stmtNo);
-
-	vector<int> usedVarList = getUsedStmt(stmtNo);
-	if(stmtType.compare("assign")==0&&intersect(usedVarList,varIndexList)){
-		if(!contains(affectTList,stmtNo)){
-			affectTList.push_back(stmtNo);
-			visited.clear();
-		}
-
-		int currentVar = getModifiedStmt(stmtNo)[0];
-		if(!contains(varIndexList,currentVar))
-			varIndexList.push_back(currentVar);
-	}
-
-	vector<int> childrenList = getNext(stmtNo);
-	for(int i=0;i<childrenList.size();i++){
-		int childStmt = childrenList[i];
-		recusiveBuildAffectTList(childStmt,varIndexList);
-	}
-
 }
 
 /************************************************** Flatten - Zhao Yang *************************************************/
@@ -1799,12 +1818,12 @@ void PKB::flattenAST()
 		
 		postfixExpr = createPostfix(thisTnode->getRightChild());
 
-		/*cout<<endl;
-		cout<<"type: "<<type<<endl;
-		cout<<"lineNum: "<<lineNum<<endl;
-		cout<<"varRef: "<<varRef<<endl;
-		cout<<"postfixExpr: --"<<postfixExpr<<"--"<<endl;
-		cout<<endl; */
+		/*//cout<<endl;
+		//cout<<"type: "<<type<<endl;
+		//cout<<"lineNum: "<<lineNum<<endl;
+		//cout<<"varRef: "<<varRef<<endl;
+		//cout<<"postfixExpr: --"<<postfixExpr<<"--"<<endl;
+		//cout<<endl; */
 
 		postfixNode* node = new postfixNode(type,lineNum,varRef,postfixExpr);
 
@@ -1854,12 +1873,12 @@ string PKB::createPostfix(TNode *node)
 void PKB::printNext()
 {
 	int stmtNum = getSizeStmtTable();
-	cout<<"StmtNumber   "<<"  nextStmt"<<endl;
+	//cout<<"StmtNumber   "<<"  nextStmt"<<endl;
 	for(int i=1;i<=stmtNum;i++){
 		vector<int> nextList = getNext(i);
 		sort (nextList.begin(), nextList.end());
 		for(unsigned int j=0;j<nextList.size();j++){
-			cout<<i<<"         "<<nextList[j]<<endl;
+			//cout<<i<<"         "<<nextList[j]<<endl;
 		}
 	}
 
@@ -1867,12 +1886,12 @@ void PKB::printNext()
 void PKB::printNextT()
 {
 	int stmtNum = getSizeStmtTable();
-	cout<<"StmtNumber   "<<"  nextTStmt"<<endl;
+	//cout<<"StmtNumber   "<<"  nextTStmt"<<endl;
 	for(int i=1;i<=stmtNum;i++){
 		vector<int> nextTList = getNextT(i);
 		sort (nextTList.begin(), nextTList.end());
 		for(unsigned int j=0;j<nextTList.size();j++){
-			cout<<i<<"         "<<nextTList[j]<<endl;
+			//cout<<i<<"         "<<nextTList[j]<<endl;
 		}
 	}
 
@@ -1880,14 +1899,14 @@ void PKB::printNextT()
 void PKB::printAffects()
 {
 	int stmtNum = getSizeStmtTable();
-	cout<<"StmtNumber   "<<"  affectsStmt"<<endl;
+	//cout<<"StmtNumber   "<<"  affectsStmt"<<endl;
 	for(int i=1;i<=stmtNum;i++){
 		if(getStmtType(i).compare("assign")!=0)
 			continue;
 		vector<int> affectList = getAffectList(i);
 		sort (affectList.begin(), affectList.end());
 		for(unsigned int j=0;j<affectList.size();j++){
-			cout<<i<<"                   "<<affectList[j]<<endl;
+			//cout<<i<<"                   "<<affectList[j]<<endl;
 		}
 	}
 
@@ -1896,15 +1915,445 @@ void PKB::printAffectsT()
 {
 	// affect only assignment?>
 	int stmtNum = getSizeStmtTable();
-	cout<<"StmtNumber   "<<"  affectsTStmt"<<endl;
+	//cout<<"StmtNumber   "<<"  affectsTStmt"<<endl;
 	for(int i=1;i<=stmtNum;i++){
 		if(getStmtType(i).compare("assign")!=0)
 			continue;
-		vector<int> affectTList = getAffectTList(i);
-		sort (affectTList.begin(), affectTList.end());
-		for(unsigned int j=0;j<affectTList.size();j++){
-			cout<<i<<"                   "<<affectTList[j]<<endl;
+		cout<<"StmtNo "<<i<<endl;
+		vector<int> res = getAffectTList(i);
+		sort (res.begin(), res.end());
+		for(unsigned int j=0;j<res.size();j++){
+			cout<<i<<"       "<<res[j]<<endl;
 		}
 	}
 
+}
+void PKB::printAffectedT()
+{
+	int stmtNum = getSizeStmtTable();
+	for(int i=1;i<=stmtNum;i++){
+		if(getStmtType(i).compare("assign")!=0)
+			continue;
+		cout<<"StmtNo "<<i<<endl;
+		vector<int> res = getAffectedTList(i);
+		sort (res.begin(), res.end());
+		for(unsigned int j=0;j<res.size();j++){
+			cout<<i<<"       "<<res[j]<<endl;
+		}
+	}
+}
+/*
+vector<int> PKB::getAffectTList(int stmtNo)
+{
+
+
+	visited.clear();
+	affectTList.clear();
+	int varIndex = getModifiedStmt(stmtNo)[0];
+	vector<int> varIndexList;
+	varIndexList.push_back(varIndex);
+
+	vector<int> childrenList = getNext(stmtNo);
+	for(int i=0;i<childrenList.size();i++){
+		int childStmt = childrenList[i];
+		recusiveBuildAffectTList(childStmt,varIndexList);
+	}
+	//DWORD finish = GetTickCount()-start;
+
+
+	return affectTList;
+}
+*/
+
+vector<int> PKB::getAffectedTList(int stmtNo)
+{
+
+	visited.clear();
+	affectedTList.clear();
+
+	string type = getStmtType(stmtNo);
+	if(type.compare("assign")!=0)
+		return affectedTList;
+
+	vector<int> varIndexes = getUsedStmt(stmtNo);
+
+
+	vector<int> parentList = getPrev(stmtNo);
+	for(int i=0;i<parentList.size();i++){
+		int parentStmt = parentList[i];
+		recusiveBuildAffectedTList(parentStmt,varIndexes);
+	}
+	//DWORD finish = GetTickCount()-start;
+	//for(int i=0;i<affectedTList.size();i++)
+	//	cout<<"?   "<<affectedTList[i]<<endl;
+	//getchar();
+	return affectedTList;
+}
+void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes)
+{
+	//cout<<"STMTNO "<<stmtNo<<endl; 
+	//for(int i=0;i<varIndexes.size();i++){
+	//	cout<<"used  "<<getVarName(varIndexes[i])<<endl;
+	//}
+	//getchar();
+
+	while(visited.size()<=stmtNo)
+		visited.push_back(0);
+	//num of loops
+	if(visited[stmtNo]>=1)//********** need to change to NUM, each time modify, num++;
+		return;
+	else visited[stmtNo]=visited[stmtNo]+1;
+	
+	string stmtType = getStmtType(stmtNo);
+
+	int modifiedVar=-1;
+	if(stmtType.compare("assign")==0)
+		modifiedVar= getModifiedStmt(stmtNo)[0];
+	else modifiedVar = -1;
+
+	if(stmtType.compare("assign")==0&&contains(varIndexes,modifiedVar)){
+		if(!contains(affectedTList,stmtNo)){
+			affectedTList.push_back(stmtNo);
+			visited.clear();
+
+
+		}
+		// delete it
+		vector<int>::iterator it = std::find(varIndexes.begin(),varIndexes.end(),modifiedVar);
+		if (it != varIndexes.end()) {
+
+			string var = getVarName(*it);
+			if(varIndexes.size()>1)
+				varIndexes.erase(it);
+			else varIndexes.clear();
+		}
+
+		vector<int> usedVarList = getUsedStmt(stmtNo);
+		for(int i=0;i<usedVarList.size();i++){
+			int usedVar = usedVarList[i];
+			if(!contains(varIndexes,usedVar)){
+				varIndexes.push_back(usedVar);
+
+				////cout<<"add new used var "<<getVarName(usedVar)<<endl;
+				//getchar();
+				//visited.clear();
+			}
+		}
+	}
+
+	if(stmtType.compare("call")==0){
+		string procName = procAtLine[stmtNo];
+		int procIndex = getProcIndex(procName);
+		//cout<<"procName "<<procName<<endl;
+		if(procIndex>=0){
+			vector<int> modifiedVarList = getModifiedProc(procIndex);
+			for(int i=0;i<modifiedVarList.size();i++){
+				int deleteVar =modifiedVarList[i];
+				if(contains(varIndexes,deleteVar)){
+					vector<int>::iterator it = std::find(varIndexes.begin(),varIndexes.end(),deleteVar);
+					if (it != varIndexes.end()) {
+						string var = getVarName(*it);
+						if(varIndexes.size()>1)
+							varIndexes.erase(it);
+						else varIndexes.clear();
+					}
+				}
+			}
+		}
+	}
+
+	vector<int> parentList = getPrev(stmtNo);
+	for(int i=0;i<parentList.size();i++){
+		int parentStmt = parentList[i];
+		recusiveBuildAffectedTList(parentStmt,varIndexes);
+	}
+
+}
+
+
+vector<int> PKB::recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList)
+{
+	vector<int> res;
+	////cout<<"STMTNO "<<stmtNo<<"  varIndex  "<<varIndexList[0]<<endl; // how to solve loop!!
+
+	while(visited.size()<=stmtNo)
+		visited.push_back(0);
+	//num of loops
+	if(visited[stmtNo]==1)//********** need to change to NUM, each time modify, num++;
+		return res;
+	else visited[stmtNo]=visited[stmtNo]+1;
+	
+	string stmtType = getStmtType(stmtNo);
+
+	vector<int> usedVarList = getUsedStmt(stmtNo);
+
+	int modifiedVar = -1;
+	if(stmtType.compare("assign")==0)
+		modifiedVar = getModifiedStmt(stmtNo)[0];
+
+	if(stmtType.compare("assign")==0&&intersect(usedVarList,varIndexList)){
+		if(!contains(affectTList,stmtNo)){
+			affectTList.push_back(stmtNo);
+			visited.clear();
+		}
+
+		int currentVar = getModifiedStmt(stmtNo)[0];
+		if(!contains(varIndexList,currentVar))
+			varIndexList.push_back(currentVar);
+	}else if(stmtType.compare("assign")==0&&contains(varIndexList,modifiedVar)){
+		// remove that var
+		vector<int>::iterator it = std::find(varIndexList.begin(),varIndexList.end(),modifiedVar);
+		if (it != varIndexList.end()) {
+
+			string var = getVarName(*it);
+			if(varIndexList.size()>1)
+				varIndexList.erase(it);
+			else varIndexList.clear();
+		}
+	}
+
+	vector<int> childrenList = getNext(stmtNo);
+	for(int i=0;i<childrenList.size();i++){
+		int childStmt = childrenList[i];
+		recusiveBuildAffectTList(childStmt,varIndexList);
+	}
+
+}
+
+vector<int> PKB::merge(vector<int> v1,vector<int> v2) // no duplicate
+{
+	v1.insert(v1.end(), v2.begin(), v2.end());
+	std::sort(v1.begin(), v1.end());
+	v1.erase(std::unique(v1.begin(), v1.end()), v1.end());
+	return v1;
+}
+
+vector<int> PKB::getAffectTList(int stmtNo)
+{
+	string stmtType = getStmtType(stmtNo);
+	if(stmtType.compare("assign")!=0){
+		error("Should be assign type at line "+stmtNo);
+	}
+	// set up
+	affectTList.clear();
+	visited.clear();
+	int varIndex = getModifiedStmt(stmtNo)[0];
+	vector<int> varIndexList;
+	varIndexList.push_back(varIndex);
+
+	vector<int> childrenList = getNext(stmtNo);
+
+	//cout<<"See what are the things in children of"<<stmtNo<<endl;
+	//for(int i=0;i<childrenList.size();i++)
+	//	cout<<"child: "<<childrenList[i]<<endl;
+	//getchar();
+	if(childrenList.size()>0){
+		// I think the assignNode will only has 1 child!! IMPORTANT ASSUMETION		
+		processStmtListAffectsT(childrenList[0],varIndexList);
+
+	}
+	return affectTList;
+}
+vector<int> PKB::processStmtListAffectsT(int stmtNo, vector<int> varIndexList)
+{
+	vector<int> res;
+
+	//cout<<"STMTNO "<<stmtNo<<endl; 
+	//for(int i=0;i<varIndexList.size();i++){
+	//	cout<<"modified  "<<getVarName(varIndexList[i])<<endl;
+	//}
+
+	while(visited.size()<=stmtNo)
+		visited.push_back(0);
+	if(visited[stmtNo]==0)
+		visited[stmtNo]=1;
+
+	while(true){
+		string stmtType = getStmtType(stmtNo);
+
+		// remember to merge and then check whether should go again
+		if(stmtType.compare("assign")==0){
+			/// 2 option 
+			// 1, adding/ 2, deleting
+			int modifiedVar = getModifiedStmt(stmtNo)[0];
+			vector<int> usedVarList = getUsedStmt(stmtNo);
+			if(intersect(usedVarList,varIndexList)){
+				// adding
+				if(!contains(affectTList,stmtNo))
+					affectTList.push_back(stmtNo);
+
+				if(!contains(varIndexList,modifiedVar))
+					varIndexList.push_back(modifiedVar);
+			}else if(contains(varIndexList,modifiedVar)){
+				// deleting
+				vector<int>::iterator it = std::find(varIndexList.begin(),varIndexList.end(),modifiedVar);
+				if (it != varIndexList.end()) {
+					string var = getVarName(*it);
+					if(varIndexList.size()>1)
+						varIndexList.erase(it);
+					else varIndexList.clear();
+				}
+			}
+		}else if(stmtType.compare("call")==0){
+			//cout<<"Line "<<stmtNo<<endl;
+			string procName = procAtLine[stmtNo];
+			int procIndex = getProcIndex(procName);
+			//cout<<"procName "<<procName<<endl;
+			if(procIndex>=0){
+				vector<int> modifiesVarList = getModifiedProc(procIndex);
+				for(int i=0;i<modifiesVarList.size();i++){
+					int deleteVar =modifiesVarList[i];
+					if(contains(varIndexList,deleteVar)){
+						vector<int>::iterator it = std::find(varIndexList.begin(),varIndexList.end(),deleteVar);
+						if (it != varIndexList.end()) {
+							string var = getVarName(*it);
+							if(varIndexList.size()>1)
+								varIndexList.erase(it);
+							else varIndexList.clear();
+						}
+					}
+				}
+			}
+		}else if(stmtType.compare("if")==0){
+			// 2 stmtlist  and then merge
+			vector<int> childrenStmt = getNext(stmtNo);
+			// assume 2 children
+			vector<int> res1 = processStmtListAffectsT(childrenStmt[0],varIndexList);
+			vector<int> res2 = processStmtListAffectsT(childrenStmt[1],varIndexList);
+			vector<int> tem = merge(res1,res2);
+			varIndexList = merge(tem,varIndexList);
+		}else if(stmtType.compare("while")==0){
+			// go into stmtList
+			while(true){
+				vector<int> res1 = processStmtListAffectsT(stmtNo+1,varIndexList);
+				vector<int> tem = merge(res1,varIndexList);
+				if(tem.size()==varIndexList.size())
+					break;// nothing new
+				else
+					varIndexList=tem;
+			}
+		}
+
+		// get followed!
+		int followedStmt = findFollowed(stmtNo);
+		
+		//cout<<"followedStmt "<<followedStmt<<endl;
+
+		if(followedStmt<0){  // no followed
+			// find next, check  visited
+			vector<int> childrenList = getNext(stmtNo);
+			//cout<<"??"<<childrenList[0]<<endl;
+			for(int i=0;i<childrenList.size();i++){
+				while(visited.size()<=childrenList[i])
+					visited.push_back(0);
+				if(visited[childrenList[i]]==0){
+					//cout<<"child "<<childrenList[i]<<endl;
+					visited[childrenList[i]]=1;
+					processStmtListAffectsT(childrenList[i],varIndexList);
+				}//else cout<<"~~"<<endl;
+			}
+			break;
+		}else stmtNo = followedStmt;
+	}
+	return varIndexList;
+}
+/*
+vector<int> PKB::getAffectedTList(int stmtNo)
+{
+	string stmtType = getStmtType(stmtNo);
+	if(stmtType.compare("assign")!=0){
+		error("Should be assign type at line "+stmtNo);
+	}
+	// set up
+	affectedTList.clear();
+	visited.clear();
+
+	vector<int> varIndexList=getUsedStmt(stmtNo);
+
+	vector<int> parentList = getPrev(stmtNo);
+
+	//cout<<"See what are the things in children of"<<stmtNo<<endl;
+	//for(int i=0;i<childrenList.size();i++)
+	//	cout<<"child: "<<childrenList[i]<<endl;
+	//getchar();
+	if(parentList.size()>0){
+		// I think the assignNode will only has 1 child!! IMPORTANT ASSUMETION		
+		processStmtListAffectedT(parentList[0],varIndexList);
+
+	}
+	return affectedTList;
+}*/
+vector<int> PKB::processStmtListAffectedT(int stmtNo, vector<int> varIndexList)
+{
+	while(visited.size()<=stmtNo)
+		visited.push_back(0);
+	if(visited[stmtNo]==0)
+		visited[stmtNo]=1;
+
+	while(true){
+		string stmtType = getStmtType(stmtNo);
+
+		// remember to merge and then check whether should go again
+		if(stmtType.compare("assign")==0){
+			/// 2 option 
+			// 1, adding/ 2, deleting
+			int modifiedVar = getModifiedStmt(stmtNo)[0];
+			vector<int> usedVarList = getUsedStmt(stmtNo);
+			//if(intersect(usedVarList,varIndexList)){
+			if(contains(varIndexList,modifiedVar)){
+				// adding
+				if(!contains(affectTList,stmtNo))
+					affectTList.push_back(stmtNo);
+
+				vector<int>::iterator it = std::find(varIndexList.begin(),varIndexList.end(),modifiedVar);
+				if (it != varIndexList.end()) {
+					string var = getVarName(*it);
+					if(varIndexList.size()>1)
+						varIndexList.erase(it);
+					else varIndexList.clear();
+				}
+
+				for(int i=0;i<usedVarList.size();i++){
+					if(!contains(varIndexList,usedVarList[i]))
+						varIndexList.push_back(usedVarList[i]);
+				}
+			}
+		}else if(stmtType.compare("call")==0){
+			string procName = procAtLine[stmtNo];
+			int procIndex = getProcIndex(procName);
+			//cout<<"procName "<<procName<<endl;
+			if(procIndex>=0){
+				vector<int> modifiedVarList = getModifiedProc(procIndex);
+				for(int i=0;i<modifiedVarList.size();i++){
+					int deleteVar =modifiedVarList[i];
+					if(contains(varIndexList,deleteVar)){
+						vector<int>::iterator it = std::find(varIndexList.begin(),varIndexList.end(),deleteVar);
+						if (it != varIndexList.end()) {
+							string var = getVarName(*it);
+							if(varIndexList.size()>1)
+								varIndexList.erase(it);
+							else varIndexList.clear();
+						}
+					}
+				}
+			}
+		}else if(stmtType.compare("while")==0){
+			cout<<"While stmt  "<<stmtNo<<endl;
+			//vector<int> tem = processStmtListAffectedT(stmtNo)
+		}
+		// if stmtNo is IF/WHILE
+
+		int followsStmt = findFollows(stmtNo);
+		vector<int> prevStmtList = getPrev(stmtNo);
+
+		if(contains(prevStmtList,followsStmt)){  //current stmtNo no the one follows IF
+
+		}
+	}
+	return varIndexList;
+}
+void PKB::error(string msg)
+{
+	cout<<"error message "<<msg<<endl;
+	exit(0);
 }

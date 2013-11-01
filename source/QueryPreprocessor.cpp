@@ -659,7 +659,10 @@ bool QueryPreprocessor::relCond(string s){
 	if(p<s.size()){
 		string s1 = trim(s.substr(0,p));
 		string s2 = trim(s.substr(p+5,s.size()-p-5));
-		return relRef(s1)&&relCond(s2);
+		if(relRef(s1)){
+			if(relCond(s2)) return true;
+			else return false;
+		}else return false;
 	}
 	else return relRef(s);
 }
@@ -1686,7 +1689,6 @@ void QueryPreprocessor::group_relations(){
     }
 
 
-
     while(total_count>0){
         list<BaseRelation*> group;
 
@@ -1695,10 +1697,8 @@ void QueryPreprocessor::group_relations(){
         for(unsigned j =0;j<relation_map.size();j++){ 
 			
 			BaseRelation* f = *it;
-			++it;
+			
             if(relation_map[j]==0){
-
-				
 
 				if(f->type=="designAbstraction"){
 					designAbstraction* first_da= static_cast<designAbstraction*>(f);
@@ -1731,6 +1731,7 @@ void QueryPreprocessor::group_relations(){
 					break;
 				} 
             }
+			++it;
         }
 
 		///----- main loop-----------
@@ -1775,8 +1776,9 @@ void QueryPreprocessor::group_relations(){
                     c++;
                     total_count--;
                     relation_map[i] =1;
+					
                 }
-				
+				i++;
             }
         }while(c!=before);
         //clear  dependence map

@@ -6,8 +6,8 @@ CFGNode::CFGNode(int statementNumber)
 	stmtNum = statementNumber;
 	numOfChildren = 0;
 	numOfParent = 0;
-	numOfChildrenBIP=0;
-	numOfParentBIP=0;
+	numOfChildrenBip=0;
+	numOfParentBip=0;
 	callNode=0;
 	calledNode=0;
 }
@@ -37,15 +37,15 @@ void CFGNode::addParent(CFGNode *node)
 	parentList.push_back(node);
 	numOfParent++;
 }
-void CFGNode::addChildBIP(CFGNode *node)
+void CFGNode::addChildBip(CFGNode *node)
 {
-	childBIPList.push_back(node);
-	numOfChildrenBIP++;
+	childBipList.push_back(node);
+	numOfChildrenBip++;
 }
-void CFGNode::addParentBIP(CFGNode *node)
+void CFGNode::addParentBip(CFGNode *node)
 {
-	parentBIPList.push_back(node);
-	numOfParentBIP++;
+	parentBipList.push_back(node);
+	numOfParentBip++;
 }
 
 

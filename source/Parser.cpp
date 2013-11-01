@@ -38,6 +38,8 @@ bool Parser::match(string token) {
 		getToken();
 		return true;
 	} else {
+		cout<<" not match "<<line<<endl;
+		getchar();
 		error();
 		return false;
 	}
@@ -182,6 +184,12 @@ void Parser::processAssignment (vector < PairNumber > useModifyList) {
 }
 
 int Parser::stmt(vector<int> stmtListNumber,vector < PairNumber > useModifyList) {
+	int procIndexForBip = pkb->getProcIndex(procName);
+	while(pkb->procFirstStmt.size()<=procIndexForBip)
+		pkb->procFirstStmt.push_back(-1);
+	if(pkb->procFirstStmt[procIndexForBip]==-1)
+		pkb->procFirstStmt[procIndexForBip]=line;
+
 	if (nextToken.compare("while") == 0) {
 		if (stmtListNumber.size()>1) {
 			int p = stmtListNumber[stmtListNumber.size()-2];
@@ -215,6 +223,13 @@ int Parser::stmt(vector<int> stmtListNumber,vector < PairNumber > useModifyList)
 		getToken();
 		string calledProcedure = nextToken;
 		pkb->insert(line,procName,calledProcedure);
+
+		//for Bip
+		while(pkb->procAtLine.size()<=line){
+			pkb->procAtLine.push_back("");
+		}
+		pkb->procAtLine[line]=calledProcedure;
+
 		getToken();
 		match(";");
 		// zhao yang, procName call calledProcedure;
@@ -279,6 +294,8 @@ bool Parser::w(vector < PairNumber > useModifyList) {
 	int whileLine = line;
 	stmtLst(useModifyList);
 	if (whileLine == line) {
+		cout<<" while line match "<<line<<endl;
+		getchar();
 		error();
 	}
 	match ("}");
@@ -309,6 +326,9 @@ bool Parser::ifProcess(vector < PairNumber > useModifyList) {
 	int ifLine = line;
 	stmtLst(useModifyList);  // tell parent
 	if (ifLine == line) {
+
+		cout<<" if line match "<<line<<endl;
+		getchar();
 		error();
 	}
 	match ("}");
@@ -333,6 +353,8 @@ string Parser::getFactorListString () {
 		getToken();
 	}
 	if (factorList.length() == 0) {
+		cout<<" factor length match "<<line<<endl;
+		getchar();
 		error();
 	}
 	return factorList;
@@ -487,15 +509,21 @@ TNode* Parser::expr (vector < PairNumber > useModifyList, string factorList) {
 
 string Parser::checkVariable(string variable) {
 	if (variable.compare("while") == 0 || variable.compare("if") == 0 || variable.compare(procName) == 0) {
+		cout<<" invalid variable "<<endl;
+		getchar();
 		error();
 	}
 	char* variableArray = new char[variable.size()];
 	memcpy(variableArray,variable.c_str(), variable.size());
 	if (!isalpha(variableArray[0])) {
+		cout<<" not alpha variable "<<endl;
+		getchar();
 		error();
 	}
 	for (unsigned i = 0; i < variable.size(); i++) {
 		if (!isdigit(variableArray[i]) && !isalpha(variableArray[i])) {
+			cout<<" not digit variable "<<line<<"   "<<variable<<endl;
+			getchar();
 			error();
 		}
 	}
@@ -503,7 +531,9 @@ string Parser::checkVariable(string variable) {
 }
 
 void Parser::error() {
-	cout << "ERROR" << endl;
+	
+	cout << "ERROR" <<line<<endl;
+	getchar();
 	exit(1);
 }
 

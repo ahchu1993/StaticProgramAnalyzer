@@ -118,6 +118,7 @@ void QueryEvaluator::validateResults(){
 
 }
 bool QueryEvaluator::processGroupedRelations(){
+
 	if(grouped_relations.size()==0)
 		return true;
     

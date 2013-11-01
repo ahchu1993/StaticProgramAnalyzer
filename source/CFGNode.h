@@ -23,12 +23,12 @@ public:
 	void setCallNode();
 	bool isCallNode();
 	bool isCalledNode();
-	int numOfChildrenBIP;
-	int numOfParentBIP;
-	vector<CFGNode *> childBIPList;
-	vector<CFGNode *> parentBIPList;
-	void addChildBIP(CFGNode *node);
-	void addParentBIP(CFGNode *node);
+	int numOfChildrenBip;
+	int numOfParentBip;
+	vector<CFGNode *> childBipList;
+	vector<CFGNode *> parentBipList;
+	void addChildBip(CFGNode *node);
+	void addParentBip(CFGNode *node);
 };
 
 #endif

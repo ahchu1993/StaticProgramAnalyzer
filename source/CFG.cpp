@@ -116,10 +116,10 @@ void CFG::buildCFGParentList(int stmtNo)
 		child->addParent(currentNode);
 		buildCFGParentList(child->stmtNum);
 	}
-	if(currentNode->isCallNode()){ // for BIP
-		for(unsigned int i=0;i<currentNode->childBIPList.size();i++){
-			CFGNode * child = currentNode->childBIPList[i];
-			child->addParentBIP(currentNode);
+	if(currentNode->isCallNode()){ // for Bip
+		for(unsigned int i=0;i<currentNode->childBipList.size();i++){
+			CFGNode * child = currentNode->childBipList[i];
+			child->addParentBip(currentNode);
 			//buildCFGParentList(child->stmtNum);
 		}
 	}
@@ -134,13 +134,13 @@ bool CFG::contains(vector<int> list, int stmtNo)
 }
 
 
-vector<int> CFG::getNextBIP(int stmtNo)
+vector<int> CFG::getNextBip(int stmtNo)
 {
 	vector<int> results;
 	CFGNode *currentNode = CFGNodes[stmtNo];
 	vector<CFGNode *> childrenList;
 	if(currentNode->isCallNode())
-		childrenList= currentNode->childBIPList;
+		childrenList= currentNode->childBipList;
 	else childrenList = currentNode->childList;
 
 	for(unsigned int i=0;i<childrenList.size();i++)
@@ -148,22 +148,32 @@ vector<int> CFG::getNextBIP(int stmtNo)
 	sort (results.begin(), results.end());
 	return results;
 }
-vector<int> CFG::getPrevBIP(int stmtNo){
+vector<int> CFG::getPrevBip(int stmtNo){
 	vector<int> results;
 	CFGNode *currentNode = CFGNodes[stmtNo];
 	vector<CFGNode *> parentList;
 	if(currentNode->isCalledNode())
-		parentList= currentNode->parentList;
-	else parentList = currentNode->parentBIPList;
+		parentList= currentNode->parentBipList;
+	else {
+		vector<CFGNode*> temp = currentNode->parentList;
+		// the prev is callNode
+		for(int i=0;i<temp.size();i++){
+			if(temp[i]->isCallNode()){
+				//*********** get prevbip from the last stmt in calledproc
+			}else{
+				parentList.push_back(temp[i]);
+			}
 
+		}
+	}
 	for(unsigned int i=0;i<parentList.size();i++)
 		results.push_back(parentList[i]->stmtNum);
 	sort (results.begin(), results.end());
 	return results;
 }
-bool CFG::isNextBIP(int stmtNo1, int stmtNo2)
+bool CFG::isNextBip(int stmtNo1, int stmtNo2)
 {
-	vector <int> childrenList = getNextBIP(stmtNo1);
+	vector <int> childrenList = getNextBip(stmtNo1);
 	for(unsigned int i=0;i<childrenList.size();i++)
 	{
 		if(childrenList[i]==stmtNo2)
@@ -171,35 +181,35 @@ bool CFG::isNextBIP(int stmtNo1, int stmtNo2)
 	}
 	return false;
 }
-bool CFG::isNextStarBIP(int stmtNo1,int stmtNo2)
+bool CFG::isNextStarBip(int stmtNo1,int stmtNo2)
 {
-	vector<int> nextStarList = getNextStarBIP(stmtNo1);
+	vector<int> nextStarList = getNextStarBip(stmtNo1);
 	if(contains(nextStarList,stmtNo2))
 		return true;
 	return false;
 }
-vector<int> CFG::getNextStarBIP(int stmtNo)
-{
+vector<int> CFG::getNextStarBip(int stmtNo)
+{//*******
 	for(unsigned int i=0;i<visited.size();i++)
 		visited[i]=0;
 	resultList.clear();
-	getNextStarBIPRecursive(stmtNo);
+	getNextStarBipRecursive(stmtNo);
 	sort (resultList.begin(), resultList.end());
 
 	return resultList;
 }
-vector<int> CFG::getPrevStarBIP(int stmtNo)
-{
+vector<int> CFG::getPrevStarBip(int stmtNo)
+{//*******@@!!!
 	for(unsigned int i=0;i<visited.size();i++)
 		visited[i]=0;
 	resultList.clear();
-	getPrevStarBIPRecursive(stmtNo);
+	getPrevStarBipRecursive(stmtNo);
 	sort (resultList.begin(), resultList.end());
 	return resultList;
 }
-void CFG::getPrevStarBIPRecursive(int stmtNo)
-{
-	vector<int> prevList = getPrevBIP(stmtNo);
+void CFG::getPrevStarBipRecursive(int stmtNo)
+{//*******
+	vector<int> prevList = getPrevBip(stmtNo);
 	for(unsigned int i=0;i<prevList.size();i++){
 		int prevStmtNo = prevList[i];
 
@@ -213,12 +223,12 @@ void CFG::getPrevStarBIPRecursive(int stmtNo)
 		}else return;
 
 		resultList.push_back(prevStmtNo);
-		getPrevStarBIPRecursive(prevStmtNo);
+		getPrevStarBipRecursive(prevStmtNo);
 	}
 }
-void CFG::getNextStarBIPRecursive(int stmtNo)
-{
-	vector<int> childrenList = getNextBIP(stmtNo);
+void CFG::getNextStarBipRecursive(int stmtNo)
+{//*******
+	vector<int> childrenList = getNextBip(stmtNo);
 	for(unsigned int i=0;i<childrenList.size();i++){
 		int childStmtNo = childrenList[i];
 
@@ -231,12 +241,12 @@ void CFG::getNextStarBIPRecursive(int stmtNo)
 			visited[childStmtNo]=1;
 		}else return;
 		resultList.push_back(childStmtNo);
-		getNextStarBIPRecursive(childStmtNo);
+		getNextStarBipRecursive(childStmtNo);
 	}
 }
 // dont need, put it in buildCFGParentList
 /*
-void CFG::buildCFGParentListBIP(int stmtNo)
+void CFG::buildCFGParentListBip(int stmtNo)
 {
 	while((unsigned int)visited.size()<=(unsigned int)stmtNo)
 		visited.push_back(0);
@@ -244,9 +254,9 @@ void CFG::buildCFGParentListBIP(int stmtNo)
 		return;
 	}else visited[stmtNo]=1;
 	CFGNode *currentNode = CFGNodes[stmtNo];
-	for(unsigned int i=0;i<currentNode->childBIPList.size();i++){
+	for(unsigned int i=0;i<currentNode->childBipList.size();i++){
 		CFGNode * child = currentNode->childList[i];
-		child->addParentBIP(currentNode);
-		buildCFGParentListBIP(child->stmtNum);
+		child->addParentBip(currentNode);
+		buildCFGParentListBip(child->stmtNum);
 	}
 }*/
