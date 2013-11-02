@@ -1555,7 +1555,7 @@ vector<pair<string, string>> PKB::getAffects(set<string>* arg1_set, string arg1T
 
 vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
-	cout<<"Into affectT"<<endl;
+	//cout<<"Into affectT"<<endl;
 
 	clock_t t;
 	t = clock();

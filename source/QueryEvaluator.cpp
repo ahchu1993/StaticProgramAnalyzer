@@ -93,7 +93,7 @@ void QueryEvaluator::validateResults(){
     if (result_refs.at(0)=="BOOLEAN") {
         string node;
         vector<string> tuple;
-        vector<vector<string>> tuples;
+        list<vector<string>> tuples;
         if (resultTable.tuples.size()>0) {
             node = "TRUE";
         }
@@ -101,8 +101,8 @@ void QueryEvaluator::validateResults(){
             node = "FALSE";
         }
         tuple.push_back(node);
-        tuples.push_back(tuple);
-        resultTable.tuples=tuples;
+		tuples.push_back(tuple);
+		resultTable.tuples=tuples;
     }
     else{
         for (int i=0; i<result_refs.size(); i++) {
@@ -118,7 +118,7 @@ void QueryEvaluator::validateResults(){
 
 }
 bool QueryEvaluator::processGroupedRelations(){
-   // ResultsTable temp_results_table;
+
 	if(grouped_relations.size()==0)
 		return true;
     
@@ -272,7 +272,7 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 	}else if(relation == "Parent"){
 		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Parent*"){
-		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		return pkb-> checkParentT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation =="Follows"){
 		return pkb->checkFollow(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation =="Follows*"){
@@ -618,7 +618,7 @@ list<string> QueryEvaluator::getResultsFromValueTable(){
 		res.push_back("true");
 		return res;
 
-	}
+	} 
 	set<string> s = *valueTable[first];
 
 	for(set<string>::iterator it = s.begin();it!=s.end();it++){
