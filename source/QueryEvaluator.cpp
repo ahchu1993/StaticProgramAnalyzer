@@ -93,7 +93,7 @@ void QueryEvaluator::validateResults(){
     if (result_refs.at(0)=="BOOLEAN") {
         string node;
         vector<string> tuple;
-        vector<vector<string>> tuples;
+        list<vector<string>> tuples;
         if (resultTable.tuples.size()>0) {
             node = "TRUE";
         }
@@ -101,8 +101,8 @@ void QueryEvaluator::validateResults(){
             node = "FALSE";
         }
         tuple.push_back(node);
-        tuples.push_back(tuple);
-        resultTable.tuples=tuples;
+		tuples.push_back(tuple);
+		resultTable.tuples=tuples;
     }
     else{
         for (int i=0; i<result_refs.size(); i++) {
