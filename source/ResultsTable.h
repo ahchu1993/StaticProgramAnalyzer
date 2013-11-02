@@ -24,28 +24,28 @@ public:
     //template<class T>
     
     struct Table{
-		list<string> columns;
+		vector<string> columns;
         vector<vector<string>> tuples;
 	};
     //static set<Columns*> columns;
     vector<string> columns;
     //vector<cell*> tuple;
-    list<vector<string>> tuples;
+    vector<vector<string>> tuples;
     //Methods
     Table table;
     
     //void joinTable(cell parent, cell child, bool flag);
     void initTable(pair<string, string> refs,vector<pair<string,string>> results);
-    void validation(int parent_index, int child_index, vector<pair<string,string>> results);
+    vector<vector<string>> validation(int parent_index, int child_index, vector<pair<string,string>> results);
     int findColumn(string ref);
     void join(pair<string, string> refs, vector<pair<string,string>> results);
-    void equiJoin(int join_index,int position, vector<pair<string,string>> results);
+    vector<vector<string>> equiJoin(int join_index,int position, vector<pair<string,string>> results);
     void merge(ResultsTable table);
     void eliminateColumns(vector<string>refs);
     ResultsTable(string ref, set<string> value);
     ResultsTable();
     list<string> toList();
-    // void printResults();
+    void printResults();
 };
 
 #endif /* defined(__cs3202__ResultsTable__) */
