@@ -128,12 +128,13 @@ bool QueryEvaluator::processGroupedRelations(){
         list<BaseRelation*> relations = *it;//for each group
         for(list<BaseRelation*>::iterator iter = relations.begin();iter!=relations.end();iter++){//for each relation
             BaseRelation* relation = *iter;
+			pair<string,string>ref_pair;
             if(relation->type=="designAbstraction")
             {
                 designAbstraction* da = static_cast<designAbstraction*>(relation);
                 
                 result_pairs = processDesignAbstraction(da);
-                pair<string,string>ref_pair;
+                
                 if(result_pairs.empty())
                     return false;
                 else{
@@ -150,12 +151,22 @@ bool QueryEvaluator::processGroupedRelations(){
                 
                 if(result_pairs.empty())
                     return false;
+				else{
+					ref_pair.first = p->synonym;
+					ref_pair.second = p->varRef;
+                    temp_table.join(ref_pair, result_pairs);
+                }
                            
             }else if(relation->type=="attr_compare"){
 				attr_compare* attr_pairs = static_cast<attr_compare*>(relation);
 				result_pairs = processAttrCompare(attr_pairs);
 				if(result_pairs.empty())
 					return false;
+				else{
+					ref_pair.first = attr_pairs->left_ref;
+					ref_pair.second = attr_pairs->right_ref;
+                    temp_table.join(ref_pair, result_pairs);
+                }
 			}
         }//for each relation
         temp_table.eliminateColumns(result_refs);
@@ -261,7 +272,7 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 	}else if(relation == "Parent"){
 		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Parent*"){
-		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		return pkb-> checkParentT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation =="Follows"){
 		return pkb->checkFollow(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation =="Follows*"){
@@ -607,7 +618,7 @@ list<string> QueryEvaluator::getResultsFromValueTable(){
 		res.push_back("true");
 		return res;
 
-	}
+	} 
 	set<string> s = *valueTable[first];
 
 	for(set<string>::iterator it = s.begin();it!=s.end();it++){
