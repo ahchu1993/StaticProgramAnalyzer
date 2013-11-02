@@ -25,6 +25,7 @@ void QueryPreprocessor::addModifiesEntry(){
 	arg1_list.synonym_type.push_back("assign");
 	arg1_list.synonym_type.push_back("if");
 	arg1_list.synonym_type.push_back("while");
+	arg1_list.synonym_type.push_back("call");
 	fillArg(&arg1_list,false,true,true);
 
 	arg2_list.synonym_type.push_back("variable");
@@ -41,6 +42,7 @@ void QueryPreprocessor::addUsesEntry(){
 	arg1.synonym_type.push_back("assign");
 	arg1.synonym_type.push_back("if");
 	arg1.synonym_type.push_back("while");
+	arg1.synonym_type.push_back("call");
 	fillArg(&arg1,false,true,true);
 
 	arg2.synonym_type.push_back("variable");
