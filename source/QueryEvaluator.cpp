@@ -272,7 +272,7 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 	}else if(relation == "Parent"){
 		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "Parent*"){
-		return pkb-> checkParent(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		return pkb-> checkParentT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation =="Follows"){
 		return pkb->checkFollow(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation =="Follows*"){
@@ -618,7 +618,7 @@ list<string> QueryEvaluator::getResultsFromValueTable(){
 		res.push_back("true");
 		return res;
 
-	}
+	} 
 	set<string> s = *valueTable[first];
 
 	for(set<string>::iterator it = s.begin();it!=s.end();it++){
