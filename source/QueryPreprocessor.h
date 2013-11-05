@@ -40,7 +40,7 @@ public:
 	};
 	
 	struct attr_entry{ // for attr_compare table
-		string prefix_type;
+		vector<string> prefix_type;
 		string evaluation_type;
 	};
 

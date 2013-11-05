@@ -1426,19 +1426,34 @@ bool QueryPreprocessor::patternCond(string patternCond){
 
 void QueryPreprocessor::build_attr_table(){
     //attr_entry e;
-	attr_entry e={ "procedure","string" };
+	vector<string> v;
+	v.push_back("call");
+	v.push_back("procedure");
+	attr_entry e={ v,"string" };
     attr_table["procName"] =e;
 
-   attr_entry e2 = { "variable","string"};
+	vector<string> v2;
+	v2.push_back("variable");
+    attr_entry e2 = { v2,"string"};
     attr_table["varName"] = e2;
 
-    attr_entry e3 = {"constant","integer"};
+	vector<string> v3;
+	v3.push_back("constant");
+    attr_entry e3 = {v3,"integer"};
     attr_table["value"] = e3;
 
-    attr_entry e4 = {"stmt","integer"};
+	vector<string> v4;
+	v4.push_back("call");
+	v4.push_back("assign");
+	v4.push_back("if");
+	v4.push_back("while");
+	v4.push_back("stmt");
+    attr_entry e4 = {v4,"integer"};
     attr_table["stmt#"] = e4;
 
-    attr_entry e5 = {"prog_line","integer"};
+	vector<string> v5;
+	v5.push_back("prog_line");
+    attr_entry e5 = {v5,"integer"};
     attr_table["prog_line"] = e5;
 
     /*e = {"integer","integer"};
@@ -1466,14 +1481,14 @@ bool QueryPreprocessor::attrCompare(string s){
         ref1_postfix = trim(ref1.substr(p1+1,ref1.size()-p1-1));
         attr_entry e = attr_table[ref1_postfix];
         ref1_type = get_type(ref1_prefix);
-		if(e.prefix_type == "stmt"&&(ref1_type=="assign"||ref1_type =="if"||ref1_type=="while")){
-			flag1 = true;
-            evaluation_type = e.evaluation_type;
-		}
-        if(ref1_type == e.prefix_type){
+		for(unsigned int i=0;i<e.prefix_type.size();i++){
+			if(ref1_type == e.prefix_type[i]){
             flag1 = true;
             evaluation_type = e.evaluation_type;
-        }
+			break;
+			}
+		}
+        
 
     }else{
         if(check_Integer(ref1)){
@@ -1505,16 +1520,15 @@ bool QueryPreprocessor::attrCompare(string s){
         ref2_postfix = trim(ref2.substr(p2+1,ref2.size()-p2-1));
         attr_entry e = attr_table[ref2_postfix];
         ref2_type = get_type(ref2_prefix);
-		if(e.prefix_type == "stmt"&&(ref2_type=="assign"||ref2_type =="if"||ref2_type=="while")){
-			flag1 = true;
-            evaluation_type = e.evaluation_type;
+		for(unsigned int i=0;i<e.prefix_type.size();i++){
+		
+			if(ref2_type == e.prefix_type[i]){
+				if(evaluation_type!=e.evaluation_type)
+					return false;
+				flag2 = true;
+				break;
+			}
 		}
-        if(ref2_type == e.prefix_type){
-            if(evaluation_type!=e.evaluation_type)
-                return false;
-            flag2 = true;
-        }
-
     }else{
         if(check_Integer(ref2)){
             ref2_prefix = ref2;
