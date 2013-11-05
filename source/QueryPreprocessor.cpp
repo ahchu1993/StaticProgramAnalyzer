@@ -84,6 +84,7 @@ void QueryPreprocessor::addParentEntry(){
 	arg2.synonym_type.push_back("assign");
 	arg2.synonym_type.push_back("if");
 	arg2.synonym_type.push_back("while");
+	arg2.synonym_type.push_back("call");
 	fillArg(&arg2,true,true,false);
 	entry e = {arg1,arg2};
 	table["Parent"] = e;
@@ -102,6 +103,7 @@ void QueryPreprocessor::addParentTEntry(){
 	arg2.synonym_type.push_back("assign");
 	arg2.synonym_type.push_back("if");
 	arg2.synonym_type.push_back("while");
+	arg2.synonym_type.push_back("call");
 	fillArg(&arg2,true,true,false);
 	entry e = {arg1,arg2};
 	table["Parent*"] = e;
@@ -114,6 +116,7 @@ void QueryPreprocessor::addFollowsEntry(){
 	arg1.synonym_type.push_back("assign");
 	arg1.synonym_type.push_back("if");
 	arg1.synonym_type.push_back("while");
+	arg1.synonym_type.push_back("call");
 	fillArg(&arg1,true,true,false);
 
 	arg2.synonym_type.push_back("prog_line");
@@ -121,6 +124,7 @@ void QueryPreprocessor::addFollowsEntry(){
 	arg2.synonym_type.push_back("assign");
 	arg2.synonym_type.push_back("if");
 	arg2.synonym_type.push_back("while");
+	arg2.synonym_type.push_back("call");
 	fillArg(&arg2,true,true,false);
 	entry e = {arg1,arg2};
 	table["Follows"] = e;
@@ -133,6 +137,7 @@ void QueryPreprocessor::addFollowsTEntry(){
 	arg1.synonym_type.push_back("assign");
 	arg1.synonym_type.push_back("if");
 	arg1.synonym_type.push_back("while");
+	arg1.synonym_type.push_back("call");
 	fillArg(&arg1,true,true,false);
 
 	arg2.synonym_type.push_back("prog_line");
@@ -140,6 +145,7 @@ void QueryPreprocessor::addFollowsTEntry(){
 	arg2.synonym_type.push_back("assign");
 	arg2.synonym_type.push_back("if");
 	arg2.synonym_type.push_back("while");
+	arg2.synonym_type.push_back("call");
 	fillArg(&arg2,true,true,false);
 	entry e = {arg1,arg2};
 	table["Follows*"] = e;
@@ -152,6 +158,7 @@ void QueryPreprocessor::addNextEntry(){
 	arg1.synonym_type.push_back("assign");
 	arg1.synonym_type.push_back("if");
 	arg1.synonym_type.push_back("while");
+	arg1.synonym_type.push_back("call");
 	fillArg(&arg1,true,true,false);
 
 	arg2.synonym_type.push_back("prog_line");
@@ -159,6 +166,7 @@ void QueryPreprocessor::addNextEntry(){
 	arg2.synonym_type.push_back("assign");
 	arg2.synonym_type.push_back("if");
 	arg2.synonym_type.push_back("while");
+	arg2.synonym_type.push_back("call");
 	fillArg(&arg2,true,true,false);
 	entry e = {arg1,arg2};
 	table["Next"] = e;
@@ -171,6 +179,7 @@ void QueryPreprocessor::addNextTEntry(){
 	arg1.synonym_type.push_back("assign");
 	arg1.synonym_type.push_back("if");
 	arg1.synonym_type.push_back("while");
+	arg1.synonym_type.push_back("call");
 	fillArg(&arg1,true,true,false);
 
 	arg2.synonym_type.push_back("prog_line");
@@ -178,6 +187,7 @@ void QueryPreprocessor::addNextTEntry(){
 	arg2.synonym_type.push_back("assign");
 	arg2.synonym_type.push_back("if");
 	arg2.synonym_type.push_back("while");
+	arg2.synonym_type.push_back("call");
 	fillArg(&arg2,true,true,false);
 	entry e = {arg1,arg2};
 	table["Next*"] = e;
@@ -190,6 +200,7 @@ void QueryPreprocessor::addNextBipEntry(){
 	arg1.synonym_type.push_back("assign");
 	arg1.synonym_type.push_back("if");
 	arg1.synonym_type.push_back("while");
+	arg1.synonym_type.push_back("call");
 	fillArg(&arg1,true,true,false);
 
 	arg2.synonym_type.push_back("prog_line");
@@ -197,6 +208,7 @@ void QueryPreprocessor::addNextBipEntry(){
 	arg2.synonym_type.push_back("assign");
 	arg2.synonym_type.push_back("if");
 	arg2.synonym_type.push_back("while");
+	arg2.synonym_type.push_back("call");
 	fillArg(&arg2,true,true,false);
 	entry e = {arg1,arg2};
 	table["NextBip"] = e;
@@ -209,6 +221,7 @@ void QueryPreprocessor::addNextTBipEntry(){
 	arg1.synonym_type.push_back("assign");
 	arg1.synonym_type.push_back("if");
 	arg1.synonym_type.push_back("while");
+	arg1.synonym_type.push_back("call");
 	fillArg(&arg1,true,true,false);
 
 	arg2.synonym_type.push_back("prog_line");
@@ -216,6 +229,7 @@ void QueryPreprocessor::addNextTBipEntry(){
 	arg2.synonym_type.push_back("assign");
 	arg2.synonym_type.push_back("if");
 	arg2.synonym_type.push_back("while");
+	arg2.synonym_type.push_back("call");
 	fillArg(&arg2,true,true,false);
 	entry e = {arg1,arg2};
 	table["NextBip*"] = e;
@@ -294,6 +308,10 @@ void QueryPreprocessor::buildTable(){
 	addNextTEntry();
 	addAffectsEntry();
 	addAffectsTEntry();
+	addNextBipEntry();
+	addNextTBipEntry();
+	addAffectsBipEntry();
+	addAffectsTBipEntry();
 
 }
 
