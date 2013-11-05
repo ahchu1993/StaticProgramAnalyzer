@@ -188,7 +188,6 @@ bool findRef(vector<string>refs, string c){
 }
 void ResultsTable::eliminateColumns(vector<string>refs){
     vector<int> ref_index;
-    select_ref = refs;
     vector<string> newColumns;
     bool do_eliminate = false;
     //vector<vector<string>> newtuples;
@@ -246,11 +245,11 @@ void print_vectors(vector<vector<string>> input){
     }
 }
 
-list<string> ResultsTable::toList(){
+list<string> ResultsTable::toList(vector<string> refs){
     list<string> lists;
     vector<int> ref_index;
-    for (int a=0; a<select_ref.size(); a++) {
-        int index = findColumn(select_ref.at(a));
+    for (int a=0; a<refs.size(); a++) {
+        int index = findColumn(refs.at(a));
         if (index!=-1) {
             ref_index.push_back(index);
         }

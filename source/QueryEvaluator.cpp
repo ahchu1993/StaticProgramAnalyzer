@@ -28,7 +28,7 @@ list<string> QueryEvaluator::processQuery(string query){
 			if(grouped_pass){
 				
 				if(grouped_relations.size()>0)
-					results = resultTable.toList();
+					results = resultTable.toList(result_refs);
 				else 
 					results = getResultsFromValueTable();
 					
