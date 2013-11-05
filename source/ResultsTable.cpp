@@ -118,20 +118,19 @@ void ResultsTable::merge(ResultsTable table){
         //merge tuples
         long list_size = tuples.size();
         for (int t =0; t<list_size; t++) {
-            vector<string> tuple = tuples.front();//get each tuple from main
-            tuples.pop_front();
+              
+           
             for (list<vector<string>>::iterator g = table.tuples.begin(); g != table.tuples.end(); g++) {
                 //find for each parent child pair in the table with the same synonmy from results
                 vector<string> o_tuple = *g;//get each tuple from other table
-                vector<string> newvector = tuple;//save original tuples in a temp vector
+                vector<string> newvector = tuples.front();//save original tuples in a temp vector
                 for (int m=0; m<o_tuple.size(); m++) {//for each cell in other table
-                    string merge_cell= o_tuple.at(m);
-                    string newCell;
-                    newCell = merge_cell;
-                    newvector.push_back(newCell);//add all the cells with original tuples in a temp vector
+                
+                    newvector.push_back(o_tuple.at(m));//add all the cells with original tuples in a temp vector
                 }
                 tuples.push_back(newvector);//save the temp vector in a output table
             }//for other table
+			 tuples.pop_front();
         }//for main
     }
 }

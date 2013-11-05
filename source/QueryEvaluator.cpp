@@ -27,8 +27,14 @@ list<string> QueryEvaluator::processQuery(string query){
 			grouped_pass = processGroupedRelations();
 			if(grouped_pass){
 				
-				if(grouped_relations.size()>0)
+				if(grouped_relations.size()>0){
+					clock_t t;
+					t = clock();
 					results = resultTable.toList(result_refs);
+					t = clock()-t;
+					printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
+				}
+					
 				else 
 					results = getResultsFromValueTable();
 					
@@ -107,10 +113,14 @@ void QueryEvaluator::validateResults(){
     else{
         for (int i=0; i<result_refs.size(); i++) {
             string ref = result_refs.at(i);
+			clock_t t;
+			t = clock();
             if (resultTable.findColumn(ref)==-1) {
                 ResultsTable tempTable(ref,*valueTable[ref]);
                 resultTable.merge(tempTable);
             }
+			t = clock()-t;
+			printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
         }
         //resultTable.eliminateColumns(result_refs);
     }
