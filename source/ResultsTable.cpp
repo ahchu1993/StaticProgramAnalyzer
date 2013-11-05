@@ -178,45 +178,61 @@ string makeKey(vector<string>input){
     }
     return output;
 }
+bool findRef(vector<string>refs, string c){
+    for (int i =0; i<refs.size(); i++) {
+        string element = refs.at(i);
+        if(element.compare(c)==0)
+            return true;
+    }
+    return false;
+}
 void ResultsTable::eliminateColumns(vector<string>refs){
     vector<int> ref_index;
+    select_ref = refs;
     vector<string> newColumns;
+    bool do_eliminate = false;
     //vector<vector<string>> newtuples;
     if (refs.at(0)!="BOOLEAN") {
         
-        for (int a=0; a<refs.size(); a++) {
-            int index = findColumn(refs.at(a));
-            if (index!=-1) {
-                ref_index.push_back(index);
+        for (int d=0; d<columns.size(); d++) {
+            if(findRef(refs,columns.at(d))==false){//if columns have more ref than refs, do elimination
+                do_eliminate = true;
+                break;
             }
         }
-        map<string,bool> checkmap;
-        
-        
-        long list_size = tuples.size();
-        for (int t =0; t<list_size; t++) {
-            vector<string> tuple = tuples.front();//get each tuple from main
-            tuples.pop_front();
-            vector<string> newtuple;
-            for (int b=0; b<ref_index.size(); b++) {
-                int index = ref_index.at(b);
-                string cell= tuple.at(index);
-                newtuple.push_back(cell);
-            }//for one tulples
-            string key = makeKey(newtuple);
-            if (!checkmap[key]) {
-                checkmap[key]=true;
-                tuples.push_back(newtuple);
+        if (do_eliminate) {
+            for (int a=0; a<refs.size(); a++) {
+                int index = findColumn(refs.at(a));
+                if (index!=-1) {
+                    ref_index.push_back(index);
+                }
             }
-        }//for all the tuples
-        for (int c=0; c<ref_index.size(); c++) {
-            
-            string temp = columns.at(ref_index.at(c));
-            newColumns.push_back(temp);
+            map<string,bool> checkmap;
+            long list_size = tuples.size();
+            for (int t =0; t<list_size; t++) {
+                vector<string> tuple = tuples.front();//get each tuple from main
+                tuples.pop_front();
+                vector<string> newtuple;
+                for (int b=0; b<ref_index.size(); b++) {
+                    int index = ref_index.at(b);
+                    string cell= tuple.at(index);
+                    newtuple.push_back(cell);
+                }//for one tulples
+                string key = makeKey(newtuple);
+                if (!checkmap[key]) {
+                    checkmap[key]=true;
+                    tuples.push_back(newtuple);
+                }
+            }//for all the tuples
+            for (int c=0; c<ref_index.size(); c++) {
+                
+                string temp = columns.at(ref_index.at(c));
+                newColumns.push_back(temp);
+            }
+            //tuples = newtuples;
+            columns = newColumns;
         }
     }
-    //tuples = newtuples;
-    columns = newColumns;
 }
 void print_vector(vector<string> input){
     for (int i =0; i<input.size(); i++) {
@@ -232,13 +248,20 @@ void print_vectors(vector<vector<string>> input){
 
 list<string> ResultsTable::toList(){
     list<string> lists;
+    vector<int> ref_index;
+    for (int a=0; a<select_ref.size(); a++) {
+        int index = findColumn(select_ref.at(a));
+        if (index!=-1) {
+            ref_index.push_back(index);
+        }
+    }
     for (list<vector<string>>::iterator g = tuples.begin(); g!=tuples.end(); g++) {
         //find for each parent child pair in the table with the same synonmy from results
         string temp;
         vector<string> tuple = *g;//get each tuple
-        for (int j=0; j<tuple.size(); j++) {
-            temp += tuple.at(j);
-            if (j!=tuple.size()-1) {
+        for (int j=0; j<ref_index.size(); j++) {
+            temp += tuple.at(ref_index.at(j));
+            if (j!=ref_index.size()-1) {
                 temp+=" ";
             }
         }

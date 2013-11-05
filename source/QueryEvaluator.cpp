@@ -112,8 +112,7 @@ void QueryEvaluator::validateResults(){
                 resultTable.merge(tempTable);
             }
         }
-        //}
-        resultTable.eliminateColumns(result_refs);
+        //resultTable.eliminateColumns(result_refs);
     }
 
 }
