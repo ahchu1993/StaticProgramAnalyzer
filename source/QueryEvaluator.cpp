@@ -95,10 +95,10 @@ void QueryEvaluator::validateResults(){
         vector<string> tuple;
         list<vector<string>> tuples;
         if (resultTable.tuples.size()>0) {
-            node = "TRUE";
+            node = "true";
         }
         else{
-            node = "FALSE";
+            node = "false";
         }
         tuple.push_back(node);
 		tuples.push_back(tuple);
