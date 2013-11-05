@@ -33,7 +33,7 @@ public:
     list<vector<string>> tuples;
     //Methods
     Table table;
-    
+    vector<string> select_ref;
     //void joinTable(cell parent, cell child, bool flag);
     void initTable(pair<string, string> refs,vector<pair<string,string>> results);
     void validation(int parent_index, int child_index, vector<pair<string,string>> results);
