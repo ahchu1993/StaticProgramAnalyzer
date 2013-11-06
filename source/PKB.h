@@ -220,7 +220,7 @@ public:
 	void recusiveBuildAffectList(int stmtNo, int varIndex);
 	void recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes);
 	vector<int> recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList);
-	void recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes);
+	void recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes, int toLoop);
 	vector<int> getAffectList(int stmtNo);
 	vector<int> getAffectedList(int stmtNo);  // all stmts that affect this stmtNo
 

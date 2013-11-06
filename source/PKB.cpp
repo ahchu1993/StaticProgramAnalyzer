@@ -1555,7 +1555,7 @@ vector<pair<string, string>> PKB::getAffects(set<string>* arg1_set, string arg1T
 
 vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
-	//cout<<"Into affectT"<<endl;
+	cout<<"Into affectT"<<endl;
 
 	clock_t t;
 	t = clock();
@@ -1568,7 +1568,7 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 
 	// if set1 is smaller , we find next
 	//*******tem
-	if(arg1_set->size()<=arg2_set->size())
+	if(true&&arg1_set->size()<=arg2_set->size())
 	{
 		for(it1=arg1List.begin();it1!=arg1List.end();it1++){
 			vector<int> list1;
@@ -1986,7 +1986,7 @@ vector<int> PKB::getAffectedTList(int stmtNo)
 	vector<int> parentList = getPrev(stmtNo);
 	for(int i=0;i<parentList.size();i++){
 		int parentStmt = parentList[i];
-		recusiveBuildAffectedTList(parentStmt,varIndexes);
+		recusiveBuildAffectedTList(parentStmt,varIndexes,0);
 	}
 	//DWORD finish = GetTickCount()-start;
 	//for(int i=0;i<affectedTList.size();i++)
@@ -1994,22 +1994,30 @@ vector<int> PKB::getAffectedTList(int stmtNo)
 	//getchar();
 	return affectedTList;
 }
-void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes)
+void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes, int toLoop)
 {
-	//cout<<"STMTNO "<<stmtNo<<endl; 
-	//for(int i=0;i<varIndexes.size();i++){
-	//	cout<<"used  "<<getVarName(varIndexes[i])<<endl;
-	//}
-	//getchar();
-
+	/*
+	cout<<"STMTNO "<<stmtNo<<endl; 
+	for(int i=0;i<varIndexes.size();i++){
+		cout<<"used  "<<getVarName(varIndexes[i])<<endl;
+	}*/
+	//if(stmtNo==68)getchar();
 	while(visited.size()<=stmtNo)
 		visited.push_back(0);
 	//num of loops
-	if(visited[stmtNo]>=1)//********** need to change to NUM, each time modify, num++;
-		return;
-	else visited[stmtNo]=visited[stmtNo]+1;
+	if(visited[stmtNo]>=1){//********** need to change to NUM, each time modify, num++;
+		if(toLoop!=1)
+			return;
+		else {
+			toLoop=0;
+			visited.clear();
+		}
+		//return;
+	}else visited[stmtNo]=visited[stmtNo]+1;
 	
 	string stmtType = getStmtType(stmtNo);
+
+	int newVar=0;
 
 	int modifiedVar=-1;
 	if(stmtType.compare("assign")==0)
@@ -2019,6 +2027,7 @@ void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes)
 	if(stmtType.compare("assign")==0&&contains(varIndexes,modifiedVar)){
 		if(!contains(affectedTList,stmtNo)){
 			affectedTList.push_back(stmtNo);
+			newVar=1;
 			visited.clear();
 
 
@@ -2070,7 +2079,9 @@ void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes)
 	vector<int> parentList = getPrev(stmtNo);
 	for(int i=0;i<parentList.size();i++){
 		int parentStmt = parentList[i];
-		recusiveBuildAffectedTList(parentStmt,varIndexes);
+		if(newVar==1)
+			recusiveBuildAffectedTList(parentStmt,varIndexes,newVar);
+		else recusiveBuildAffectedTList(parentStmt,varIndexes,toLoop);
 	}
 
 }
@@ -2288,6 +2299,7 @@ vector<int> PKB::getAffectedTList(int stmtNo)
 	}
 	return affectedTList;
 }*/
+//*** not done
 vector<int> PKB::processStmtListAffectedT(int stmtNo, vector<int> varIndexList)
 {
 	while(visited.size()<=stmtNo)
