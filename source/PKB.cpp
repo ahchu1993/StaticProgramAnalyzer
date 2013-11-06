@@ -924,6 +924,22 @@ set<string> PKB::getAllStmts(){
 	return stmtTable.getAllStatements();
 }
 
+void PKB::insertFirstStmtList(int stmtNo){
+	bool flag = false;
+	for (unsigned i =0; i<firstStmtList.size(); i++){
+		if(firstStmtList.at(i) == stmtNo){
+			flag = true;
+		}
+	}
+	if(!flag){
+		firstStmtList.push_back(stmtNo);
+	}
+}
+
+vector<int> PKB::getFirstStmtList(){
+	return firstStmtList;
+}
+
 /************************************************** ConstantTable *************************************************/
 void PKB::insertConst(int stmtNo, int number)
 {
