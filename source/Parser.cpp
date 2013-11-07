@@ -276,7 +276,7 @@ bool Parser::assign(vector < PairNumber > useModifyList) {
 bool Parser::w(vector < PairNumber > useModifyList) {
 	getToken();
 	int varIndex = pkb->getVarIndex(checkVariable(nextToken));
-
+	pkb->insertControlVar(line,nextToken);
 	// while node
 	TNode* whileNode = pkb->createRootNode("root", -3, line);
 
@@ -309,6 +309,9 @@ bool Parser::w(vector < PairNumber > useModifyList) {
 bool Parser::ifProcess(vector < PairNumber > useModifyList) {
 	getToken();
 	int varIndex = pkb->getVarIndex(checkVariable(nextToken));
+
+	pkb->insertControlVar(line,nextToken);
+
 	if (varIndex < 0) {
 		varIndex = (*pkb).insertVar(nextToken);
 	}
