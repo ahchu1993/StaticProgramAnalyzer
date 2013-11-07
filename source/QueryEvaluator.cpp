@@ -540,9 +540,10 @@ vector<pair<string,string>> QueryEvaluator::processAttrCompare(attr_compare* a){
 	vector<pair<string,string>> result;
 	set<string> s1 = getValueSet(a->left_ref,a->left_ref_type,"");
 	set<string> s2 = getValueSet(a->right_ref,a->right_ref_type,"");
+	string evaluation_type = a->evaluation_type;
 	set<string>::iterator it2;
 
-	if(a->left_ref_type=="call"||a->right_ref_type=="call"){
+	if((a->left_ref_type=="call"||a->right_ref_type=="call")&&evaluation_type == "string"){
 		if(a->left_ref_type=="call"&&a->right_ref_type=="call"){
 			for(set<string>::iterator it = s1.begin();it!=s1.end();it++){
 				it2 = s2.find(*it);

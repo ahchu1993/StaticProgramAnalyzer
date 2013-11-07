@@ -54,13 +54,15 @@ public:
 	string left_ref_type;
 	string right_ref;
 	string right_ref_type;
+	string evaluation_type;
 
-	attr_compare(string left_r,string left_t,string right_r,string right_t){
+	attr_compare(string left_r,string left_t,string right_r,string right_t,string e_type){
 		type = "attr_compare";
 		left_ref = left_r;
 		left_ref_type = left_t;
 		right_ref = right_r;
 		right_ref_type = right_t;
+		string evaluation_type = e_type;
 	}
 
 };

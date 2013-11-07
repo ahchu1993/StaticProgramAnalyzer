@@ -1595,7 +1595,7 @@ bool QueryPreprocessor::attrCompare(string s){
 
     if(flag1&&flag2){
        
-        attr_compare* compare = new attr_compare(ref1_prefix,ref1_type,ref2_prefix,ref2_type);
+        attr_compare* compare = new attr_compare(ref1_prefix,ref1_type,ref2_prefix,ref2_type,evaluation_type);
 
 		bool b1 = ref1_type=="string"||ref1_type=="integer";
 		bool b2 = ref2_type=="string"||ref2_type=="integer";
