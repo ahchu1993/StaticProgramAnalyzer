@@ -482,8 +482,9 @@ vector<pair<string,string>> QueryEvaluator::processAttrCompare(attr_compare* a){
 				string temp = *it;
 				int lineno = Util::convertStringToInt(temp);
 				string proc = pkb->procAtLine[lineno];
-				if(proc==a->right_ref){
-					pair<string,string> p(*it,*it);
+				it2 = s2.find(proc);
+				if(it2!=s2.end()){
+					pair<string,string> p(*it,proc);
 					result.push_back(p);
 				}
 			}
@@ -492,8 +493,9 @@ vector<pair<string,string>> QueryEvaluator::processAttrCompare(attr_compare* a){
 				string temp = *it;
 				int lineno = Util::convertStringToInt(temp);
 				string proc = pkb->procAtLine[lineno];
-				if(proc==a->left_ref){
-					pair<string,string> p(*it,*it);
+				it2 = s1.find(proc);
+				if(it2!=s1.end()){
+					pair<string,string> p(proc,*it);
 					result.push_back(p);
 				}
 			}
@@ -648,7 +650,7 @@ list<string> QueryEvaluator::validateResults(){
 	if (result_refs.at(0)=="BOOLEAN") {
 		return res;
     }
-   		
+   	bool cartesian_flag = false;
 	/// compute the first synonym in result refs
 	string first = result_refs_complex[0];
 	int p0 = first.find(".");
@@ -656,6 +658,7 @@ list<string> QueryEvaluator::validateResults(){
 		string synonym = first.substr(0,p0);
 		int index = resultTable.findColumn(synonym);
 		if(index==-1){
+			
 			set<string> s = *valueTable[synonym];
 			for(set<string>::iterator it = s.begin();it!=s.end();it++){
 				int ind = Util::convertStringToInt(*it);
@@ -696,6 +699,7 @@ list<string> QueryEvaluator::validateResults(){
 			string synonym = ref.substr(0,p);
 			int index = resultTable.findColumn(synonym);
 			if(index==-1){ //not in resultTable
+				cartesian_flag = true;
 				set<string> s = *valueTable[synonym];
 				for(set<string>::iterator it = s.begin();it!=s.end();it++){
 					int ind = Util::convertStringToInt(*it);
@@ -712,28 +716,44 @@ list<string> QueryEvaluator::validateResults(){
 				res = temp;
 
 			}else{ // get from tuple
-				for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
-					vector<string> tuple = *it;
-					int count = resultTable.tuples.size();
+				if(!cartesian_flag){
+					list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();
 					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
-						if(count==resultTable.tuples.size()){
-							string ref1 = *it_list;
+						string ref1 = *it_list;
+						vector<string> t = *it_tuples;
+						ref1.append(" ");
+						ref1.append(t.at(index));
+						temp.push_back(ref1);
+						it_tuples++;
+					}
+				}else{
+					for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
+						vector<string> tuple = *it;
+						int count = resultTable.tuples.size();
 					
-							ref1.append(" ");
-							ref1.append(tuple.at(index));
-							temp.push_back(ref1);
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+							if(count==resultTable.tuples.size()){
+								string ref1 = *it_list;
+					
+								ref1.append(" ");
+								ref1.append(tuple.at(index));
+								temp.push_back(ref1);
+							}
+							count--;
+							if(count==0)
+								count = resultTable.tuples.size();
 						}
-						count--;
-						if(count==0)
-							count = resultTable.tuples.size();
 					}
 				}
+
+				
 				res = temp;
 			}
 
 		}else{ // ref is snynonym
 			int index = resultTable.findColumn(ref);
 			if(index ==-1){ //not in resultTable
+				cartesian_flag = true;
 				set<string> s = *valueTable[ref];
 				for(set<string>::iterator it = s.begin();it!=s.end();it++){
 						
@@ -749,23 +769,36 @@ list<string> QueryEvaluator::validateResults(){
 				res = temp;
 
 			}else { //in resultTable
-				for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
-					vector<string> tuple = *it;
-					int count = resultTable.tuples.size();
+				if(!cartesian_flag){
+					list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();
 					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
-						if(count==resultTable.tuples.size()){
-							string ref1 = *it_list;
+						string ref1 = *it_list;
+						vector<string> t = *it_tuples;
+						ref1.append(" ");
+						ref1.append(t.at(index));
+						temp.push_back(ref1);
+						it_tuples++;
+					}
+				}else {
+					for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
+						vector<string> tuple = *it;
+						int count = resultTable.tuples.size();
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+							if(count==resultTable.tuples.size()){
+								string ref1 = *it_list;
 					
-							ref1.append(" ");
-							ref1.append(tuple.at(index));
-							temp.push_back(ref1);
+								ref1.append(" ");
+								ref1.append(tuple.at(index));
+								temp.push_back(ref1);
 							
+							}
+							count--;
+							if(count==0)
+								count = resultTable.tuples.size();
 						}
-						count--;
-						if(count==0)
-							count = resultTable.tuples.size();
 					}
 				}
+				
 				res = temp;
 			}
 		}					
