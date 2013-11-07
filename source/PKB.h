@@ -78,6 +78,7 @@ public:
 	vector<int> getCallsList(int procIndex);
 	vector<int> getCallsT(int procIndex);
 	vector<int> getCalledT(int procIndex);
+
 	/************************************************** ParentTable *************************************************/
 	vector<pair<string, string>> getParent(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string, string>> getParentT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
@@ -149,7 +150,7 @@ public:
 	set<string> getAllProcs(); 
 
 	/************************************************** StmtTable *************************************************/
-	int insertStmt(int stmtNo, string type);
+	int insertStmt(int stmtNo, string type, string controlVar);
 	vector<int> getStmtNo(string type);
 	int getSizeStmtTable();
 	string getStmtType(int stmtNo);
@@ -157,6 +158,7 @@ public:
 	set<string> getAllStmts();
 	void insertFirstStmtList(int stmtNo);
 	vector<int> getFirstStmtList();
+	string getControlVariable(int stmtNo);
 
 	/************************************************** ConstantTable *************************************************/
 	void insertConst(int stmtNo, int number);
