@@ -15,6 +15,7 @@ using namespace std;
 typedef struct stmt_row_t{
 	int stmt_no;
 	string type;
+	string controlVar;
 } stmt_row;
 
 class StmtTable
@@ -29,7 +30,7 @@ public:
 	// If stmtNo is not in the StmtTable, inserts stmtNo into the StmtTable and return 1 to indicate success
 	// Else, returns -1.
 	// type can only be "ASSIGN", "CALL", "IF", "WHILE"
-	int insertStmt(int stmtNo, string type);
+	int insertStmt(int stmtNo, string type, string controlVar);
 
 	// Returns the list of all stmt of type type
 	vector<int> getStmtNo(string type);
@@ -45,5 +46,6 @@ public:
 
 	/*************************************** New APIs *******************************************/
 	set<string> getAllStatements();
+	string getControlVariable(int stmtNo);
 };
 #endif
