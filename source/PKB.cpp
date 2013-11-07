@@ -1006,6 +1006,35 @@ void PKB::buildCFG()
 		//cout<<" root node, stmt "<<cfg.CFGHeaderList[i]->stmtNum<<endl;
 		cfg.buildCFGParentList(cfg.CFGHeaderList[i]->stmtNum);
 	}
+
+	// add last stmts in proc 
+	vector<int> visitedHere;
+	for(int j=0;j<procFirstStmt.size();j++){
+		stack<int> s;
+		s.push(procFirstStmt[j]);
+		visitedHere.clear();
+		while(s.size()>0){
+			int top = s.top(); s.pop();
+			if(top<=0) continue;
+			while(visitedHere.size()<=top+2)
+				visitedHere.push_back(0);
+			if(visitedHere[top]==0)
+				visitedHere[top]=1;
+			else continue;
+
+			vector<int> childrenList = getNext(top);
+			for(int i=0;i<childrenList.size();i++){
+				if(childrenList[i]==0){
+					cout<<top<<" ~~ "<<i<<endl;
+					getchar();
+				}
+
+				s.push(childrenList[i]);
+			}
+			if(childrenList.size()==0)
+				lastStmtsInProc[j].push_back(top);
+		}
+	}
 }
 
 void PKB::buildTree(int procIndex)  // build cfg tree
@@ -1066,16 +1095,18 @@ CFGNode* PKB::buildLink(int stmtNo)  // build cfg link
 		if(followedIndex>0){
 			whileNode->addChild(buildLink(followedIndex));
 		}else{
-			whileNode->addChild(findNext(stmtNo));
+			int childNo = findNext(stmtNo)->stmtNum;
+			if(childNo>0)
+				whileNode->addChild(cfg.CFGNodes[childNo]);
 		}
 
 		// for bip, last stmt in that proc
 		// find nextFollow of stmtNo, stmtNo no parent
-		if(findFollowed(stmtNo)<0&&getParent(stmtNo)<0){
+		//if(findFollowed(stmtNo)<0&&getParent(stmtNo)<0){
 			//***********wrong! what if parent is if.. ifhas no parent
-			cout<<"Last while in the proc "<<stmtNo<<endl;
-			lastStmtsInProc[currentProc].push_back(stmtNo);
-		}
+		//	cout<<"Last while in the proc "<<stmtNo<<endl;
+		//	lastStmtsInProc[currentProc].push_back(stmtNo);
+		//}
 
 		return whileNode;
 	}else if(stmtType.compare("if")==0){
@@ -1112,12 +1143,12 @@ CFGNode* PKB::buildLink(int stmtNo)  // build cfg link
 			node->addChild(buildLink(afterStmtNo));
 		}else{
 			CFGNode* nextNode= findNext(stmtNo);
-			if(nextNode->stmtNum==0){
+			if(nextNode->stmtNum<=0){
 				// last assign or call in the proc
 
 				//***** if is called, findLast in another pro
-				cout<<"last Stmt in the proc "<<stmtNo<<endl;
-				lastStmtsInProc[currentProc].push_back(stmtNo);
+				//cout<<"last Stmt in the proc "<<stmtNo<<endl;
+				//lastStmtsInProc[currentProc].push_back(stmtNo);
 
 				return node;
 			}else node->addChild(nextNode);

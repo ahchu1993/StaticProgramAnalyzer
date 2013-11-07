@@ -21,7 +21,7 @@
 #include "CallTable.h"
 #include "AST.h"
 #include "CFG.h"
-
+#include <stack>
 #include <time.h>
 //#include <Windows.h>
 
