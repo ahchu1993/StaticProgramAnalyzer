@@ -1904,7 +1904,7 @@ void PKB::printNext()
 		vector<int> nextList = getNext(i);
 		sort (nextList.begin(), nextList.end());
 		for(unsigned int j=0;j<nextList.size();j++){
-			//cout<<i<<"         "<<nextList[j]<<endl;
+			cout<<i<<"         "<<nextList[j]<<endl;
 		}
 	}
 
@@ -2425,5 +2425,59 @@ vector<pair<string, string>> PKB::getNextBip(set<string>* arg1_set, string arg1T
 		}
 	}
 	return result;
+
+}
+void PKB::printPrev()
+{
+	int stmtTableSize = getSizeStmtTable();
+	for(int i=1;i<=stmtTableSize;i++){
+		vector<int> prevList = getPrev(i);
+		sort (prevList.begin(), prevList.end());
+		for(unsigned int j=0;j<prevList.size();j++){
+			cout<<i<<"         "<<prevList[j]<<endl;
+		}
+	}
+}
+void PKB::printPrevT()
+{
+	int stmtTableSize = getSizeStmtTable();
+	for(int i=1;i<=stmtTableSize;i++){
+		vector<int> prevTList = getPrevT(i);
+		sort (prevTList.begin(), prevTList.end());
+		for(unsigned int j=0;j<prevTList.size();j++){
+			cout<<i<<"         "<<prevTList[j]<<endl;
+		}
+	}
+}
+void PKB::printNextBip()
+{
+	int stmtTableSize = getSizeStmtTable();
+	for(int i=1;i<=stmtTableSize;i++){
+		vector<int> nextBipList = getNextBip(i);
+		sort (nextBipList.begin(), nextBipList.end());
+		for(unsigned int j=0;j<nextBipList.size();j++){
+			cout<<i<<"         "<<nextBipList[j]<<endl;
+		}
+	}
+}
+
+void PKB::printPrevBip()
+{
+	int stmtTableSize = getSizeStmtTable();
+	for(int i=1;i<=stmtTableSize;i++){
+		vector<int> prevBipList = getPrevBip(i);
+		sort (prevBipList.begin(), prevBipList.end());
+		for(unsigned int j=0;j<prevBipList.size();j++){
+			cout<<i<<"         "<<prevBipList[j]<<endl;
+		}
+	}
+
+}
+void PKB::printNextBipT()
+{
+
+}
+void PKB::printPrevBipT()
+{
 
 }
