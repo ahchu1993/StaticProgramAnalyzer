@@ -28,11 +28,11 @@ list<string> QueryEvaluator::processQuery(string query){
 			if(grouped_pass){
 				
 				if(grouped_relations.size()>0){
-					clock_t t;
-					t = clock();
+					//clock_t t;
+					//t = clock();
 					results = resultTable.toList(result_refs);
-					t = clock()-t;
-					printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
+					//t = clock()-t;
+					//printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 				}
 					
 				else 
@@ -575,7 +575,7 @@ void QueryEvaluator::initialzeValueTable(){
 			valueTable[entity.synonym] = t;
 		}else{
 			vector<int> stmts;
-			if(entity.synonym=="prog_line")
+			if(entity.type=="prog_line")
 				stmts= QueryEvaluator::pkb->getStmtNo("stmt");
 			else stmts = QueryEvaluator::pkb->getStmtNo(entity.type);
 			set<string>* s = new set<string>;
@@ -602,20 +602,7 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
 
 
 
-/*list<string> QueryEvaluator::getResults(){
-	string r = result_refs.at(0);
-	list<string> res;
-	if(r=="BOOLEAN"){
-		res.push_back("true");
-		return res;
-	}
-	set<string> s = *valueTable[r];
-	
-	for(set<string>::iterator it = s.begin();it!=s.end();it++){
-		res.push_back(*it);
-	}
-	return res;
-} */
+
 
 list<string> QueryEvaluator::getResultsFromValueTable(){
 	

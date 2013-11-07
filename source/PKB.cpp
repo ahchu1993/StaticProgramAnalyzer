@@ -277,8 +277,8 @@ bool PKB::checkParent(string arg1, string arg1Type, string arg2, string arg2Type
 		else return false;
 	}else if(arg1Type=="integer"&&arg2=="_"){
 		int p = Util::convertStringToInt(arg1);
-		string type = getStmtType(p);
-		vector<int> children = getChildren(p,type);
+		//string type = getStmtType(p);
+		vector<int> children = getChildren(p,"stmt");
 		if(children.size()>0) return true;
 		else return false;
 	}else{
@@ -305,8 +305,8 @@ bool PKB::checkParentT(string arg1, string arg1Type, string arg2, string arg2Typ
 		else return false;
 	}else if(arg1Type=="integer"&&arg2=="_"){
 		int p = Util::convertStringToInt(arg1);
-		string type = getStmtType(p);
-		vector<int> children = getChildrenT(p,type);
+		//string type = getStmtType(p);
+		vector<int> children = getChildrenT(p,"stmt");
 		if(children.size()>0) return true;
 		else return false;
 	}else{
