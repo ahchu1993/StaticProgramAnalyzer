@@ -41,6 +41,8 @@ private:
 	CallTable callTable;
 	AST ast;
 
+	vector<int> firstStmtList;
+
 	//CFG -ZHAO yang
 	CFG cfg;
 
@@ -151,6 +153,8 @@ public:
 	string getStmtType(int stmtNo);
 	void printStmtTable();
 	set<string> getAllStmts();
+	void insertFirstStmtList(int stmtNo);
+	vector<int> getFirstStmtList();
 
 	/************************************************** ConstantTable *************************************************/
 	void insertConst(int stmtNo, int number);
