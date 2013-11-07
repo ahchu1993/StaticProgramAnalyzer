@@ -7,7 +7,7 @@
 using namespace std;
 
 
-static string designEntity[] = {"procedure","stmtList", "stmt", "assign", "call", "while", "if", "variable", "constant", "prog_line"};
+static string designEntity[] = {"procedure","stmtLst", "stmt", "assign", "call", "while", "if", "variable", "constant", "prog_line"};
 static const int NumDE = 10;
 
 void QueryPreprocessor::fillArg(QueryPreprocessor::arg_type_list* arg_list,bool undersc, bool int_t, bool string_t){

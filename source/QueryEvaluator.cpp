@@ -655,7 +655,7 @@ void QueryEvaluator::initialzeValueTable(){
 				t->insert(*it);
 			}
 			valueTable[entity.synonym] = t;
-		}else if(entity.type=="stmtList"){
+		}else if(entity.type=="stmtLst"){
 			vector<int> s = pkb->getFirstStmtList();
 			set<string> *t = new set<string>;
 			for(unsigned int i=0;i<s.size();i++){
