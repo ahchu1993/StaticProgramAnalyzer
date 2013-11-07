@@ -1384,12 +1384,12 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 		return isNextT(first,second);
 	}
 }
-bool checkNextBip(string arg1, string arg1Type, string arg2, string arg2Type)
+bool PKB::checkNextBip(string arg1, string arg1Type, string arg2, string arg2Type)
 {
 
 	return true; ///********
 }
-bool checkNextTBip(string arg1, string arg1Type, string arg2, string arg2Type)
+bool PKB::checkNextTBip(string arg1, string arg1Type, string arg2, string arg2Type)
 {
 	return true; ///**********
 }
