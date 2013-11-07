@@ -439,15 +439,16 @@ vector<pair<string,string>> QueryEvaluator::patternIfOrWhile(pattern* p){
 	
 	vector<pair<string,string>> result;
 	set<string> s = *valueTable[p->synonym];
-	if(p->varRef_type=="string"){
+	if(p->varRef_type=="variable"){
 		for(set<string>::iterator it = s.begin();it!=s.end();it++){
-			string a = *it;
+			int lineno = Util::convertStringToInt(*it);
 			// lineno - control variable
-			pair<string,string> * pa = new pair<string,string>("","");
+			string var = pkb->getControlVariable(lineno);
+			pair<string,string> * pa = new pair<string,string>(*it,var);
 			result.push_back(*pa);
 	
 		}
-	}else{ //varRef = "_"
+	}else if(p->varRef =="_"){ //varRef = "_"
 		
 		for(set<string>::iterator it = s.begin();it!=s.end();it++){
 			string a = *it;
@@ -455,6 +456,16 @@ vector<pair<string,string>> QueryEvaluator::patternIfOrWhile(pattern* p){
 			pair<string,string> * pa = new pair<string,string>(a,"");
 			result.push_back(*pa);
 
+		}
+	}else {
+		for(set<string>::iterator it = s.begin();it!=s.end();it++){
+			int lineno = Util::convertStringToInt(*it);
+			// lineno - control variable
+			string var = pkb->getControlVariable(lineno);
+			if(var ==p->varRef){
+				pair<string,string> * pa = new pair<string,string>(*it,var);
+				result.push_back(*pa);
+			}
 		}
 	}
 	return result;
