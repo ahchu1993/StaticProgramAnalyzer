@@ -215,6 +215,8 @@ public:
 
 	vector<pair<string, string>> getNextBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string,string>> getNextTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
+	
+	
 	string toString(int num);
 	/************************************************** Affect - Zhao Yang *************************************************/
 	vector<int> affectList; // for internal usage
@@ -281,6 +283,12 @@ public:
 	/************************************/
 	void printNext();
 	void printNextT();
+	void printPrev();
+	void printPrevT();
+	void printNextBip();
+	void printNextBipT();
+	void printPrevBip();
+	void printPrevBipT();
 	void printAffects();
 	void printAffectsT();
 	void printAffectedT();
