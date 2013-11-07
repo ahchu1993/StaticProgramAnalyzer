@@ -15,6 +15,7 @@ using namespace std;
 typedef struct stmt_row_t{
 	int stmt_no;
 	string type;
+	string controlVar;
 } stmt_row;
 
 class StmtTable
@@ -45,5 +46,8 @@ public:
 
 	/*************************************** New APIs *******************************************/
 	set<string> getAllStatements();
+	// Return 1 to indicate success, -1 otherwise
+	int insertControlVar(int stmtNo, string controlVar);
+	string getControlVariable(int stmtNo);
 };
 #endif

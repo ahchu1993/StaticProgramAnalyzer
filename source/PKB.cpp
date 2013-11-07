@@ -940,6 +940,14 @@ vector<int> PKB::getFirstStmtList(){
 	return firstStmtList;
 }
 
+int PKB::insertControlVar(int stmtNo, string controlVar){
+	return stmtTable.insertControlVar(stmtNo, controlVar);
+}
+
+string PKB::getControlVariable(int stmtNo){
+	return stmtTable.getControlVariable(stmtNo);
+}
+
 /************************************************** ConstantTable *************************************************/
 void PKB::insertConst(int stmtNo, int number)
 {

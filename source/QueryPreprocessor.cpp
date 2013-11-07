@@ -7,7 +7,7 @@
 using namespace std;
 
 
-static string designEntity[] = {"procedure","stmtList", "stmt", "assign", "call", "while", "if", "variable", "constant", "prog_line"};
+static string designEntity[] = {"procedure","stmtLst", "stmt", "assign", "call", "while", "if", "variable", "constant", "prog_line"};
 static const int NumDE = 10;
 
 void QueryPreprocessor::fillArg(QueryPreprocessor::arg_type_list* arg_list,bool undersc, bool int_t, bool string_t){
@@ -499,8 +499,16 @@ bool QueryPreprocessor::check_process_tuple(string t){
 			int p = t.find(".");
 			string s = t.substr(0,p);
 			if(exists(s)){
-				result_reffs.push_back(s);
-				return true;
+				string synonym_type = get_type(s);
+				string postfix = t.substr(p+1,t.size()-2);
+				if(synonym_type=="call"&&postfix =="procName"){
+					result_reffs.push_back(t);
+					return true;
+				}else{
+					result_reffs.push_back(s);
+					return true;
+				}
+				
 			}
 			else return false;
 		}
@@ -519,14 +527,30 @@ bool QueryPreprocessor::check_process_tuple(string t){
 			unsigned int p = t.find(",");
 
 			if(p>t.size()) {  ///no coma,single elem
-				if(check_elem(t)){
+				if(check_elem(t)) {      ///single elem, no <>
+					if(check_attrRef(t)){
+						int p = t.find(".");
+						string s = t.substr(0,p);
+						if(exists(s)){
+							string synonym_type = get_type(s);
+							string postfix = t.substr(p+1,t.size()-2);
+							if(synonym_type=="call"&&postfix =="procName"){
+								result_reffs.push_back(t);
+								return true;
+							}else{
+								result_reffs.push_back(s);
+								return true;
+							}
+				
+						}
+						else return false;
+					}
 					if(exists(t)){
 						result_reffs.push_back(t);
 						return true;
 					}
 					else return false;
 				}
-				else return false;
 			}
 
 			else {
@@ -537,8 +561,15 @@ bool QueryPreprocessor::check_process_tuple(string t){
 						int p = t1.find(".");
 						string s = t1.substr(0,p);
 						if(exists(s)){
-							result_reffs.push_back(s);
-							//return true;
+							string synonym_type = get_type(s);
+							string postfix = t1.substr(p+1,t1.size()-2);
+							if(synonym_type=="call"&&postfix =="procName"){
+								result_reffs.push_back(t1);
+							}else{
+								result_reffs.push_back(s);
+								
+							}
+				
 						}
 						else return false;
 					}
@@ -558,8 +589,15 @@ bool QueryPreprocessor::check_process_tuple(string t){
 							int p = t1.find(".");
 							string s = t1.substr(0,p);
 							if(exists(s)){
-								result_reffs.push_back(s);
-								//return true;
+								string synonym_type = get_type(s);
+								string postfix = t1.substr(p+1,t1.size()-2);
+								if(synonym_type=="call"&&postfix =="procName"){
+									result_reffs.push_back(t1);
+								}else{
+									result_reffs.push_back(s);
+									
+								}
+				
 							}
 							else return false;
 						}
@@ -1376,16 +1414,20 @@ bool QueryPreprocessor::pattern_while(string s){
 				varRef = varRef.substr(1,varRef.size()-2);
 			}
 
-			p0 = s.find("_");
+			string rest = s.substr(p1,s.size()-1);
+
+			p0 = rest.find("_");
+			
 			if(p0>s.size()) return false;
 			else {
+				p1 = rest.find(",");
 				string s1 = s.substr(p1+1,p0-p1-1);
 				if(trim(s1)!="") return false;
 				else {
-					p1 = s.find(")");
-					if(p1>s.size()) return false;
+					p1 = rest.find(")");
+					if(p1>rest.size()) return false;
 					else {
-						s1 = s.substr(p0+1,p1-p0-1);
+						s1 = rest.substr(p0+1,p1-p0-1);
 						if(trim(s1)!="") return false;
 						else {
 							tree_node t = build_tree_expr("_");
@@ -1557,7 +1599,7 @@ bool QueryPreprocessor::attrCompare(string s){
 
     if(flag1&&flag2){
        
-        attr_compare* compare = new attr_compare(ref1_prefix,ref1_type,ref2_prefix,ref2_type);
+        attr_compare* compare = new attr_compare(ref1_prefix,ref1_type,ref2_prefix,ref2_type,evaluation_type);
 
 		bool b1 = ref1_type=="string"||ref1_type=="integer";
 		bool b2 = ref2_type=="string"||ref2_type=="integer";

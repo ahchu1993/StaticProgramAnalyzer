@@ -30,6 +30,7 @@ private:
 	map<string, set<string>*> valueTable;
     vector<QueryPreprocessor::entityReff> entities;
 	vector<string> result_refs;
+	vector<string> result_refs_complex;
 	list<BaseRelation*> constant_relations;
 	list<list<BaseRelation*>> grouped_relations;
 	PKB* pkb;
@@ -50,7 +51,7 @@ private:
 	// designAbstraction
 	bool processTwoConstantsDesignAbstraction(designAbstraction* da);
 	vector<pair<string,string>> processDesignAbstraction(designAbstraction* da);
-    void validateResults();
+    list<string> validateResults();
 	// pattern
 	vector<pair<string,string>> processPattern(pattern* p);
 	vector<pair<string,string>> patternAssign(pattern *p);
