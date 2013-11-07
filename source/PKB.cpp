@@ -2415,8 +2415,10 @@ vector<pair<string, string>> PKB::getNextBip(set<string>* arg1_set, string arg1T
 		string index1 = *it1;
 		int stmtNo1 = atoi(index1.c_str());
 		vector<int> childrenList = getNextBip(stmtNo1);
+
 		for(it2=arg2List.begin();it2!= arg2List.end();it2++){
 			string index2 = *it2;
+
 			int stmtNo2 = atoi(index2.c_str());
 			if(contains(childrenList,stmtNo2)){
 				pair<string,string> p(index1,index2);
@@ -2426,6 +2428,22 @@ vector<pair<string, string>> PKB::getNextBip(set<string>* arg1_set, string arg1T
 	}
 	return result;
 
+}
+vector<pair<string,string>> PKB::getNextTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
+{
+	vector<pair<string,string>> result;
+
+	return result;
+}
+vector<pair<string, string>> PKB::getAffectsBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
+{
+	vector<pair<string,string>> result;
+	return result;
+}
+vector<pair<string, string>> PKB::getAffectsTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
+{
+	vector<pair<string,string>> result;
+	return result;
 }
 void PKB::printPrev()
 {

@@ -43,10 +43,12 @@ private:
 
 	vector<int> firstStmtList;
 
-	//CFG -ZHAO yang
-	CFG cfg;
+	
+	
 
 public:
+	//CFG -ZHAO yang
+	CFG cfg;
 	PKB();
 
 	/************************************************** AST *************************************************/
