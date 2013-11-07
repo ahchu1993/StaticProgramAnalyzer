@@ -42,6 +42,7 @@ public:
     void merge(ResultsTable table);
     void eliminateColumns(vector<string>refs);
     ResultsTable(string ref, set<string> value);
+	ResultsTable(string ref, list<string> value);
     ResultsTable();
     list<string> toList(vector<string> refs);
     // void printResults();

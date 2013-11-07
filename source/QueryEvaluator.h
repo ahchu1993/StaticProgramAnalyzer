@@ -30,6 +30,7 @@ private:
 	map<string, set<string>*> valueTable;
     vector<QueryPreprocessor::entityReff> entities;
 	vector<string> result_refs;
+	vector<string> result_refs_complex;
 	list<BaseRelation*> constant_relations;
 	list<list<BaseRelation*>> grouped_relations;
 	PKB* pkb;

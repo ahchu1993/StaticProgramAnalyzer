@@ -499,8 +499,16 @@ bool QueryPreprocessor::check_process_tuple(string t){
 			int p = t.find(".");
 			string s = t.substr(0,p);
 			if(exists(s)){
-				result_reffs.push_back(s);
-				return true;
+				string synonym_type = get_type(s);
+				string postfix = t.substr(p+1,t.size()-2);
+				if(synonym_type=="call"&&postfix =="procName"){
+					result_reffs.push_back(t);
+					return true;
+				}else{
+					result_reffs.push_back(s);
+					return true;
+				}
+				
 			}
 			else return false;
 		}
@@ -519,14 +527,30 @@ bool QueryPreprocessor::check_process_tuple(string t){
 			unsigned int p = t.find(",");
 
 			if(p>t.size()) {  ///no coma,single elem
-				if(check_elem(t)){
+				if(check_elem(t)) {      ///single elem, no <>
+					if(check_attrRef(t)){
+						int p = t.find(".");
+						string s = t.substr(0,p);
+						if(exists(s)){
+							string synonym_type = get_type(s);
+							string postfix = t.substr(p+1,t.size()-2);
+							if(synonym_type=="call"&&postfix =="procName"){
+								result_reffs.push_back(t);
+								return true;
+							}else{
+								result_reffs.push_back(s);
+								return true;
+							}
+				
+						}
+						else return false;
+					}
 					if(exists(t)){
 						result_reffs.push_back(t);
 						return true;
 					}
 					else return false;
 				}
-				else return false;
 			}
 
 			else {
@@ -537,8 +561,15 @@ bool QueryPreprocessor::check_process_tuple(string t){
 						int p = t1.find(".");
 						string s = t1.substr(0,p);
 						if(exists(s)){
-							result_reffs.push_back(s);
-							//return true;
+							string synonym_type = get_type(s);
+							string postfix = t1.substr(p+1,t1.size()-2);
+							if(synonym_type=="call"&&postfix =="procName"){
+								result_reffs.push_back(t1);
+							}else{
+								result_reffs.push_back(s);
+								
+							}
+				
 						}
 						else return false;
 					}
@@ -558,8 +589,15 @@ bool QueryPreprocessor::check_process_tuple(string t){
 							int p = t1.find(".");
 							string s = t1.substr(0,p);
 							if(exists(s)){
-								result_reffs.push_back(s);
-								//return true;
+								string synonym_type = get_type(s);
+								string postfix = t1.substr(p+1,t1.size()-2);
+								if(synonym_type=="call"&&postfix =="procName"){
+									result_reffs.push_back(t1);
+								}else{
+									result_reffs.push_back(s);
+									
+								}
+				
 							}
 							else return false;
 						}
