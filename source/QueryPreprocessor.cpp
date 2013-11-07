@@ -1414,16 +1414,20 @@ bool QueryPreprocessor::pattern_while(string s){
 				varRef = varRef.substr(1,varRef.size()-2);
 			}
 
-			p0 = s.find("_");
+			string rest = s.substr(p1,s.size()-1);
+
+			p0 = rest.find("_");
+			
 			if(p0>s.size()) return false;
 			else {
+				p1 = rest.find(",");
 				string s1 = s.substr(p1+1,p0-p1-1);
 				if(trim(s1)!="") return false;
 				else {
-					p1 = s.find(")");
-					if(p1>s.size()) return false;
+					p1 = rest.find(")");
+					if(p1>rest.size()) return false;
 					else {
-						s1 = s.substr(p0+1,p1-p0-1);
+						s1 = rest.substr(p0+1,p1-p0-1);
 						if(trim(s1)!="") return false;
 						else {
 							tree_node t = build_tree_expr("_");

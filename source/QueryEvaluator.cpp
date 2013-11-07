@@ -436,40 +436,25 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 }
 
 vector<pair<string,string>> QueryEvaluator::patternIfOrWhile(pattern* p){
-	map<int,PKB::postfixNode*> exp_list = pkb->postfixExprList;
+	
 	vector<pair<string,string>> result;
 	set<string> s = *valueTable[p->synonym];
 	if(p->varRef_type=="string"){
 		for(set<string>::iterator it = s.begin();it!=s.end();it++){
 			string a = *it;
-			int aint = Util::convertStringToInt(a); //if stmt#
-
-			PKB::postfixNode* n = exp_list[aint];
-
-			if(p->varRef==n->varRef){
-				string first = Util::convertIntToString(n->lineNum);
-				string second = n->varRef;
-				pair<string,string> * pa = new pair<string,string>(first,second);
-				result.push_back(*pa);
-				
-			}
+			// lineno - control variable
+			pair<string,string> * pa = new pair<string,string>("","");
+			result.push_back(*pa);
+	
 		}
-	}else{
-		set<string> vars = *valueTable[p->varRef];
+	}else{ //varRef = "_"
+		
 		for(set<string>::iterator it = s.begin();it!=s.end();it++){
 			string a = *it;
-			int aint = Util::convertStringToInt(a); //if stmt#
+		
+			pair<string,string> * pa = new pair<string,string>(a,"");
+			result.push_back(*pa);
 
-			PKB::postfixNode* n = exp_list[aint];
-
-			for(set<string>::iterator it_vars = vars.begin();it_vars!=vars.end();it_vars++)
-				if(*it_vars==n->varRef){
-					string first = Util::convertIntToString(n->lineNum);
-					string second = n->varRef;
-					pair<string,string> * pa = new pair<string,string>(first,second);
-					result.push_back(*pa);
-					break;
-				}
 		}
 	}
 	return result;
