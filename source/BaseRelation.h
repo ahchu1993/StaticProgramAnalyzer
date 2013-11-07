@@ -62,7 +62,7 @@ public:
 		left_ref_type = left_t;
 		right_ref = right_r;
 		right_ref_type = right_t;
-		string evaluation_type = e_type;
+		evaluation_type = e_type;
 	}
 
 };
