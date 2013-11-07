@@ -1341,49 +1341,30 @@ bool QueryPreprocessor::pattern_if(string s){
 				varRef = varRef.substr(1,varRef.size()-2);
 			}
 
-			p0 = s.find("_");
-			if(p0>s.size()) return false;
-			else {
-				string s1 = s.substr(p1+1,p0-p1-1);
+			string rest = s.substr(p1+1,s.size()-2);
+			p0 = rest.find("_");
+			p1 = rest.find(",");
+			int p2 = rest.find("_",p1);
+			int p3 = rest.find(")");
 
-				if(trim(s1)!="") return false;
-				else {
-					p1 = s.find(",",p1+1);
-					if(p1>s.size()) return false;
-					else {
-						s1 = s.substr(p0+1,p1-p0-1);
+			string space1 = trim(rest.substr(p0+1,p1-p0-1));
+			string space2 = trim(rest.substr(p1+1,p2-p1-1));
+			string space3 = trim(rest.substr(p2+1,p3-p2-1));
+			if(space1!=""||space2!=""||space3!="")
+				return false;
 
-						if(trim(s1)!="") return false;
-						else {
-							p0 = s.find("_",p0+1);
-							if(p0>s.size()) return false;
-							else {
-								s1 = s.substr(p1+1,p0-p1-1);
-								if(trim(s1)!="") return false;
-								else {
-									p1 = s.find(")");
-									if(p1>s.size()) return false;
-									else {
-										s1 = s.substr(p0+1,p1-p0-1);
-										if(trim(s1)!="") return false;
-										else {
-											tree_node t = build_tree_expr("_");
-											string exp_tree = flatten(&t);
-											pattern* p = new pattern("p_if",synonym,varRef,varRef_type,false,exp_tree);
+			
+			tree_node t = build_tree_expr("_");
+			string exp_tree = flatten(&t);
+			pattern* p = new pattern("p_if",synonym,varRef,varRef_type,false,exp_tree);
 
-											if(varRef_type =="variable")
-												relations.push_front(p);
-											else 
-												constant_relations.push_front(p);
-											return true;
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+			if(varRef_type =="variable")
+				relations.push_front(p);
+			else 
+				constant_relations.push_front(p);
+			return true;
+					
+			
 		}
 		else return false;
 	}
