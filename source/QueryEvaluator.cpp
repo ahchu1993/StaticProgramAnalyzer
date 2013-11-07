@@ -130,6 +130,7 @@ void QueryEvaluator::validateResults(){
 	
 	if (result_refs.at(0)=="BOOLEAN") {
 		//do nothing
+		resultTable.tuples.clear();
     }
     else{
         for (int i=0; i<result_refs.size(); i++) {
