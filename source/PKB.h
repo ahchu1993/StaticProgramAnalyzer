@@ -180,6 +180,7 @@ public:
 	vector<int> procFirstStmt;
 	vector<vector<int>> lastStmtsInProc;
 	int currentProc;
+	vector<int > findLastStmts(int callStmt);
 	/************************************************** Next - Zhao Yang *************************************************/
 	// utilities
 	vector<int> getNext(int stmtNo);

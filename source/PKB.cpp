@@ -980,7 +980,7 @@ void PKB::buildCFG()
 		vector<int> lists;
 		lastStmtsInProc.push_back(lists);
 	}
-	currentProc=-1;
+	
 
 	visited.clear();
 	currentIndex=1;
@@ -1012,6 +1012,7 @@ void PKB::buildCFG()
 	for(int j=0;j<procFirstStmt.size();j++){
 		stack<int> s;
 		s.push(procFirstStmt[j]);
+		cout<<"pr: "<<getProcName(j)<<"  "<<procFirstStmt[j]<<endl;
 		visitedHere.clear();
 		while(s.size()>0){
 			int top = s.top(); s.pop();
@@ -1024,10 +1025,6 @@ void PKB::buildCFG()
 
 			vector<int> childrenList = getNext(top);
 			for(int i=0;i<childrenList.size();i++){
-				if(childrenList[i]==0){
-					cout<<top<<" ~~ "<<i<<endl;
-					getchar();
-				}
 
 				s.push(childrenList[i]);
 			}
@@ -1035,8 +1032,71 @@ void PKB::buildCFG()
 				lastStmtsInProc[j].push_back(top);
 		}
 	}
+
+	// last stmt in that proc to next node of callNode
+	vector<int> visitedThis;
+	for(int i=0;i<cfg.CFGHeaderList.size();i++){
+		CFGNode* thisRoot=cfg.CFGHeaderList[i];
+		stack<int> st;
+
+		st.push(thisRoot->stmtNum);
+		while(st.size()>0){
+			int top = st.top();st.pop();
+			while(visitedThis.size()<=top)
+				visitedThis.push_back(0);
+			if(visitedThis[top]==0)
+				visitedThis[top]=1;
+			else continue;
+
+			CFGNode* thisNode = cfg.CFGNodes[top];
+			vector<int> childrenList = getNext(thisNode->stmtNum);
+			for(int i=0;i<childrenList.size();i++)
+				st.push(childrenList[i]);
+
+			if(thisNode->isCallNode()){
+
+
+				if(childrenList.size()>0){
+					int afterStmt = childrenList[0];
+
+					vector<int> lastStmts =  findLastStmts(thisNode->stmtNum);
+
+
+					for(int i=0;i<lastStmts.size();i++){
+						cfg.CFGNodes[lastStmts[i]]->addChildBip(cfg.CFGNodes[afterStmt]);
+						cfg.CFGNodes[afterStmt]->addParentBip(cfg.CFGNodes[lastStmts[i]]);
+					}
+				}
+			}
+		}
+	}
 }
 
+vector<int > PKB::findLastStmts(int callStmt){
+	vector<int> res;
+	if(getStmtType(callStmt).compare("call")!=0){
+		res.push_back(callStmt);
+		return res;
+	}
+
+	string calledProcName = procAtLine[callStmt];
+	//cout<<"proc At Line "<<calledProcName<<endl;
+	int calledProcIndex = getProcIndex(calledProcName);
+	if(calledProcIndex<0) {
+		return res;
+	}
+	vector<int> lastStmtsList = lastStmtsInProc[calledProcIndex];
+	for(int i=0;i<lastStmtsList.size();i++){
+		if(getStmtType(lastStmtsList[i]).compare("call")!=0){
+			res.push_back(lastStmtsList[i]);
+		}else{
+			vector<int> res1 = findLastStmts(lastStmtsList[i]);
+			for(int i=0;i<res1.size();i++)
+				res.push_back(res1[i]);
+		}
+	}
+	return res;
+}
 void PKB::buildTree(int procIndex)  // build cfg tree
 {
 	//cout<<"current index "<<currentIndex<<endl;
@@ -1045,13 +1105,16 @@ void PKB::buildTree(int procIndex)  // build cfg tree
 	cfg.CFGHeaderList.push_back(cfg.CFGNodes[currentIndex]);
 
 	int rootStmtNum = cfg.CFGNodes[currentIndex]->stmtNum;
+	currentProc=-1;
 	for(int i=0;i<procFirstStmt.size();i++){
 		if(rootStmtNum==procFirstStmt[i]){
 			currentProc = i;
 			cout<<"procNum-->>>  "<<getProcName(i)<<"  at stmt "<<rootStmtNum<<endl;
+			break;
 		}
 	}
-
+	if(cfg.CFGNodes[currentIndex]->getProcedure()<0)
+		cfg.CFGNodes[currentIndex]->setProcedure(currentProc);
 	buildLink(currentIndex);
 }
 // top down approach
@@ -1059,7 +1122,12 @@ CFGNode* PKB::buildLink(int stmtNo)  // build cfg link
 {
 	if(visited[stmtNo]==0)
 		visited[stmtNo]=1;
-	else return cfg.CFGNodes[stmtNo];
+	else {
+		if(cfg.CFGNodes[stmtNo]->getProcedure()<0){
+			cfg.CFGNodes[stmtNo]->setProcedure(currentProc);
+		}
+		return cfg.CFGNodes[stmtNo];
+	}
 	currentIndex++;
 	string stmtType =   getStmtType(stmtNo);
 
@@ -1074,13 +1142,17 @@ CFGNode* PKB::buildLink(int stmtNo)  // build cfg link
 			firstStmtInThatProc= procFirstStmt[calledProcIndex];
 		//cout<<"first prc "<<firstStmtInThatProc<<endl;
 		if(firstStmtInThatProc>0){
+			// callNode to the first node.
 			CFGNode* thisNode  = cfg.CFGNodes[stmtNo];
 			CFGNode* thatNode = cfg.CFGNodes[firstStmtInThatProc];
+			if(thisNode->getProcedure()<0)
+				thisNode->setProcedure(currentProc);
+
 			thisNode->addChildBip(thatNode);
 			thatNode->addParentBip(thisNode);
+
+
 		}
-		// ****go to the call proceudre!@! for Bip
-		// how to get the first stmt using procedure call stmtNo;
 		
 	}
 
@@ -1088,16 +1160,23 @@ CFGNode* PKB::buildLink(int stmtNo)  // build cfg link
 	if(stmtType.compare("while")==0){
 
 		CFGNode *whileNode=cfg.CFGNodes[stmtNo];
-
+		if(whileNode->getProcedure()<0)
+			whileNode->setProcedure(currentProc);
 		whileNode->addChild(buildLink(stmtNo+1)); // must be his child
 
 		int followedIndex =  findFollowed(stmtNo);
 		if(followedIndex>0){
-			whileNode->addChild(buildLink(followedIndex));
+			CFGNode* temNode = buildLink(followedIndex);
+			if(temNode->getProcedure()<0)
+				temNode->setProcedure(currentProc);
+			whileNode->addChild(temNode);
 		}else{
 			int childNo = findNext(stmtNo)->stmtNum;
-			if(childNo>0)
+			if(childNo>0){
+				if(cfg.CFGNodes[childNo]->getProcedure()<0)
+					cfg.CFGNodes[childNo]->setProcedure(currentProc);
 				whileNode->addChild(cfg.CFGNodes[childNo]);
+			}
 		}
 
 		// for bip, last stmt in that proc
@@ -1111,7 +1190,8 @@ CFGNode* PKB::buildLink(int stmtNo)  // build cfg link
 		return whileNode;
 	}else if(stmtType.compare("if")==0){
 		CFGNode *ifNode=cfg.CFGNodes[stmtNo];
-
+		if(ifNode->getProcedure()<0)
+			ifNode->setProcedure(currentProc);
 		vector<int> childrenList =  getChildren(stmtNo,"stmt"); // *** why?
 		//cout<<"child "<<childrenList.size()<<"  stmtNo: "<<stmtNo<<endl;
 		
@@ -1128,9 +1208,14 @@ CFGNode* PKB::buildLink(int stmtNo)  // build cfg link
 		}
 
 		//cout<<"haha found: "<<"  "<<afterElseStmtNo<<endl;
-
-		ifNode->addChild(buildLink(stmtNo+1)); // then
-		ifNode->addChild(buildLink(afterElseStmtNo)); // else
+		CFGNode* tem1 = buildLink(stmtNo+1);
+		if(tem1->getProcedure()<0)
+			tem1->setProcedure(currentProc);
+		CFGNode* tem2 = buildLink(afterElseStmtNo);
+		if(tem2->getProcedure()<0)
+			tem2->setProcedure(currentProc);
+		ifNode->addChild(tem1); // then
+		ifNode->addChild(tem2); // else
 
 		return ifNode;
 	}else{  // call or assign
@@ -1138,11 +1223,18 @@ CFGNode* PKB::buildLink(int stmtNo)  // build cfg link
 		
 		CFGNode *node=cfg.CFGNodes[stmtNo];
 
+		if(node->getProcedure()<0)
+			node->setProcedure(currentProc);
 		int afterStmtNo = stmtNo+1;
 		if( isFollowed(stmtNo,afterStmtNo)){
-			node->addChild(buildLink(afterStmtNo));
+			CFGNode* tem = buildLink(afterStmtNo);
+			if(tem->getProcedure()<0)
+				tem->setProcedure(currentProc);
+			node->addChild(tem);
 		}else{
 			CFGNode* nextNode= findNext(stmtNo);
+			if(nextNode->getProcedure()<0)
+				nextNode->setProcedure(currentProc);
 			if(nextNode->stmtNum<=0){
 				// last assign or call in the proc
 
@@ -1483,6 +1575,29 @@ void PKB::recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes)
 	else visited[stmtNo]=visited[stmtNo]+1;
 
 	string type = getStmtType(stmtNo);
+
+	///****call
+	if(type.compare("call")==0){
+		string procName = procAtLine[stmtNo];
+		int procIndex = getProcIndex(procName);
+		//cout<<"procName "<<procName<<endl;
+		if(procIndex>=0){
+			vector<int> modifiedVarList = getModifiedProc(procIndex);
+			for(int i=0;i<modifiedVarList.size();i++){
+				int deleteVar =modifiedVarList[i];
+				if(contains(varIndexes,deleteVar)){
+					vector<int>::iterator it = std::find(varIndexes.begin(),varIndexes.end(),deleteVar);
+					if (it != varIndexes.end()) {
+						string var = getVarName(*it);
+						if(varIndexes.size()>1)
+							varIndexes.erase(it);
+						else varIndexes.clear();
+					}
+				}
+			}
+		}
+	}
+
 	if(type.compare("assign")!=0){
 
 	}else{
@@ -1525,7 +1640,15 @@ void PKB::recusiveBuildAffectList(int stmtNo, int varIndex)
 	string stmtType =  getStmtType(stmtNo);
 	
 	//**** check if it's call stmt
-
+	if(stmtType.compare("call")==0){
+		string procName = procAtLine[stmtNo];
+		int procIndex = getProcIndex(procName);
+		//cout<<"procName "<<procName<<endl;
+		if(procIndex<0) return;
+		vector<int> modifiedVarList = getModifiedProc(procIndex);
+		if(contains(modifiedVarList,varIndex))
+			return;
+	}
 	// problematic!!!! while situation, i only need assignment vars
 	if(stmtType.compare("assign")==0&&contains(usedVarList,varIndex)){
 		if(!contains(affectList,stmtNo)){

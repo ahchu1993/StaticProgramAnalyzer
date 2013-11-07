@@ -139,7 +139,7 @@ vector<int> CFG::getNextBip(int stmtNo)
 	vector<int> results;
 	CFGNode *currentNode = CFGNodes[stmtNo];
 	vector<CFGNode *> childrenList;
-	if(currentNode->isCallNode())
+	if(currentNode->childBipList.size()>0)
 		childrenList= currentNode->childBipList;
 	else childrenList = currentNode->childList;
 

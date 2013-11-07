@@ -1,6 +1,6 @@
 #include "CFGNode.h"
-
-
+#include <iostream>
+#include <cstdio>
 CFGNode::CFGNode(int statementNumber)
 {
 	stmtNum = statementNumber;
@@ -10,6 +10,15 @@ CFGNode::CFGNode(int statementNumber)
 	numOfParentBip=0;
 	callNode=0;
 	calledNode=0;
+	thisProcedure=-1;
+}
+void CFGNode::setProcedure(int proc)
+{
+	thisProcedure=proc;
+}
+int CFGNode::getProcedure()
+{
+	return thisProcedure;
 }
 void CFGNode::setCallNode(){
 	callNode=1;

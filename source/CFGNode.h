@@ -15,6 +15,9 @@ public:
 	vector<CFGNode *> childList;
 	vector<CFGNode *> parentList;
 
+	void setProcedure(int proc);
+	int getProcedure();
+	int thisProcedure;
 
 	// for inter-procedure
 	int callNode;
