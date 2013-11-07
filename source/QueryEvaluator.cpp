@@ -225,13 +225,13 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 	}else if(relation=="Affects*"){
 		res = pkb-> getAffectsT(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation =="NextBip"){
-		res = pkb-> getNext(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+		res = pkb-> getNextBip(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation =="NextBip*"){
-		res = pkb-> getNext(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+		res = pkb-> getNextTBip(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation =="AffectsBip"){
-		res = pkb-> getNext(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+		res = pkb-> getAffectsBip(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}else if(relation =="AffectsBip*"){
-		res = pkb-> getNext(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
+		res = pkb-> getAffectsTBip(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}
 
 	if(da->ref1==da->ref2){  // ref1 is the same as ref2
@@ -295,13 +295,13 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 	}else if(relation == "Affects*"){
 		return pkb-> checkAffectsT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "NextBip"){
-		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		return pkb-> checkNextBip(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "NextBip*"){
-		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		return pkb-> checkNextTBip(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "AffectsBip"){
-		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		return pkb-> checkAffectsBip(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "AffectsBip*"){
-		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		return pkb-> checkAffectsTBip(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}
 
 	return false;
@@ -493,14 +493,48 @@ vector<pair<string,string>> QueryEvaluator::processAttrCompare(attr_compare* a){
 	set<string> s1 = getValueSet(a->left_ref,a->left_ref_type,"");
 	set<string> s2 = getValueSet(a->right_ref,a->right_ref_type,"");
 	set<string>::iterator it2;
-	for(set<string>::iterator it = s1.begin();it!=s1.end();it++){
-		it2 = s2.find(*it);
-		if(it2!=s2.end()){
-			pair<string,string> p(*it,*it);
-			result.push_back(p);
+
+	if(a->left_ref_type=="call"||a->right_ref_type=="call"){
+		if(a->left_ref_type=="call"&&a->right_ref_type=="call"){
+			for(set<string>::iterator it = s1.begin();it!=s1.end();it++){
+				it2 = s2.find(*it);
+				if(it2!=s2.end()){
+					pair<string,string> p(*it,*it);
+					result.push_back(p);
+				}
+			}
+		}else if(a->left_ref_type=="call"){
+			for(set<string>::iterator it = s1.begin();it!=s1.end();it++){
+				string temp = *it;
+				int lineno = Util::convertStringToInt(temp);
+				string proc = pkb->procAtLine[lineno];
+				if(proc==a->right_ref){
+					pair<string,string> p(*it,*it);
+					result.push_back(p);
+				}
+			}
+		}else {
+			for(set<string>::iterator it = s2.begin();it!=s2.end();it++){
+				string temp = *it;
+				int lineno = Util::convertStringToInt(temp);
+				string proc = pkb->procAtLine[lineno];
+				if(proc==a->left_ref){
+					pair<string,string> p(*it,*it);
+					result.push_back(p);
+				}
+			}
+		}
+		
+	}else {
+
+		for(set<string>::iterator it = s1.begin();it!=s1.end();it++){
+			it2 = s2.find(*it);
+			if(it2!=s2.end()){
+				pair<string,string> p(*it,*it);
+				result.push_back(p);
+			}
 		}
 	}
-
 	string type1 = a->left_ref_type;
 	string type2 = a->right_ref_type;
 	bool b1 = type1=="integer"||type1=="string";
