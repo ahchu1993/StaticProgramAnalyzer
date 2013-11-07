@@ -1825,11 +1825,9 @@ void QueryPreprocessor::group_relations(){
                 if(dependence[r1]==1||dependence[r2]==1){
                     dependence[r1] = 1;
                     dependence[r2] = 1;
-
-					if(re->type=="designAbstraction") //design abstraction goes to back of group
-						group.push_back(re);
-					else	/// pattern or attr_compare goes to the front of group
-						group.push_front(re);
+				
+					group.push_back(re); //take out order priority
+					
                     c++;
                     total_count--;
                     relation_map[i] =1;
