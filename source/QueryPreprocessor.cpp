@@ -1430,18 +1430,30 @@ bool QueryPreprocessor::pattern_while(string s){
 	else return false;
 }
 
-bool QueryPreprocessor::patternCond(string patternCond){
-	int p = patternCond.find("(");
-	string synonym = trim(patternCond.substr(0,p));
+bool QueryPreprocessor::check_pattern(string patt){
+	int p = patt.find("(");
+	string synonym = trim(patt.substr(0,p));
 	string p_type = get_type(synonym);
 	if(p_type =="assign")
-		return pattern_assign(patternCond);
+		return pattern_assign(patt);
 
 	else if(p_type =="while")
-		return pattern_while(patternCond);
+		return pattern_while(patt);
 
 	else 
-		return pattern_if(patternCond);
+		return pattern_if(patt);
+}
+bool QueryPreprocessor::patternCond(string pattCond){
+	int p0 = pattCond.find(" and ");
+	if(p0<pattCond.size()){
+		string pattern_left = pattCond.substr(0,p0);
+		string pattern_rest = pattCond.substr(p0+5,pattCond.size()-p0-5);
+
+		if(check_pattern(pattern_left)){
+			return patternCond(pattern_rest);
+		}else return false;
+	}else return check_pattern(pattCond);
+	
 }
 
 
