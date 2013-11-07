@@ -573,6 +573,14 @@ void QueryEvaluator::initialzeValueTable(){
 				t->insert(*it);
 			}
 			valueTable[entity.synonym] = t;
+		}else if(entity.type=="stmtList"){
+			vector<int> s = pkb->getFirstStmtList();
+			set<string> *t = new set<string>;
+			for(unsigned int i=0;i<s.size();i++){
+				string temp = Util::convertIntToString(s[i]);
+				t->insert(temp);
+			}
+			valueTable[entity.synonym] = t;
 		}else{
 			vector<int> stmts;
 			if(entity.type=="prog_line")
