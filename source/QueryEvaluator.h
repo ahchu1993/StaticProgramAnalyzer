@@ -51,7 +51,7 @@ private:
 	// designAbstraction
 	bool processTwoConstantsDesignAbstraction(designAbstraction* da);
 	vector<pair<string,string>> processDesignAbstraction(designAbstraction* da);
-    void validateResults();
+    list<string> validateResults();
 	// pattern
 	vector<pair<string,string>> processPattern(pattern* p);
 	vector<pair<string,string>> patternAssign(pattern *p);

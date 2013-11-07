@@ -38,7 +38,7 @@ list<string> QueryEvaluator::processQuery(string query){
 				if(grouped_relations.size()>0){
 					//clock_t t;
 					//t = clock();
-					results = resultTable.toList(result_refs);
+					results = validateResults();
 					//t = clock()-t;
 					//printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 				}
@@ -101,67 +101,7 @@ bool QueryEvaluator::processConstantRelations(){
 	return true;
 }
 
-void QueryEvaluator::validateResults(){
-    
-    // if (resultTable.columns.size()<result_refs.size()) {
-	bool change_proc = false;
-	//bool inside_result = false;
-	vector<int> change_proc_index;
-	for(int z =0; z<result_refs_complex.size();z++){
-		if(result_refs_complex.at(z)!=result_refs.at(z)){
-			change_proc =true;
-			if(resultTable.findColumn(result_refs.at(z))!=-1){
-				change_proc_index.push_back(z);
-				//inside_result = true;
-			}
-		}
-	}
-	if(change_proc && change_proc_index.size()>0){//check if there is c.proc inside results_reff_complex
-		//change the line number to proc name
-		for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
-			for(int m = 0;m<change_proc_index.size();m++){
-				int c_ind = change_proc_index[m];
-				int ind = Util::convertStringToInt((*it).at(c_ind));
-				string proc = pkb->procAtLine[ind];
-				(*it).at(change_proc_index.at(m))=proc;
-			}
-		}
-	}
-	
-	if (result_refs.at(0)=="BOOLEAN") {
-		//do nothing
-		resultTable.tuples.clear();
-    }
-    else{
-        for (int i=0; i<result_refs.size(); i++) {
-            string ref = result_refs.at(i);
-			string ref2 = result_refs_complex.at(i);
-			//clock_t t;
-			//t = clock();
-            if (resultTable.findColumn(ref)==-1) {
-				if(ref!=ref2){
-					list<string> temp_l;
-					set<string> s = *valueTable[ref];
-					for(set<string>::iterator it = s.begin();it!=s.end();it++){
-						int ind = Util::convertStringToInt(*it);
-						string proc = pkb->procAtLine[ind];
-						temp_l.push_back(proc);
-					}
-					ResultsTable tempTable(ref, temp_l);
-					resultTable.merge(tempTable);
-				}
-				else{
-					ResultsTable tempTable(ref,*valueTable[ref]);
-				    resultTable.merge(tempTable);
-				}
-			}
-			//t = clock()-t;
-			//printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
-        }
-        
-    }
 
-}
 bool QueryEvaluator::processGroupedRelations(){
 
 	if(grouped_relations.size()==0)
@@ -230,7 +170,7 @@ bool QueryEvaluator::processGroupedRelations(){
        
     }//for each group
     //resultTable=temp_results_table;
-    validateResults();
+    
     return true;
 }
 
@@ -692,7 +632,161 @@ void QueryEvaluator::updateValueTable(string ref, vector<string> values){
 }
 
 
+list<string> QueryEvaluator::validateResults(){
+    
+    // if (resultTable.columns.size()<result_refs.size()) {
+	bool change_proc = false;
+	//bool inside_result = false;
+	vector<int> change_proc_index;
+	for(int z =0; z<result_refs_complex.size();z++){
+		if(result_refs_complex.at(z)!=result_refs.at(z)){
+			change_proc =true;
+			if(resultTable.findColumn(result_refs.at(z))!=-1){
+				change_proc_index.push_back(z);
+				//inside_result = true;
+			}
+		}
+	}
+	if(change_proc && change_proc_index.size()>0){//check if there is c.proc inside results_reff_complex
+		//change the line number to proc name
+		for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
+			for(int m = 0;m<change_proc_index.size();m++){
+				int c_ind = change_proc_index[m];
+				int ind = Util::convertStringToInt((*it).at(c_ind));
+				string proc = pkb->procAtLine[ind];
+				(*it).at(change_proc_index.at(m))=proc;
+			}
+		}
+	}
 
+	list<string> res;
+	if (result_refs.at(0)=="BOOLEAN") {
+		return res;
+    }
+   		
+	/// compute the first synonym in result refs
+	string first = result_refs_complex[0];
+	int p0 = first.find(".");
+	if(p0<first.size()){
+		string synonym = first.substr(0,p0);
+		int index = resultTable.findColumn(synonym);
+		if(index==-1){
+			set<string> s = *valueTable[synonym];
+			for(set<string>::iterator it = s.begin();it!=s.end();it++){
+				int ind = Util::convertStringToInt(*it);
+				string proc = pkb->procAtLine[ind];
+				res.push_back(proc);
+			}
+		}else{
+			for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
+				vector<string> tuple = *it;
+				res.push_back(tuple.at(index));
+			}
+		}
+	}else {
+		int index = resultTable.findColumn(first);
+		if(index==-1){
+			set<string> s = *valueTable[first];
+			for(set<string>::iterator it = s.begin();it!=s.end();it++){		
+				res.push_back(*it);
+			}
+		}else{
+			for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
+				vector<string> tuple = *it;
+				res.push_back(tuple.at(index));
+			}
+		}
+		
+	}
+
+	/// main loop
+	for (int i=1; i<result_refs.size(); i++) {
+		string ref = result_refs_complex.at(i);
+
+		list<string> temp;	
+			
+		int p = ref.find(".");
+
+		if(p<ref.size()){ //ref is call.procName
+			string synonym = ref.substr(0,p);
+			int index = resultTable.findColumn(synonym);
+			if(index==-1){ //not in resultTable
+				set<string> s = *valueTable[synonym];
+				for(set<string>::iterator it = s.begin();it!=s.end();it++){
+					int ind = Util::convertStringToInt(*it);
+					string proc = pkb->procAtLine[ind];
+					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+				
+						string ref1 = *it_list;
+					
+						ref1.append(" ");
+						ref1.append(proc);
+						temp.push_back(ref1);
+					}
+				}
+				res = temp;
+
+			}else{ // get from tuple
+				for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
+					vector<string> tuple = *it;
+					int count = resultTable.tuples.size();
+					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+						if(count==resultTable.tuples.size()){
+							string ref1 = *it_list;
+					
+							ref1.append(" ");
+							ref1.append(tuple.at(index));
+							temp.push_back(ref1);
+						}
+						count--;
+						if(count==0)
+							count = resultTable.tuples.size();
+					}
+				}
+				res = temp;
+			}
+
+		}else{ // ref is snynonym
+			int index = resultTable.findColumn(ref);
+			if(index ==-1){ //not in resultTable
+				set<string> s = *valueTable[ref];
+				for(set<string>::iterator it = s.begin();it!=s.end();it++){
+						
+					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+				
+						string ref1 = *it_list;
+							
+						ref1.append(" ");
+						ref1.append(*it);
+						temp.push_back(ref1);
+					}
+				}
+				res = temp;
+
+			}else { //in resultTable
+				for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
+					vector<string> tuple = *it;
+					int count = resultTable.tuples.size();
+					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+						if(count==resultTable.tuples.size()){
+							string ref1 = *it_list;
+					
+							ref1.append(" ");
+							ref1.append(tuple.at(index));
+							temp.push_back(ref1);
+							
+						}
+						count--;
+						if(count==0)
+							count = resultTable.tuples.size();
+					}
+				}
+				res = temp;
+			}
+		}					
+	}
+	return res;
+}
 
 
 list<string> QueryEvaluator::getResultsFromValueTable(){
