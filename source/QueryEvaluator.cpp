@@ -178,8 +178,13 @@ bool QueryEvaluator::processGroupedRelations(){
                 }
 			}
         }//for each relation
-        temp_table.eliminateColumns(result_refs);
-        resultTable.merge(temp_table);
+        if (temp_table.tuples.size()==0) {
+            break;
+        }
+        else{
+            temp_table.eliminateColumns(result_refs);
+            resultTable.merge(temp_table);
+        }
     }//for each group
     //resultTable=temp_results_table;
     validateResults();
