@@ -295,13 +295,13 @@ bool QueryEvaluator::processTwoConstantsDesignAbstraction(designAbstraction* da)
 	}else if(relation == "Affects*"){
 		return pkb-> checkAffectsT(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "NextBip"){
-		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		return pkb-> checkNextBip(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "NextBip*"){
-		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		return pkb-> checkNextTBip(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "AffectsBip"){
-		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		return pkb-> checkAffectsBip(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}else if(relation == "AffectsBip*"){
-		return pkb-> checkNext(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
+		return pkb-> checkAffectsTBip(da->ref1, da->ref1_type, da->ref2, da->ref2_type);
 	}
 
 	return false;
