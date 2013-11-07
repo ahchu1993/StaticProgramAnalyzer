@@ -1643,11 +1643,11 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 	return result;
 
 }
-bool checkAffectsBip(string arg1, string arg1Type, string arg2, string arg2Type)
+bool PKB::checkAffectsBip(string arg1, string arg1Type, string arg2, string arg2Type)
 {
 	return true; ///*******
 }
-bool checkAffectsTBip(string arg1, string arg1Type, string arg2, string arg2Type)
+bool PKB::checkAffectsTBip(string arg1, string arg1Type, string arg2, string arg2Type)
 {
 	return true;//******
 }
