@@ -30,7 +30,7 @@ public:
 	// If stmtNo is not in the StmtTable, inserts stmtNo into the StmtTable and return 1 to indicate success
 	// Else, returns -1.
 	// type can only be "ASSIGN", "CALL", "IF", "WHILE"
-	int insertStmt(int stmtNo, string type, string controlVar);
+	int insertStmt(int stmtNo, string type);
 
 	// Returns the list of all stmt of type type
 	vector<int> getStmtNo(string type);
@@ -46,6 +46,8 @@ public:
 
 	/*************************************** New APIs *******************************************/
 	set<string> getAllStatements();
+	// Return 1 to indicate success, -1 otherwise
+	int insertControlVar(int stmtNo, string controlVar);
 	string getControlVariable(int stmtNo);
 };
 #endif

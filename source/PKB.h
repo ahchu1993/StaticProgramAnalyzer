@@ -150,7 +150,7 @@ public:
 	set<string> getAllProcs(); 
 
 	/************************************************** StmtTable *************************************************/
-	int insertStmt(int stmtNo, string type, string controlVar);
+	int insertStmt(int stmtNo, string type);
 	vector<int> getStmtNo(string type);
 	int getSizeStmtTable();
 	string getStmtType(int stmtNo);
@@ -158,6 +158,7 @@ public:
 	set<string> getAllStmts();
 	void insertFirstStmtList(int stmtNo);
 	vector<int> getFirstStmtList();
+	int insertControlVar(int stmtNo, string controlVar);
 	string getControlVariable(int stmtNo);
 
 	/************************************************** ConstantTable *************************************************/

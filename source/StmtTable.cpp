@@ -7,7 +7,7 @@ StmtTable::~StmtTable(void)
 {
 }
 
-int StmtTable::insertStmt(int stmtNo, string type, string controlVar)
+int StmtTable::insertStmt(int stmtNo, string type)
 {
 	//assert(stmtNo>=0 && (type.compare("assign") == 0 || type.compare("call") == 0 || type.compare("while") == 0 || type.compare("if") == 0));
 	stmt_row temp_row;
@@ -25,7 +25,7 @@ int StmtTable::insertStmt(int stmtNo, string type, string controlVar)
 	stmt_row new_row;
 	new_row.stmt_no = stmtNo;
 	new_row.type = type;
-	new_row.controlVar = controlVar;
+	new_row.controlVar = "";
 	Stmt_Table.push_back(new_row);
 
 	return 1;
@@ -113,6 +113,20 @@ set<string> StmtTable::getAllStatements(){
 	}
 
 	return result;
+}
+int StmtTable::insertControlVar(int stmtNo, string controlVar){
+	stmt_row* temp_row;
+
+	for (unsigned i = 0; i < Stmt_Table.size(); i++)
+	{
+		temp_row = &Stmt_Table.at(i);
+		if ((*temp_row).stmt_no == stmtNo){
+			(*temp_row).controlVar = controlVar;
+			return 1;
+		}
+	}
+
+	return -1;
 }
 
 string StmtTable::getControlVariable(int stmtNo){

@@ -900,9 +900,9 @@ set<string> PKB::getAllProcs(){
 }
 
 /************************************************** StmtTable *************************************************/
-int PKB::insertStmt(int stmtNo, string type, string controlVar)
+int PKB::insertStmt(int stmtNo, string type)
 {
-	return stmtTable.insertStmt(stmtNo, type, controlVar);
+	return stmtTable.insertStmt(stmtNo, type);
 }
 vector<int> PKB::getStmtNo(string type)
 {
@@ -938,6 +938,10 @@ void PKB::insertFirstStmtList(int stmtNo){
 
 vector<int> PKB::getFirstStmtList(){
 	return firstStmtList;
+}
+
+int PKB::insertControlVar(int stmtNo, string controlVar){
+	return stmtTable.insertControlVar(stmtNo, controlVar);
 }
 
 string PKB::getControlVariable(int stmtNo){
