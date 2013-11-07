@@ -1247,9 +1247,11 @@ vector<int> PKB::getPrevT(int stmtNo)
 bool PKB::checkNext(string arg1, string arg1Type, string arg2, string arg2Type){
 	if(arg1=="_"&&arg2=="_"){
 		int size = stmtTable.getSize();
-		if(size>0)
-			return true;
-		else return false;
+		for(int i=1;i<=size;i++){
+			if(getNext(i).size()>0)
+				return true;
+		}
+		return false;
 	}else if(arg1=="_"&&arg2Type=="integer"){
 		int second = Util::convertStringToInt(arg2);
 		vector<int> f = getPrev(second);
@@ -1344,9 +1346,11 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 {
 	if(arg1=="_"&&arg2=="_"){
 		int size = stmtTable.getSize();
-		if(size>0)
-			return true;
-		else return false;
+		for(int i=1;i<=size;i++){
+			if(getNextT(i).size()>0)
+				return true;
+		}
+		return false;
 	}else if(arg1=="_"&&arg2Type=="integer"){
 		int second = Util::convertStringToInt(arg2);
 		vector<int> f = getPrevT(second);
@@ -1366,6 +1370,7 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 }
 bool checkNextBip(string arg1, string arg1Type, string arg2, string arg2Type)
 {
+
 	return true; ///********
 }
 bool checkNextTBip(string arg1, string arg1Type, string arg2, string arg2Type)
@@ -2086,7 +2091,7 @@ void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes, int toL
 
 }
 
-
+/*
 vector<int> PKB::recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList)
 {
 	vector<int> res;
@@ -2135,7 +2140,7 @@ vector<int> PKB::recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList)
 	}
 
 }
-
+*/
 vector<int> PKB::merge(vector<int> v1,vector<int> v2) // no duplicate
 {
 	v1.insert(v1.end(), v2.begin(), v2.end());
@@ -2273,6 +2278,8 @@ vector<int> PKB::processStmtListAffectsT(int stmtNo, vector<int> varIndexList)
 	}
 	return varIndexList;
 }
+
+
 /*
 vector<int> PKB::getAffectedTList(int stmtNo)
 {
@@ -2300,6 +2307,7 @@ vector<int> PKB::getAffectedTList(int stmtNo)
 	return affectedTList;
 }*/
 //*** not done
+/*
 vector<int> PKB::processStmtListAffectedT(int stmtNo, vector<int> varIndexList)
 {
 	while(visited.size()<=stmtNo)
@@ -2368,9 +2376,38 @@ vector<int> PKB::processStmtListAffectedT(int stmtNo, vector<int> varIndexList)
 		}
 	}
 	return varIndexList;
-}
+}*/
 void PKB::error(string msg)
 {
 	cout<<"error message "<<msg<<endl;
 	exit(0);
+}
+
+
+/**********************************NextBip zy***************************************/
+
+vector<pair<string, string>> PKB::getNextBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
+{
+	vector<pair<string,string>> result;
+
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> arg1List = *arg1_set;
+	set<string> arg2List = *arg2_set;
+
+	for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+		string index1 = *it1;
+		int stmtNo1 = atoi(index1.c_str());
+		vector<int> childrenList = getNextBip(stmtNo1);
+		for(it2=arg2List.begin();it2!= arg2List.end();it2++){
+			string index2 = *it2;
+			int stmtNo2 = atoi(index2.c_str());
+			if(contains(childrenList,stmtNo2)){
+				pair<string,string> p(index1,index2);
+				result.push_back(p);
+			}
+		}
+	}
+	return result;
+
 }

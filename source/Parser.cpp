@@ -152,6 +152,9 @@ bool Parser::stmtLst(vector < PairNumber > useModifyList) {
 int Parser::processStmt(vector<int> stmtListNumber, vector < PairNumber > useModifyList) {
 	int t=line++;
 	stmtListNumber.push_back(line);
+
+	pkb->insertFirstStmtList(line);
+
 	//*previousStmtLine = line;
 	stmt(stmtListNumber, useModifyList);
 	return t+1;
