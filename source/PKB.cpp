@@ -161,6 +161,7 @@ vector<string> PKB::getCalledList(string procName){
 void PKB::printCallTable(){
 	callTable.print();
 }
+
 //Api for Khue
 //Input: procIndex
 //Output: vector of all stmNo that call* procIndex
@@ -3084,48 +3085,62 @@ vector<int> PKB::getAffectedBipList(int stmtNo)
 		return affectedList;
 	vector<int> varIndexes = getUsedStmt(stmtNo); // all var-s that modified this stmt
 
+	storageAtThatLine.clear();
+	for(int i=0;i<=getSizeStmtTable();i++){
+		vector<int> tmp;
+		storageAtThatLine.push_back(tmp);
+	}
+
 	visited.clear();
-	vector<int> parentList = getPrev(stmtNo);
+	vector<int> parentList = getPrevBip(stmtNo);
 	for(int i=0;i<parentList.size();i++){
 		int parentStmt = parentList[i];
-		recusiveBuildAffectedBipList(parentStmt,varIndexes);
+		recusiveBuildAffectedBipList(parentStmt,varIndexes,0);
 	}
 	return affectedBipList;
 
 }
-void PKB::recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes)
+void PKB::recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes, int toLoop)
 {
-	while(visited.size()<=stmtNo+1)
+	cout<<"STMTNO "<<stmtNo<<endl; 
+	for(int i=0;i<varIndexes.size();i++){
+		cout<<"used  "<<getVarName(varIndexes[i])<<endl;
+	}
+	//getchar();
+
+	if(varIndexes.size()==0)return;
+	if(storageAtThatLine[stmtNo].size()>0){
+		vector<int> tem = merge(storageAtThatLine[stmtNo],varIndexes);
+		if(tem.size()>storageAtThatLine[stmtNo].size()){
+			storageAtThatLine[stmtNo]=tem;
+			toLoop=1;
+		}else {
+			//cout<<"wow "<<stmtNo<<endl;
+			//getchar();
+			return;
+		}
+	}else{
+		storageAtThatLine[stmtNo] = varIndexes;
+	}
+	cout<<"wow "<<stmtNo<<endl;
+
+	while(visited.size()<=stmtNo)
 		visited.push_back(0);
 	//num of loops
-	if(visited[stmtNo]==1)
-		return;
-	else visited[stmtNo]=visited[stmtNo]+1;
-
-	string type = getStmtType(stmtNo);
-
-	///****call
-	/* bip dont consider call
-	if(type.compare("call")==0){
-		string procName = procAtLine[stmtNo];
-		int procIndex = getProcIndex(procName);
-		//cout<<"procName "<<procName<<endl;
-		if(procIndex>=0){
-			vector<int> modifiedVarList = getModifiedProc(procIndex);
-			for(int i=0;i<modifiedVarList.size();i++){
-				int deleteVar =modifiedVarList[i];
-				if(contains(varIndexes,deleteVar)){
-					vector<int>::iterator it = std::find(varIndexes.begin(),varIndexes.end(),deleteVar);
-					if (it != varIndexes.end()) {
-						string var = getVarName(*it);
-						if(varIndexes.size()>1)
-							varIndexes.erase(it);
-						else varIndexes.clear();
-					}
-				}
-			}
+	if(visited[stmtNo]>=1){
+		if(toLoop!=1)
+			return;
+		else {
+			toLoop=0;
+			visited.clear();
 		}
-	}*/
+		//return;
+	}else visited[stmtNo]=visited[stmtNo]+1;
+
+	cout<<"mom "<<stmtNo<<endl;
+
+	int newVar=0;
+	string type = getStmtType(stmtNo);
 
 	if(type.compare("assign")!=0){
 
@@ -3134,6 +3149,7 @@ void PKB::recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes)
 		if(contains(varIndexes,modifiedVar)){
 			if(!contains(affectedBipList,stmtNo)){
 				affectedBipList.push_back(stmtNo);
+				newVar=1;
 				//visited.clear();
 			}
 			vector<int>::iterator it = std::find(varIndexes.begin(),varIndexes.end(),modifiedVar);
@@ -3152,7 +3168,8 @@ void PKB::recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes)
 	for(int i=0;i<parentList.size();i++){
 		int parentStmt = parentList[i];
 		////cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
-		recusiveBuildAffectedBipList(parentStmt,varIndexes);
+		if(newVar)
+			recusiveBuildAffectedBipList(parentStmt,varIndexes,newVar);
+		else recusiveBuildAffectedBipList(parentStmt,varIndexes,toLoop);
 	}
-
 }

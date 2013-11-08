@@ -245,7 +245,7 @@ public:
 	vector<int> affectBipList;
 	vector<int> affectedBipList;
 	void recusiveBuildAffectBipList(int stmtNo, int varIndex);
-	void recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes);
+	void recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes, int toLoop);
 
 	vector<int> getAffectTList(int stmtNo);
 	vector<int> getAffectedTList(int stmtNo);
