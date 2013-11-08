@@ -184,6 +184,9 @@ public:
 	vector<vector<int>> lastStmtsInProc;
 	int currentProc;
 	vector<int > findLastStmts(int callStmt);
+
+	vector<vector<int>> storageAtThatLine;
+
 	/************************************************** Next - Zhao Yang *************************************************/
 	// utilities
 	vector<int> getNext(int stmtNo);

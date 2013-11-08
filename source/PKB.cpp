@@ -2165,6 +2165,11 @@ vector<int> PKB::getAffectedTList(int stmtNo)
 
 	vector<int> varIndexes = getUsedStmt(stmtNo);
 
+	storageAtThatLine.clear();
+	for(int i=0;i<=getSizeStmtTable();i++){
+		vector<int> tmp;
+		storageAtThatLine.push_back(tmp);
+	}
 
 	vector<int> parentList = getPrev(stmtNo);
 	for(int i=0;i<parentList.size();i++){
@@ -2177,13 +2182,27 @@ vector<int> PKB::getAffectedTList(int stmtNo)
 	//getchar();
 	return affectedTList;
 }
+
 void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes, int toLoop)
 {
-	/*
-	cout<<"STMTNO "<<stmtNo<<endl; 
+	if(varIndexes.size()==0)return;
+	if(storageAtThatLine[stmtNo].size()>0){
+		vector<int> tem = merge(storageAtThatLine[stmtNo],varIndexes);
+		if(tem.size()>storageAtThatLine[stmtNo].size()){
+			storageAtThatLine[stmtNo]=tem;
+		}else {
+			cout<<"wow "<<stmtNo<<endl;
+			//getchar();
+			return;
+		}
+	}else{
+		storageAtThatLine[stmtNo] = varIndexes;
+	}
+	//cout<<"STMTNO "<<stmtNo<<endl; 
 	for(int i=0;i<varIndexes.size();i++){
-		cout<<"used  "<<getVarName(varIndexes[i])<<endl;
-	}*/
+	//	cout<<"used  "<<getVarName(varIndexes[i])<<endl;
+	}
+	//getchar();
 	//if(stmtNo==68)getchar();
 	while(visited.size()<=stmtNo)
 		visited.push_back(0);
@@ -2212,8 +2231,6 @@ void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes, int toL
 			affectedTList.push_back(stmtNo);
 			newVar=1;
 			visited.clear();
-
-
 		}
 		// delete it
 		vector<int>::iterator it = std::find(varIndexes.begin(),varIndexes.end(),modifiedVar);
