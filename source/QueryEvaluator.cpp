@@ -738,9 +738,10 @@ list<string> QueryEvaluator::validateResults(){
 						it_tuples++;
 					}
 				}else{
+					int move = 0;
 					for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
 						vector<string> tuple = *it;
-						int count = resultTable.tuples.size();
+						int count = resultTable.tuples.size()+move;
 					
 						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
 							if(count==resultTable.tuples.size()){
@@ -751,9 +752,13 @@ list<string> QueryEvaluator::validateResults(){
 								temp.push_back(ref1);
 							}
 							count--;
-							if(count==0)
-								count = resultTable.tuples.size();
+							if(count==move){
+								
+								count = resultTable.tuples.size()+move;
+							}
+								
 						}
+						move++;
 					}
 				}
 
@@ -791,9 +796,10 @@ list<string> QueryEvaluator::validateResults(){
 						it_tuples++;
 					}
 				}else {
+					int move = 0;
 					for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
 						vector<string> tuple = *it;
-						int count = resultTable.tuples.size();
+						int count = resultTable.tuples.size()+move;
 						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
 							if(count==resultTable.tuples.size()){
 								string ref1 = *it_list;
@@ -804,9 +810,12 @@ list<string> QueryEvaluator::validateResults(){
 							
 							}
 							count--;
-							if(count==0)
-								count = resultTable.tuples.size();
+							if(count==move){
+								
+								count = resultTable.tuples.size()+move;
+							}							
 						}
+						move++;
 					}
 				}
 				
@@ -821,6 +830,14 @@ list<string> QueryEvaluator::validateResults(){
 list<string> QueryEvaluator::getResultsFromValueTable(){
 	
 	list<string> res;
+	// initialize refs_appereared as 0
+	map<string,int> refs_appeared;
+	for(unsigned int i=0;i<result_refs.size();i++){ //simple form,include call.procName
+		refs_appeared[result_refs[i]] = 0;
+	}
+
+	//cartesian flag
+	bool cartesian_flag = false;
 
 	string first = result_refs_complex[0];
 	
@@ -833,6 +850,7 @@ list<string> QueryEvaluator::getResultsFromValueTable(){
 	int p0 = first.find(".");
 	if(p0<first.size()){ //call.procName
 		string str = first.substr(0,p0);
+		refs_appeared[str] = 1; //set ref appeared
 		set<string> s = *valueTable[str];
 		for(set<string>::iterator it = s.begin();it!=s.end();it++){
 			int ind = Util::convertStringToInt(*it);
@@ -842,45 +860,133 @@ list<string> QueryEvaluator::getResultsFromValueTable(){
 		
 
 	}else {
+		refs_appeared[first] = 1; //set ref appeared
 		set<string> s = *valueTable[first];
 		for(set<string>::iterator it = s.begin();it!=s.end();it++){
 			res.push_back(*it);
 		}
 	}
-		
+	// main loop	
 	for(unsigned int i=1;i<result_refs_complex.size();i++){
 		list<string> temp;
 		string ref = result_refs_complex[i];
 		int p = ref.find(".");
-		if(p<ref.size()){
-			string str = first.substr(0,p0);
+		if(p<ref.size()){ //call.procName
+			string str = ref.substr(0,p0);
 			set<string> s = *valueTable[str];
-			for(set<string>::iterator it = s.begin();it!=s.end();it++){
-				int ind = Util::convertStringToInt(*it);
-				string proc = pkb->procAtLine[ind];
-				for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
-				
-					string ref1 = *it_list;
+			if(refs_appeared[str]){ // appeared,can't do cartesian product
+				if(cartesian_flag){
+					int move = 0;
+					for(set<string>::iterator it = s.begin();it!=s.end();it++){
+						int ind = Util::convertStringToInt(*it);
+						string proc = pkb->procAtLine[ind];
+
+						int count = s.size()+move;
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+							if(count==s.size()){
+								string ref1 = *it_list;
 					
-					ref1.append(" ");
-					ref1.append(proc);
-					temp.push_back(ref1);
+								ref1.append(" ");
+								ref1.append(proc);
+								temp.push_back(ref1);
+							}
+							count--;
+							if(count==move){
+								
+								count = s.size()+move;
+							}
+								
+						}
+						move++;
+					}
+					res = temp;
+
+				}else {
+					
+					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+						string ref1 = *it_list;
+						
+						ref1.append(" ");
+						ref1.append(ref1);   //append itself
+						temp.push_back(ref1);
+						
+					}
+					res = temp;
 				}
-			}
-			res = temp;
-		}else{
-			set<string> ref_set = *valueTable[ref];
-			for(set<string>::iterator it = ref_set.begin();it!=ref_set.end();it++){
-				for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
 				
-					string ref1 = *it_list;
-					string ref2 = *it;
-					ref1.append(" ");
-					ref1.append(ref2);
-					temp.push_back(ref1);
+			}else{ // not appeared, cartesian product
+				cartesian_flag = true;
+				for(set<string>::iterator it = s.begin();it!=s.end();it++){
+					int ind = Util::convertStringToInt(*it);
+					string proc = pkb->procAtLine[ind];
+					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+				
+						string ref1 = *it_list;
+					
+						ref1.append(" ");
+						ref1.append(proc);
+						temp.push_back(ref1);
+					}
 				}
+				res = temp;
+				refs_appeared[str] = 1; //set ref appeared
 			}
-			res = temp;
+			
+		}else{  // appeared,can't do cartesian product
+
+			set<string> ref_set = *valueTable[ref];
+			if(refs_appeared[ref]){
+				if(cartesian_flag){
+					int move = 0;
+					for(set<string>::iterator it = ref_set.begin();it!=ref_set.end();it++){
+						int count = ref_set.size()+move;
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+							if(count==ref_set.size()){
+								string ref1 = *it_list;
+								string ref2 = *it;
+								ref1.append(" ");
+								ref1.append(ref2);
+								temp.push_back(ref1);
+							}
+							count--;
+							if(count==move){
+								
+								count = ref_set.size()+move;
+							}
+								
+						}
+						move++;
+					}
+					res = temp;
+
+				}else {
+					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+						string ref1 = *it_list;
+						
+						ref1.append(" ");
+						ref1.append(*it_list);   //append itself
+						temp.push_back(ref1);
+						
+					}
+					res = temp;
+				}
+				
+			}else { // cartesian product
+				cartesian_flag = true;
+				for(set<string>::iterator it = ref_set.begin();it!=ref_set.end();it++){
+					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+				
+						string ref1 = *it_list;
+						string ref2 = *it;
+						ref1.append(" ");
+						ref1.append(ref2);
+						temp.push_back(ref1);
+					}
+				}
+				res = temp;
+				refs_appeared[ref] = 1; //set ref appeared
+			}
+			
 		}
 		
 	}
