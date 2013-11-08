@@ -1427,18 +1427,35 @@ vector<pair<string, string>> PKB::getNext(set<string>* arg1_set, string arg1Type
 	set<string> arg1List = *arg1_set;
 	set<string> arg2List = *arg2_set;
 
-	//********** bi direction
-
-	for(it1=arg1List.begin();it1!=arg1List.end();it1++){
-		string index1 = *it1;
-		int stmtNo1 = atoi(index1.c_str());
-		vector<int> childrenList = getNext(stmtNo1);
-		for(it2=arg2List.begin();it2!= arg2List.end();it2++){
+	if(true&&arg1_set->size()<=arg2_set->size())
+	{
+		for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+			string index1 = *it1;
+			int stmtNo1 = atoi(index1.c_str());
+			vector<int> childrenList = getNext(stmtNo1);
+			for(it2=arg2List.begin();it2!= arg2List.end();it2++){
+				string index2 = *it2;
+				int stmtNo2 = atoi(index2.c_str());
+				if(contains(childrenList,stmtNo2)){
+					pair<string,string> p(index1,index2);
+					result.push_back(p);
+				}
+			}
+		}
+	}else{
+		for(it2=arg2List.begin();it2!=arg2List.end();it2++){
 			string index2 = *it2;
 			int stmtNo2 = atoi(index2.c_str());
-			if(contains(childrenList,stmtNo2)){
-				pair<string,string> p(index1,index2);
-				result.push_back(p);
+			vector<int> childrenList = getPrev(stmtNo2);
+
+			for(it1=arg1List.begin();it1!= arg1List.end();it1++){
+				string index1 = *it1;
+
+				int stmtNo1 = atoi(index1.c_str());
+				if(contains(childrenList,stmtNo1)){
+					pair<string,string> p(index1,index2);
+					result.push_back(p);
+				}
 			}
 		}
 	}
@@ -1519,12 +1536,59 @@ bool PKB::checkNextT(string arg1, string arg1Type, string arg2, string arg2Type)
 }
 bool PKB::checkNextBip(string arg1, string arg1Type, string arg2, string arg2Type)
 {
+	if(arg1=="_"&&arg2=="_"){
+		int size = stmtTable.getSize();
+		for(int i=1;i<=size;i++){
+			if(getNextBip(i).size()>0)
+				return true;
+		}
+		return false;
+	}else if(arg1=="_"&&arg2Type=="integer"){
+		int second = Util::convertStringToInt(arg2);
+		vector<int> f = getPrevBip(second);
+		if(f.size()>0) return true;
+		else return false;
+	}else if(arg1Type=="integer"&&arg2=="_"){
+		int f = Util::convertStringToInt(arg1);
+		vector<int> s = getNextBip(f);
+		if(s.size()>0) return true;
+		else return false;
+	}else{
+		int first = Util::convertStringToInt(arg1);
+		int second = Util::convertStringToInt(arg2);
 
-	return true; ///********
+		vector<int> s = getNextBip(first);
+		if(contains(s,second)) return true;
+		else return false;
+	}
 }
 bool PKB::checkNextTBip(string arg1, string arg1Type, string arg2, string arg2Type)
 {
-	return true; ///**********
+	if(arg1=="_"&&arg2=="_"){
+		int size = stmtTable.getSize();
+		for(int i=1;i<=size;i++){
+			if(getNextTBip(i).size()>0)
+				return true;
+		}
+		return false;
+	}else if(arg1=="_"&&arg2Type=="integer"){
+		int second = Util::convertStringToInt(arg2);
+		vector<int> f = getPrevTBip(second);
+		if(f.size()>0) return true;
+		else return false;
+	}else if(arg1Type=="integer"&&arg2=="_"){
+		int f = Util::convertStringToInt(arg1);
+		vector<int> s = getNextTBip(f);
+		if(s.size()>0) return true;
+		else return false;
+	}else{
+		int first = Util::convertStringToInt(arg1);
+		int second = Util::convertStringToInt(arg2);
+
+		vector<int> s = getNextTBip(first);
+		if(contains(s,second)) return true;
+		else return false;
+	}
 }
 string PKB::toString(int num){
 	stringstream ss;
@@ -1950,32 +2014,58 @@ bool PKB::checkAffectsT(set<string>* arg1_set, string arg1Type, set<string>* arg
 
 bool PKB::checkAffects(string arg1, string arg1Type, string arg2, string arg2Type)
 {
-	int stmtNo1,stmtNo2;
-	istringstream (arg1) >> stmtNo1;
-	istringstream (arg2) >> stmtNo2;
-	
-	vector<int> affectResult = getAffectList(stmtNo1);
-	for(int i=0;i<affectResult.size();i++){
-		if(stmtNo2==affectResult[i])
-			return true;  
-	}
-	return false;
 
-	//****** will be deleted
+	if(arg1=="_"&&arg2=="_"){
+		int size = stmtTable.getSize();
+		for(int i=1;getStmtType(i).compare("assign")==0&&i<=size;i++){
+			if(getAffectList(i).size()>0)
+				return true;
+		}
+		return false;
+	}else if(arg1=="_"&&arg2Type=="integer"){
+		int second = Util::convertStringToInt(arg2);
+		vector<int> f = getAffectedList(second);
+		if(f.size()>0) return true;
+		else return false;
+	}else if(arg1Type=="integer"&&arg2=="_"){
+		int f = Util::convertStringToInt(arg1);
+		vector<int> s = getAffectList(f);
+		if(s.size()>0) return true;
+		else return false;
+	}else{
+		int first = Util::convertStringToInt(arg1);
+		int second = Util::convertStringToInt(arg2);
+		vector<int> s = getAffectList(first);
+		if(contains(s,second))return true;
+		else return false;
+	}
 }
 bool PKB::checkAffectsT(string arg1, string arg1Type, string arg2, string arg2Type)
 {
-	//******** will be deleted
-	int stmtNo1,stmtNo2;
-	istringstream (arg1) >> stmtNo1;
-	istringstream (arg2) >> stmtNo2;
-
-	vector<int> affectTResult = getAffectTList(stmtNo1);
-	for(int i=0;i<affectTResult.size();i++){
-		if(stmtNo2==affectTResult[i])
-			return true;  
+	if(arg1=="_"&&arg2=="_"){
+		int size = stmtTable.getSize();
+		for(int i=1;getStmtType(i).compare("assign")==0&&i<=size;i++){
+			if(getAffectTList(i).size()>0)
+				return true;
+		}
+		return false;
+	}else if(arg1=="_"&&arg2Type=="integer"){
+		int second = Util::convertStringToInt(arg2);
+		vector<int> f = getAffectedTList(second);
+		if(f.size()>0) return true;
+		else return false;
+	}else if(arg1Type=="integer"&&arg2=="_"){
+		int f = Util::convertStringToInt(arg1);
+		vector<int> s = getAffectTList(f);
+		if(s.size()>0) return true;
+		else return false;
+	}else{
+		int first = Util::convertStringToInt(arg1);
+		int second = Util::convertStringToInt(arg2);
+		vector<int> s = getAffectTList(first);
+		if(contains(s,second))return true;
+		else return false;
 	}
-	return false;
 }
 
 /************************************************** Flatten - Zhao Yang *************************************************/
@@ -2611,18 +2701,37 @@ vector<pair<string, string>> PKB::getNextBip(set<string>* arg1_set, string arg1T
 	set<string> arg1List = *arg1_set;
 	set<string> arg2List = *arg2_set;
 
-	for(it1=arg1List.begin();it1!=arg1List.end();it1++){
-		string index1 = *it1;
-		int stmtNo1 = atoi(index1.c_str());
-		vector<int> childrenList = getNextBip(stmtNo1);
+	if(true&&arg1_set->size()<=arg2_set->size())
+	{
+		for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+			string index1 = *it1;
+			int stmtNo1 = atoi(index1.c_str());
+			vector<int> childrenList = getNextBip(stmtNo1);
 
-		for(it2=arg2List.begin();it2!= arg2List.end();it2++){
+			for(it2=arg2List.begin();it2!= arg2List.end();it2++){
+				string index2 = *it2;
+
+				int stmtNo2 = atoi(index2.c_str());
+				if(contains(childrenList,stmtNo2)){
+					pair<string,string> p(index1,index2);
+					result.push_back(p);
+				}
+			}
+		}
+	}else{
+		for(it2=arg2List.begin();it2!=arg2List.end();it2++){
 			string index2 = *it2;
-
 			int stmtNo2 = atoi(index2.c_str());
-			if(contains(childrenList,stmtNo2)){
-				pair<string,string> p(index1,index2);
-				result.push_back(p);
+			vector<int> childrenList = getPrevBip(stmtNo2);
+
+			for(it1=arg1List.begin();it1!= arg1List.end();it1++){
+				string index1 = *it1;
+
+				int stmtNo1 = atoi(index1.c_str());
+				if(contains(childrenList,stmtNo1)){
+					pair<string,string> p(index1,index2);
+					result.push_back(p);
+				}
 			}
 		}
 	}
