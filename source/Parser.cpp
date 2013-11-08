@@ -222,8 +222,8 @@ int Parser::stmt(vector<int> stmtListNumber,vector < PairNumber > useModifyList)
 		if (useModifyList.size() > 0) {
 			pkb->insert(useModifyList[useModifyList.size() - 1].index, useModifyList[useModifyList.size() - 1].DE, line, "call");
 		}
-		// *** do we need AST here?
-
+		// ***** why 50 is not inserted?
+		//useModifyList.push_back(PairNumber(line, "call"));
 		getToken();
 		string calledProcedure = nextToken;
 		pkb->insert(line,procName,calledProcedure);

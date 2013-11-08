@@ -239,6 +239,14 @@ public:
 	vector<int> getAffectList(int stmtNo);
 	vector<int> getAffectedList(int stmtNo);  // all stmts that affect this stmtNo
 
+	// affects Bip
+	vector<int> getAffectBipList(int stmtNo);
+	vector<int> getAffectedBipList(int stmtNo);
+	vector<int> affectBipList;
+	vector<int> affectedBipList;
+	void recusiveBuildAffectBipList(int stmtNo, int varIndex);
+	void recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes);
+
 	vector<int> getAffectTList(int stmtNo);
 	vector<int> getAffectedTList(int stmtNo);
 	vector<int> listToVector(list<int> lis);
