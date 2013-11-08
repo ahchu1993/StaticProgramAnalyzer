@@ -127,6 +127,7 @@ public:
 	bool pattern_assign(string s);
 	bool pattern_if(string s);
 	bool pattern_while(string s);
+	bool check_pattern(string s);
 	bool patternCond(string patternCond);
 
 	///------------------------functions to validate with clause---------------- 

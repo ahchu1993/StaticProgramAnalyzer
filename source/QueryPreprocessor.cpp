@@ -1341,49 +1341,30 @@ bool QueryPreprocessor::pattern_if(string s){
 				varRef = varRef.substr(1,varRef.size()-2);
 			}
 
-			p0 = s.find("_");
-			if(p0>s.size()) return false;
-			else {
-				string s1 = s.substr(p1+1,p0-p1-1);
+			string rest = s.substr(p1+1,s.size()-2);
+			p0 = rest.find("_");
+			p1 = rest.find(",");
+			int p2 = rest.find("_",p1);
+			int p3 = rest.find(")");
 
-				if(trim(s1)!="") return false;
-				else {
-					p1 = s.find(",",p1+1);
-					if(p1>s.size()) return false;
-					else {
-						s1 = s.substr(p0+1,p1-p0-1);
+			string space1 = trim(rest.substr(p0+1,p1-p0-1));
+			string space2 = trim(rest.substr(p1+1,p2-p1-1));
+			string space3 = trim(rest.substr(p2+1,p3-p2-1));
+			if(space1!=""||space2!=""||space3!="")
+				return false;
 
-						if(trim(s1)!="") return false;
-						else {
-							p0 = s.find("_",p0+1);
-							if(p0>s.size()) return false;
-							else {
-								s1 = s.substr(p1+1,p0-p1-1);
-								if(trim(s1)!="") return false;
-								else {
-									p1 = s.find(")");
-									if(p1>s.size()) return false;
-									else {
-										s1 = s.substr(p0+1,p1-p0-1);
-										if(trim(s1)!="") return false;
-										else {
-											tree_node t = build_tree_expr("_");
-											string exp_tree = flatten(&t);
-											pattern* p = new pattern("p_if",synonym,varRef,varRef_type,false,exp_tree);
+			
+			tree_node t = build_tree_expr("_");
+			string exp_tree = flatten(&t);
+			pattern* p = new pattern("p_if",synonym,varRef,varRef_type,false,exp_tree);
 
-											if(varRef_type =="variable")
-												relations.push_front(p);
-											else 
-												constant_relations.push_front(p);
-											return true;
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
+			if(varRef_type =="variable")
+				relations.push_front(p);
+			else 
+				constant_relations.push_front(p);
+			return true;
+					
+			
 		}
 		else return false;
 	}
@@ -1449,18 +1430,30 @@ bool QueryPreprocessor::pattern_while(string s){
 	else return false;
 }
 
-bool QueryPreprocessor::patternCond(string patternCond){
-	int p = patternCond.find("(");
-	string synonym = trim(patternCond.substr(0,p));
+bool QueryPreprocessor::check_pattern(string patt){
+	int p = patt.find("(");
+	string synonym = trim(patt.substr(0,p));
 	string p_type = get_type(synonym);
 	if(p_type =="assign")
-		return pattern_assign(patternCond);
+		return pattern_assign(patt);
 
 	else if(p_type =="while")
-		return pattern_while(patternCond);
+		return pattern_while(patt);
 
 	else 
-		return pattern_if(patternCond);
+		return pattern_if(patt);
+}
+bool QueryPreprocessor::patternCond(string pattCond){
+	int p0 = pattCond.find(" and ");
+	if(p0<pattCond.size()){
+		string pattern_left = pattCond.substr(0,p0);
+		string pattern_rest = pattCond.substr(p0+5,pattCond.size()-p0-5);
+
+		if(check_pattern(pattern_left)){
+			return patternCond(pattern_rest);
+		}else return false;
+	}else return check_pattern(pattCond);
+	
 }
 
 
@@ -1844,11 +1837,9 @@ void QueryPreprocessor::group_relations(){
                 if(dependence[r1]==1||dependence[r2]==1){
                     dependence[r1] = 1;
                     dependence[r2] = 1;
-
-					if(re->type=="designAbstraction") //design abstraction goes to back of group
-						group.push_back(re);
-					else	/// pattern or attr_compare goes to the front of group
-						group.push_front(re);
+				
+					group.push_back(re); //take out order priority
+					
                     c++;
                     total_count--;
                     relation_map[i] =1;
