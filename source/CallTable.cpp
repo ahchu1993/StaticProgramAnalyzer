@@ -146,5 +146,10 @@ void CallTable::print(){
 			cout << callTable.at(i).calledProcs.at(j) << ", ";
 		}
 		cout << "\n";
+		cout << "Call stmts are:";
+		for(unsigned j=0; j<callTable.at(i).callStmNo.size(); j++){
+			cout << callTable.at(i).callStmNo.at(j) << ", ";
+		}
+		cout << "\n";
 	}
 }
