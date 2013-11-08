@@ -1,3 +1,11 @@
+/************************************************************************/
+/* 
+ Assumetion: varName should be different from ProcName
+			 StmtNo = prog_line
+*/
+/************************************************************************/
+
+
 #include "Parser.h"
 #include <string.h>
 #include <stdlib.h>

@@ -632,7 +632,7 @@ vector<int> PKB::getModifiedList(int varIndex, string DE){
 	return modifyTable.getModifiedList(varIndex, DE);
 }
 void PKB::printModifyTable()
-{
+{	
 	vector<modify_proc_row> ModifyProcTable = modifyTable.getModifyProcTable();
 	vector<modify_stmt_row> ModifyStmtTable = modifyTable.getModifyStmtTable();
 	modify_proc_row temp_proc_row;
@@ -640,13 +640,13 @@ void PKB::printModifyTable()
 	string type;
 	int procIndex, stmtNo, varIndex;
 
-	//cout<< "ModifyProcTable:" << endl;
-	//cout<< "procName" << "\t" << "varName" << endl;
+	cout<< "ModifyProcTable:" << endl;
+	cout<< "procName" << "\t" << "varName" << endl;
 	for (unsigned i = 0; i<ModifyProcTable.size(); i++){
 		temp_proc_row = ModifyProcTable.at(i);
 		procIndex = temp_proc_row.procIndex;
 		varIndex = temp_proc_row.varIndex;
-		//cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
+		cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
 	}
 
 	cout<< "ModifyStmtTable:" << endl;
@@ -656,9 +656,10 @@ void PKB::printModifyTable()
 		stmtNo = temp_stmt_row.stmtNo;
 		type = temp_stmt_row.DE;
 		varIndex = temp_stmt_row.varIndex;
-		if(type.compare("call")==0)
+
 		cout<<stmtNo<<"\t"<<type<<"\t"<<varTable.getVarName(varIndex)<<endl;
 	}
+	
 }
 
 /************************************************** UseTable *************************************************/
