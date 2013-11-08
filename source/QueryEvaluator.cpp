@@ -661,12 +661,22 @@ list<string> QueryEvaluator::validateResults(){
 	if (result_refs.at(0)=="BOOLEAN") {
 		return res;
     }
+
+	// initialize refs_appereared as 0
+	map<string,int> refs_appeared;
+	for(unsigned int i=0;i<result_refs.size();i++){ //simple form,include call.procName
+		refs_appeared[result_refs[i]] = 0;
+	}
+	// cartesian flag
    	bool cartesian_flag = false;
+
+
 	/// compute the first synonym in result refs
 	string first = result_refs_complex[0];
 	int p0 = first.find(".");
 	if(p0<first.size()){
 		string synonym = first.substr(0,p0);
+		refs_appeared[synonym] = 1; //set ref appeared
 		int index = resultTable.findColumn(synonym);
 		if(index==-1){
 			
@@ -683,6 +693,7 @@ list<string> QueryEvaluator::validateResults(){
 			}
 		}
 	}else {
+		refs_appeared[first] = 1; //set ref appeared
 		int index = resultTable.findColumn(first);
 		if(index==-1){
 			set<string> s = *valueTable[first];
@@ -709,117 +720,294 @@ list<string> QueryEvaluator::validateResults(){
 		if(p<ref.size()){ //ref is call.procName
 			string synonym = ref.substr(0,p);
 			int index = resultTable.findColumn(synonym);
+			
 			if(index==-1){ //not in resultTable
-				cartesian_flag = true;
 				set<string> s = *valueTable[synonym];
-				for(set<string>::iterator it = s.begin();it!=s.end();it++){
-					int ind = Util::convertStringToInt(*it);
-					string proc = pkb->procAtLine[ind];
-					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
-				
-						string ref1 = *it_list;
-					
-						ref1.append(" ");
-						ref1.append(proc);
-						temp.push_back(ref1);
-					}
-				}
-				res = temp;
+				if(refs_appeared[synonym]){ // appeared, not do cartesian product
+					if(cartesian_flag){ // count and jump 
+						int move = 0;
+						for(set<string>::iterator it = s.begin();it!=s.end();it++){
+							int ind = Util::convertStringToInt(*it);
+							string proc = pkb->procAtLine[ind];
 
-			}else{ // get from tuple
-				if(!cartesian_flag){
-					list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();
-					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
-						string ref1 = *it_list;
-						vector<string> t = *it_tuples;
-						ref1.append(" ");
-						ref1.append(t.at(index));
-						temp.push_back(ref1);
-						it_tuples++;
-					}
-				}else{
-					int move = 0;
-					for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
-						vector<string> tuple = *it;
-						int count = resultTable.tuples.size()+move;
+							int count = s.size()+move;
+							for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+								if(count==s.size()){
+									string ref1 = *it_list;
 					
-						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
-							if(count==resultTable.tuples.size()){
-								string ref1 = *it_list;
-					
-								ref1.append(" ");
-								ref1.append(tuple.at(index));
-								temp.push_back(ref1);
+									ref1.append(" ");
+									ref1.append(proc);
+									temp.push_back(ref1);
+								}
+								count--;
+								if(count==move){								
+									count = s.size()+move;
+								}								
 							}
-							count--;
-							if(count==move){
-								
-								count = resultTable.tuples.size()+move;
-							}
-								
+							move++;
 						}
-						move++;
+						res = temp;
+
+					}else {// not been cross producted, append itself
+							
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+							string ref1 = *it_list;
+
+							int ind = Util::convertStringToInt(ref1);
+							string proc = pkb->procAtLine[ind];
+
+							ref1.append(" ");
+							ref1.append(proc);   //append itself.procName
+							temp.push_back(ref1);
+						
+						}
+						res = temp;
 					}
+
+				}else {// not appeared,cartesian product
+
+					cartesian_flag = true;
+					set<string> s = *valueTable[synonym];
+					for(set<string>::iterator it = s.begin();it!=s.end();it++){
+						int ind = Util::convertStringToInt(*it);
+						string proc = pkb->procAtLine[ind];
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+				
+							string ref1 = *it_list;
+					
+							ref1.append(" ");
+							ref1.append(proc);
+							temp.push_back(ref1);
+						}
+					}
+					res = temp;
+					refs_appeared[synonym] = 1;
 				}
 
-				
-				res = temp;
+			}else{ // get from resultTable
+				if(refs_appeared[synonym]){ // appeared, not do cartesian product
+					if(cartesian_flag){ //count and jump
+						int move = 0;
+						for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
+							vector<string> tuple = *it;
+							int ind = Util::convertStringToInt(tuple.at(index));
+							string proc = pkb->procAtLine[ind];
+
+							int count = resultTable.tuples.size()+move;
+					
+							for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+								if(count==resultTable.tuples.size()){
+									string ref1 = *it_list;					
+									ref1.append(" ");
+									ref1.append(proc);
+									temp.push_back(ref1);
+								}
+								count--;
+								if(count==move){								
+									count = resultTable.tuples.size()+move;
+								}							
+							}
+							move++;
+						}
+						res  = temp;
+
+					}else { //append
+						list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+							string ref1 = *it_list;
+							vector<string> t = *it_tuples;
+							ref1.append(" ");
+							int ind = Util::convertStringToInt(t.at(index));
+							string proc = pkb->procAtLine[ind];
+							ref1.append(proc);
+							temp.push_back(ref1);
+							it_tuples++;
+						}
+						res = temp;
+					}
+				}else {// not appeared
+					refs_appeared[synonym] = 1; //set ref appeared
+
+					if(cartesian_flag){// count and jump
+						int move = 0;
+						for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
+							vector<string> tuple = *it;
+							int ind = Util::convertStringToInt(tuple.at(index));
+							string proc = pkb->procAtLine[ind];
+							int count = resultTable.tuples.size()+move;
+					
+							for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+								if(count==resultTable.tuples.size()){
+									string ref1 = *it_list;
+					
+									ref1.append(" ");
+									ref1.append(proc);
+									temp.push_back(ref1);
+								}
+								count--;
+								if(count==move){
+								
+									count = resultTable.tuples.size()+move;
+								}
+								
+							}
+							move++;
+						}
+						res= temp;
+					}else { // append itself
+						list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+							string ref1 = *it_list;
+							vector<string> t = *it_tuples;
+							ref1.append(" ");
+							int ind = Util::convertStringToInt(t.at(index));
+							string proc = pkb->procAtLine[ind];
+							ref1.append(proc);
+							temp.push_back(ref1);
+							it_tuples++;
+						}
+						res = temp;
+					}
+				}
 			}
 
 		}else{ // ref is snynonym
 			int index = resultTable.findColumn(ref);
 			if(index ==-1){ //not in resultTable
-				cartesian_flag = true;
 				set<string> s = *valueTable[ref];
-				for(set<string>::iterator it = s.begin();it!=s.end();it++){
-						
-					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
-				
-						string ref1 = *it_list;
+				if(refs_appeared[ref]){ // appeared, not do cartesian product
+					if(cartesian_flag){ // count and jump 
+						int move = 0;
+						for(set<string>::iterator it = s.begin();it!=s.end();it++){
+
+							int count = s.size()+move;
+							for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+								if(count==s.size()){
+									string ref1 = *it_list;
+									string ref2 = *it;
+									ref1.append(" ");
+									ref1.append(ref2);
+									temp.push_back(ref1);
+								}
+								count--;
+								if(count==move){								
+									count = s.size()+move;
+								}								
+							}
+							move++;
+						}
+						res = temp;
+
+					}else {// not been cross producted, append itself
 							
-						ref1.append(" ");
-						ref1.append(*it);
-						temp.push_back(ref1);
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+							string ref1 = *it_list;
+						
+							ref1.append(" ");
+							ref1.append(ref1);   //append itself
+							temp.push_back(ref1);
+						
+						}
+						res = temp;
 					}
+
+				}else {// do cartesian product,set flag
+
+					cartesian_flag = true;
+					set<string> s = *valueTable[ref];
+					for(set<string>::iterator it = s.begin();it!=s.end();it++){
+						
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+				
+							string ref1 = *it_list;
+							string ref2 = *it;
+							ref1.append(" ");
+							ref1.append(ref2);
+							temp.push_back(ref1);
+						}
+					}
+					res = temp;
+					refs_appeared[ref] = 1;
 				}
-				res = temp;
 
 			}else { //in resultTable
-				if(!cartesian_flag){
-					list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();
-					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
-						string ref1 = *it_list;
-						vector<string> t = *it_tuples;
-						ref1.append(" ");
-						ref1.append(t.at(index));
-						temp.push_back(ref1);
-						it_tuples++;
-					}
-				}else {
-					int move = 0;
-					for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
-						vector<string> tuple = *it;
-						int count = resultTable.tuples.size()+move;
-						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
-							if(count==resultTable.tuples.size()){
-								string ref1 = *it_list;
+				if(refs_appeared[ref]){ // appeared, not do cartesian product
+					if(cartesian_flag){ //count and jump
+						int move = 0;
+						for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
+							vector<string> tuple = *it;
+							int count = resultTable.tuples.size()+move;
 					
-								ref1.append(" ");
-								ref1.append(tuple.at(index));
-								temp.push_back(ref1);
-							
-							}
-							count--;
-							if(count==move){
+							for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+								if(count==resultTable.tuples.size()){
+									string ref1 = *it_list;
+					
+									ref1.append(" ");
+									ref1.append(tuple.at(index));
+									temp.push_back(ref1);
+								}
+								count--;
+								if(count==move){
 								
-								count = resultTable.tuples.size()+move;
-							}							
+									count = resultTable.tuples.size()+move;
+								}							
+							}
+							move++;
 						}
-						move++;
+						res  = temp;
+
+					}else { //append
+						list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+							string ref1 = *it_list;
+							vector<string> t = *it_tuples;
+							ref1.append(" ");
+							ref1.append(t.at(index));
+							temp.push_back(ref1);
+							it_tuples++;
+						}
+						res = temp;
+					}
+				}else {// not appeared
+					refs_appeared[ref] = 1; //set ref appeared
+
+					if(cartesian_flag){// count and jump
+						int move = 0;
+						for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
+							vector<string> tuple = *it;
+							int count = resultTable.tuples.size()+move;
+					
+							for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+								if(count==resultTable.tuples.size()){
+									string ref1 = *it_list;
+					
+									ref1.append(" ");
+									ref1.append(tuple.at(index));
+									temp.push_back(ref1);
+								}
+								count--;
+								if(count==move){
+								
+									count = resultTable.tuples.size()+move;
+								}
+								
+							}
+							move++;
+						}
+						res= temp;
+					}else { // append itself
+						list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+							string ref1 = *it_list;
+							vector<string> t = *it_tuples;
+							ref1.append(" ");
+							ref1.append(t.at(index));
+							temp.push_back(ref1);
+							it_tuples++;
+						}
+						res = temp;
 					}
 				}
-				
-				res = temp;
 			}
 		}					
 	}
@@ -932,7 +1120,7 @@ list<string> QueryEvaluator::getResultsFromValueTable(){
 				refs_appeared[str] = 1; //set ref appeared
 			}
 			
-		}else{  // appeared,can't do cartesian product
+		}else{  // ref is synonym
 
 			set<string> ref_set = *valueTable[ref];
 			if(refs_appeared[ref]){
