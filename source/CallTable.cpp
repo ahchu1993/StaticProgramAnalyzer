@@ -7,13 +7,9 @@ CallTable::CallTable() {
 void CallTable::insert(int stmNo, string proc1, string proc2){
 	for(unsigned i=0; i<callTable.size(); i++){
 		if(callTable.at(i).callingProc.compare(proc1) == 0){
-			if(find(callTable.at(i).calledProcs.begin(), callTable.at(i).calledProcs.end(), proc2) != callTable.at(i).calledProcs.end()){
-				return;
-			}else{
-				callTable.at(i).calledProcs.push_back(proc2);
-				callTable.at(i).callStmNo.push_back(stmNo);
-				return;
-			}
+			callTable.at(i).calledProcs.push_back(proc2);
+			callTable.at(i).callStmNo.push_back(stmNo);
+			return;
 		}	
 	}
 	
