@@ -2225,13 +2225,20 @@ void PKB::printAffectedT()
 		}
 	}
 }
-/*
+
 vector<int> PKB::getAffectTList(int stmtNo)
 {
 
 
 	visited.clear();
 	affectTList.clear();
+
+	storageAtThatLine.clear();
+	for(int i=0;i<=getSizeStmtTable();i++){
+		vector<int> tmp;
+		storageAtThatLine.push_back(tmp);
+	}
+
 	int varIndex = getModifiedStmt(stmtNo)[0];
 	vector<int> varIndexList;
 	varIndexList.push_back(varIndex);
@@ -2239,14 +2246,14 @@ vector<int> PKB::getAffectTList(int stmtNo)
 	vector<int> childrenList = getNext(stmtNo);
 	for(int i=0;i<childrenList.size();i++){
 		int childStmt = childrenList[i];
-		recusiveBuildAffectTList(childStmt,varIndexList);
+		recusiveBuildAffectTList(childStmt,varIndexList,0);
 	}
 	//DWORD finish = GetTickCount()-start;
 
 
 	return affectTList;
 }
-*/
+
 
 vector<int> PKB::getAffectedTList(int stmtNo)
 {
@@ -2309,7 +2316,7 @@ void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes, int toL
 	while(visited.size()<=stmtNo)
 		visited.push_back(0);
 	//num of loops
-	if(visited[stmtNo]>=1){//********** need to change to NUM, each time modify, num++;
+	if(visited[stmtNo]>=1){
 		if(toLoop!=1)
 			return;
 		else {
@@ -2397,18 +2404,40 @@ void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes, int toL
 
 }
 
-/*
-vector<int> PKB::recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList)
+
+void PKB::recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList, int toLoop)
 {
-	vector<int> res;
+	if(varIndexList.size()==0)return;
+	if(storageAtThatLine[stmtNo].size()>0){
+		vector<int> tem = merge(storageAtThatLine[stmtNo],varIndexList);
+		if(tem.size()>storageAtThatLine[stmtNo].size()){
+			storageAtThatLine[stmtNo]=tem;
+			toLoop=1;
+		}else {
+			//cout<<"wow "<<stmtNo<<endl;
+			//getchar();
+			return;
+		}
+	}else{
+		storageAtThatLine[stmtNo] = varIndexList;
+	}
+
 	////cout<<"STMTNO "<<stmtNo<<"  varIndex  "<<varIndexList[0]<<endl; // how to solve loop!!
 
 	while(visited.size()<=stmtNo)
 		visited.push_back(0);
 	//num of loops
-	if(visited[stmtNo]==1)//********** need to change to NUM, each time modify, num++;
-		return res;
-	else visited[stmtNo]=visited[stmtNo]+1;
+	if(visited[stmtNo]>=1){
+		if(toLoop!=1)
+			return;
+		else {
+			toLoop=0;
+			visited.clear();
+		}
+		//return;
+	}else visited[stmtNo]=visited[stmtNo]+1;
+
+	int newVar=0;
 	
 	string stmtType = getStmtType(stmtNo);
 
@@ -2418,9 +2447,12 @@ vector<int> PKB::recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList)
 	if(stmtType.compare("assign")==0)
 		modifiedVar = getModifiedStmt(stmtNo)[0];
 
+
+
 	if(stmtType.compare("assign")==0&&intersect(usedVarList,varIndexList)){
 		if(!contains(affectTList,stmtNo)){
 			affectTList.push_back(stmtNo);
+			newVar=1;
 			visited.clear();
 		}
 
@@ -2438,15 +2470,37 @@ vector<int> PKB::recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList)
 			else varIndexList.clear();
 		}
 	}
+	if(stmtType.compare("call")==0){
+		string procName = procAtLine[stmtNo];
+		int procIndex = getProcIndex(procName);
+		//cout<<"procName "<<procName<<endl;
+		if(procIndex>=0){
+			vector<int> modifiedVarList = getModifiedProc(procIndex);
+			for(int i=0;i<modifiedVarList.size();i++){
+				int deleteVar =modifiedVarList[i];
+				if(contains(varIndexList,deleteVar)){
+					vector<int>::iterator it = std::find(varIndexList.begin(),varIndexList.end(),deleteVar);
+					if (it != varIndexList.end()) {
+						string var = getVarName(*it);
+						if(varIndexList.size()>1)
+							varIndexList.erase(it);
+						else varIndexList.clear();
+					}
+				}
+			}
+		}
+	}
 
 	vector<int> childrenList = getNext(stmtNo);
 	for(int i=0;i<childrenList.size();i++){
 		int childStmt = childrenList[i];
-		recusiveBuildAffectTList(childStmt,varIndexList);
+		if(newVar)
+			recusiveBuildAffectTList(childStmt,varIndexList,newVar);
+		else recusiveBuildAffectTList(childStmt,varIndexList,toLoop);
 	}
 
 }
-*/
+
 vector<int> PKB::merge(vector<int> v1,vector<int> v2) // no duplicate
 {
 	v1.insert(v1.end(), v2.begin(), v2.end());
@@ -2454,7 +2508,7 @@ vector<int> PKB::merge(vector<int> v1,vector<int> v2) // no duplicate
 	v1.erase(std::unique(v1.begin(), v1.end()), v1.end());
 	return v1;
 }
-
+/*
 vector<int> PKB::getAffectTList(int stmtNo)
 {
 	string stmtType = getStmtType(stmtNo);
@@ -2482,7 +2536,7 @@ vector<int> PKB::getAffectTList(int stmtNo)
 	}
 
 	return affectTList;
-}
+}*/
 vector<int> PKB::processStmtListAffectsT(int stmtNo, vector<int> varIndexList)
 {
 	vector<int> res;
