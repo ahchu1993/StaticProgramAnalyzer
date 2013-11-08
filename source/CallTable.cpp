@@ -7,13 +7,9 @@ CallTable::CallTable() {
 void CallTable::insert(int stmNo, string proc1, string proc2){
 	for(unsigned i=0; i<callTable.size(); i++){
 		if(callTable.at(i).callingProc.compare(proc1) == 0){
-			if(find(callTable.at(i).calledProcs.begin(), callTable.at(i).calledProcs.end(), proc2) != callTable.at(i).calledProcs.end()){
-				return;
-			}else{
-				callTable.at(i).calledProcs.push_back(proc2);
-				callTable.at(i).callStmNo.push_back(stmNo);
-				return;
-			}
+			callTable.at(i).calledProcs.push_back(proc2);
+			callTable.at(i).callStmNo.push_back(stmNo);
+			return;
 		}	
 	}
 	
@@ -87,14 +83,27 @@ vector<string> CallTable::getCallsT(string proc){
 
 vector<int> CallTable::getCallsStmT(string proc){
 	vector<int> result;
-	vector<string> callsList = getCallsList(proc);
-	vector<int> callsStmList = getCallsStmtList(proc);
+	//vector<string> callsList = getCallsList(proc);
+	//vector<int> callsStmList = getCallsStmtList(proc);
+	/*vector<int> callsStmList;
+	for(unsigned i=0; i<callsList.size(); i++){
+		if(callTable.at(i).callingProc == callsList.at(i)){
+			callsStmList.push_back(callTable.at(i).callStmNo);
+		}
+	}
 	if(callsList.size() == 0)
 		return result;
 	for(unsigned i=0; i<callsList.size(); i++){
 		vector<int> tmp = getCallsStmT(callsList.at(i));
 		result.push_back(callsStmList.at(i));
 		result.insert(result.end(), tmp.begin(), tmp.end());
+	}*/
+	for(unsigned i=0; i<callTable.size(); i++){
+		for(unsigned j=0; j<callTable.at(i).calledProcs.size(); j++){
+			if(callTable.at(i).calledProcs.at(j) == proc){
+				result.push_back(callTable.at(i).callStmNo.at(j));
+			}
+		}
 	}
 	return Util::removeDuplicateInt(result);
 }
@@ -131,6 +140,11 @@ void CallTable::print(){
 		cout << callTable.at(i).callingProc << " : ";
 		for(unsigned j=0; j<callTable.at(i).calledProcs.size(); j++){
 			cout << callTable.at(i).calledProcs.at(j) << ", ";
+		}
+		cout << "\n";
+		cout << "Call stmts are:";
+		for(unsigned j=0; j<callTable.at(i).callStmNo.size(); j++){
+			cout << callTable.at(i).callStmNo.at(j) << ", ";
 		}
 		cout << "\n";
 	}
