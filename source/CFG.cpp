@@ -114,6 +114,8 @@ void CFG::buildCFGParentList(int stmtNo)
 	for(unsigned int i=0;i<currentNode->childList.size();i++){
 		CFGNode * child = currentNode->childList[i];
 		child->addParent(currentNode);
+		if(!currentNode->isCallNode())
+			child->addParentBip(currentNode);
 		buildCFGParentList(child->stmtNum);
 	}
 	if(currentNode->isCallNode()){ // for Bip
@@ -154,19 +156,10 @@ vector<int> CFG::getPrevBip(int stmtNo){
 	vector<int> results;
 	CFGNode *currentNode = CFGNodes[stmtNo];
 	vector<CFGNode *> parentList;
-	if(currentNode->isCalledNode())
+	if(currentNode->parentBipList.size()>0){
 		parentList= currentNode->parentBipList;
-	else {
-		vector<CFGNode*> temp = currentNode->parentList;
-		// the prev is callNode
-		for(int i=0;i<temp.size();i++){
-			if(temp[i]->isCallNode()){
-				//*********** get prevbip from the last stmt in calledproc
-			}else{
-				parentList.push_back(temp[i]);
-			}
-
-		}
+	}else {
+		parentList = currentNode->parentList;
 	}
 	for(unsigned int i=0;i<parentList.size();i++)
 		results.push_back(parentList[i]->stmtNum);

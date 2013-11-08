@@ -233,11 +233,19 @@ public:
 	vector<int> affectTList; // for internal usage
 	vector<int> affectedTList; // for internal usage
 	void recusiveBuildAffectList(int stmtNo, int varIndex);
-	void recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes);
-	//vector<int> recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList);
+	void recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes,int toLoop);
+	void recusiveBuildAffectTList(int stmtNo, vector<int> varIndexList, int toLoop);
 	void recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes, int toLoop);
 	vector<int> getAffectList(int stmtNo);
 	vector<int> getAffectedList(int stmtNo);  // all stmts that affect this stmtNo
+
+	// affects Bip
+	vector<int> getAffectBipList(int stmtNo);
+	vector<int> getAffectedBipList(int stmtNo);
+	vector<int> affectBipList;
+	vector<int> affectedBipList;
+	void recusiveBuildAffectBipList(int stmtNo, int varIndex);
+	void recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes);
 
 	vector<int> getAffectTList(int stmtNo);
 	vector<int> getAffectedTList(int stmtNo);
