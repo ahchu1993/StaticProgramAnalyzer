@@ -159,14 +159,9 @@ vector<string> PKB::getCalledList(string procName){
 	return callTable.getCalledList(procName);
 }
 void PKB::printCallTable(){
-	//callTable.print();
-	vector<int> callingStmt;
-	callingStmt = getCallsStmT(2);
-	cout<<"DCM"<<endl;
-	for (unsigned i =0; i<callingStmt.size(); i++){
-		cout<<callingStmt.at(i)<<endl;
-	}
+	callTable.print();
 }
+
 //Api for Khue
 //Input: procIndex
 //Output: vector of all stmNo that call* procIndex
