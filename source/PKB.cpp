@@ -1097,10 +1097,6 @@ vector<int > PKB::findLastStmts(int callStmt){
 	for(int i=0;i<lastStmtsList.size();i++){
 		//if(getStmtType(lastStmtsList[i]).compare("call")!=0){
 			res.push_back(lastStmtsList[i]);
-
-			if(callStmt==87){
-				cout<<"################!!!!!!!!!!!!!"<<endl;
-			}
 		/*}else{
 			vector<int> res1 = findLastStmts(lastStmtsList[i]);
 			for(int i=0;i<res1.size();i++)
@@ -2177,7 +2173,7 @@ vector<int> PKB::getAffectedTList(int stmtNo)
 		vector<int> tmp;
 		storageAtThatLine.push_back(tmp);
 	}
-	cout<<"#######"<<endl;
+	//cout<<"#######"<<endl;
 	vector<int> parentList = getPrev(stmtNo);
 	for(int i=0;i<parentList.size();i++){
 		int parentStmt = parentList[i];
@@ -2203,6 +2199,7 @@ void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes, int toL
 		vector<int> tem = merge(storageAtThatLine[stmtNo],varIndexes);
 		if(tem.size()>storageAtThatLine[stmtNo].size()){
 			storageAtThatLine[stmtNo]=tem;
+			toLoop=1;
 		}else {
 			//cout<<"wow "<<stmtNo<<endl;
 			//getchar();
@@ -2293,12 +2290,13 @@ void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes, int toL
 	for(int i=0;i<parentList.size();i++){
 		int parentStmt = parentList[i];
 
+		/*
 		if(parentStmt==48){
 			for(int i=0;i<varIndexes.size();i++){
 				cout<<stmtNo<<"  ~~used~~ "<<getVarName(varIndexes[i])<<"  "<<newVar<<endl;
 			}
 			getchar();
-		}
+		}*/
 
 		if(newVar==1)
 			recusiveBuildAffectedTList(parentStmt,varIndexes,newVar);
