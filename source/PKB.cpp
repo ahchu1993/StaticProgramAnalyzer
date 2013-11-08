@@ -1638,24 +1638,49 @@ vector<int> PKB::getAffectedList(int stmtNo)
 	if(type.compare("assign")!=0)
 		return affectedList;
 	vector<int> varIndexes = getUsedStmt(stmtNo); // all var-s that modified this stmt
-
+	storageAtThatLine.clear();
+	for(int i=0;i<=getSizeStmtTable();i++){
+		vector<int> tmp;
+		storageAtThatLine.push_back(tmp);
+	}
 	visited.clear();
 	vector<int> parentList = getPrev(stmtNo);
 	for(int i=0;i<parentList.size();i++){
 		int parentStmt = parentList[i];
-		recusiveBuildAffectedList(parentStmt,varIndexes);
+		recusiveBuildAffectedList(parentStmt,varIndexes,0);
 	}
 	return affectedList;
 }
-void PKB::recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes)
+void PKB::recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes, int toLoop)
 {
-	while(visited.size()<=stmtNo+1)
+	if(varIndexes.size()==0)return;
+	if(storageAtThatLine[stmtNo].size()>0){
+		vector<int> tem = merge(storageAtThatLine[stmtNo],varIndexes);
+		if(tem.size()>storageAtThatLine[stmtNo].size()){
+			storageAtThatLine[stmtNo]=tem;
+			toLoop=1;
+		}else {
+			//cout<<"wow "<<stmtNo<<endl;
+			//getchar();
+			return;
+		}
+	}else{
+		storageAtThatLine[stmtNo] = varIndexes;
+	}
+
+	while(visited.size()<=stmtNo)
 		visited.push_back(0);
 	//num of loops
-	if(visited[stmtNo]==1)
-		return;
-	else visited[stmtNo]=visited[stmtNo]+1;
-
+	if(visited[stmtNo]>=1){
+		if(toLoop!=1)
+			return;
+		else {
+			toLoop=0;
+			visited.clear();
+		}
+		//return;
+	}else visited[stmtNo]=visited[stmtNo]+1;
+	int newVar=0;
 	string type = getStmtType(stmtNo);
 
 	///****call
@@ -1687,6 +1712,7 @@ void PKB::recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes)
 		if(contains(varIndexes,modifiedVar)){
 			if(!contains(affectedList,stmtNo)){
 				affectedList.push_back(stmtNo);
+				newVar=1;
 				//visited.clear();
 			}
 			vector<int>::iterator it = std::find(varIndexes.begin(),varIndexes.end(),modifiedVar);
@@ -1705,7 +1731,9 @@ void PKB::recusiveBuildAffectedList(int stmtNo, vector<int> varIndexes)
 	for(int i=0;i<parentList.size();i++){
 		int parentStmt = parentList[i];
 		////cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
-		recusiveBuildAffectedList(parentStmt,varIndexes);
+		if(newVar)
+			recusiveBuildAffectedList(parentStmt,varIndexes,newVar);
+		else recusiveBuildAffectedList(parentStmt,varIndexes,toLoop);
 	}
 
 }
@@ -2032,17 +2060,26 @@ bool PKB::checkAffects(string arg1, string arg1Type, string arg2, string arg2Typ
 		return false;
 	}else if(arg1=="_"&&arg2Type=="integer"){
 		int second = Util::convertStringToInt(arg2);
+		if(getStmtType(second).compare("assign")!=0)
+			return false;
 		vector<int> f = getAffectedList(second);
 		if(f.size()>0) return true;
 		else return false;
 	}else if(arg1Type=="integer"&&arg2=="_"){
 		int f = Util::convertStringToInt(arg1);
+		if(getStmtType(f).compare("assign")!=0)
+			return false;
 		vector<int> s = getAffectList(f);
 		if(s.size()>0) return true;
 		else return false;
 	}else{
 		int first = Util::convertStringToInt(arg1);
 		int second = Util::convertStringToInt(arg2);
+
+		if(getStmtType(first).compare("assign")!=0)
+			return false;
+		if(getStmtType(second).compare("assign")!=0)
+			return false;
 		vector<int> s = getAffectList(first);
 		if(contains(s,second))return true;
 		else return false;
@@ -2059,17 +2096,25 @@ bool PKB::checkAffectsT(string arg1, string arg1Type, string arg2, string arg2Ty
 		return false;
 	}else if(arg1=="_"&&arg2Type=="integer"){
 		int second = Util::convertStringToInt(arg2);
+		if(getStmtType(second).compare("assign")!=0)
+			return false;
 		vector<int> f = getAffectedTList(second);
 		if(f.size()>0) return true;
 		else return false;
 	}else if(arg1Type=="integer"&&arg2=="_"){
 		int f = Util::convertStringToInt(arg1);
+		if(getStmtType(f).compare("assign")!=0)
+			return false;
 		vector<int> s = getAffectTList(f);
 		if(s.size()>0) return true;
 		else return false;
 	}else{
 		int first = Util::convertStringToInt(arg1);
 		int second = Util::convertStringToInt(arg2);
+		if(getStmtType(first).compare("assign")!=0)
+			return false;
+		if(getStmtType(second).compare("assign")!=0)
+			return false;
 		vector<int> s = getAffectTList(first);
 		if(contains(s,second))return true;
 		else return false;
@@ -3066,6 +3111,7 @@ void PKB::recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes)
 	string type = getStmtType(stmtNo);
 
 	///****call
+	/* bip dont consider call
 	if(type.compare("call")==0){
 		string procName = procAtLine[stmtNo];
 		int procIndex = getProcIndex(procName);
@@ -3085,7 +3131,7 @@ void PKB::recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes)
 				}
 			}
 		}
-	}
+	}*/
 
 	if(type.compare("assign")!=0){
 
