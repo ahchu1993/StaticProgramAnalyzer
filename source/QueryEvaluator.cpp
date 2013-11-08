@@ -899,14 +899,14 @@ list<string> QueryEvaluator::validateResults(){
 						res = temp;
 
 					}else {// not been cross producted, append itself
-							
+						set<string>::iterator it = s.begin();	
 						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
 							string ref1 = *it_list;
 						
 							ref1.append(" ");
-							ref1.append(ref1);   //append itself
+							ref1.append(*it);   //append itself
 							temp.push_back(ref1);
-						
+							it++;
 						}
 						res = temp;
 					}
@@ -1090,13 +1090,14 @@ list<string> QueryEvaluator::getResultsFromValueTable(){
 					res = temp;
 
 				}else {
-					
+					set<string>::iterator it = s.begin();
 					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
 						string ref1 = *it_list;
 						
 						ref1.append(" ");
-						ref1.append(ref1);   //append itself
+						ref1.append(*it);   //append itself
 						temp.push_back(ref1);
+						it++;
 						
 					}
 					res = temp;
@@ -1148,13 +1149,14 @@ list<string> QueryEvaluator::getResultsFromValueTable(){
 					res = temp;
 
 				}else {
+					set<string>::iterator it = ref_set.begin();
 					for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
 						string ref1 = *it_list;
 						
 						ref1.append(" ");
-						ref1.append(*it_list);   //append itself
+						ref1.append(*it);   //append itself
 						temp.push_back(ref1);
-						
+						it++;
 					}
 					res = temp;
 				}
