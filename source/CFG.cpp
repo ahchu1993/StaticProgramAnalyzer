@@ -141,6 +141,8 @@ vector<int> CFG::getNextBip(int stmtNo)
 	vector<CFGNode *> childrenList;
 	if(currentNode->childBipList.size()>0)
 		childrenList= currentNode->childBipList;
+	else if(currentNode->isCallNode())
+		;
 	else childrenList = currentNode->childList;
 
 	for(unsigned int i=0;i<childrenList.size();i++)

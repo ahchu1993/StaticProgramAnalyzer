@@ -1095,13 +1095,17 @@ vector<int > PKB::findLastStmts(int callStmt){
 	}
 	vector<int> lastStmtsList = lastStmtsInProc[calledProcIndex];
 	for(int i=0;i<lastStmtsList.size();i++){
-		if(getStmtType(lastStmtsList[i]).compare("call")!=0){
+		//if(getStmtType(lastStmtsList[i]).compare("call")!=0){
 			res.push_back(lastStmtsList[i]);
-		}else{
+
+			if(callStmt==87){
+				cout<<"################!!!!!!!!!!!!!"<<endl;
+			}
+		/*}else{
 			vector<int> res1 = findLastStmts(lastStmtsList[i]);
 			for(int i=0;i<res1.size();i++)
 				res.push_back(res1[i]);
-		}
+		}*/
 	}
 	return res;
 }
@@ -1427,6 +1431,8 @@ vector<pair<string, string>> PKB::getNext(set<string>* arg1_set, string arg1Type
 	set<string> arg1List = *arg1_set;
 	set<string> arg2List = *arg2_set;
 
+	//********** bi direction
+
 	for(it1=arg1List.begin();it1!=arg1List.end();it1++){
 		string index1 = *it1;
 		int stmtNo1 = atoi(index1.c_str());
@@ -1452,7 +1458,7 @@ vector<pair<string, string>> PKB::getNextT(set<string>* arg1_set, string arg1Typ
 	set<string> arg1List = *arg1_set;
 	set<string> arg2List = *arg2_set;
 
-	//** check size , next/prev
+	//**** check size , next/prev
 
 	for(it1=arg1List.begin();it1!=arg1List.end();it1++){
 		string index1 = *it1;
@@ -1786,6 +1792,7 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 			//cout<<"index 2 "<<index2<<endl;
 
 			list2 = getAffectedTList(index2);
+
 			for(it1=arg1List.begin();it1!=arg1List.end();it1++){
 				int index1;
 				istringstream (*it1) >> index1;
@@ -2170,16 +2177,22 @@ vector<int> PKB::getAffectedTList(int stmtNo)
 		vector<int> tmp;
 		storageAtThatLine.push_back(tmp);
 	}
-
+	cout<<"#######"<<endl;
 	vector<int> parentList = getPrev(stmtNo);
 	for(int i=0;i<parentList.size();i++){
 		int parentStmt = parentList[i];
 		recusiveBuildAffectedTList(parentStmt,varIndexes,0);
 	}
-	//DWORD finish = GetTickCount()-start;
-	//for(int i=0;i<affectedTList.size();i++)
-	//	cout<<"?   "<<affectedTList[i]<<endl;
-	//getchar();
+	/*
+	for(int i=0;i<affectedTList.size();i++){
+		if(stmtNo==52){
+			cout<<"FFF"<<affectedTList[i]<<endl;
+		}
+	}
+	if(stmtNo==52)getchar();
+	else{
+		cout<<" ..."<<stmtNo<<endl;
+	}*/
 	return affectedTList;
 }
 
@@ -2191,7 +2204,7 @@ void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes, int toL
 		if(tem.size()>storageAtThatLine[stmtNo].size()){
 			storageAtThatLine[stmtNo]=tem;
 		}else {
-			cout<<"wow "<<stmtNo<<endl;
+			//cout<<"wow "<<stmtNo<<endl;
 			//getchar();
 			return;
 		}
@@ -2279,6 +2292,14 @@ void PKB::recusiveBuildAffectedTList(int stmtNo, vector<int> varIndexes, int toL
 	vector<int> parentList = getPrev(stmtNo);
 	for(int i=0;i<parentList.size();i++){
 		int parentStmt = parentList[i];
+
+		if(parentStmt==48){
+			for(int i=0;i<varIndexes.size();i++){
+				cout<<stmtNo<<"  ~~used~~ "<<getVarName(varIndexes[i])<<"  "<<newVar<<endl;
+			}
+			getchar();
+		}
+
 		if(newVar==1)
 			recusiveBuildAffectedTList(parentStmt,varIndexes,newVar);
 		else recusiveBuildAffectedTList(parentStmt,varIndexes,toLoop);
@@ -2363,11 +2384,13 @@ vector<int> PKB::getAffectTList(int stmtNo)
 	//for(int i=0;i<childrenList.size();i++)
 	//	cout<<"child: "<<childrenList[i]<<endl;
 	//getchar();
+	
 	if(childrenList.size()>0){
 		// I think the assignNode will only has 1 child!! IMPORTANT ASSUMETION		
 		processStmtListAffectsT(childrenList[0],varIndexList);
 
 	}
+
 	return affectTList;
 }
 vector<int> PKB::processStmtListAffectsT(int stmtNo, vector<int> varIndexList)
@@ -2612,6 +2635,45 @@ vector<pair<string,string>> PKB::getNextTBip(set<string>* arg1_set, string arg1T
 {
 	vector<pair<string,string>> result;
 
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> arg1List = *arg1_set;
+	set<string> arg2List = *arg2_set;
+
+	if(true&&arg1_set->size()<=arg2_set->size())
+	{
+		for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+			string index1 = *it1;
+			int stmtNo1 = atoi(index1.c_str());
+			vector<int> childrenList = getNextTBip(stmtNo1);
+
+			for(it2=arg2List.begin();it2!= arg2List.end();it2++){
+				string index2 = *it2;
+
+				int stmtNo2 = atoi(index2.c_str());
+				if(contains(childrenList,stmtNo2)){
+					pair<string,string> p(index1,index2);
+					result.push_back(p);
+				}
+			}
+		}
+	}else{
+		for(it2=arg2List.begin();it2!=arg2List.end();it2++){
+			string index2 = *it2;
+			int stmtNo2 = atoi(index2.c_str());
+			vector<int> childrenList = getPrevTBip(stmtNo2);
+
+			for(it1=arg1List.begin();it1!= arg1List.end();it1++){
+				string index1 = *it1;
+
+				int stmtNo1 = atoi(index1.c_str());
+				if(contains(childrenList,stmtNo1)){
+					pair<string,string> p(index1,index2);
+					result.push_back(p);
+				}
+			}
+		}
+	}
 	return result;
 }
 vector<pair<string, string>> PKB::getAffectsBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
