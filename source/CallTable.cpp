@@ -87,14 +87,27 @@ vector<string> CallTable::getCallsT(string proc){
 
 vector<int> CallTable::getCallsStmT(string proc){
 	vector<int> result;
-	vector<string> callsList = getCallsList(proc);
-	vector<int> callsStmList = getCallsStmtList(proc);
+	//vector<string> callsList = getCallsList(proc);
+	//vector<int> callsStmList = getCallsStmtList(proc);
+	/*vector<int> callsStmList;
+	for(unsigned i=0; i<callsList.size(); i++){
+		if(callTable.at(i).callingProc == callsList.at(i)){
+			callsStmList.push_back(callTable.at(i).callStmNo);
+		}
+	}
 	if(callsList.size() == 0)
 		return result;
 	for(unsigned i=0; i<callsList.size(); i++){
 		vector<int> tmp = getCallsStmT(callsList.at(i));
 		result.push_back(callsStmList.at(i));
 		result.insert(result.end(), tmp.begin(), tmp.end());
+	}*/
+	for(unsigned i=0; i<callTable.size(); i++){
+		for(unsigned j=0; j<callTable.at(i).calledProcs.size(); j++){
+			if(callTable.at(i).calledProcs.at(j) == proc){
+				result.push_back(callTable.at(i).callStmNo.at(j));
+			}
+		}
 	}
 	return Util::removeDuplicateInt(result);
 }
