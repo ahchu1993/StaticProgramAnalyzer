@@ -184,9 +184,9 @@ public:
 	vector<vector<int>> lastStmtsInProc;
 	int currentProc;
 	vector<int > findLastStmts(int callStmt);
-
+	vector<int> getAllStmtsInProc(int procIndex);
 	vector<vector<int>> storageAtThatLine;
-
+	int getCalledProcAtLine(int line);
 	bool sameProcedure(int stmtNo1, int stmtNo2);
 	/************************************************** Next - Zhao Yang *************************************************/
 	// utilities
@@ -325,6 +325,7 @@ public:
 	void goToNextBip(int stmt,stack<int> fromProcedure);
 	void goToPrevBip(int stmt,stack<int> fromProcedure);
 	int firstOne;
+	vector<int> visitedProc;
 	vector<int> resultList;
 
 
@@ -333,9 +334,13 @@ public:
 	bool isLast(int stmtNo);
 	bool isFirst(int stmtNo);
 
+
 	// 
 	vector<int> sequentialAffectsTBip(int lineno);
 	void f(int lineno,string var,vector<int> *result);
-	
+
+	bool isAfterCall(int stmt);
+	vector<int> findLastStmtsInThatProc(int callStmt);
+
 };
 #endif
