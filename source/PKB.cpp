@@ -3648,7 +3648,21 @@ vector<pair<string, string>> PKB::getAffectsTBip(set<string>* arg1_set, string a
 		}
 		
 	}else{
-	
+		vector<int> Affected;
+		for(it2=arg2List.begin();it2!=arg2List.end();it2++){
+			int lineno = Util::convertStringToInt(*it2);
+			
+			Affected = reverseAffectsTBip(lineno);
+			for(unsigned int i=0;i<Affected.size();i++){
+				int t = Affected[i];
+				string first = Util::convertIntToString(t);
+
+				if(arg1List.find(first)!=arg1List.end()){
+					pair<string,string> p(first,*it2);
+					result.push_back(p);
+				}
+			}
+		}
 	}
 
 	return result;
@@ -3703,6 +3717,60 @@ void PKB::f(int cur,string var, vector<int> *result){
 			}
 		}else{
 			f(child,var,result);
+		}
+	}
+}
+
+vector<int> PKB::reverseAffectsTBip(int lineno){
+	
+	vector<int> vars = getUsedStmt(lineno);
+	
+	vector<int> res;
+	for(unsigned int i=0;i<vars.size();i++){
+		string var = getVarName(vars[i]);
+		r(lineno,var,&res);
+	}
+	
+	return res;
+
+}
+
+void PKB::r(int cur,string var, vector<int> *result){
+	pair<int,string> p(cur,var);
+	
+	if(m[p]==1) return;
+	else m[p] =1;
+	vector<int> predecessorList = getPrevBip(cur);
+	if(predecessorList.empty()) return;
+	for(unsigned int i=0;i<predecessorList.size();i++){
+		int predecessor = predecessorList[i];
+		string predecessor_type = getStmtType(predecessor);
+		int varIndex = getVarIndex(var);
+		if(predecessor_type=="assign"){
+			// if modify(child, v)
+			
+			vector<int> Modifiedstmts = getModifiedList(varIndex,"assign");
+			if(contains(Modifiedstmts,predecessor)){ // modified
+				result->push_back(predecessor);
+				vector<int> newvars = getModifiedStmt(predecessor);
+				for(unsigned int i=0;i<newvars.size();i++){
+					string newvar = getVarName(newvars[i]);
+					r(predecessor,newvar,result);
+				}			
+			}else {
+				r(predecessor,var,result);
+			}
+
+		}else if(predecessor_type == "call"){
+						
+				vector<int> pre_call = getPrevBip(predecessor);
+				for(unsigned int i=0;i<pre_call.size();i++){
+					r(pre_call[i],var,result);
+				}
+				
+			
+		}else{
+			r(predecessor,var,result);
 		}
 	}
 }
