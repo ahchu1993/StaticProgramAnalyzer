@@ -583,14 +583,16 @@ void PKB::updateModify(){
 
 	//procList = procTable.getProcList();
 	procList = getTopoCall();
-	for (unsigned i=0; i<procList.size(); i++){
+	cout<<procList.size()<<endl;
+	for (int i=procList.size()-1; i>=0; i--){
 		cout<<procList.at(i)<<endl;
 	}
+	cout<<"Khue"<<endl;
 	//for (unsigned i=0; i<procList.size(); i++){
-	for (unsigned i=procList.size()-1; i>=0; i--){
+	for (int i=procList.size()-1; i>=0; i--){
 		//cout<<i<<endl;
 		currentProcIndex = procList.at(i);
-
+		cout<<"akioh"<<endl;
 		// Get all proc that call the current proc
 		callingProc = getCallsT(currentProcIndex);
 		// Get all stmtNo of the calling stmt
