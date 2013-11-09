@@ -187,6 +187,7 @@ public:
 
 	vector<vector<int>> storageAtThatLine;
 
+	bool sameProcedure(int stmtNo1, int stmtNo2);
 	/************************************************** Next - Zhao Yang *************************************************/
 	// utilities
 	vector<int> getNext(int stmtNo);
@@ -225,7 +226,7 @@ public:
 	vector<pair<string, string>> getNextBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string,string>> getNextTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	
-	
+	bool isFirstStmt(int stmtNo);
 	string toString(int num);
 	/************************************************** Affect - Zhao Yang *************************************************/
 	vector<int> affectList; // for internal usage
@@ -245,12 +246,13 @@ public:
 	vector<int> affectBipList;
 	vector<int> affectedBipList;
 	void recusiveBuildAffectBipList(int stmtNo, int varIndex);
-	void recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes, int toLoop);
+	void recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes, int toLoop, stack<int> fromProcStmt);
 
 	vector<int> getAffectTList(int stmtNo);
 	vector<int> getAffectedTList(int stmtNo);
 	vector<int> listToVector(list<int> lis);
 
+	stack<int> assignProcedure(stack<int> procs, int stmtNo1,int stmtNo2);
 	vector<int> merge(vector<int> v1,vector<int> v2);
 
 	vector<int> processStmtListAffectsT(int stmtNo, vector<int> varIndexList);
