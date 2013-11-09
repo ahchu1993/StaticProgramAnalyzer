@@ -782,6 +782,10 @@ void PKB::updateUse(){
 	procList = getTopoCall();
 
 	for (unsigned i=0; i<procList.size(); i++){
+		cout<<procList.at(i)<<endl;
+	}
+
+	for (unsigned i=0; i<procList.size(); i++){
 		currentProcIndex = procList.at(i);
 
 		callingProc = getCallsT(currentProcIndex);
@@ -799,6 +803,8 @@ void PKB::updateUse(){
 
 		for (unsigned j =0; j<callingStmt.size(); j++){
 			tempStmtNo = callingStmt.at(j);
+			//cout<<"TESTING"<<endl;
+			//cout<<tempStmtNo<<endl;
 			for (unsigned k=0; k<usedVar.size(); k++){
 				tempVarIndex = usedVar.at(k);
 				useTable.insertUseStmt(tempStmtNo, tempVarIndex, "call");
@@ -843,28 +849,23 @@ void PKB::printUseTable()
 	string type;
 	int procIndex, stmtNo, varIndex;
 
-
-
-
-
-
-	//cout<< "UseProcTable:" << endl;
-	//cout<< "procName" << "\t" << "varName" << endl;
+	cout<< "UseProcTable:" << endl;
+	cout<< "procName" << "\t" << "varName" << endl;
 	for (unsigned i = 0; i<UseProcTable.size(); i++){
 		temp_proc_row = UseProcTable.at(i);
 		procIndex = temp_proc_row.procIndex;
 		varIndex = temp_proc_row.varIndex;
-		//cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
+		cout<<procTable.getProcName(procIndex)<<"\t"<<varTable.getVarName(varIndex)<<endl;
 	}
 
-	//cout<< "UseStmtTable:" << endl;
-	//cout<< "stmtNo" << "\t" << "Type" << "\t" << "varName" << endl;
+	cout<< "UseStmtTable:" << endl;
+	cout<< "stmtNo" << "\t" << "Type" << "\t" << "varName" << endl;
 	for (unsigned i = 0; i<UseStmtTable.size(); i++){
 		temp_stmt_row = UseStmtTable.at(i);
 		stmtNo = temp_stmt_row.stmtNo;
 		type = temp_stmt_row.DE;
 		varIndex = temp_stmt_row.varIndex;
-		//cout<<stmtNo<<"\t"<<type<<"\t"<<varTable.getVarName(varIndex)<<endl;
+		cout<<stmtNo<<"\t"<<type<<"\t"<<varTable.getVarName(varIndex)<<endl;
 	}
 }
 
