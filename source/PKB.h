@@ -78,7 +78,7 @@ public:
 	vector<int> getCallsList(int procIndex);
 	vector<int> getCallsT(int procIndex);
 	vector<int> getCalledT(int procIndex);
-
+	vector<int> getTopoCall();
 	/************************************************** ParentTable *************************************************/
 	vector<pair<string, string>> getParent(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string, string>> getParentT(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);

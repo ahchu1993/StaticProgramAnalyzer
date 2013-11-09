@@ -67,7 +67,25 @@ vector<string> CallTable::getCalledT(string proc){
 	return Util::removeDuplicate(result);
 
 }
+vector<string> result;
+vector<string> CallTable::getTopoCall(){
+	result.clear();
+	string firstProc = callTable.at(0).callingProc;
+	getTopoCallRecur(firstProc);
+}
+void CallTable::getTopoCallRecur(string startProc){
+	result.push_back(startProc);
+	vector<string> neighbor= getCalledList(startProc);
+	if(neighbor.size() == 0){
+		return;
+	}
+	for(unsigned i=0; i<neighbor.size(); i++){
+		string proc = neighbor.at(i);
+		getTopoCallRecur(proc);
 
+	}
+	
+}
 vector<string> CallTable::getCallsT(string proc){
 	vector<string> result;
 	vector<string> callsList = getCallsList(proc);
