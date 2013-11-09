@@ -74,11 +74,12 @@ vector<string> CallTable::getTopoCall(){
 	for(unsigned i=0; i<callTable.size(); i++){
 		if(getCallsList(callTable.at(i).callingProc).size() == 0){
 			firstProc = callTable.at(i).callingProc;
+			getTopoCallRecur(firstProc);
 			break;
 		}
 	}
 	//string firstProc = callTable.at(0).callingProc;
-	getTopoCallRecur(firstProc);
+	
 	return result;
 }
 void CallTable::getTopoCallRecur(string startProc){
