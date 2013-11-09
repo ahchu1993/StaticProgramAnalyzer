@@ -75,11 +75,11 @@ vector<string> CallTable::getTopoCall(){
 		if(getCallsList(callTable.at(i).callingProc).size() == 0){
 			firstProc = callTable.at(i).callingProc;
 			getTopoCallRecur(firstProc);
-			break;
 		}
 	}
-	//string firstProc = callTable.at(0).callingProc;
-	
+	for(unsigned i=0; i<result.size(); i++){
+		cout << result.at(i);
+	}
 	return result;
 }
 void CallTable::getTopoCallRecur(string startProc){
@@ -93,6 +93,7 @@ void CallTable::getTopoCallRecur(string startProc){
 		getTopoCallRecur(proc);
 
 	}
+
 	result.push_back(startProc);
 }
 vector<string> CallTable::getCallsT(string proc){
@@ -175,4 +176,5 @@ void CallTable::print(){
 		}
 		cout << "\n";
 	}
+	getTopoCall();
 }
