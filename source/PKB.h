@@ -42,7 +42,7 @@ private:
 	AST ast;
 
 	vector<int> firstStmtList;
-
+	map<pair<int,string>,int> m;
 	
 	
 
@@ -332,5 +332,10 @@ public:
 	bool isCall(int stmtNo);
 	bool isLast(int stmtNo);
 	bool isFirst(int stmtNo);
+
+	// 
+	vector<int> sequentialAffectsTBip(int lineno);
+	void f(int lineno,string var,vector<int> *result);
+	
 };
 #endif
