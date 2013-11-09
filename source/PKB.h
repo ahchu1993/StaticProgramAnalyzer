@@ -184,7 +184,7 @@ public:
 	vector<vector<int>> lastStmtsInProc;
 	int currentProc;
 	vector<int > findLastStmts(int callStmt);
-
+	vector<int> getAllStmtsInProc(int procIndex);
 	vector<vector<int>> storageAtThatLine;
 	int getCalledProcAtLine(int line);
 	bool sameProcedure(int stmtNo1, int stmtNo2);
@@ -325,6 +325,7 @@ public:
 	void goToNextBip(int stmt,stack<int> fromProcedure);
 	void goToPrevBip(int stmt,stack<int> fromProcedure);
 	int firstOne;
+	vector<int> visitedProc;
 	vector<int> resultList;
 
 
