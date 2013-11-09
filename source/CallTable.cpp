@@ -75,6 +75,9 @@ vector<string> CallTable::getTopoCall(){
 	return result;
 }
 void CallTable::getTopoCallRecur(string startProc){
+	if(find(result.begin(), result.end(), startProc) != result.end()){
+		return;
+	}
 	result.push_back(startProc);
 	vector<string> neighbor= getCalledList(startProc);
 	if(neighbor.size() == 0){
