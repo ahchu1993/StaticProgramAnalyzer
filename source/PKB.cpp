@@ -134,10 +134,13 @@ bool PKB::checkCallsT(string arg1, string arg1Type, string arg2, string arg2Type
 		else return false;
 
 	}else{
-		bool called = isCalled(arg1,arg2);
-		if(called)
-			return true;
-		else return false;
+		vector<string> callees = callTable.getCalledT(arg1);
+		for(unsigned int i=0;i<callees.size();i++){
+			if(callees[i]==arg2)
+				return true;
+		}
+		
+		return false;
 	}
 	return true;
 }
