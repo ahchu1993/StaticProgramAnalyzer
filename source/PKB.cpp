@@ -1,7 +1,6 @@
 #include "PKB.h"
 
 PKB::PKB(){
-
 }
 
 /************************************************** AST *************************************************/
@@ -1116,13 +1115,13 @@ vector<int > PKB::findLastStmts(int callStmt){
 	}
 	vector<int> lastStmtsList = lastStmtsInProc[calledProcIndex];
 	for(int i=0;i<lastStmtsList.size();i++){
-		//if(getStmtType(lastStmtsList[i]).compare("call")!=0){
+		if(getStmtType(lastStmtsList[i]).compare("call")!=0){
 			res.push_back(lastStmtsList[i]);
-		/*}else{
+		}else{
 			vector<int> res1 = findLastStmts(lastStmtsList[i]);
 			for(int i=0;i<res1.size();i++)
 				res.push_back(res1[i]);
-		}*/
+		}
 	}
 	return res;
 }
@@ -1375,11 +1374,11 @@ vector<int> PKB::getPrevBip(int stmtNo)
 }
 vector<int> PKB::getNextTBip(int stmtNo)
 {
-	return cfg.getNextStarBip(stmtNo);
+	return getNextStarBip(stmtNo);
 }
 vector<int> PKB::getPrevTBip(int stmtNo)
 {
-	return cfg.getPrevStarBip(stmtNo);
+	return getPrevStarBip(stmtNo);
 }
 bool PKB::isNext(int stmtNo1,int stmtNo2)
 {
@@ -1394,7 +1393,13 @@ bool PKB::isNextT(int stmtNo1, int stmtNo2)
 		return true;
 	return false;
 }
-
+bool PKB::isNextStarBip(int stmtNo1,int stmtNo2)
+{
+	vector<int> nextStarList = getNextStarBip(stmtNo1);
+	if(contains(nextStarList,stmtNo2))
+		return true;
+	return false;
+}
 vector<int> PKB::getNextT(int stmtNo)
 {	
 	printf("Enter next star \n");
@@ -3133,6 +3138,7 @@ vector<int> PKB::getAffectedBipList(int stmtNo)
 	return affectedBipList;
 
 }
+//************
 void PKB::recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes, int toLoop, stack<int> fromProcedure)
 {
 	cout<<"STMTNO "<<stmtNo<<endl; 
@@ -3206,11 +3212,20 @@ void PKB::recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes, int t
 			int parentStmt = parentList[i];
 			////cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
 			stack<int> tem = fromProcedure;
-			if(!sameProcedure(stmtNo,parentStmt))
-				tem.push(cfg.CFGNodes[stmtNo]->getProcedure());
+			if(!sameProcedure(stmtNo,parentStmt)){
+				int calledProcIndex = cfg.CFGNodes[parentStmt]->getProcedure();
+				vector<int> prevListWithoutBip = getPrev(stmtNo);
+				for(int i=0;i<prevListWithoutBip.size();i++){
+					if(getStmtType(prevListWithoutBip[i]).compare("call")!=0)
+						continue;
+					int calledProcIndexInCallStmt = findCalledProcIndex(prevListWithoutBip[i]);
+					if(prevListWithoutBip[i]==calledProcIndexInCallStmt)
+						tem.push(prevListWithoutBip[i]);
+				}
+			}
 			if(newVar)
-				recusiveBuildAffectedBipList(parentStmt,varIndexes,newVar,assignProcedure(tem,stmtNo,parentStmt));
-			else recusiveBuildAffectedBipList(parentStmt,varIndexes,toLoop,assignProcedure(tem,stmtNo,parentStmt));
+				recusiveBuildAffectedBipList(parentStmt,varIndexes,newVar,tem);
+			else recusiveBuildAffectedBipList(parentStmt,varIndexes,toLoop,tem);
 		}
 		/*
 		// continue from prevCallStmt
@@ -3252,6 +3267,17 @@ stack<int> PKB::assignProcedure(stack<int> procs,int stmtNo1,int stmtNo2)
 		return procs;
 	}
 }
+int PKB::findCalledProcIndex(int stmtNo)
+{
+	if(getStmtType(stmtNo).compare("call")!=0){
+		cout<<"No Call Stmt"<<endl;
+		return -100;
+		
+	}
+	string procName = procAtLine[stmtNo];
+	int procIndex = getProcIndex(procName);
+	return procIndex;
+}
 bool PKB::isFirstStmt(int stmtNo)
 {
 	for(int i=0;i<procFirstStmt.size();i++){
@@ -3268,4 +3294,251 @@ bool PKB::sameProcedure(int stmtNo1, int stmtNo2)
 	if(a!=b)
 		return false;
 	else return true;
+}
+
+
+//////////////////////NextBip////////////////////////////
+vector<int> PKB::getNextStarBip(int stmtNo)
+{//*******
+	for(unsigned int i=0;i<visited.size();i++)
+		visited[i]=0;
+	resultList.clear();
+	firstOne=1;
+	stack<int> newStack;
+	getNextStarBipRecursive(stmtNo,newStack);
+	//sort (resultList.begin(), resultList.end());
+
+	return resultList;
+}
+
+vector<int> PKB::getPrevStarBip(int stmtNo)
+{//*******@@!!!
+	for(unsigned int i=0;i<visited.size();i++)
+		visited[i]=0;
+	resultList.clear();
+	firstOne=1;
+	stack<int> newStack;
+	getPrevStarBipRecursive(stmtNo,newStack);
+	sort (resultList.begin(), resultList.end());
+	return resultList;
+}
+void PKB::getPrevStarBipRecursive(int stmtNo,stack<int> fromProcedure)
+{
+	//if(fromProcedure.size()>0)
+	//	cout<<"StmtNo in next*bip  "<<stmtNo <<"~~~~~~~~~~~~~~~~~~~~"<<fromProcedure.top()<<endl;
+	//else cout<<"StmtNo in next*bip  "<<stmtNo<<"~~~~~~~~~~~~~~~~~~~~empty"<<endl;
+	//getchar();
+	// add size in case over flow
+	while(visited.size()<=(unsigned int)stmtNo){
+		visited.push_back(0);
+	}
+
+	if(firstOne==1){
+		firstOne=0;
+	}else{
+		if(visited[stmtNo]==0){
+			visited[stmtNo]=1;
+		}else{
+			if(fromProcedure.size()<=0)
+				return;
+			return;
+		}
+		resultList.push_back(stmtNo); 
+	}
+	//for(int i=0;i<resultList.size();i++)
+	//	cout<<""<<resultList[i]<<endl;
+	//getchar();
+
+	if(!isCall(stmtNo)&&isFirst(stmtNo)){
+		if(fromProcedure.size()>0){ // from somewhere
+			int fromStmt = fromProcedure.top();fromProcedure.pop();
+			goToPrevBip(fromStmt,fromProcedure);
+		}else{
+			vector<int> nextBipList = getNextBip(stmtNo);
+			for(int i=0;i<nextBipList.size();i++){
+				if(checkVisited(nextBipList[i])!=0)
+					continue;
+				getNextStarBipRecursive(nextBipList[i],fromProcedure);
+			}
+		}
+	}else if(isCall(stmtNo)){
+		vector<int> nextBipList = getPrevBip(stmtNo);
+		int gone =0;
+		for(int i=0;i<nextBipList.size();i++){
+			if(checkVisited(nextBipList[i])!=0)
+				continue;
+			stack<int> tem = fromProcedure;  // may be visited
+			tem.push(stmtNo);
+			gone = 1;
+			getPrevStarBipRecursive(nextBipList[i],tem);
+		}
+		if(gone==0){
+			vector<int> nextList = getPrev(stmtNo);
+			for(int i=0;i<nextList.size();i++)
+				getPrevStarBipRecursive(nextList[i],fromProcedure);
+		}
+	}else if(!isCall(stmtNo)&&!isFirst(stmtNo)){
+		//normal
+		vector<int> nextList = getPrev(stmtNo);
+		for(int i=0;i<nextList.size();i++){
+			if(checkVisited(nextList[i])!=0)
+				continue;
+			getPrevStarBipRecursive(nextList[i],fromProcedure);
+		}
+	}else{
+		cout<<"###########"<<endl;
+		cout<<"###########"<<endl;
+		cout<<"r u kidding"<<endl;
+		cout<<"###########"<<endl;
+		cout<<"###########"<<endl;
+	}
+}
+void PKB::getNextStarBipRecursive(int stmtNo,stack<int> fromProcedure)
+{//*******
+	if(fromProcedure.size()>0)
+		cout<<"StmtNo in next*bip  "<<stmtNo <<"~~~~~~~~~~~~~~~~~~~~"<<fromProcedure.top()<<endl;
+	else cout<<"StmtNo in next*bip  "<<stmtNo<<"~~~~~~~~~~~~~~~~~~~~empty"<<endl;
+	//getchar();
+	// add size in case over flow
+	while(visited.size()<=(unsigned int)stmtNo){
+		visited.push_back(0);
+	}
+
+	if(firstOne==1){
+		firstOne=0;
+	}else{
+		if(visited[stmtNo]==0){
+			visited[stmtNo]=1;
+		}else{
+			if(fromProcedure.size()<=0)
+				return;
+			return;
+		}
+		resultList.push_back(stmtNo); 
+	}
+	for(int i=0;i<resultList.size();i++)
+		cout<<""<<resultList[i]<<endl;
+	//getchar();
+
+	if(!isCall(stmtNo)&&isLast(stmtNo)){
+		if(fromProcedure.size()>0){ // from somewhere
+			int fromStmt = fromProcedure.top();fromProcedure.pop();
+			goToNextBip(fromStmt,fromProcedure);
+		}else{
+			vector<int> nextBipList = getNextBip(stmtNo);
+			for(int i=0;i<nextBipList.size();i++){
+				if(checkVisited(nextBipList[i])!=0)
+					continue;
+					getNextStarBipRecursive(nextBipList[i],fromProcedure);
+			}
+		}
+	}else if(isCall(stmtNo)){
+		vector<int> nextBipList = getNextBip(stmtNo);
+		int gone =0;
+		for(int i=0;i<nextBipList.size();i++){
+			if(checkVisited(nextBipList[i])!=0)
+				continue;
+			stack<int> tem = fromProcedure;  // may be visited
+			tem.push(stmtNo);
+			gone = 1;
+			getNextStarBipRecursive(nextBipList[i],tem);
+		}
+		if(gone==0){
+			vector<int> nextList = getNext(stmtNo);
+			for(int i=0;i<nextList.size();i++)
+				getNextStarBipRecursive(nextList[i],fromProcedure);
+		}
+	}else if(!isCall(stmtNo)&&!isLast(stmtNo)){
+		//normal
+		vector<int> nextList = getNext(stmtNo);
+		for(int i=0;i<nextList.size();i++){
+			if(checkVisited(nextList[i])!=0)
+				continue;
+			getNextStarBipRecursive(nextList[i],fromProcedure);
+		}
+	}else{
+		cout<<"###########"<<endl;
+		cout<<"###########"<<endl;
+		cout<<"r u kidding"<<endl;
+		cout<<"###########"<<endl;
+		cout<<"###########"<<endl;
+	}
+}
+int PKB::checkVisited(int stmt)
+{
+	while(visited.size()<=stmt)
+		visited.push_back(0);
+	return visited[stmt];
+}
+bool PKB::isCall(int stmtNo)
+{
+	if(cfg.CFGNodes[stmtNo]->isCallNode())
+		return true;
+	return false;
+}
+bool PKB::isLast(int stmtNo)
+{
+	if(getNext(stmtNo).size()==0)
+		return true;
+	return false;
+
+}
+bool PKB::isFirst(int stmtNo)
+{
+	if(getPrev(stmtNo).size()==0)
+		return true;
+	return false;
+}
+void PKB::goToPrevBip(int stmt,stack<int> fromProcedure)
+{
+	if(!isCall(stmt))
+	{
+		cout<<"WTF"<<endl;
+		return;
+	}
+	vector<int> nextList = getPrev(stmt);
+	if(nextList.size()==0){
+		if(fromProcedure.size()>0){
+			int fromStmt = fromProcedure.top();fromProcedure.pop();
+			goToPrevBip(fromStmt,fromProcedure);
+		}else {
+			int currentProc = cfg.CFGNodes[stmt]->getProcedure();
+			// call table
+
+			vector<int> calledList = getCallsStmT(currentProc);
+			for(int i=0;i<calledList.size();i++)
+				goToPrevBip(calledList[i],fromProcedure);
+		}
+	}else{
+		for(int i=0;i<nextList.size();i++){
+			getPrevStarBipRecursive(nextList[i],fromProcedure);
+		}
+	}
+
+}
+void PKB::goToNextBip(int stmt,stack<int> fromProcedure)
+{
+	if(!isCall(stmt))
+	{
+		cout<<"WTF"<<endl;
+		return;
+	}
+	vector<int> nextList = getNext(stmt);
+	if(nextList.size()==0){
+		if(fromProcedure.size()>0){
+			int fromStmt = fromProcedure.top();fromProcedure.pop();
+			goToNextBip(fromStmt,fromProcedure);
+		}else {
+			int currentProc = cfg.CFGNodes[stmt]->getProcedure();
+			// call table
+			
+			vector<int> calledList = getCallsStmT(currentProc);
+			for(int i=0;i<calledList.size();i++)
+				goToNextBip(calledList[i],fromProcedure);
+		}
+	}else{
+		for(int i=0;i<nextList.size();i++){
+			getNextStarBipRecursive(nextList[i],fromProcedure);
+		}
+	}
 }

@@ -3,12 +3,16 @@
 #include "CFGNode.h"
 #include <algorithm>
 #include <iostream>
+#include <stack>
+
+
 class CFG
 {
 public:
-	CFG(void);
+	CFG();
 	vector<CFGNode *> CFGHeaderList;//root nood
 	vector<CFGNode *> CFGNodes;	
+
 
 	// for normail next
 	vector<int> getNext(int stmtNo);
@@ -23,8 +27,7 @@ public:
 	// for next BIP  
 	vector<int> getNextBip(int stmtNo);
 	vector<int> getPrevBip(int stmtNo);
-	vector<int> getNextStarBip(int stmtNo);
-	vector<int> getPrevStarBip(int stmtNo);
+
 	bool isNextBip(int stmtNo1, int stmtNo2);
 	bool isNextStarBip(int stmtNo1,int stmtNo2);
 	//void buildCFGParentListBIP(int stmtNo);
@@ -32,16 +35,21 @@ public:
 	vector<int> visited;
 
 private:
+
 	vector<int> resultList;
-	// normail next
+	// normal next
 	void getNextStarRecursive(int stmtNo);
 	void getPrevStarRecursive(int stmtNo);
 
-	// next BIP
-	void getNextStarBipRecursive(int stmtNo);
-	void getPrevStarBipRecursive(int stmtNo);
 
 	bool contains(vector<int> list, int stmtNo);
+	vector<int> merge(vector<int> v1,vector<int> v2); 
+
+
+	void processNextStarProcedure(int stmtNo);
+
+	int checkVisited(int stmt);
+
 };
 
 #endif

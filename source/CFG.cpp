@@ -1,7 +1,6 @@
 #include "CFG.h"
 
 CFG::CFG(){
-	
 }
 
 
@@ -176,69 +175,38 @@ bool CFG::isNextBip(int stmtNo1, int stmtNo2)
 	}
 	return false;
 }
-bool CFG::isNextStarBip(int stmtNo1,int stmtNo2)
-{
-	vector<int> nextStarList = getNextStarBip(stmtNo1);
-	if(contains(nextStarList,stmtNo2))
-		return true;
-	return false;
-}
-vector<int> CFG::getNextStarBip(int stmtNo)
-{//*******
-	for(unsigned int i=0;i<visited.size();i++)
-		visited[i]=0;
-	resultList.clear();
-	getNextStarBipRecursive(stmtNo);
-	sort (resultList.begin(), resultList.end());
 
-	return resultList;
-}
-vector<int> CFG::getPrevStarBip(int stmtNo)
-{//*******@@!!!
-	for(unsigned int i=0;i<visited.size();i++)
-		visited[i]=0;
-	resultList.clear();
-	getPrevStarBipRecursive(stmtNo);
-	sort (resultList.begin(), resultList.end());
-	return resultList;
-}
-void CFG::getPrevStarBipRecursive(int stmtNo)
-{//*******
-	vector<int> prevList = getPrevBip(stmtNo);
-	for(unsigned int i=0;i<prevList.size();i++){
-		int prevStmtNo = prevList[i];
 
-		// add size in case over flow
-		while(visited.size()<=(unsigned int)prevStmtNo){
-			visited.push_back(0);
-		}
-		// loop detection
-		if(visited[prevStmtNo]==0){
-			visited[prevStmtNo]=1;
-		}else return;
 
-		resultList.push_back(prevStmtNo);
-		getPrevStarBipRecursive(prevStmtNo);
+	/*
+	if(getNext(stmtNo).size()==0&&CFGNodes[stmtNo]->isCallNode()){ // last call
+		vector<int> tem = getNextBip(stmtNo);
+		for(int i=0;i<tem.size();i++)
+			processNextStarProcedure(tem[i]);
+
 	}
-}
-void CFG::getNextStarBipRecursive(int stmtNo)
-{//*******
+	cout<<"##"<<stmtNo<<endl;
+	getchar();
 	vector<int> childrenList = getNextBip(stmtNo);
 	for(unsigned int i=0;i<childrenList.size();i++){
 		int childStmtNo = childrenList[i];
 
-		// add size in case over flow
-		while(visited.size()<=(unsigned int)childStmtNo){
-			visited.push_back(0);
+		if(CFGNodes[childStmtNo]->childList.size()==0){// last stmt
+			getNextStarBipRecursive(childStmtNo);
+		}else if(CFGNodes[childStmtNo]->getProcedure()!=CFGNodes[stmtNo]->getProcedure()){
+			// branch in
+			processNextStarProcedure(childStmtNo);
+			
+			vector<int> nextChildList=getNext(stmtNo);
+			for(int i=0;i<nextChildList.size();i++){
+				cout<<"???  "<<stmtNo<<"  "<<nextChildList[i]<<endl;
+				getNextStarBipRecursive(nextChildList[i]);
+			}
+		}else{
+			getNextStarBipRecursive(childStmtNo);
 		}
-		// loop detection
-		if(visited[childStmtNo]==0){
-			visited[childStmtNo]=1;
-		}else return;
-		resultList.push_back(childStmtNo);
-		getNextStarBipRecursive(childStmtNo);
-	}
-}
+	}*/
+
 // dont need, put it in buildCFGParentList
 /*
 void CFG::buildCFGParentListBip(int stmtNo)
@@ -255,3 +223,11 @@ void CFG::buildCFGParentListBip(int stmtNo)
 		buildCFGParentListBip(child->stmtNum);
 	}
 }*/
+
+vector<int> CFG::merge(vector<int> v1,vector<int> v2) // no duplicate
+{
+	v1.insert(v1.end(), v2.begin(), v2.end());
+	std::sort(v1.begin(), v1.end());
+	v1.erase(std::unique(v1.begin(), v1.end()), v1.end());
+	return v1;
+}

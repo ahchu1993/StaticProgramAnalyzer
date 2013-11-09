@@ -226,6 +226,7 @@ public:
 	vector<pair<string, string>> getNextBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	vector<pair<string,string>> getNextTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	
+	int findCalledProcIndex(int stmtNo);
 	bool isFirstStmt(int stmtNo);
 	string toString(int num);
 	/************************************************** Affect - Zhao Yang *************************************************/
@@ -311,5 +312,25 @@ public:
 	void printAffects();
 	void printAffectsT();
 	void printAffectedT();
+
+
+
+
+	// next BIP
+	bool isNextStarBip(int stmtNo1,int stmtNo2);
+	vector<int> getNextStarBip(int stmtNo);
+	vector<int> getPrevStarBip(int stmtNo);
+	void getNextStarBipRecursive(int stmtNo,stack<int> fromProcedure);
+	void getPrevStarBipRecursive(int stmtNo,stack<int> fromProcedure);
+	void goToNextBip(int stmt,stack<int> fromProcedure);
+	void goToPrevBip(int stmt,stack<int> fromProcedure);
+	int firstOne;
+	vector<int> resultList;
+
+
+	int checkVisited(int stmt);
+	bool isCall(int stmtNo);
+	bool isLast(int stmtNo);
+	bool isFirst(int stmtNo);
 };
 #endif
