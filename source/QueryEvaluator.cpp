@@ -669,6 +669,8 @@ list<string> QueryEvaluator::validateResults(){
 	}
 	// cartesian flag
    	bool cartesian_flag = false;
+	// tuple_used flag
+	bool tuple_used = false;
 
 
 	/// compute the first synonym in result refs
@@ -687,6 +689,7 @@ list<string> QueryEvaluator::validateResults(){
 				res.push_back(proc);
 			}
 		}else{
+			tuple_used = true;
 			for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
 				vector<string> tuple = *it;
 				res.push_back(tuple.at(index));
@@ -701,6 +704,7 @@ list<string> QueryEvaluator::validateResults(){
 				res.push_back(*it);
 			}
 		}else{
+			tuple_used = true;
 			for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
 				vector<string> tuple = *it;
 				res.push_back(tuple.at(index));
@@ -827,8 +831,7 @@ list<string> QueryEvaluator::validateResults(){
 					}
 				}else {// not appeared
 					refs_appeared[synonym] = 1; //set ref appeared
-
-					if(cartesian_flag){// count and jump
+					if(tuple_used&&cartesian_flag){ //resultTable in use, count and jump
 						int move = 0;
 						for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
 							vector<string> tuple = *it;
@@ -854,7 +857,24 @@ list<string> QueryEvaluator::validateResults(){
 							move++;
 						}
 						res= temp;
-					}else { // cartesian product, set flag
+
+					}else if(tuple_used&&!cartesian_flag){ //append
+						list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+							string ref1 = *it_list;
+							vector<string> t = *it_tuples;
+							ref1.append(" ");
+							int ind = Util::convertStringToInt(t.at(index));
+							string proc = pkb->procAtLine[ind];
+							ref1.append(proc);
+							temp.push_back(ref1);
+							it_tuples++;
+						}
+						res = temp;
+
+					}else { // first time resultTable in use, cartesian, no matter cartesian_flag
+						tuple_used = true;
+						cartesian_flag = true;
 						for(list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();it_tuples!=resultTable.tuples.end();it_tuples++){
 							for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
 								string ref1 = *it_list;
@@ -870,6 +890,7 @@ list<string> QueryEvaluator::validateResults(){
 						res = temp;
 						cartesian_flag = true;
 					}
+					
 				}
 			}
 
@@ -973,7 +994,7 @@ list<string> QueryEvaluator::validateResults(){
 				}else {// not appeared
 					refs_appeared[ref] = 1; //set ref appeared
 
-					if(cartesian_flag){// count and jump
+					if(tuple_used && cartesian_flag){ // count and jump
 						int move = 0;
 						for(list<vector<string>>::iterator it=resultTable.tuples.begin();it!=resultTable.tuples.end();it++){
 							vector<string> tuple = *it;
@@ -997,7 +1018,20 @@ list<string> QueryEvaluator::validateResults(){
 							move++;
 						}
 						res= temp;
-					}else { // cartesian,set cartesian_flag = true
+					}else if(tuple_used& !cartesian_flag){ // append
+						list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();
+						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+							string ref1 = *it_list;
+							vector<string> t = *it_tuples;
+							ref1.append(" ");
+							ref1.append(t.at(index));
+							temp.push_back(ref1);
+							it_tuples++;
+						}
+						res = temp;
+					}else { // resultTable first time use, cartesian
+						tuple_used = true;
+						cartesian_flag = true;
 						for(list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();it_tuples!=resultTable.tuples.end();it_tuples++){
 							for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
 								string ref1 = *it_list;
@@ -1009,7 +1043,6 @@ list<string> QueryEvaluator::validateResults(){
 							}
 						}
 						res = temp;
-						cartesian_flag = true;
 					}
 				}
 			}
