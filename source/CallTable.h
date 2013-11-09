@@ -30,6 +30,8 @@ public:
 	vector<string> getCallsT(string proc);
 	vector<int> getCallsStmT(string proc);
 	vector<int> getCallsStmtList(string procName);
+	void getTopoCallRecur(string startProc);
+	vector<string> getTopoCall()
 	bool checkCall(vector<string> set1, vector<string> set2);
 	int getSize();
 	void print();

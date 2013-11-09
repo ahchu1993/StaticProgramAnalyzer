@@ -206,6 +206,14 @@ vector<int> PKB::getCalledT(int procIndex){
 
 	return result;
 }
+vector<int> PKB::getTopoCall(){
+	vector<string> stringList = callTable.getTopoCall();
+	vector<int> result;
+	for(unsigned i=0; i<stringList.size(); i++){
+		result.push_back(procTable.getProcIndex(stringList.at(i)));
+	}
+	return result;
+}
 
 /************************************************** ParentTable *************************************************/
 vector<pair<string, string>> PKB::getParent(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
