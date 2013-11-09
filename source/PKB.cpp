@@ -160,7 +160,6 @@ vector<string> PKB::getCalledList(string procName){
 }
 void PKB::printCallTable(){
 	callTable.print();
-
 }
 
 //Api for Khue
@@ -581,8 +580,9 @@ void PKB::updateModify(){
 	vector<int> modifiedVar;
 	vector<int> parentList;
 	vector<int> modifiedVarInside;
-
-	procList = procTable.getProcList();
+	
+	procList = getTopoCall();
+	
 	for (unsigned i=0; i<procList.size(); i++){
 		currentProcIndex = procList.at(i);
 
@@ -779,7 +779,8 @@ void PKB::updateUse(){
 	vector<int> parentList;
 	vector<int> usedVarInside;
 
-	procList = procTable.getProcList();
+	procList = getTopoCall();
+
 	for (unsigned i=0; i<procList.size(); i++){
 		currentProcIndex = procList.at(i);
 
