@@ -2048,7 +2048,9 @@ bool PKB::checkAffects(string arg1, string arg1Type, string arg2, string arg2Typ
 
 	if(arg1=="_"&&arg2=="_"){
 		int size = stmtTable.getSize();
-		for(int i=1;getStmtType(i).compare("assign")==0&&i<=size;i++){
+		for(int i=1;i<=size;i++){
+			if(getStmtType(i).compare("assign")!=0)
+				continue;
 			if(getAffectList(i).size()>0)
 				return true;
 		}
@@ -2084,7 +2086,9 @@ bool PKB::checkAffectsT(string arg1, string arg1Type, string arg2, string arg2Ty
 {
 	if(arg1=="_"&&arg2=="_"){
 		int size = stmtTable.getSize();
-		for(int i=1;getStmtType(i).compare("assign")==0&&i<=size;i++){
+		for(int i=1;i<=size;i++){
+			if(getStmtType(i).compare("assign")!=0)
+				continue;;
 			if(getAffectTList(i).size()>0)
 				return true;
 		}
@@ -3092,19 +3096,33 @@ vector<int> PKB::getAffectedBipList(int stmtNo)
 	}
 
 	visited.clear();
+	stack<int> fromProcedure;
+	fromProcedure.push(-1);
+
 	vector<int> parentList = getPrevBip(stmtNo);
 	for(int i=0;i<parentList.size();i++){
 		int parentStmt = parentList[i];
-		recusiveBuildAffectedBipList(parentStmt,varIndexes,0);
+
+		cout<<"?? "<<getProcName(cfg.CFGNodes[stmtNo]->getProcedure())<<"~"<<endl;
+		if(sameProcedure(stmtNo,parentStmt))
+			cout<<"Same "<<cfg.CFGNodes[stmtNo]->getProcedure()<<"  "<<cfg.CFGNodes[parentStmt]->getProcedure()<<endl;
+		//getchar();
+		stack<int> tem = fromProcedure;
+		if(!sameProcedure(stmtNo,parentStmt))
+			tem.push(cfg.CFGNodes[stmtNo]->getProcedure());
+		recusiveBuildAffectedBipList(parentStmt,varIndexes,0,tem);
 	}
 	return affectedBipList;
 
 }
-void PKB::recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes, int toLoop)
+void PKB::recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes, int toLoop, stack<int> fromProcedure)
 {
 	cout<<"STMTNO "<<stmtNo<<endl; 
 	for(int i=0;i<varIndexes.size();i++){
 		cout<<"used  "<<getVarName(varIndexes[i])<<endl;
+	}
+	for(int i=0;i<fromProcedure.size();i++){
+		cout<<"from  "<<fromProcedure.top()<<endl;
 	}
 	//getchar();
 
@@ -3122,7 +3140,7 @@ void PKB::recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes, int t
 	}else{
 		storageAtThatLine[stmtNo] = varIndexes;
 	}
-	cout<<"wow "<<stmtNo<<endl;
+
 
 	while(visited.size()<=stmtNo)
 		visited.push_back(0);
@@ -3137,7 +3155,6 @@ void PKB::recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes, int t
 		//return;
 	}else visited[stmtNo]=visited[stmtNo]+1;
 
-	cout<<"mom "<<stmtNo<<endl;
 
 	int newVar=0;
 	string type = getStmtType(stmtNo);
@@ -3165,11 +3182,72 @@ void PKB::recusiveBuildAffectedBipList(int stmtNo, vector<int> varIndexes, int t
 	if(varIndexes.size()==0)return;
 
 	vector<int> parentList = getPrevBip(stmtNo);
-	for(int i=0;i<parentList.size();i++){
-		int parentStmt = parentList[i];
-		////cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
-		if(newVar)
-			recusiveBuildAffectedBipList(parentStmt,varIndexes,newVar);
-		else recusiveBuildAffectedBipList(parentStmt,varIndexes,toLoop);
+
+	if(!isFirstStmt(stmtNo)){
+		for(int i=0;i<parentList.size();i++){
+			int parentStmt = parentList[i];
+			////cout<<"no "<<stmtNo<<" child "<<childStmt<<endl;
+			stack<int> tem = fromProcedure;
+			if(!sameProcedure(stmtNo,parentStmt))
+				tem.push(cfg.CFGNodes[stmtNo]->getProcedure());
+			if(newVar)
+				recusiveBuildAffectedBipList(parentStmt,varIndexes,newVar,assignProcedure(tem,stmtNo,parentStmt));
+			else recusiveBuildAffectedBipList(parentStmt,varIndexes,toLoop,assignProcedure(tem,stmtNo,parentStmt));
+		}
+		/*
+		// continue from prevCallStmt
+		for(int i=0;i<parentList.size();i++){
+			if(getStmtType(parentList[i]).compare("call")!=0)
+				continue;
+			if(!sameProcedure(stmtNo,parentList[i]))
+				continue;
+			recusiveBuildAffectedBipList(parentList[i],varIndexes,toLoop);
+		}*/
+	}else{  // go to where is belong to;
+		if(fromProcedure.size()==0)return;
+		/////////////////////////
+		// change fromProcedure to fromSTMT..
+		//////////////////////////
+		int fromP = fromProcedure.top(); fromProcedure.pop();
+		for(int i=0;i<parentList.size();i++){
+			int parentStmt = parentList[i];
+			
+			//cout<<"stmt "<<stmtNo<<"  from "<<getProcName(fromP)<<"   thisP "<<getProcName(cfg.CFGNodes[parentStmt]->getProcedure())<<endl;
+			//getchar();
+			if(fromP==-1)
+				;
+			else if(cfg.CFGNodes[parentStmt]->getProcedure()!=fromP)
+				continue;
+			if(newVar)
+				recusiveBuildAffectedBipList(parentStmt,varIndexes,newVar,fromProcedure);
+			else recusiveBuildAffectedBipList(parentStmt,varIndexes,toLoop,fromProcedure);
+		}
+
 	}
+}
+stack<int> PKB::assignProcedure(stack<int> procs,int stmtNo1,int stmtNo2)
+{
+	if(sameProcedure(stmtNo1,stmtNo2))
+		return procs;
+	else {
+		procs.push(cfg.CFGNodes[stmtNo1]->getProcedure());
+		return procs;
+	}
+}
+bool PKB::isFirstStmt(int stmtNo)
+{
+	for(int i=0;i<procFirstStmt.size();i++){
+		if(stmtNo==procFirstStmt[i])
+			return true;
+	}
+	return false;
+}
+bool PKB::sameProcedure(int stmtNo1, int stmtNo2)
+{
+	int a = cfg.CFGNodes[stmtNo1]->getProcedure();
+	int b = cfg.CFGNodes[stmtNo2]->getProcedure();
+
+	if(a!=b)
+		return false;
+	else return true;
 }
