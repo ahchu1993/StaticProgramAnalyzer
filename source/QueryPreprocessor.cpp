@@ -658,7 +658,7 @@ bool QueryPreprocessor::relRef(string relation){
         arg1_flag = true;
     }else{
         if (arg1[0]=='"' && arg1[arg1.size()-1]=='"' && arg1_list.string_type){
-			arg1 = arg1.substr(1,arg1.size()-2);
+			arg1 = trim(arg1.substr(1,arg1.size()-2));
             arg1_type = "string";
             arg1_flag = true;
 		}
@@ -681,7 +681,7 @@ bool QueryPreprocessor::relRef(string relation){
         arg2_flag = true;
     }else{
         if (arg2[0]=='"' && arg2[arg2.size()-1]=='"' && arg2_list.string_type){
-			arg2 = arg2.substr(1,arg2.size()-2);
+			arg2 = trim(arg2.substr(1,arg2.size()-2));
             arg2_type = "string";
             arg2_flag = true;
 		}
@@ -701,7 +701,9 @@ bool QueryPreprocessor::relRef(string relation){
 				constant_relations.push_front(da);
         }
 		else {
-			if(rel_type=="Affects"||rel_type=="Affects*")
+			bool complex1 = rel_type=="Affects"||rel_type=="Affects*"||rel_type=="Next*";
+			bool complex2 = rel_type=="AffectsBip"||rel_type=="AffectsBip*"||rel_type=="NextBip*";
+			if(complex1||complex2)
 				relations.push_back(da);
 			else
 				relations.push_front(da);
