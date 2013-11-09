@@ -186,7 +186,7 @@ public:
 	vector<int > findLastStmts(int callStmt);
 
 	vector<vector<int>> storageAtThatLine;
-
+	int getCalledProcAtLine(int line);
 	bool sameProcedure(int stmtNo1, int stmtNo2);
 	/************************************************** Next - Zhao Yang *************************************************/
 	// utilities
@@ -332,5 +332,7 @@ public:
 	bool isCall(int stmtNo);
 	bool isLast(int stmtNo);
 	bool isFirst(int stmtNo);
+	bool isAfterCall(int stmt);
+	vector<int> findLastStmtsInThatProc(int callStmt);
 };
 #endif
