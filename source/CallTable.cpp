@@ -67,7 +67,35 @@ vector<string> CallTable::getCalledT(string proc){
 	return Util::removeDuplicate(result);
 
 }
+vector<string> result;
+vector<string> CallTable::getTopoCall(){
+	result.clear();
+	string firstProc;
+	for(unsigned i=0; i<callTable.size(); i++){
+		if(getCallsList(callTable.at(i).callingProc).size() == 0){
+			firstProc = callTable.at(i).callingProc;
+			getTopoCallRecur(firstProc);
+		}
+	}
+	for(unsigned i=0; i<result.size(); i++){
+		cout << result.at(i);
+	}
+	return result;
+}
+void CallTable::getTopoCallRecur(string startProc){
+	if(find(result.begin(), result.end(), startProc) != result.end()){
+		return;
+	}
 
+	vector<string> neighbor= getCalledList(startProc);
+	for(unsigned i=0; i<neighbor.size(); i++){
+		string proc = neighbor.at(i);
+		getTopoCallRecur(proc);
+
+	}
+
+	result.push_back(startProc);
+}
 vector<string> CallTable::getCallsT(string proc){
 	vector<string> result;
 	vector<string> callsList = getCallsList(proc);
@@ -148,4 +176,5 @@ void CallTable::print(){
 		}
 		cout << "\n";
 	}
+	getTopoCall();
 }

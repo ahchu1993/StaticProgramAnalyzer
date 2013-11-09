@@ -205,6 +205,16 @@ vector<int> PKB::getCalledT(int procIndex){
 
 	return result;
 }
+vector<int> PKB::getTopoCall(){
+	vector<string> stringList = callTable.getTopoCall();
+	vector<int> result;
+	for(unsigned i=0; i<stringList.size(); i++){
+		if (procTable.getProcIndex(stringList.at(i)) != -1){
+			result.push_back(procTable.getProcIndex(stringList.at(i)));
+		}
+	}
+	return result;
+}
 
 /************************************************** ParentTable *************************************************/
 vector<pair<string, string>> PKB::getParent(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type){
@@ -571,8 +581,9 @@ void PKB::updateModify(){
 	vector<int> modifiedVar;
 	vector<int> parentList;
 	vector<int> modifiedVarInside;
-
-	procList = procTable.getProcList();
+	
+	procList = getTopoCall();
+	
 	for (unsigned i=0; i<procList.size(); i++){
 		currentProcIndex = procList.at(i);
 
@@ -769,7 +780,12 @@ void PKB::updateUse(){
 	vector<int> parentList;
 	vector<int> usedVarInside;
 
-	procList = procTable.getProcList();
+	procList = getTopoCall();
+
+	for (unsigned i=0; i<procList.size(); i++){
+		cout<<procList.at(i)<<endl;
+	}
+
 	for (unsigned i=0; i<procList.size(); i++){
 		currentProcIndex = procList.at(i);
 
@@ -788,6 +804,8 @@ void PKB::updateUse(){
 
 		for (unsigned j =0; j<callingStmt.size(); j++){
 			tempStmtNo = callingStmt.at(j);
+			//cout<<"TESTING"<<endl;
+			//cout<<tempStmtNo<<endl;
 			for (unsigned k=0; k<usedVar.size(); k++){
 				tempVarIndex = usedVar.at(k);
 				useTable.insertUseStmt(tempStmtNo, tempVarIndex, "call");
@@ -831,11 +849,6 @@ void PKB::printUseTable()
 	use_stmt_row temp_stmt_row;
 	string type;
 	int procIndex, stmtNo, varIndex;
-
-
-
-
-
 
 	cout<< "UseProcTable:" << endl;
 	cout<< "procName" << "\t" << "varName" << endl;
