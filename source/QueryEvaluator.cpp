@@ -854,19 +854,21 @@ list<string> QueryEvaluator::validateResults(){
 							move++;
 						}
 						res= temp;
-					}else { // append itself
-						list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();
-						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
-							string ref1 = *it_list;
-							vector<string> t = *it_tuples;
-							ref1.append(" ");
-							int ind = Util::convertStringToInt(t.at(index));
-							string proc = pkb->procAtLine[ind];
-							ref1.append(proc);
-							temp.push_back(ref1);
-							it_tuples++;
+					}else { // cartesian product, set flag
+						for(list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();it_tuples!=resultTable.tuples.end();it_tuples++){
+							for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+								string ref1 = *it_list;
+								vector<string> t = *it_tuples;
+								ref1.append(" ");
+								int ind = Util::convertStringToInt(t.at(index));
+								string proc = pkb->procAtLine[ind];
+								ref1.append(proc);
+								temp.push_back(ref1);
+								
+							}
 						}
 						res = temp;
+						cartesian_flag = true;
 					}
 				}
 			}
@@ -995,17 +997,19 @@ list<string> QueryEvaluator::validateResults(){
 							move++;
 						}
 						res= temp;
-					}else { // append itself
-						list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();
-						for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
-							string ref1 = *it_list;
-							vector<string> t = *it_tuples;
-							ref1.append(" ");
-							ref1.append(t.at(index));
-							temp.push_back(ref1);
-							it_tuples++;
+					}else { // cartesian,set cartesian_flag = true
+						for(list<vector<string>>::iterator it_tuples = resultTable.tuples.begin();it_tuples!=resultTable.tuples.end();it_tuples++){
+							for(list<string>::iterator it_list = res.begin();it_list!=res.end();it_list++){
+								string ref1 = *it_list;
+								vector<string> t = *it_tuples;
+								ref1.append(" ");
+								ref1.append(t.at(index));
+								temp.push_back(ref1);
+								
+							}
 						}
 						res = temp;
+						cartesian_flag = true;
 					}
 				}
 			}

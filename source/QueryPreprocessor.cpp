@@ -479,7 +479,7 @@ bool QueryPreprocessor::check_elem(string elem){
 
 bool QueryPreprocessor::check_varRef(string s){
 	if(s.at(0)=='\"'&&s.at(s.size()-1)=='\"')
-		s = s.substr(1,s.size()-2);
+		s = trim(s.substr(1,s.size()-2));
 	return check_synonym(s)||s=="_"||check_IDENT(s);
 }
 
@@ -1254,7 +1254,7 @@ bool QueryPreprocessor::pattern_assign(string s){
 				varRef_type = get_type(varRef);
 			else {
 				varRef_type = "string";
-				varRef = varRef.substr(1,varRef.size()-2); // strip ""
+				varRef = trim(varRef.substr(1,varRef.size()-2)); // strip ""
 			}
 
 			unsigned int p2 = s.find_last_of(")");
@@ -1338,7 +1338,7 @@ bool QueryPreprocessor::pattern_if(string s){
 				varRef_type = get_type(varRef);
 			else {
 				varRef_type = "string";
-				varRef = varRef.substr(1,varRef.size()-2);
+				varRef = trim(varRef.substr(1,varRef.size()-2));
 			}
 
 			string rest = s.substr(p1+1,s.size()-2);
@@ -1392,7 +1392,7 @@ bool QueryPreprocessor::pattern_while(string s){
 				varRef_type = get_type(varRef);
 			else {
 				varRef_type = "string";
-				varRef = varRef.substr(1,varRef.size()-2);
+				varRef = trim(varRef.substr(1,varRef.size()-2));
 			}
 
 			string rest = s.substr(p1,s.size()-1);
