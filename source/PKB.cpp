@@ -210,7 +210,9 @@ vector<int> PKB::getTopoCall(){
 	vector<string> stringList = callTable.getTopoCall();
 	vector<int> result;
 	for(unsigned i=0; i<stringList.size(); i++){
-		result.push_back(procTable.getProcIndex(stringList.at(i)));
+		if (procTable.getProcIndex(stringList.at(i)) != -1){
+			result.push_back(procTable.getProcIndex(stringList.at(i)));
+		}
 	}
 	return result;
 }
