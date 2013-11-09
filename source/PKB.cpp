@@ -582,9 +582,13 @@ void PKB::updateModify(){
 	vector<int> modifiedVarInside;
 
 	//procList = procTable.getProcList();
-	procList = callTable.getTopoCall();
+	procList = getTopoCall();
+	for (unsigned i=0; i<procList.size(); i++){
+		cout<<procList.at(i)<<endl;
+	}
 	//for (unsigned i=0; i<procList.size(); i++){
 	for (unsigned i=procList.size()-1; i>=0; i--){
+		//cout<<i<<endl;
 		currentProcIndex = procList.at(i);
 
 		// Get all proc that call the current proc
@@ -781,7 +785,7 @@ void PKB::updateUse(){
 	vector<int> usedVarInside;
 
 	//procList = procTable.getProcList();
-	procList = callTable.getTopoCall();
+	procList = getTopoCall();
 
 	//for (unsigned i=0; i<procList.size(); i++){
 	for (unsigned i=procList.size()-1; i>=0; i--){
