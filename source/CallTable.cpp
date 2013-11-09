@@ -77,7 +77,9 @@ vector<string> CallTable::getTopoCall(){
 			getTopoCallRecur(firstProc);
 		}
 	}
-
+	for(unsigned i=0; i<result.size(); i++){
+		cout << result.at(i);
+	}
 	return result;
 }
 void CallTable::getTopoCallRecur(string startProc){
@@ -174,4 +176,5 @@ void CallTable::print(){
 		}
 		cout << "\n";
 	}
+	getTopoCall();
 }
