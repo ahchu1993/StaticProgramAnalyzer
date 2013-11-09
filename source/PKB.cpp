@@ -162,6 +162,11 @@ vector<string> PKB::getCalledList(string procName){
 }
 void PKB::printCallTable(){
 	callTable.print();
+
+	vector<int> procList = getTopoCall();
+	for (unsigned i = 0; i<procList.size(); i++){
+		cout<<procList.at(i)<<endl;
+	}
 }
 
 //Api for Khue
