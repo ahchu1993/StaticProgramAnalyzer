@@ -80,6 +80,7 @@ vector<string> CallTable::getTopoCall(){
 	for(unsigned i=0; i<result.size(); i++){
 		cout << result.at(i);
 	}
+	cout<<"\n";
 	return result;
 }
 void CallTable::getTopoCallRecur(string startProc){
