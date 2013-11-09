@@ -347,6 +347,22 @@ bool UseTable::checkUse(vector<int> set1, vector<int> set2){
 	return false;
 }
 
+// Return true or false whether stmt use var
+bool UseTable::isUsed(int stmtNo, int varIndex){
+	use_stmt_row temp_row;
+
+	for (unsigned i =0; i<UseStmtTable.size(); i++)
+	{
+		temp_row = UseStmtTable.at(i);
+		if (temp_row.stmtNo == stmtNo && temp_row.varIndex == varIndex)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 vector<use_stmt_row> UseTable::getUseStmtTable(){
 	return UseStmtTable;
 }

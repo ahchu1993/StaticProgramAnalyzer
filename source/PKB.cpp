@@ -635,6 +635,10 @@ void PKB::updateModify(){
 	}
 }
 
+bool PKB::isModified(int stmtNo, int varIndex){
+	return modifyTable.isModified(stmtNo, varIndex);
+}
+
 int PKB::insertModifyStmt(int stmtNo, int varIndex, string DE){
 	return modifyTable.insertModifyStmt(stmtNo, varIndex, DE);
 }
@@ -832,6 +836,10 @@ void PKB::updateUse(){
 			}
 		}
 	}
+}
+
+bool PKB::isUsed(int stmtNo, int varIndex){
+	return useTable.isUsed(stmtNo, varIndex);
 }
 
 int PKB::insertUseStmt(int stmtNo, int varIndex, string DE){
