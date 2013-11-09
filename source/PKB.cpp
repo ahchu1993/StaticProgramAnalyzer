@@ -160,7 +160,6 @@ vector<string> PKB::getCalledList(string procName){
 }
 void PKB::printCallTable(){
 	callTable.print();
-	callTable.getTopoCall();
 }
 
 //Api for Khue
@@ -581,19 +580,12 @@ void PKB::updateModify(){
 	vector<int> modifiedVar;
 	vector<int> parentList;
 	vector<int> modifiedVarInside;
-
-	//procList = procTable.getProcList();
+	
 	procList = getTopoCall();
-	cout<<procList.size()<<endl;
-	for (int i=procList.size()-1; i>=0; i--){
-		cout<<procList.at(i)<<endl;
-	}
-	cout<<"Khue"<<endl;
-	//for (unsigned i=0; i<procList.size(); i++){
-	for (int i=procList.size()-1; i>=0; i--){
-		//cout<<i<<endl;
+	
+	for (unsigned i=0; i<procList.size(); i++){
 		currentProcIndex = procList.at(i);
-		cout<<"akioh"<<endl;
+
 		// Get all proc that call the current proc
 		callingProc = getCallsT(currentProcIndex);
 		// Get all stmtNo of the calling stmt
@@ -787,11 +779,9 @@ void PKB::updateUse(){
 	vector<int> parentList;
 	vector<int> usedVarInside;
 
-	//procList = procTable.getProcList();
 	procList = getTopoCall();
 
-	//for (unsigned i=0; i<procList.size(); i++){
-	for (unsigned i=procList.size()-1; i>=0; i--){
+	for (unsigned i=0; i<procList.size(); i++){
 		currentProcIndex = procList.at(i);
 
 		callingProc = getCallsT(currentProcIndex);

@@ -72,10 +72,7 @@ vector<string> CallTable::getTopoCall(){
 	result.clear();
 	string firstProc = callTable.at(0).callingProc;
 	getTopoCallRecur(firstProc);
-	cout << "adybasfcusfbcfwcnadniaiwufuygsfwusgf";
-	for(unsigned i=0; i<result.size(); i++){
-		cout << result.at(i)+ " ";
-	}
+	
 	return result;
 }
 void CallTable::getTopoCallRecur(string startProc){
