@@ -36,11 +36,11 @@ list<string> QueryEvaluator::processQuery(string query){
 			if(grouped_pass){
 				
 				if(grouped_relations.size()>0){
-					//clock_t t;
-					//t = clock();
+					clock_t t;
+					t = clock();
 					results = validateResults();
-					//t = clock()-t;
-					//printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
+					t = clock()-t;
+					printf ("getResult took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 				}
 					
 				else 
@@ -117,20 +117,25 @@ bool QueryEvaluator::processGroupedRelations(){
             if(relation->type=="designAbstraction")
             {
                 designAbstraction* da = static_cast<designAbstraction*>(relation);
-                
+               
                 result_pairs = processDesignAbstraction(da);
-                
+               
+				 //clock_t t;
+				//t = clock();
                 if(result_pairs.empty())
                     return false;
                 else{
                     ref_pair.first = da->ref1;
                     ref_pair.second = da->ref2;
+					
                     temp_table.join(ref_pair, result_pairs);
+					 
 					if (temp_table.tuples.size()==0) {
 						return false;
 					}
                 }
-
+				//t = clock()-t;
+				//printf ("join took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
             }
             else if(relation->type=="pattern"){
                 
@@ -165,9 +170,11 @@ bool QueryEvaluator::processGroupedRelations(){
         }//for each relation
         
         
+										
         temp_table.eliminateColumns(result_refs);
         resultTable.merge(temp_table);
        
+		
     }//for each group
     //resultTable=temp_results_table;
     
@@ -222,7 +229,7 @@ vector<pair<string,string>> QueryEvaluator::processDesignAbstraction(designAbstr
 		res = pkb-> getAffectsTBip(&ref1_set, da->ref1_type, &ref2_set, da->ref2_type);
 	}
 
-	if(da->ref1==da->ref2){  // ref1 is the same as ref2
+	if(da->ref1==da->ref2&&da->ref1_type==da->ref2_type){  // ref1 is the same as ref2
 		vector<pair<string,string>> temp;
 		for(unsigned int i=0;i<res.size();i++){
 			pair<string,string> t = res.at(i);
