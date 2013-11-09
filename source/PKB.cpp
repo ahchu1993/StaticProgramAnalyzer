@@ -160,7 +160,7 @@ vector<string> PKB::getCalledList(string procName){
 }
 void PKB::printCallTable(){
 	callTable.print();
-	callTable.getTopoCall();
+
 }
 
 //Api for Khue
