@@ -2995,7 +2995,7 @@ void PKB::printPrevBipT()
 	}
 }
 
-vector<pair<string, string>> PKB::getAffectsBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
+/*vector<pair<string, string>> PKB::getAffectsBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
 	cout<<"Into affectsBip "<<endl;
 	clock_t t;
@@ -3046,7 +3046,7 @@ vector<pair<string, string>> PKB::getAffectsBip(set<string>* arg1_set, string ar
 	////cout<<"This affectT takes "<<finish<<endl;
 	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 	return result;
-}
+} */
 
 vector<int> PKB::getAffectBipList(int stmtNo)
 {
@@ -3896,7 +3896,7 @@ vector<int> PKB::reverseAffectsTBip(int lineno){
 
 }
 
-void PKB::r(int cur,string var, vector<int> *result){
+void PKB::rstar(int cur,string var, vector<int> *result){
 	pair<int,string> p(cur,var);
 	
 	if(m[p]==1) return;
