@@ -338,10 +338,16 @@ public:
 
 
 	// 
-	vector<int> sequentialAffectsTBip(int lineno);
-	vector<int> reverseAffectsTBip(int lineno);
+	vector<int> sequentialAffectsBip(int lineno);
+	vector<int> reverseAffectsBip(int lineno);
 	void f(int lineno,string var,vector<int> *result);
 	void r(int lineno,string var,vector<int> *result);
+
+	vector<int> sequentialAffectsTBip(int lineno);
+	vector<int> reverseAffectsTBip(int lineno);
+	void fstar(int lineno,string var,vector<int> *result);
+	void rstar(int lineno,string var,vector<int> *result);
+
 
 	bool isAfterCall(int stmt);
 	vector<int> findLastStmtsInThatProc(int callStmt);

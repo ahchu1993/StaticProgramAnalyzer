@@ -2995,7 +2995,7 @@ void PKB::printPrevBipT()
 	}
 }
 
-vector<pair<string, string>> PKB::getAffectsBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
+/*vector<pair<string, string>> PKB::getAffectsBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
 	cout<<"Into affectsBip "<<endl;
 	clock_t t;
@@ -3046,7 +3046,7 @@ vector<pair<string, string>> PKB::getAffectsBip(set<string>* arg1_set, string ar
 	////cout<<"This affectT takes "<<finish<<endl;
 	printf ("It took (%f seconds).\n",((float)t)/CLOCKS_PER_SEC);
 	return result;
-}
+} */
 
 vector<int> PKB::getAffectBipList(int stmtNo)
 {
@@ -3630,6 +3630,157 @@ int PKB::getCalledProcAtLine(int callStmt)
 
 }
 
+/// ------------------ AffectsBip ------------------ xw
+
+vector<pair<string, string>> PKB::getAffectsBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
+{
+	vector<pair<string,string>> result;
+	set<string>::iterator it1;
+	set<string>::iterator it2;
+	set<string> arg1List = *arg1_set;
+	set<string> arg2List = *arg2_set;
+	if(arg1List.size()<=arg2List.size()){
+		vector<int> Affected;
+		for(it1=arg1List.begin();it1!=arg1List.end();it1++){
+			int lineno = Util::convertStringToInt(*it1);
+			
+			Affected = sequentialAffectsBip(lineno);
+			
+			for(unsigned int i=0;i<Affected.size();i++){
+				int t = Affected[i];
+				string second = Util::convertIntToString(t);
+
+				if(arg2List.find(second)!=arg2List.end()){
+					pair<string,string> p(*it1,second);
+					result.push_back(p);
+				}
+			}
+		}
+		
+	}else{
+		vector<int> Affected;
+		for(it2=arg2List.begin();it2!=arg2List.end();it2++){
+			int lineno = Util::convertStringToInt(*it2);
+			
+			Affected = reverseAffectsBip(lineno);
+			for(unsigned int i=0;i<Affected.size();i++){
+				int t = Affected[i];
+				string first = Util::convertIntToString(t);
+
+				if(arg1List.find(first)!=arg1List.end()){
+					pair<string,string> p(first,*it2);
+					result.push_back(p);
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
+vector<int> PKB::sequentialAffectsBip(int lineno){
+	
+	vector<int> vars = getModifiedStmt(lineno);
+	string var = getVarName(vars.at(0));
+	vector<int> res;
+	
+	f(lineno,var,&res);
+	m.clear();
+	return res;
+
+}
+
+void PKB::f(int cur,string var, vector<int> *result){
+	pair<int,string> p(cur,var);
+	
+	if(m[p]==1) return;
+	else m[p] =1;
+	vector<int> childList = getNextBip(cur);
+	if(childList.empty()) return;
+	for(unsigned int i=0;i<childList.size();i++){
+		int child = childList[i];
+		string child_type = getStmtType(child);
+		int varIndex = getVarIndex(var);
+		if(child_type=="assign"){
+			// if use(child, v)
+				
+			if(isUsed(child,varIndex)){
+				result->push_back(child);
+				
+			}
+			// if modify(child,v)
+			
+			if(isModified(child,varIndex))
+				continue;
+			else f(child,var,result);
+
+		}else if(child_type == "call"){
+			// if modify(child,v)
+			
+			if(isModified(child,varIndex))
+				continue;
+			else {
+				vector<int> after_call = getNextBip(child);
+				f(after_call[0],var,result);
+			}
+		}else{
+			f(child,var,result);
+		}
+	}
+}
+
+vector<int> PKB::reverseAffectsBip(int lineno){
+	
+	vector<int> vars = getUsedStmt(lineno);
+	
+	vector<int> res;
+	for(unsigned int i=0;i<vars.size();i++){
+		string var = getVarName(vars[i]);
+		r(lineno,var,&res);
+	}
+	
+	m.clear();
+	return res;
+
+}
+
+void PKB::r(int cur,string var, vector<int> *result){
+	pair<int,string> p(cur,var);
+	
+	if(m[p]==1) return;
+	else m[p] =1;
+	vector<int> predecessorList = getPrevBip(cur);
+	if(predecessorList.empty()) return;
+	for(unsigned int i=0;i<predecessorList.size();i++){
+		int predecessor = predecessorList[i];
+		string predecessor_type = getStmtType(predecessor);
+		int varIndex = getVarIndex(var);
+		if(predecessor_type=="assign"){
+			// if modify(child, v)
+			
+			
+			if(isModified(predecessor,varIndex)){ // modified
+				result->push_back(predecessor);
+				return;		
+			}else {
+				r(predecessor,var,result);
+			}
+
+		}else if(predecessor_type == "call"){
+						
+				vector<int> pre_call = getPrevBip(predecessor);
+				for(unsigned int i=0;i<pre_call.size();i++){
+					r(pre_call[i],var,result);
+				}
+				
+			
+		}else{
+			r(predecessor,var,result);
+		}
+	}
+}
+
+
 /// ------------------ AffectsTBip ------------------ xw
 vector<pair<string, string>> PKB::getAffectsTBip(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type)
 {
@@ -3644,6 +3795,7 @@ vector<pair<string, string>> PKB::getAffectsTBip(set<string>* arg1_set, string a
 			int lineno = Util::convertStringToInt(*it1);
 			
 			Affected = sequentialAffectsTBip(lineno);
+			
 			for(unsigned int i=0;i<Affected.size();i++){
 				int t = Affected[i];
 				string second = Util::convertIntToString(t);
@@ -3682,12 +3834,13 @@ vector<int> PKB::sequentialAffectsTBip(int lineno){
 	string var = getVarName(vars.at(0));
 	vector<int> res;
 	
-	f(lineno,var,&res);
+	fstar(lineno,var,&res);
+	m.clear();
 	return res;
 
 }
 
-void PKB::f(int cur,string var, vector<int> *result){
+void PKB::fstar(int cur,string var, vector<int> *result){
 	pair<int,string> p(cur,var);
 	
 	if(m[p]==1) return;
@@ -3700,31 +3853,30 @@ void PKB::f(int cur,string var, vector<int> *result){
 		int varIndex = getVarIndex(var);
 		if(child_type=="assign"){
 			// if use(child, v)
-			
-			vector<int> Usedstmts = getUsedList(varIndex,"assign");
-			if(contains(Usedstmts,child)){
+				
+			if(isUsed(child,varIndex)){
 				result->push_back(child);
 				vector<int> newvars = getModifiedStmt(child);
 				string newvar = getVarName(newvars.at(0));
-				f(child,newvar,result);
+				fstar(child,newvar,result);
 			}
 			// if modify(child,v)
-			vector<int> ModifiedStmts = getModifiedList(varIndex,"assign");
-			if(contains(ModifiedStmts,child))
+			
+			if(isModified(child,varIndex))
 				continue;
-			else f(child,var,result);
+			else fstar(child,var,result);
 
 		}else if(child_type == "call"){
 			// if modify(child,v)
-			vector<int> ModifiedStmts = getModifiedList(varIndex,"assign");
-			if(contains(ModifiedStmts,child))
+			
+			if(isModified(child,varIndex))
 				continue;
 			else {
 				vector<int> after_call = getNextBip(child);
-				f(after_call[0],var,result);
+				fstar(after_call[0],var,result);
 			}
 		}else{
-			f(child,var,result);
+			fstar(child,var,result);
 		}
 	}
 }
@@ -3736,14 +3888,15 @@ vector<int> PKB::reverseAffectsTBip(int lineno){
 	vector<int> res;
 	for(unsigned int i=0;i<vars.size();i++){
 		string var = getVarName(vars[i]);
-		r(lineno,var,&res);
+		rstar(lineno,var,&res);
 	}
 	
+	m.clear();
 	return res;
 
 }
 
-void PKB::r(int cur,string var, vector<int> *result){
+void PKB::rstar(int cur,string var, vector<int> *result){
 	pair<int,string> p(cur,var);
 	
 	if(m[p]==1) return;
@@ -3757,28 +3910,28 @@ void PKB::r(int cur,string var, vector<int> *result){
 		if(predecessor_type=="assign"){
 			// if modify(child, v)
 			
-			vector<int> Modifiedstmts = getModifiedList(varIndex,"assign");
-			if(contains(Modifiedstmts,predecessor)){ // modified
+			
+			if(isModified(predecessor,varIndex)){ // modified
 				result->push_back(predecessor);
 				vector<int> newvars = getModifiedStmt(predecessor);
 				for(unsigned int i=0;i<newvars.size();i++){
 					string newvar = getVarName(newvars[i]);
-					r(predecessor,newvar,result);
+					rstar(predecessor,newvar,result);
 				}			
 			}else {
-				r(predecessor,var,result);
+				rstar(predecessor,var,result);
 			}
 
 		}else if(predecessor_type == "call"){
 						
 				vector<int> pre_call = getPrevBip(predecessor);
 				for(unsigned int i=0;i<pre_call.size();i++){
-					r(pre_call[i],var,result);
+					rstar(pre_call[i],var,result);
 				}
 				
 			
 		}else{
-			r(predecessor,var,result);
+			rstar(predecessor,var,result);
 		}
 	}
 }
