@@ -531,7 +531,7 @@ string Parser::checkVariable(string variable) {
 	char* variableArray = new char[variable.size()];
 	memcpy(variableArray,variable.c_str(), variable.size());
 	if (!isalpha(variableArray[0])) {
-		cout<<" not alpha variable "<<endl;
+		cout<<" not alpha variable "<<line<<endl;
 		getchar();
 		error();
 	}
