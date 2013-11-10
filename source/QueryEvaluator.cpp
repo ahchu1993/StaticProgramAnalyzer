@@ -407,37 +407,45 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 		}
 	}else { // varRef = "_"
 		set<string> s = *valueTable[p->synonym]; //redeced set
+		
+		if(p->expr_tree =="  "){ // expr_spec "_"
+			for(set<string>::iterator it =s.begin();it!=s.end();it++){
+				pair<string,string> pa(*it,"");
+				result.push_back(pa);
+			}
+		}
+		else {
+			for(set<string>::iterator it =s.begin();it!=s.end();it++){
 
-		for(set<string>::iterator it =s.begin();it!=s.end();it++){
-
-			string a = *it;
-			int aint = Util::convertStringToInt(a); 
-			PKB::postfixNode* n = exp_list[aint];
-			// get a node from the reduced set
+				string a = *it;
+				int aint = Util::convertStringToInt(a); 
+				PKB::postfixNode* n = exp_list[aint];
+				// get a node from the reduced set
 
 			
-			string q_expr = p->expr_tree;
-			string p_expr = n->postfixExpr;
+				string q_expr = p->expr_tree;
+				string p_expr = n->postfixExpr;
 
-			if(p->exact&&q_expr==p_expr){ //complete match, and found
-				string first = Util::convertIntToString(n->lineNum);
-				string second = n->varRef;
-				pair<string,string> * pa = new pair<string,string>(first,second);
-				result.push_back(*pa);
-					
-			}
-			else if(!(p->exact)){
-				int pint = p_expr.find(q_expr); //postfix expr string matching
-					
-				if(pint<p_expr.size())
-				{
+				if(p->exact&&q_expr==p_expr){ //complete match, and found
 					string first = Util::convertIntToString(n->lineNum);
 					string second = n->varRef;
 					pair<string,string> * pa = new pair<string,string>(first,second);
 					result.push_back(*pa);
-						
+					
 				}
-			}			
+				else if(!(p->exact)){
+					int pint = p_expr.find(q_expr); //postfix expr string matching
+					
+					if(pint<p_expr.size())
+					{
+						string first = Util::convertIntToString(n->lineNum);
+						string second = n->varRef;
+						pair<string,string> * pa = new pair<string,string>(first,second);
+						result.push_back(*pa);
+						
+					}
+				}			
+			}
 		}
 	}
 	return result;
