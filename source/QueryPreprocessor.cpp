@@ -850,12 +850,12 @@ bool QueryPreprocessor::check_expr_f(string s){
 					rit++;
 				}
 
-				else if(rit->second=="("&&balance!=0){
+				else if(rit->second=="("){
+					balance--;
 					rit++;
+					if(balance ==0) break;
 				}
 
-				else if(rit->second=="("&&balance==0)
-					break;
 				else rit++;
 
 			}
@@ -864,11 +864,12 @@ bool QueryPreprocessor::check_expr_f(string s){
 				return false;
 
 			int p2 = rit->first;
-			string s1;
+			/*string s1;
 			if(p2==0) //"(" at start
 				s1= trim(s.substr(p2+1,p1-p2-1));
 			else  
-				s1 = trim(s.substr(p2+1,p1-p2));
+				s1 = trim(s.substr(p2+1,p1-p2)); */
+			string s1 = trim(s.substr(p2+1,p1-p2-1));
 			unsigned int p_bracket = s1.find("(");
 			if(p_bracket>s1.size()) {
 
