@@ -293,6 +293,22 @@ bool ModifyTable::checkModify(vector<int> set1, vector<int> set2){
 	return false;
 }
 
+// Return true or false whether stmt modify var
+bool ModifyTable::isModified(int stmtNo, int varIndex){
+	modify_stmt_row temp_row;
+
+	for (unsigned i =0; i<ModifyStmtTable.size(); i++)
+	{
+		temp_row = ModifyStmtTable.at(i);
+		if (temp_row.stmtNo == stmtNo && temp_row.varIndex == varIndex)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 vector<modify_proc_row> ModifyTable::getModifyProcTable(){
 		return ModifyProcTable;
 }

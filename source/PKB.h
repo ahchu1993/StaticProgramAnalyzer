@@ -42,7 +42,7 @@ private:
 	AST ast;
 
 	vector<int> firstStmtList;
-
+	map<pair<int,string>,int> m;
 	
 	
 
@@ -113,6 +113,7 @@ public:
 	vector<pair<string, string>> getModify(set<string>* arg1List, string arg1Type, set<string>* arg2List, string arg2Type);
 	bool checkModify(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateModify();
+	bool isModified(int stmtNo, int varIndex);
 
 	int insertModifyStmt(int stmtNo, int varIndex, string DE);
 	int insertModifyProc(int procIndex, int varIndex);
@@ -125,6 +126,7 @@ public:
 	vector<pair<string, string>> getUse(set<string>* arg1_set, string arg1Type, set<string>* arg2_set, string arg2Type);
 	bool checkUse(string arg1, string arg1Type, string arg2, string arg2Type);
 	void updateUse();
+	bool isUsed(int stmtNo, int varIndex);
 
 	int insertUseStmt(int stmtNo, int varIndex, string DE);
 	int insertUseProc(int procIndex, int varIndex);
@@ -333,7 +335,16 @@ public:
 	bool isCall(int stmtNo);
 	bool isLast(int stmtNo);
 	bool isFirst(int stmtNo);
+
+
+	// 
+	vector<int> sequentialAffectsTBip(int lineno);
+	vector<int> reverseAffectsTBip(int lineno);
+	void f(int lineno,string var,vector<int> *result);
+	void r(int lineno,string var,vector<int> *result);
+
 	bool isAfterCall(int stmt);
 	vector<int> findLastStmtsInThatProc(int callStmt);
+
 };
 #endif

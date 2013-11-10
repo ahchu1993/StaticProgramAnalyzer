@@ -70,6 +70,9 @@ public:
 	// Return whether there exist a pair satisfying set1 and set2
 	bool checkModify(vector<int> set1, vector<int> set2);
 
+	// Return true or false whether stmt modify var
+	bool isModified(int stmtNo, int varIndex);
+
 	vector<modify_proc_row> getModifyProcTable();
 	vector<modify_stmt_row> getModifyStmtTable();
 };
