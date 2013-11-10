@@ -323,13 +323,15 @@ public:
 	vector<int> getNextStarBip(int stmtNo);
 	vector<int> getPrevStarBip(int stmtNo);
 	void getNextStarBipRecursive(int stmtNo,stack<int> fromProcedure);
-	void getPrevStarBipRecursive(int stmtNo,stack<int> fromProcedure);
+	void getPrevStarBipRecursive(int stmtNo);
 	void goToNextBip(int stmt,stack<int> fromProcedure);
 	void goToPrevBip(int stmt,stack<int> fromProcedure);
 	int firstOne;
 	vector<int> visitedProc;
 	vector<int> resultList;
 
+
+	void prevTReverse(int cur);
 
 	int checkVisited(int stmt);
 	bool isCall(int stmtNo);
