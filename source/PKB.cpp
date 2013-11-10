@@ -2183,7 +2183,7 @@ void PKB::flattenAST()
 
 		lineNum = thisTnode->getLineNo();
 		
-		postfixExpr = createPostfix(thisTnode->getRightChild());
+		postfixExpr = " "+createPostfix(thisTnode->getRightChild());
 
 		/*//cout<<endl;
 		//cout<<"type: "<<type<<endl;

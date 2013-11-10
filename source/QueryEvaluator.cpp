@@ -428,6 +428,7 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 			}
 			else if(!(p->exact)){
 				int pint = p_expr.find(q_expr); //postfix expr string matching
+					
 				if(pint<p_expr.size())
 				{
 					string first = Util::convertIntToString(n->lineNum);

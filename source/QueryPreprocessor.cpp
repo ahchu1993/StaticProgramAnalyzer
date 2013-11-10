@@ -1267,7 +1267,7 @@ bool QueryPreprocessor::pattern_assign(string s){
 			if(expr_spec=="_") {
 
 				tree_node t = build_tree_expr("_");
-				string exp_tree = flatten(&t);	
+				string exp_tree = " "+flatten(&t);	
 				pattern* p = new pattern("p_assign", synonym,varRef,varRef_type,false,exp_tree);
 
 				if(varRef_type =="variable")
@@ -1287,7 +1287,7 @@ bool QueryPreprocessor::pattern_assign(string s){
 
 						expr_spec = expr_spec.substr(p1+1,p2-p1-1);
 						tree_node t = build_tree(expr_spec);
-						string exp_tree = flatten(&t);
+						string exp_tree = " "+flatten(&t);
 						pattern* patt = new pattern("p_assign", synonym,varRef,varRef_type,false,exp_tree);
 						if(varRef_type =="variable")
 							relations.push_front(patt);
@@ -1300,7 +1300,7 @@ bool QueryPreprocessor::pattern_assign(string s){
 
 						expr_spec = expr_spec.substr(p1+1,p2-p1-1);
 						tree_node t = build_tree(expr_spec);
-						string exp_tree = flatten(&t);
+						string exp_tree = " "+flatten(&t);
 						pattern* patt = new pattern("p_assign", synonym,varRef,varRef_type,true,exp_tree);
 						if(varRef_type =="variable")
 							relations.push_front(patt);
@@ -1358,7 +1358,7 @@ bool QueryPreprocessor::pattern_if(string s){
 
 			
 			tree_node t = build_tree_expr("_");
-			string exp_tree = flatten(&t);
+			string exp_tree = " "+flatten(&t);
 			pattern* p = new pattern("p_if",synonym,varRef,varRef_type,false,exp_tree);
 
 			if(varRef_type =="variable")
@@ -1415,7 +1415,7 @@ bool QueryPreprocessor::pattern_while(string s){
 						if(trim(s1)!="") return false;
 						else {
 							tree_node t = build_tree_expr("_");
-							string exp_tree = flatten(&t);
+							string exp_tree = " "+flatten(&t);
 							pattern* p= new pattern("p_while",synonym,varRef,varRef_type,false,exp_tree);
 
 							if(varRef_type=="variable")
