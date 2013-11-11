@@ -4111,7 +4111,7 @@ void PKB::rstar(int cur,string var, vector<int> *result,stack<int> s){
 								
 						if(isModified(calls[i],varIndex)){ // modified
 							result->push_back(calls[i]);
-							vector<int> newvars = getModifiedStmt(calls[i]);
+							vector<int> newvars = getUsedStmt(calls[i]);
 							for(unsigned int i=0;i<newvars.size();i++){
 								string newvar = getVarName(newvars[i]);
 								rstar(calls[i],newvar,result,s);
@@ -4140,7 +4140,7 @@ void PKB::rstar(int cur,string var, vector<int> *result,stack<int> s){
 					
 			if(isModified(predecessor,varIndex)){ // modified
 				result->push_back(predecessor);
-				vector<int> newvars = getModifiedStmt(predecessor);
+				vector<int> newvars = getUsedStmt(predecessor);
 				for(unsigned int i=0;i<newvars.size();i++){
 					string newvar = getVarName(newvars[i]);
 					rstar(predecessor,newvar,result,s);
@@ -4155,7 +4155,11 @@ void PKB::rstar(int cur,string var, vector<int> *result,stack<int> s){
 			
 			if(isModified(pre_call[0],varIndex)){
 				result->push_back(pre_call[0]);
-				return;	
+				vector<int> newvars = getUsedStmt(pre_call[0]);
+				for(unsigned int i=0;i<newvars.size();i++){
+					string newvar = getVarName(newvars[i]);
+					rstar(pre_call[0],newvar,result,s);
+				}		
 			}
 			else rstar(pre_call[0],var,result,s);
 			
