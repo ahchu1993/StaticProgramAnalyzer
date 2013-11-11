@@ -743,6 +743,12 @@ bool QueryPreprocessor::check_factor(string s){
 bool QueryPreprocessor::check_term(string s){
 	s = trim(s);
 	if(s=="") return false;
+	int p_bracket = s.find("(");
+	if(p_bracket<s.size()){
+		string s1 = trim(s.substr(0,p_bracket));
+		string s2 = trim(s.substr(p_bracket+1,s.size()-p_bracket-2));
+		return check_expr_f(s2);
+	}
 	unsigned int p = s.find_last_of("*");
 	if(p<s.size()){
 		string s1 = trim(s.substr(0,p));
