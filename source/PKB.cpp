@@ -1939,11 +1939,60 @@ vector<pair<string, string>> PKB::getAffectsT(set<string>* arg1_set, string arg1
 }
 bool PKB::checkAffectsBip(string arg1, string arg1Type, string arg2, string arg2Type)
 {
-	return true; ///*******
+	if(arg1=="_"&&arg2=="_"){
+		vector<int> v= getStmtNo("assign");		
+		if(v.size()>1)
+			return true;
+		else return false;
+	}else if(arg1=="_"&&arg2Type=="integer"){
+		int c = Util::convertStringToInt(arg2);
+		vector<int> res = reverseAffectsBip(c);
+		if(res.size()>0) return true;
+		else return false;
+	}else if(arg1Type=="integer"&&arg2=="_"){
+		int p = Util::convertStringToInt(arg1);
+		//string type = getStmtType(p);
+		vector<int> res = sequentialAffectsBip(p);
+		if(res.size()>0) return true;
+		else return false;
+	}else{
+		int first = Util::convertStringToInt(arg1);
+		vector<int> res = sequentialAffectsBip(first);
+		int second = Util::convertStringToInt(arg2);
+		for(unsigned int i=0;i<res.size();i++){
+			if(res[i]==second) return true;
+		}
+		return false;
+	}
+	
 }
 bool PKB::checkAffectsTBip(string arg1, string arg1Type, string arg2, string arg2Type)
 {
-	return true;//******
+	if(arg1=="_"&&arg2=="_"){
+		vector<int> v= getStmtNo("assign");		
+		if(v.size()>1)
+			return true;
+		else return false;
+	}else if(arg1=="_"&&arg2Type=="integer"){
+		int c = Util::convertStringToInt(arg2);
+		vector<int> res = reverseAffectsTBip(c);
+		if(res.size()>0) return true;
+		else return false;
+	}else if(arg1Type=="integer"&&arg2=="_"){
+		int p = Util::convertStringToInt(arg1);
+		//string type = getStmtType(p);
+		vector<int> res = sequentialAffectsTBip(p);
+		if(res.size()>0) return true;
+		else return false;
+	}else{
+		int first = Util::convertStringToInt(arg1);
+		vector<int> res = sequentialAffectsTBip(first);
+		int second = Util::convertStringToInt(arg2);
+		for(unsigned int i=0;i<res.size();i++){
+			if(res[i]==second) return true;
+		}
+		return false;
+	}
 }
 bool PKB::intersect(vector<int> list1, vector<int> list2){
 	for(int i=0;i<list1.size();i++)
