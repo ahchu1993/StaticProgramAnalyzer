@@ -43,7 +43,7 @@ private:
 
 	vector<int> firstStmtList;
 	map<pair<int,string>,int> m;
-	
+	//vector<int> visited;
 	
 
 public:
@@ -342,8 +342,8 @@ public:
 	// 
 	vector<int> sequentialAffectsBip(int lineno);
 	vector<int> reverseAffectsBip(int lineno);
-	void f(int lineno,string var,vector<int> *result);
-	void r(int lineno,string var,vector<int> *result);
+	void f(int lineno,string var,vector<int> *result,stack<int> s);
+	void r(int lineno,string var,vector<int> *result,stack<int> s);
 
 	vector<int> sequentialAffectsTBip(int lineno);
 	vector<int> reverseAffectsTBip(int lineno);

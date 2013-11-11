@@ -338,7 +338,7 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 	if(p->varRef_type=="string"){
 
 		set<string> s = *valueTable[p->synonym]; //redeced set
-
+		
 		for(set<string>::iterator it =s.begin();it!=s.end();it++){
 
 			string a = *it;
@@ -370,6 +370,7 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 				}else{}
 			}
 		}
+		
 	}else if(p->varRef_type=="variable"){ //varRef =="variable"
 		set<string> s = *valueTable[p->synonym]; //redeced set
 		set<string> vars = *valueTable[p->varRef]; //redeced set for vars
@@ -407,7 +408,8 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 		}
 	}else { // varRef = "_"
 		set<string> s = *valueTable[p->synonym]; //redeced set
-
+		
+		
 		for(set<string>::iterator it =s.begin();it!=s.end();it++){
 
 			string a = *it;
@@ -428,6 +430,7 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 			}
 			else if(!(p->exact)){
 				int pint = p_expr.find(q_expr); //postfix expr string matching
+					
 				if(pint<p_expr.size())
 				{
 					string first = Util::convertIntToString(n->lineNum);
@@ -439,6 +442,7 @@ vector<pair<string,string>> QueryEvaluator::patternAssign(pattern* p){
 			}			
 		}
 	}
+	
 	return result;
 }
 

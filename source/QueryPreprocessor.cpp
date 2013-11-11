@@ -743,6 +743,12 @@ bool QueryPreprocessor::check_factor(string s){
 bool QueryPreprocessor::check_term(string s){
 	s = trim(s);
 	if(s=="") return false;
+	int p_bracket = s.find("(");
+	if(p_bracket<s.size()){
+		string s1 = trim(s.substr(0,p_bracket));
+		string s2 = trim(s.substr(p_bracket+1,s.size()-p_bracket-2));
+		return check_expr_f(s2);
+	}
 	unsigned int p = s.find_last_of("*");
 	if(p<s.size()){
 		string s1 = trim(s.substr(0,p));
@@ -1267,7 +1273,9 @@ bool QueryPreprocessor::pattern_assign(string s){
 			if(expr_spec=="_") {
 
 				tree_node t = build_tree_expr("_");
-				string exp_tree = flatten(&t);	
+				string exp_tree = flatten(&t);
+				if(exp_tree!=" ")
+					exp_tree = " "+exp_tree;
 				pattern* p = new pattern("p_assign", synonym,varRef,varRef_type,false,exp_tree);
 
 				if(varRef_type =="variable")
@@ -1288,6 +1296,8 @@ bool QueryPreprocessor::pattern_assign(string s){
 						expr_spec = expr_spec.substr(p1+1,p2-p1-1);
 						tree_node t = build_tree(expr_spec);
 						string exp_tree = flatten(&t);
+						if(exp_tree!=" ")
+							exp_tree = " "+exp_tree;
 						pattern* patt = new pattern("p_assign", synonym,varRef,varRef_type,false,exp_tree);
 						if(varRef_type =="variable")
 							relations.push_front(patt);
@@ -1301,6 +1311,8 @@ bool QueryPreprocessor::pattern_assign(string s){
 						expr_spec = expr_spec.substr(p1+1,p2-p1-1);
 						tree_node t = build_tree(expr_spec);
 						string exp_tree = flatten(&t);
+						if(exp_tree!=" ")
+							exp_tree = " "+exp_tree;
 						pattern* patt = new pattern("p_assign", synonym,varRef,varRef_type,true,exp_tree);
 						if(varRef_type =="variable")
 							relations.push_front(patt);
@@ -1359,6 +1371,8 @@ bool QueryPreprocessor::pattern_if(string s){
 			
 			tree_node t = build_tree_expr("_");
 			string exp_tree = flatten(&t);
+			if(exp_tree!=" ")
+					exp_tree = " "+exp_tree;
 			pattern* p = new pattern("p_if",synonym,varRef,varRef_type,false,exp_tree);
 
 			if(varRef_type =="variable")
@@ -1416,6 +1430,8 @@ bool QueryPreprocessor::pattern_while(string s){
 						else {
 							tree_node t = build_tree_expr("_");
 							string exp_tree = flatten(&t);
+							if(exp_tree!=" ")
+								exp_tree = " "+exp_tree;
 							pattern* p= new pattern("p_while",synonym,varRef,varRef_type,false,exp_tree);
 
 							if(varRef_type=="variable")
