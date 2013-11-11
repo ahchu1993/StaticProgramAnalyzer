@@ -3714,43 +3714,34 @@ void PKB::f(int cur,string var, vector<int> *result,stack<int> s){
 	if(m[p]==1) return;
 	else m[p] =1;
 	vector<int> childList=getNext(cur);
-	/*
-	bool visited_flag = false;
-	for(unsigned int i=0;i<visited.size();i++){
-		if(visited[i]==cur){
-			visited_flag = true;
-			for(unsigned int j=0;j<visited.size();j++){
-				for(unsigned int k=0;k<childList.size();k++){
-					if(childList[k]==visited[j])
-						childList[k] = -1;
-				}
-			}
-			for(vector<int>::iterator it = childList.begin();it!=childList.end();it++){
-				if(*it==-1){
-					childList.erase(it);
-					it = childList.begin();
-				}
-			}
-			break;
-		}
-		
-	}
-	if(!visited_flag) visited.push_back(cur);
-	*/
-
+	
+	int varIndex = getVarIndex(var);
 	if(childList.empty()||isLast(cur)) {
 		if(s.empty()) return;
 		else{
 			int procCall = s.top();
 			s.pop();
 			vector<int> next = getNext(procCall); // only one stmt after call
-			f(next[0],var,result,s);
+			string next_type = getStmtType(next[0]);
+			if(next_type=="assign"){
+				if(isUsed(next[0],varIndex)){
+					result->push_back(next[0]);
+				
+				}
+				// if modify(child,v)
+			
+				if(isModified(next[0],varIndex))
+					return;
+				else f(next[0],var,result,s);
+			}else f(next[0],var,result,s);
+			
+
 		} 
 	}else{
 		for(unsigned int i=0;i<childList.size();i++){
 			int child = childList[i];
 			string child_type = getStmtType(child);
-			int varIndex = getVarIndex(var);
+			
 			if(child_type=="assign"){
 				// if use(child, v)
 				
@@ -3767,14 +3758,25 @@ void PKB::f(int cur,string var, vector<int> *result,stack<int> s){
 			}else if(child_type == "call"){
 				s.push(child);
 				vector<int> firstStmt = getNextBip(child);
-				f(firstStmt[0],var,result,s);
+				string next_type = getStmtType(firstStmt[0]);
+				if(next_type=="assign"){
+					if(isUsed(firstStmt[0],varIndex)){
+						result->push_back(firstStmt[0]);
+				
+					}
+					// if modify(child,v)
+			
+					if(isModified(firstStmt[0],varIndex))
+						return;
+					else f(firstStmt[0],var,result,s);
+				}
+				else f(firstStmt[0],var,result,s);
 			
 			}else{
 				f(child,var,result,s);
 			}
 		}
-	}
-	
+	}	
 }
 
 vector<int> PKB::reverseAffectsBip(int lineno){
@@ -3799,30 +3801,7 @@ void PKB::r(int cur,string var, vector<int> *result,stack<int> s){
 	if(m[p]==1) return;
 	else m[p] =1;
 	vector<int> predecessorList = getPrev(cur);
-	/*
-	bool visited_flag = false;
-	for(unsigned int i=0;i<visited.size();i++){
-		if(visited[i]==cur){
-			visited_flag = true;
-			for(unsigned int j=0;j<visited.size();j++){
-				for(unsigned int k=0;k<predecessorList.size();k++){
-					if(predecessorList[k]==visited[j])
-						predecessorList[k] = -1;
-				}
-			}
-			for(vector<int>::iterator it = predecessorList.begin();it!=predecessorList.end();it++){
-				if(*it==-1){
-					predecessorList.erase(it);
-					it = predecessorList.begin();
-				}
-			}
-			break;
-		}
-		
-	}
-	if(!visited_flag) visited.push_back(cur);
-	*/
-	
+	int varIndex = getVarIndex(var);
 	if(predecessorList.empty()||isFirst(cur)){
 		if(s.empty()){ // first stmt, find all calls
 			vector<int> calls = getPrevBip(cur);
@@ -3830,7 +3809,17 @@ void PKB::r(int cur,string var, vector<int> *result,stack<int> s){
 				return;
 			else{
 				for(unsigned int i=0;i<calls.size();i++){
-					r(calls[i],var,result,s);
+					string last_type = getStmtType(calls[i]);
+					if(last_type=="assign"){
+								
+						if(isModified(calls[i],varIndex)){ // modified
+							result->push_back(calls[i]);
+							return;		
+						}else {
+							r(calls[i],var,result,s);
+						}
+					}
+					else r(calls[i],var,result,s);
 				}
 			}
 		}else{ //goto the call
@@ -3844,7 +3833,7 @@ void PKB::r(int cur,string var, vector<int> *result,stack<int> s){
 	for(unsigned int i=0;i<predecessorList.size();i++){
 		int predecessor = predecessorList[i];
 		string predecessor_type = getStmtType(predecessor);
-		int varIndex = getVarIndex(var);
+		
 		if(predecessor_type=="assign"){
 			// if modify(child, v)
 					
@@ -3926,52 +3915,90 @@ vector<int> PKB::sequentialAffectsTBip(int lineno){
 	vector<int> vars = getModifiedStmt(lineno);
 	string var = getVarName(vars.at(0));
 	vector<int> res;
-	
-	fstar(lineno,var,&res);
+	stack<int> s;
+	fstar(lineno,var,&res,s);
 	m.clear();
 	return res;
 
 }
 
-void PKB::fstar(int cur,string var, vector<int> *result){
-	pair<int,string> p(cur,var);
-	
+void PKB::fstar(int cur,string var, vector<int> *result,stack<int> s){
+	pair<int,string> p(cur,var);	
 	if(m[p]==1) return;
 	else m[p] =1;
-	vector<int> childList = getNextBip(cur);
-	if(childList.empty()) return;
-	for(unsigned int i=0;i<childList.size();i++){
-		int child = childList[i];
-		string child_type = getStmtType(child);
-		int varIndex = getVarIndex(var);
-		if(child_type=="assign"){
-			// if use(child, v)
+	vector<int> childList=getNext(cur);
+	
+	int varIndex = getVarIndex(var);
+	if(childList.empty()||isLast(cur)) {
+		if(s.empty()) return;
+		else{
+			int procCall = s.top();
+			s.pop();
+			vector<int> next = getNext(procCall); // only one stmt after call
+			string next_type = getStmtType(next[0]);
+			if(next_type=="assign"){
+				if(isUsed(next[0],varIndex)){
+					result->push_back(next[0]);
+					vector<int> newvars = getModifiedStmt(next[0]);
+					string newvar = getVarName(newvars.at(0));
+					fstar(next[0],newvar,result,s);
 				
-			if(isUsed(child,varIndex)){
-				result->push_back(child);
-				vector<int> newvars = getModifiedStmt(child);
-				string newvar = getVarName(newvars.at(0));
-				fstar(child,newvar,result);
-			}
-			// if modify(child,v)
+				}
+				// if modify(child,v)
 			
-			if(isModified(child,varIndex))
-				continue;
-			else fstar(child,var,result);
+				if(isModified(next[0],varIndex))
+					return;
+				else fstar(next[0],var,result,s);
+			}else fstar(next[0],var,result,s);
+			
 
-		}else if(child_type == "call"){
-			// if modify(child,v)
+		} 
+	}else{
+		for(unsigned int i=0;i<childList.size();i++){
+			int child = childList[i];
+			string child_type = getStmtType(child);
 			
-			if(isModified(child,varIndex))
-				continue;
-			else {
-				vector<int> after_call = getNextBip(child);
-				fstar(after_call[0],var,result);
+			if(child_type=="assign"){
+				// if use(child, v)
+				
+				if(isUsed(child,varIndex)){
+					result->push_back(child);
+					vector<int> newvars = getModifiedStmt(child);
+					string newvar = getVarName(newvars.at(0));
+					fstar(child,newvar,result,s);
+				
+				}
+				// if modify(child,v)
+			
+				if(isModified(child,varIndex))
+					continue;
+				else fstar(child,var,result,s);
+
+			}else if(child_type == "call"){
+				s.push(child);
+				vector<int> firstStmt = getNextBip(child);
+				string next_type = getStmtType(firstStmt[0]);
+				if(next_type=="assign"){
+					if(isUsed(firstStmt[0],varIndex)){
+						result->push_back(firstStmt[0]);
+						vector<int> newvars = getModifiedStmt(firstStmt[0]);
+						string newvar = getVarName(newvars.at(0));
+						fstar(firstStmt[0],newvar,result,s);
+				
+					}
+					// if modify(child,v)
+			
+					if(isModified(firstStmt[0],varIndex))
+						return;
+					else fstar(firstStmt[0],var,result,s);
+				}
+				else fstar(firstStmt[0],var,result,s);
+			
+			}else{
+				fstar(child,var,result,s);
 			}
-		}else{
-			fstar(child,var,result);
 		}
-	}
+	}	
 }
 
 vector<int> PKB::reverseAffectsTBip(int lineno){
@@ -3981,7 +4008,8 @@ vector<int> PKB::reverseAffectsTBip(int lineno){
 	vector<int> res;
 	for(unsigned int i=0;i<vars.size();i++){
 		string var = getVarName(vars[i]);
-		rstar(lineno,var,&res);
+		stack<int> s;
+		rstar(lineno,var,&res,s);
 	}
 	
 	m.clear();
@@ -3989,42 +4017,76 @@ vector<int> PKB::reverseAffectsTBip(int lineno){
 
 }
 
-void PKB::rstar(int cur,string var, vector<int> *result){
-	pair<int,string> p(cur,var);
-	
+void PKB::rstar(int cur,string var, vector<int> *result,stack<int> s){
+	pair<int,string> p(cur,var);	
 	if(m[p]==1) return;
 	else m[p] =1;
-	vector<int> predecessorList = getPrevBip(cur);
-	if(predecessorList.empty()) return;
+	vector<int> predecessorList = getPrev(cur);
+	int varIndex = getVarIndex(var);
+	if(predecessorList.empty()||isFirst(cur)){
+		if(s.empty()){ // first stmt, find all calls
+			vector<int> calls = getPrevBip(cur);
+			if(calls.empty()) 
+				return;
+			else{
+				for(unsigned int i=0;i<calls.size();i++){
+					string last_type = getStmtType(calls[i]);
+					if(last_type=="assign"){
+								
+						if(isModified(calls[i],varIndex)){ // modified
+							result->push_back(calls[i]);
+							vector<int> newvars = getModifiedStmt(calls[i]);
+							for(unsigned int i=0;i<newvars.size();i++){
+								string newvar = getVarName(newvars[i]);
+								rstar(calls[i],newvar,result,s);
+							}		
+						}else {
+							rstar(calls[i],var,result,s);
+						}
+					}
+					else rstar(calls[i],var,result,s);
+				}
+			}
+		}else{ //goto the call
+			int call = s.top();
+			s.pop();
+			rstar(call,var,result,s);
+		}
+	}
+	
+	
 	for(unsigned int i=0;i<predecessorList.size();i++){
 		int predecessor = predecessorList[i];
 		string predecessor_type = getStmtType(predecessor);
-		int varIndex = getVarIndex(var);
+		
 		if(predecessor_type=="assign"){
 			// if modify(child, v)
-			
-			
+					
 			if(isModified(predecessor,varIndex)){ // modified
 				result->push_back(predecessor);
 				vector<int> newvars = getModifiedStmt(predecessor);
 				for(unsigned int i=0;i<newvars.size();i++){
 					string newvar = getVarName(newvars[i]);
-					rstar(predecessor,newvar,result);
-				}			
+					rstar(predecessor,newvar,result,s);
+				}	
 			}else {
-				rstar(predecessor,var,result);
+				rstar(predecessor,var,result,s);
 			}
 
 		}else if(predecessor_type == "call"){
-						
-				vector<int> pre_call = getPrevBip(predecessor);
-				for(unsigned int i=0;i<pre_call.size();i++){
-					rstar(pre_call[i],var,result);
-				}
+			s.push(predecessor);		
+			vector<int> pre_call = getPrevBip(cur);
+			
+			if(isModified(pre_call[0],varIndex)){
+				result->push_back(pre_call[0]);
+				return;	
+			}
+			else rstar(pre_call[0],var,result,s);
+			
 				
 			
 		}else{
-			rstar(predecessor,var,result);
+			rstar(predecessor,var,result,s);
 		}
 	}
 }

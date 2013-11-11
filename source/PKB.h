@@ -347,8 +347,8 @@ public:
 
 	vector<int> sequentialAffectsTBip(int lineno);
 	vector<int> reverseAffectsTBip(int lineno);
-	void fstar(int lineno,string var,vector<int> *result);
-	void rstar(int lineno,string var,vector<int> *result);
+	void fstar(int lineno,string var,vector<int> *result,stack<int> s);
+	void rstar(int lineno,string var,vector<int> *result,stack<int> s);
 
 
 	bool isAfterCall(int stmt);
