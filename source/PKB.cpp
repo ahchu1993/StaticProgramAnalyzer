@@ -3923,10 +3923,13 @@ void PKB::r(int cur,string var, vector<int> *result,stack<int> s){
 		}else if(predecessor_type == "call"){
 			s.push(predecessor);		
 			vector<int> pre_call = getPrevBip(cur);
-			
-			if(isModified(pre_call[0],varIndex)){
+			string pre_call_type = getStmtType(pre_call[0]);
+			if(pre_call_type=="assign"){
+				if(isModified(pre_call[0],varIndex)){
 				result->push_back(pre_call[0]);
 				return;	
+				}
+				else r(pre_call[0],var,result,s);
 			}
 			else r(pre_call[0],var,result,s);
 			
@@ -4152,18 +4155,19 @@ void PKB::rstar(int cur,string var, vector<int> *result,stack<int> s){
 		}else if(predecessor_type == "call"){
 			s.push(predecessor);		
 			vector<int> pre_call = getPrevBip(cur);
-			
-			if(isModified(pre_call[0],varIndex)){
-				result->push_back(pre_call[0]);
-				vector<int> newvars = getUsedStmt(pre_call[0]);
-				for(unsigned int i=0;i<newvars.size();i++){
-					string newvar = getVarName(newvars[i]);
-					rstar(pre_call[0],newvar,result,s);
-				}		
+			string pre_call_type = getStmtType(pre_call[0]);
+			if(pre_call_type=="assign"){
+				if(isModified(pre_call[0],varIndex)){
+					result->push_back(pre_call[0]);
+					vector<int> newvars = getUsedStmt(pre_call[0]);
+					for(unsigned int i=0;i<newvars.size();i++){
+						string newvar = getVarName(newvars[i]);
+						rstar(pre_call[0],newvar,result,s);
+					}		
+				}
+				else rstar(pre_call[0],var,result,s);
 			}
-			else rstar(pre_call[0],var,result,s);
-			
-				
+			else rstar(pre_call[0],var,result,s);			
 			
 		}else{
 			rstar(predecessor,var,result,s);
