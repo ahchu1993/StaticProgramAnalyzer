@@ -1,0 +1,134 @@
+procedure John {	
+	i=1; //1
+	n=i; //2
+	a = i+n-2; //3
+	c =    i*n; //4
+		if w then { //5
+		while i{ //6
+			o=n+a; //7
+				if x then { //8
+				call First; //9
+				while b{ //10
+					a = a-i; //11
+					b=a*1;}  //12
+				n=a+1; //13
+				call Second; //14
+				} else {
+					while n { //15
+						call Third;//16
+						while i{  //17
+							if y then { //18
+								call First; //19
+								while b{ //20
+									i= a+5-3*n; //21
+									b=b-1; //22
+									while n{ //23
+										while c{ //24
+											if z then { //25
+												while o{ //26
+													a = a+1;} //27
+												a=c;    //28
+												while n { //29
+													while b{ //30
+														while i{  //31
+															n=3; //32
+															i=n*3-1; //33
+														}
+														while a{  //34
+															a=a; //35
+															while b{ //36
+																n = a+c; //37
+																n=n; //38
+															}
+														}
+													}
+												}
+											}
+											else {
+												b=a+5+1-a-n*c-i+o; //39
+												b=a; //40
+												i=n+1; //41
+												n=i-n+a*o+c; //42
+											}
+										}
+									}
+									while n{ //43
+										i=1+5; //44
+									}
+								}
+							}
+							else {
+								call Second; //45
+								n=a+i;  //46
+							}
+						}		
+						b=b+1; //47
+						a=i;  //48
+					}
+				}
+			}
+		} else {
+			while b{   //49
+				n=i*n-a*o+c;    //50
+			}
+		} 
+}
+		
+procedure First {
+	x=2;    //51
+	z=3;    //52
+	while x { //53
+		y=x+z;  //54
+		x=y+z;  //55
+		z=x+y;  //56
+	}
+	while z { //57
+		y=4;  //58
+			while y {  //59
+				if x then {  //60
+					call Second;  //61
+					y=x+z;  //62
+					x=y+z;  //63
+					call Third;  //64
+					z=x+y; //65
+				} else {
+					call Third; //66
+				}
+		}
+	}
+}
+
+procedure Second {
+	x=0; //67
+	i=5; //68
+	z=2;  //69
+	while z { //70
+		while x { //71
+			while i { //72
+				x=x+2*y; //73
+				call Third;	//74
+				i=i-1; //75
+			}
+			if x then { //76
+				x=x+1; //77
+			} else {
+				z=1; //78
+			}
+		}
+		z=z+x-i; //79
+		y=z*2+i; //80
+		x=x*y-z; //81
+	}
+}
+
+procedure Third {
+	z=5; //82
+	v=z; //83
+	z=1+z-v*2; //84
+	z=2*z-v; //85
+	call Fourth; //86
+}
+
+procedure Fourth {
+z=1; //87
+}

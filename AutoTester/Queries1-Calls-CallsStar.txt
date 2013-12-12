@@ -1,0 +1,212 @@
+42
+cat: Calls, CallsStar
+1 - Calls ::
+procedure p1, p2;
+Select p1 such that Calls(p1, p2)
+Alpha, Bravo,Iftest,Jake,Whiletest
+5000
+2 - Calls ::
+procedure p1, p2;
+Select p2 such that Calls(p1, p2)
+Charlie, Bravo, Delta, Iftest,Jake
+5000
+3 - Calls ::
+procedure p;
+Select p such that Calls(p, "Bravo")
+Alpha, Iftest,Jake
+5000
+4 - Calls ::
+procedure p;
+Select p such that Calls(p, "Charlie")
+Alpha, Bravo, Whiletest
+5000
+5 - Calls ::
+procedure p;
+Select p such that Calls("Alpha", p)
+Charlie, Delta, Bravo, Iftest
+5000
+6 - Calls ::
+procedure p;
+Select p such that Calls(p, "Delta")
+Alpha
+5000
+7 - Calls ::
+procedure p;
+Select p such that Calls("Alpha", "Charlie")
+Alpha, Delta, Charlie, Bravo, Iftest,Jake,Whiletest
+5000
+8 - Calls ::
+procedure p;
+Select p such that Calls("Delta", "Bravo")
+none
+5000
+9 - Calls ::
+procedure p;
+Select BOOLEAN such that Calls(p, "Bravo")
+true
+5000
+10 - Calls ::
+procedure p;
+Select BOOLEAN such that Calls(p, "Alpha")
+false
+5000
+11 - Calls ::
+procedure p;
+Select p such that Calls("Delta", "Bravo")
+none
+5000
+12 - Calls ::
+procedure p;
+Select p such that Calls("Alpha", "Bravo")
+Alpha,Bravo,Charlie,Delta,Iftest,Jake,Whiletest
+5000
+13 - CallsStar ::
+procedure p;
+Select p such that Calls*(p, "Bravo")
+Alpha, Iftest,Jake,Whiletest
+5000
+14 - CallsStar ::
+procedure p;
+Select p such that Calls*(p, "Charlie")
+Alpha, Bravo, Iftest,Jake,Whiletest
+5000
+15 - CallsStar ::
+procedure p1, p2;
+Select p1 such that Calls*(p1, p2)
+Alpha, Bravo, Iftest,Jake,Whiletest
+5000
+16 - CallsStar ::
+procedure p1, p2;
+Select p2 such that Calls*(p1, p2)
+Bravo, Delta, Charlie, Iftest,Jake
+5000
+17 - CallsStar ::
+procedure p1, p2;
+Select p1 such that Calls*("Alpha", p2)
+Alpha, Bravo, Charlie, Delta, Iftest,Jake,Whiletest
+5000
+18 - CallsStar ::
+procedure p1, p2;
+Select p1 such that Calls*("Delta", p2)
+none
+5000
+19 - CallsStar ::
+procedure p1, p2;
+Select p1 such that Calls*("Bravo", p2)
+Alpha, Bravo, Charlie, Delta, Iftest,Jake,Whiletest
+5000
+20 - CallsStar ::
+procedure p1, p2;
+Select p1 such that Calls*("Delta", "Alpha")
+none
+5000
+21 - CallsStar ::
+procedure p1, p2;
+Select p1 such that Calls*("Delta", "Random")
+none
+5000
+22 - CallsStar ::
+procedure p1, p2;
+Select p2 such that Calls*("Alpha", "Charlie")
+Alpha, Bravo, Delta, Charlie, Iftest,Jake,Whiletest
+5000
+23 - CallsStar ::
+procedure p1, p2;
+Select BOOLEAN such that Calls*(p1, p2)
+true
+5000
+24 - CallsStar ::
+procedure p1, p2;
+Select BOOLEAN such that Calls*(p1, "Alpha")
+false
+5000
+25 - CallsStar ::
+procedure p1, p2;
+Select BOOLEAN such that Calls*(p1, "Delta")
+true
+5000
+26 - CallsStar ::
+procedure p1, p2;
+Select BOOLEAN such that Calls*("Bravo", "Delta")
+false
+5000
+27 - CallsStar ::
+procedure p1, p2;
+Select BOOLEAN such that Calls*("Alpha", "Delta")
+true
+5000
+28 - CallsStar ::
+procedure p1, p2;
+Select BOOLEAN such that Calls*("Random", "Delta")
+false
+5000
+29 - CallsStar ::
+procedure p;
+Select BOOLEAN such that Calls*(p, "Random")
+false
+5000
+30 - CallsStar ::
+procedure p1, p2;
+Select BOOLEAN such that Calls*("Alpha", "Random")
+false
+5000
+31 - Calls ::
+procedure p1, p2;
+Select BOOLEAN such that Calls("Random", "Delta")
+false
+5000
+32 - Calls ::
+procedure p;
+Select BOOLEAN such that Calls("Random", "Random2")
+false
+5000
+33 - Calls ::
+procedure p1, p2;
+Select BOOLEAN such that Calls("Delta", "Random")
+false
+5000
+34 - Calls ::
+procedure p1, p2; if ifs;
+Select ifs such that Calls("Random", "Delta")
+none
+5000
+35 - Calls ::
+procedure p1, p2; if ifs;
+Select ifs such that Calls("Alpha", "Delta")
+8, 18, 23, 37, 48, 78, 79, 80, 85, 94, 100, 102, 112
+5000
+36 - Calls ::
+procedure p1, p2; if ifs;
+Select ifs such that Calls(p1, "Delta")
+8, 18, 23, 37, 48, 78, 79, 80, 85, 94, 100, 102, 112
+5000
+37 - Calls ::
+procedure p1, p2; if ifs;
+Select ifs such that Calls("Alpha", p2)
+8, 18, 23, 37, 48, 78, 79, 80, 85, 94, 100, 102, 112
+5000
+38 - Calls ::
+procedure p1, p2; assign a;
+Select a such that Calls("Random", "Delta")
+none
+5000
+39 - Calls ::
+procedure p1, p2; while w;
+Select w such that Calls("Alpha", "Delta")
+10, 21, 38, 42, 47, 54, 58, 59, 60, 61, 68, 91, 92, 99, 101, 110, 111
+5000
+40 - Calls ::
+procedure p1, p2; while w;
+Select w such that Calls("Alpha", "Random")
+none
+5000
+41 - Calls ::
+procedure p1, p2; while w;
+Select w such that Calls("Alpha", p2)
+10, 21, 38, 42, 47, 54, 58, 59, 60, 61, 68, 91, 92, 99, 101, 110, 111
+5000
+42 - Calls ::
+procedure p1, p2; while w;
+Select w such that Calls("Delta", "Delta")
+none
+5000

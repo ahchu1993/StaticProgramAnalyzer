@@ -1,0 +1,52 @@
+10
+cat: All Category
+1 - test01 :: return all the directly or indirectly parent of stmt number 2
+stmt s;
+Select s such that Parent*(s,2)
+none
+5000
+2 - test02 :: return all the child directly or indirectly under parent stmt number 2
+stmt s;
+Select s such that Parent*(2,s)
+none
+5000
+3 - test03 :: return the while statment when there is a stmt number before the while stmt
+while w; stmt s;
+Select w such that Follows*(s,w)
+7
+5000
+4 - test04 :: return the variable modify at stmt number 3
+variable v;
+Select v such that Modifies(3,v)
+y
+5000
+5 - test05 :: return all the while loop which modify variable i
+while w;
+Select w such that Modifies(w, "i")
+10
+5000
+6 - test06 :: return all the stmt number which uses variable i
+stmt s;
+Select s such that Uses(s, "i")
+7, 10, 12, 13
+5000
+7 - test07 :: return all the variable which uses in assignment statement
+variable v; assign a;
+Select v such that Uses(a,v)
+z, x, y, d, i
+5000
+8 - test08 :: return all the variable which uses in stmt number 10
+variable v;
+Select v such that Uses(10,v)
+i, y, x
+5000
+9 - test09 :: return all the assignment stmt number which uses y on the left hand side
+assign a;
+Select a pattern a("y",_)
+3, 13
+5000
+10 - test10 :: return all the assignment stmt number which uses y on the right hand side
+assign a;
+Select a pattern a(_, _"y"_)
+4, 8, 9, 11, 13
+5000

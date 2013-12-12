@@ -1,0 +1,185 @@
+procedure Alpha {
+1	idx = 1; 
+2   y = idx; 
+3   x = idx *y + 2;
+4   call Charlie;
+5   t = idx + y;
+6   call Delta;
+7   t = idx + y;
+8   if idx then {
+9   	k = y - x;
+10      while z {
+11      	x = x + idx;
+12 	    	z = x + 1;
+		}
+13      y = x + idx;
+	} else {
+14  	y = x + idx;
+15      call Delta;
+16      z = z - 1;
+	}
+17  call Bravo;
+18  if x then {
+19  	a = 5;
+20      b = z;
+21      while x {
+22      	c = idx + a + 5;
+23			if c then {
+24		   		idx=a;
+25		   		a = b;
+26		   		b = c;
+27		   		c = idx;
+28		   		idx = z;
+29		   		z = a;
+			} else {
+30		   		call Bravo;
+31		   		b = idx;
+32		   		c = b;
+33		   		a = z;
+34		   		z = c;
+35		   		c = idx;
+			}
+		}
+    } else {
+36      call Charlie;
+37      if z then {
+38      	while a{
+39	     		call Iftest;
+			}
+40	  		y = x+ idx +a+b+c+k;
+		} else{
+41	  	call Delta;
+		}
+	}
+}
+ 
+procedure Bravo {
+42 	while z {
+43 		idx = x + 3 * y + z;
+44 		call Charlie;
+45 		z = z - 1;
+	}
+46 	x = idx;
+}
+ 
+procedure Charlie {
+47 	while x {
+48 		if idx then {
+49 			x = idx + 2;
+		} else {
+50 			y = idx * y + x + k * t;
+		}
+	}
+51 	z = idx + k + x; 
+52 	test = i;
+}
+ 
+procedure Delta {
+53 	idx = y + idx;
+}
+ 
+
+procedure Whiletest{
+54	while x{
+55		a = 3*4-idx *(k-t);
+56		idx = a-c;
+57		c = idx + t+(y-x);
+58		while z {
+59			while x {
+60				while y{
+61					while y{
+62						a = b*c - 4;
+63						call Iftest;
+64						k = b -11;
+65						c= 2*c;
+					}
+66					test = i;
+67					i = y;
+68					while x {
+69						x = 3 -4-5-b;
+70						b = c*x;
+71						x = x +z;
+72						call Charlie;
+					}
+73					i = i+1;
+				}
+74				idx = idx - x;
+			}
+75			i = i+4;
+76			call Charlie;
+77			t = t*a;
+		}
+	}
+}
+
+procedure Iftest {
+78	if a then {
+79		if b then {
+80			if c then {
+81				b = a -c+a;
+82				x = y-z+x;
+83				t = t -b;
+			} else {
+84				call Bravo;
+85				if idx then {
+86					idx = x - idx;
+87					call Alpha111;
+				} else {
+88					call Jake;
+89					idx = idx - idx;
+				}
+			}
+		} else { 
+90		 x = x -a;
+91			while x{
+92				while z {
+93					a = a-b;
+				}
+			}
+		}
+	} else {
+94		if x then{
+95			call Bravo;
+96			x =x -y + idx;
+97			call Jake;
+		} else{
+98			x = a-4;
+		}
+	}
+}
+
+procedure  Jake{
+99	while idx {
+100		if a then{
+101			while y {
+102				if b then {
+103					b = c -(a-b*(c*(a-idx-(y-x))));
+104					c  = idx -a +b;
+105					a =  k - 9;
+106					i = test +3;
+				} else {
+107					y = y;
+108					x  = x;
+109					z = z;					
+				}
+			}
+		} else {
+110			while a {
+111				while b {
+112					if c then{
+113						c = c +b;
+114						b = c - b;
+115						idx  = b * c ;
+116						c = idx - c;
+					}else {
+117						call Bravo;
+					}
+				}
+			}
+		}
+118		k = a-1;
+	}
+119	k = b+1;
+}
+procedure Alpha111{
+}

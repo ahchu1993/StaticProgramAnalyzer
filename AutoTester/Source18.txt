@@ -1,0 +1,168 @@
+procedure Alpha {
+u = 1;
+v = 2;
+w = u;
+w = u + v;
+uv1=u+v;
+uv2= u + v;
+uv3 = u+ v;
+uv4 =u + v;
+uv5 = u +v;
+uuv = u + u + v;
+BIGUV = u + v;
+wide           =           u          +             v;
+veryWide 			= 		u 					+ 								v;
+broken
+=
+u
++
+v
+;
+veryBroken
+
+=
+
+
+
+
+
+
+
+u
+
+
+
+
+
+
+
++
+
+
+v
+
+
+
+
+
+
+
+;
+
+wideBroken			=
+		u
+				+
+									v
++
+		w
+																		;
+
+clone = w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w+w;
+
+num123num = 9999 + 0;
+
+mix = u + 1 + v + 2 + w + 3;
+
+}
+
+procedure Alpha2 { x = 1; 
+y = 2; 
+				z = 3; 
+							xyz=x+y+z;
+x1 = x + 1 + 90192;}
+
+procedure Beta {
+day = 0;
+while tomorrowNeverComes { day = day + 1; }
+
+var1able = 0;
+
+while a{
+	var1able = var1able + 1;
+	while b{
+		var1able = var1able + 1;
+		while c{
+			var1able = var1able + 1;
+			while d{
+				var1able = var1able + 1;
+				while e{
+					var1able = var1able + 1;
+					while f{
+						var1able = var1able + 1;
+						while g{
+							var1able = var1able + 1;
+							while h{ 
+								var1able = var1able + 1;
+							}
+						}
+					}
+				}
+			}			
+		}
+	}
+}
+						
+while BREAK1 {
+
+
+
+
+
+
+
+	while BREAK2 {
+		
+		
+		
+		
+		while BREAK3 {			
+		
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			lol = 0;
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+		}
+		
+		
+		
+	}
+}
+
+}
+
+procedure betaTwo {
+	beta = 0;
+}
+
+procedure Gamma {
+long =  1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1;
+}
+
+procedure Delta {
+	r=x;
+	s=     y;
+	t         =         z;
+}

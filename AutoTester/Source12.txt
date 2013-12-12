@@ -1,0 +1,33 @@
+procedure B{
+	m = n+1;
+	call C;
+}
+
+procedure C{
+	z = t;
+}
+
+procedure D{
+	call E;
+}
+
+procedure E{
+	a = b;
+	call B;
+}
+
+procedure F{
+	call G;
+}
+
+procedure G{
+	call H;
+}
+
+procedure H{
+	x = y;
+}
+
+procedure A {
+	call B;
+}

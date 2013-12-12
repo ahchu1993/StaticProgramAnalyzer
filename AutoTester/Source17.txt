@@ -1,0 +1,27 @@
+procedure Bill {
+z = 10;
+x = z + 5;	
+y = z + 4;
+d = x + y + 12;
+d = d + z + x;
+e = d + z + x;
+while i {
+e = x + y;
+x = y + z; }
+}
+
+procedure Mary {
+while i {
+z = y+3 + 2+x;
+i = i + 1; }
+y = y + z + i; }	
+
+procedure Jane {
+while d {
+z = x + z; }
+x = z + x; }
+
+procedure John {
+while e {
+u=10;	
+}}

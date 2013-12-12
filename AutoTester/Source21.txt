@@ -1,0 +1,7 @@
+procedure Pattern {
+a = i+(n-2);
+i= a+(5-3)*n;
+b=(a+5)+1-(a-n)*c-(i+o);
+n=i-((n+a)*o)+c;
+b=(((a+5)+1)-(a-n))*c-(i+o);
+}

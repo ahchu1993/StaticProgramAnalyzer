@@ -1,0 +1,58 @@
+procedure John{ 	if i then{
+		m=i;
+		x = i+m+2;
+	} else { y =    i+m;	}
+	y =   m;
+	while i{
+		k=m+x;
+		while z{
+			x = x-i;
+			z=x+1;}
+		m=x+1;
+		while m {
+			while i{
+				if i then {
+					x = y + (m - k);
+					m = 3+5; } else {
+					y = 1 * x; }
+				while z{
+					i= x+5+3*m;
+					z=z+1;
+					while m{
+						while y{
+							while k{
+								x = x+1;}
+							x=y;
+							while m {
+								if k then {
+									while z{
+										while i{
+											m=3;}
+										while x{
+											x=x;
+											while z{
+												m = x+y+d-3;}}}}
+								else { if i then {
+										x = 8 * (x + y);
+									} else { y =  (((k+y) * m) + (z * z))-4;}}}}
+						if x then{
+							z=x*5+1+x+m+y+i+k; 
+							if y then {
+								m  = 1;
+							} else { while i {
+									x = x + y; }	}
+						} else{	z=x;
+							i=m+1; }
+						z=x+5+(1+x)+m+y+i+k;
+						z=x;
+						i=m+1;
+						m=i+(m+x)*k+y;}
+					while m{
+						i=1+5;}}
+				m=x+i;}			
+			z=z+1;
+			x=i;}}
+	while z{
+		m=i+m+x+k+y;}}
+
+		

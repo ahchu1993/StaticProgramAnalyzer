@@ -1,0 +1,182 @@
+50
+cat: Affects
+1 - Affects ::
+procedure p1, p2; assign a1;
+Select p1 such that Affects(a1, 55)
+Alpha,Bravo,Charlie,Delta,Iftest,Jake,Whiletest
+5000
+2 - Affects ::
+assign a1, a2;
+Select a1 such that Affects(a1, 62)
+57, 65, 70
+5000
+3 - Affects ::
+assign a1, a2;
+Select a1 such that Affects(62, a1)
+none
+5000
+4 - Affects ::
+assign a1, a2;
+Select a1 such that Affects(69, a1)
+70, 71
+5000
+5 - Affects ::
+assign a1, a2;
+Select a1 such that Affects(a1, 70)
+69, 65, 57
+5000
+6 - Affects ::
+assign a1, a2;
+Select a1 such that Affects(a1, 75)
+73, 75
+5000
+7 - Affects ::
+assign a1, a2;
+Select a1 such that Affects(a1, 77)
+55, 77
+5000
+8 - Affects ::
+assign a1, a2;
+Select a1 such that Affects(a1, 81)
+none
+5000
+9 - Affects ::
+assign a1, a2;
+Select a1 such that Affects(a1, 83)
+81
+5000
+10 - Affects ::
+assign a1, a2;
+Select a1 such that Affects(a1, 89)
+none
+5000
+11 - Affects ::
+assign a1, a2;
+Select a1 such that Affects(a1, 96)
+none
+5000
+12 - Affects ::
+assign a1, a2;
+Select a1 such that Affects(83, a1)
+none
+5000
+13 - Affects ::
+assign a1, a2; procedure p;
+Select p such that Affects(a1, 81)
+none
+5000
+14 - Affects ::
+assign a1, a2; procedure p;
+Select p such that Affects(a1, 83)
+Alpha, Bravo, Charlie, Delta, Whiletest, Iftest, Jake
+5000
+15 - Affects ::
+assign a1, a2; procedure p;
+Select BOOLEAN such that Affects(a1, 83)
+true
+5000
+16 - Affects ::
+assign a1, a2; procedure p;
+Select BOOLEAN such that Affects(a1, 93)
+true
+5000
+17 - Affects ::
+assign a1, a2; procedure p;
+Select BOOLEAN such that Affects(103, 104)
+true
+5000
+18 - Affects ::
+assign a1, a2; procedure p;
+Select BOOLEAN such that Affects(103, 105)
+false
+5000
+19 - Affects ::
+assign a1, a2; procedure p;
+Select BOOLEAN such that Affects(103, 113)
+true
+5000
+20 - Affects ::
+assign a1, a2; procedure p;
+Select BOOLEAN such that Affects(104, 108)
+false
+5000
+21 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(104, a1)
+103, 113
+5000
+22 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(107, a1)
+103, 107
+5000
+23 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(113, a1)
+114, 115, 116
+5000
+24 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(a1, 109)
+109
+5000
+25 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(a1, 114)
+103, 114, 113
+5000
+26 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(a1, 118)
+105
+5000
+27 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(a1, 119)
+103, 114
+5000
+28 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(a1, 51)
+49
+5000
+29 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(2, a1)
+3
+5000
+30 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(3, a1)
+none
+5000
+31 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(5, a1)
+none
+5000
+32 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(7, a1)
+none
+5000
+33 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(9, a1)
+40
+5000
+34 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(a1, 14)
+none
+5000
+35 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(a1, 19)
+none
+5000
+36 - Affects ::
+assign a1, a2; procedure p;
+Select a1 such that Affects(a1, 20)
+none
+5000

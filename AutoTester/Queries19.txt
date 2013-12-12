@@ -1,0 +1,52 @@
+10
+cat: All Category
+1 - AssignPattern, Typed, ImplStmtLine :: Which are all the assignment statements?
+assign a;
+Select a pattern a(_,_)
+1, 2, 3, 4, 6, 8, 9, 10, 14, 15, 19, 20, 24, 26, 28, 29, 30, 31, 32, 34, 35, 36, 37, 39
+5000
+2 - AssignPattern, TwoClauses :: What are the assignments that have variable v on left side and uses it at the same time?
+assign a; variable v;
+Select a such that Uses(a,v) pattern a(v,_)
+8, 15, 19, 26, 32, 36, 39
+5000
+3 - AssignPattern, TwoClauses, Parent* :: What are the assignments with pattern 'm' on left side and 'i' on right side and is the direct/indirect children of a while?
+assign a; while w;
+Select a pattern a("n",_"i"_) such that Parent*(w,a)
+32, 39, 35
+5000
+4 - AssignPattern, TwoClauses, Modifies :: What are the  assignments that modifies 'm' and has 'o' on right side?
+assign a; variable v;
+Select a pattern a(v,_"o"_) such that Modifies(a,"n")
+32,39
+5000
+5 - AssignPattern, TwoClauses, Follows :: What are the assignments that have 'a' on left side and follows 5?
+assign a;
+Select a pattern a("a",_) such that Follows(5,a)
+none
+5000
+6 - AssignPattern, TwoClauses, Parent :: What are the parent of the assignments with 'a' on left side and 'c' on right side?
+assign a; stmt s;
+Select s such that Parent(s,a) pattern a("a",_"c"_)
+17
+5000
+7 - AssignPattern, Underscore, TwoClauses, Follows :: What are the assignments with 'c' on the right side and this assignment is followed by another statement?
+assign a;
+Select a pattern a(_, _"c"_)  such that Follows(a,_)
+20, 29
+5000
+8 - AssignPattern, TwoClauses, Follows* :: What are the assignments with 'c' on the right side and follows directly/indirectly a while statement?
+assign a; while w;
+Select a pattern a(_,_"c"_) such that Follows*(w,a)
+20,29,32
+5000
+9 - AssignPattern, TwoClauses, Follows* :: What are the assignments with 'b' on the right side and follows directly/indirectly a while statement?
+assign a; while w;
+Select 	a pattern a(_,_"b"_) such that Follows*(			w,a)
+36
+5000
+10 - AssignPattern, TwoClauses, Follows ::  What are while loop that is followed by another while loop if there is an assignment with pattern ('b',_'o'_)?
+assign a; while ww,www;
+Select ww pattern a("b",_"o"_) such that Follows(ww,www)
+23, 16, 5
+5000

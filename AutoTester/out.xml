@@ -1,0 +1,1295 @@
+<?xml-stylesheet type="text/xsl" href="analysis.xsl"?>
+<test_results>
+<info>
+<name>AutoTester</name><parsing_time_taken>1188.000000</parsing_time_taken>
+</info>
+<queries>
+<category name=" All Category">
+<query>
+<id Next="1" NextStar="1" comment="" >101</id><querystr><![CDATA[stmt s; Select BOOLEAN such that Next(s,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>153.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Next="1" NextStar="1" comment="" >102</id><querystr><![CDATA[stmt s; Select BOOLEAN such that Next*(s,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>458.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Next="1" NextStar="1" comment="" >103</id><querystr><![CDATA[stmt foo; Select BOOLEAN such that Next(_,foo)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>135.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Next="1" NextStar="1" comment="" >104</id><querystr><![CDATA[stmt foo; Select BOOLEAN such that Next*(_,foo)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>451.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Next="1" NextStar="1" comment="" >105</id><querystr><![CDATA[stmt foo; Select BOOLEAN such that Next(_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>25.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Next="1" NextStar="1" comment="" >106</id><querystr><![CDATA[stmt foo; Select BOOLEAN such that Next(14,46)]]></querystr>
+<stuans>false</stuans>
+<correct>false</correct>
+<time_taken>26.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Next="1" NextStar="1" comment="" >107</id><querystr><![CDATA[stmt foo; Select BOOLEAN such that Next(15,46)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>24.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Next="1" NextStar="1" comment="" >108</id><querystr><![CDATA[stmt foo; Select BOOLEAN such that Next*(1,74)]]></querystr>
+<stuans>false</stuans>
+<correct>false</correct>
+<time_taken>43.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Next="1" NextStar="1" comment="" >109</id><querystr><![CDATA[stmt foo; Select BOOLEAN such that Next*(foo,foo)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>355.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Next="1" NextStar="1" comment="" >110</id><querystr><![CDATA[stmt foo; Select BOOLEAN such that Next(foo,foo)]]></querystr>
+<stuans>false</stuans>
+<correct>false</correct>
+<time_taken>121.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >111</id><querystr><![CDATA[assign a;  Select a such that Affects (6, a)]]></querystr>
+<stuans>6,7,8</stuans>
+<correct>6,7,8</correct>
+<time_taken>40.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >112</id><querystr><![CDATA[assign a;  Select a such that Affects (55, a)]]></querystr>
+<stuans>58,59,60</stuans>
+<correct>58,59,60</correct>
+<time_taken>106.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >113</id><querystr><![CDATA[assign a;  Select a such that Affects (14,_)]]></querystr>
+<stuans>1,11,13,14,16,17,19,2,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,6,60,61,62,66,67,68,7,70,72,73,74,8,9</stuans>
+<correct>1,2,6,7,8,9,11,13,14,16,17,19,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,60,61,62,66,67,68,70,72,73,74</correct>
+<time_taken>105.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >114</id><querystr><![CDATA[assign a;  Select BOOLEAN such that Affects (17, 49)]]></querystr>
+<stuans>false</stuans>
+<correct>false</correct>
+<time_taken>105.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >115</id><querystr><![CDATA[assign a;  Select a such that Affects (23, 1)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>149.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >116</id><querystr><![CDATA[assign a;  Select a such that Affects (23, a)]]></querystr>
+<stuans>16,19,22,24,27,28,32,45</stuans>
+<correct>16,19,22,24,27,28,32,45</correct>
+<time_taken>153.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >117</id><querystr><![CDATA[assign a;  Select BOOLEAN such that Affects (62,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>48.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AffectsStar="1" comment="" >118</id><querystr><![CDATA[assign a;  Select a such that Affects* (23, a)]]></querystr>
+<stuans>16,17,19,20,22,23,24,25,27,28,31,32,35,38,39,42,43,44,45,46</stuans>
+<correct>16,19,22,24,27,28,32,45,25,31,46,17,20,38,39,23,35,42,44,43</correct>
+<time_taken>144.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AffectsStar="1" comment="" >119</id><querystr><![CDATA[assign a;  Select a such that Affects* (53, a)]]></querystr>
+<stuans>54,55,58,59,60,61</stuans>
+<correct>54,55,58,59,60,61</correct>
+<time_taken>44.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AffectsStar="1" comment="" >121</id><querystr><![CDATA[assign ASSIGN;  Select ASSIGN such that Affects* (ASSIGN, 32)]]></querystr>
+<stuans>13,14,16,17,20,23,24,25,27,28,30,32,37,39,40,43</stuans>
+<correct>28,23,13,24,14,16,17,20,25,27,30,32,40,43,39,37</correct>
+<time_taken>85.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AffectsStar="1" comment="" >122</id><querystr><![CDATA[assign a;  Select a such that Affects* (17, a)]]></querystr>
+<stuans>16,17,19,20,22,27,31,32,35,38,39,42,43,44,45,46</stuans>
+<correct>17,19,38,39,42,45,46,20,16,22,32,27,31,44,43,35</correct>
+<time_taken>70.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >123</id><querystr><![CDATA[assign a; Select BOOLEAN such that Affects (9, 11)]]></querystr>
+<stuans>false</stuans>
+<correct>false</correct>
+<time_taken>23.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >124</id><querystr><![CDATA[if i; Select i.stmt# such that Affects (13, 16)]]></querystr>
+<stuans>12,18,29,33,34,4,57,63,64,65,71</stuans>
+<correct>4,12,18,29,33,34,57,63,64,65,71</correct>
+<time_taken>46.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >125</id><querystr><![CDATA[assign a; Select BOOLEAN such that Affects (17, 19)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>35.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >126</id><querystr><![CDATA[assign a; Select BOOLEAN such that Affects (20, 27)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>32.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >128</id><querystr><![CDATA[assign a; Select a such that Affects (a, 13)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>26.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >129</id><querystr><![CDATA[assign a; Select a such that Affects (a, 72)]]></querystr>
+<stuans>72</stuans>
+<correct>72</correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >130</id><querystr><![CDATA[assign a; Select a such that Affects (a, 27)]]></querystr>
+<stuans>20,23,27,28</stuans>
+<correct>27,28,23,20</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >131</id><querystr><![CDATA[assign a; Select a such that Affects (a, 45)]]></querystr>
+<stuans>13,17,20,23,27,28,37,39</stuans>
+<correct>27,37,39,17,20,23,28,13</correct>
+<time_taken>39.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >132</id><querystr><![CDATA[assign a; Select a such that Affects (a, 54)]]></querystr>
+<stuans>53</stuans>
+<correct>53</correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >133</id><querystr><![CDATA[assign a; Select a such that Affects (a, 68)]]></querystr>
+<stuans>62</stuans>
+<correct>62</correct>
+<time_taken>40.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >134</id><querystr><![CDATA[assign a; Select a such that Affects (6, a)]]></querystr>
+<stuans>6,7,8</stuans>
+<correct>6,7,8</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >135</id><querystr><![CDATA[assign a; Select a such that Affects (11, a)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >136</id><querystr><![CDATA[assign a; Select a such that Affects (24, a)]]></querystr>
+<stuans>16,23,25</stuans>
+<correct>16,23,25</correct>
+<time_taken>45.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >137</id><querystr><![CDATA[assign a; Select a such that Affects (30, a)]]></querystr>
+<stuans>24</stuans>
+<correct>24</correct>
+<time_taken>43.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >138</id><querystr><![CDATA[assign a; Select a such that Affects (74, a)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>27.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >139</id><querystr><![CDATA[assign a; Select a such that Affects (58, a)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>34.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >140</id><querystr><![CDATA[assign a; constant c; Select c.value such that Affects (a,a)]]></querystr>
+<stuans>1,2,3,5,8</stuans>
+<correct>1,2,3,5,8</correct>
+<time_taken>527.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AssignPattern="1" Typed="1" ImplStmtLine="1" comment="Which assignments have subexpression 'm'?" >141</id><querystr><![CDATA[assign a; Select a pattern a(_, _"      m  "_)]]></querystr>
+<stuans>13,2,30,32,38,40,45,53,55,58,59,6,62,7,72,73,8</stuans>
+<correct>2,6,7,8,13,30,32,38,40,45,53,55,58,59,62,72,73</correct>
+<time_taken>43.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AssignPattern="1" Typed="1" ImplStmtLine="1" comment="Which assignments have 'm' on the left side and subexpression 'i' on the right side?" >142</id><querystr><![CDATA[assign a; Select a pattern a("  m", _"  i "_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>42.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AssignPattern="1" Typed="1" ImplStmtLine="1" comment="Which variables appear on the left side of assignments with subexpression 'i' on the right side?" >143</id><querystr><![CDATA[variable v; assign a; Select v pattern a(v, _"  i    "_)]]></querystr>
+<stuans>b,x,a,i,y</stuans>
+<correct>a,x,b,y,i</correct>
+<time_taken>34.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AssignPattern="1" Typed="1" ImplStmtLine="1" comment="Which assignments have x on the left side?" >144</id><querystr><![CDATA[assign a; Select a pattern a("    x", _)]]></querystr>
+<stuans>14,17,20,27,49,53,9</stuans>
+<correct>9,14,17,20,27,49,53</correct>
+<time_taken>32.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AssignPattern="1" Typed="1" ImplStmtLine="1" comment="Which are all the assignment statements?" >145</id><querystr><![CDATA[assign a; Select a pattern a(_,_)]]></querystr>
+<stuans>1,11,13,14,16,17,19,2,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,6,60,61,62,66,67,68,7,70,72,73,74,8,9</stuans>
+<correct>1,2,6,7,8,9,11,13,14,16,17,19,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,60,61,62,66,67,68,70,72,73,74</correct>
+<time_taken>51.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AssignPattern="1" Typed="1" ImplStmtLine="1" comment="Which variables appear on both sides?" >146</id><querystr><![CDATA[variable v; assign a; Select v pattern a(v,"            2- 8 ")]]></querystr>
+<stuans>x</stuans>
+<correct>x</correct>
+<time_taken>33.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AssignPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >147</id><querystr><![CDATA[assign a; Select a pattern a(_,_" b   +        d "_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AssignPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >148</id><querystr><![CDATA[assign a; Select a pattern a(_,_" i      - k"_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>31.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AssignPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >149</id><querystr><![CDATA[assign a; Select a pattern a(_,_" b-m-x "_)]]></querystr>
+<stuans>58,73</stuans>
+<correct>58,73</correct>
+<time_taken>31.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id AssignPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >150</id><querystr><![CDATA[assign a; Select a pattern a(_,_"3"_)]]></querystr>
+<stuans>16,19,2,23,45,46,74</stuans>
+<correct>2,16,19,23,45,46,74</correct>
+<time_taken>32.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id IfPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >151</id><querystr><![CDATA[if i; Select BOOLEAN pattern i(_,_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>27.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id IfPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >152</id><querystr><![CDATA[if i; variable v; Select v pattern i(_,_,_)]]></querystr>
+<stuans>a,b,c,d,e,i,k,m,x,y,z</stuans>
+<correct>a,b,c,d,e,i,k,m,x,y,z</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id IfPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >153</id><querystr><![CDATA[if i; variable v; Select v pattern i(v,_,_)]]></querystr>
+<stuans>i,z,m,x,b,y,k</stuans>
+<correct>b,i,y,z,m,k,x</correct>
+<time_taken>32.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id IfPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >154</id><querystr><![CDATA[if i; variable v; Select v.varName pattern i(" x",_,_)]]></querystr>
+<stuans>a,b,c,d,e,i,k,m,x,y,z</stuans>
+<correct>a,b,c,d,e,i,k,m,x,y,z</correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id IfPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >155</id><querystr><![CDATA[if i; stmt s; Select i.stmt# pattern i("k   ",_,_)]]></querystr>
+<stuans>65</stuans>
+<correct>65</correct>
+<time_taken>31.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id IfPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >156</id><querystr><![CDATA[if i; stmt s; Select s pattern i("      STARBUCKS",_,_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id IfPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >157</id><querystr><![CDATA[if i; variable v; Select i pattern i(v,_,_)]]></querystr>
+<stuans>12,18,29,33,34,4,57,63,64,65,71</stuans>
+<correct>4,12,18,29,33,34,57,63,64,65,71</correct>
+<time_taken>34.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id IfPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >158</id><querystr><![CDATA[assign a; if i; Select i pattern i(" tHISiSalONGiDENTITY",_,_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id IfPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >159</id><querystr><![CDATA[assign a; if i; Select a pattern i("z",_,_)]]></querystr>
+<stuans>1,11,13,14,16,17,19,2,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,6,60,61,62,66,67,68,7,70,72,73,74,8,9</stuans>
+<correct>1,2,6,7,8,9,11,13,14,16,17,19,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,60,61,62,66,67,68,70,72,73,74</correct>
+<time_taken>50.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id IfPattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >160</id><querystr><![CDATA[variable v; if i; assign AvERYlONGaSSIGNnAMEwHICHiSuSEDtOtEST; Select AvERYlONGaSSIGNnAMEwHICHiSuSEDtOtEST pattern i("i",_,_)]]></querystr>
+<stuans>1,11,13,14,16,17,19,2,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,6,60,61,62,66,67,68,7,70,72,73,74,8,9</stuans>
+<correct>1,2,6,7,8,9,11,13,14,16,17,19,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,60,61,62,66,67,68,70,72,73,74</correct>
+<time_taken>49.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id WhilePattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >161</id><querystr><![CDATA[while w; Select BOOLEAN pattern w(_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id WhilePattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >162</id><querystr><![CDATA[while w; variable v; Select v pattern w(_,_)]]></querystr>
+<stuans>a,b,c,d,e,i,k,m,x,y,z</stuans>
+<correct>a,b,c,d,e,i,k,m,x,y,z</correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id WhilePattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >163</id><querystr><![CDATA[while w; variable v; Select v pattern w(v,_)]]></querystr>
+<stuans>b,z,x,i,k,m,d,y</stuans>
+<correct>b,i,y,z,m,k,x,d</correct>
+<time_taken>33.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id WhilePattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >164</id><querystr><![CDATA[while w; variable v; Select v.varName pattern w("x",_)]]></querystr>
+<stuans>a,b,c,d,e,i,k,m,x,y,z</stuans>
+<correct>a,b,c,d,e,i,k,m,x,y,z</correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id WhilePattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >165</id><querystr><![CDATA[while w; stmt s; Select w.stmt# pattern w("k",_)]]></querystr>
+<stuans>48</stuans>
+<correct>48</correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id WhilePattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >166</id><querystr><![CDATA[while w; stmt s; Select s pattern w("STARBUCKSSUCKS      ",_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id WhilePattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >167</id><querystr><![CDATA[while w; variable v; Select w pattern w(v,_)]]></querystr>
+<stuans>15,21,26,41,48,5,51,52,69</stuans>
+<correct>5,15,21,26,41,48,51,52,69</correct>
+<time_taken>32.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id WhilePattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >168</id><querystr><![CDATA[variable v; while w; Select w pattern w(v,_)]]></querystr>
+<stuans>15,21,26,41,48,5,51,52,69</stuans>
+<correct>5,15,21,26,41,48,51,52,69</correct>
+<time_taken>34.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id WhilePattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >169</id><querystr><![CDATA[assign a; while w; Select a pattern w("z",_)]]></querystr>
+<stuans>1,11,13,14,16,17,19,2,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,6,60,61,62,66,67,68,7,70,72,73,74,8,9</stuans>
+<correct>1,2,6,7,8,9,11,13,14,16,17,19,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,60,61,62,66,67,68,70,72,73,74</correct>
+<time_taken>45.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id WhilePattern="1" Typed="1" ImplStmtLine="1" comment="Pattern matching?" >170</id><querystr><![CDATA[variable v; while While; Select While pattern While("ThisIsAVeryLongIdentityIsForTestingNotForFun",_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="assign1.stmt# = stmt.stmt#" >171</id><querystr><![CDATA[assign a; stmt s; Select s with a.stmt# = s.stmt#]]></querystr>
+<stuans>1,11,13,14,16,17,19,2,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,6,60,61,62,66,67,68,7,70,72,73,74,8,9</stuans>
+<correct>1,2,6,7,8,9,11,13,14,16,17,19,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,60,61,62,66,67,68,70,72,73,74</correct>
+<time_taken>67.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="assign1.stmt# = stmt.stmt#" >172</id><querystr><![CDATA[assign a; stmt s; Select a with a.stmt# = s.stmt#]]></querystr>
+<stuans>1,11,13,14,16,17,19,2,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,6,60,61,62,66,67,68,7,70,72,73,74,8,9</stuans>
+<correct>1,2,6,7,8,9,11,13,14,16,17,19,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,60,61,62,66,67,68,70,72,73,74</correct>
+<time_taken>72.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="assign1.stmt# = c.value" >173</id><querystr><![CDATA[assign a; constant c; Select a with a.stmt# = c.value]]></querystr>
+<stuans>1,2,8</stuans>
+<correct>1,2,8</correct>
+<time_taken>33.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="assign1.stmt# = 27" >174</id><querystr><![CDATA[assign a; Select BOOLEAN with a.stmt# = 27]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="assign1.stmt# = 200" >175</id><querystr><![CDATA[assign ASSIGN;  Select BOOLEAN with ASSIGN.stmt# = 200]]></querystr>
+<stuans>false</stuans>
+<correct>false</correct>
+<time_taken>27.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="while.stmt# = if.stmt#" >176</id><querystr><![CDATA[while w; if i; Select BOOLEAN with w.stmt# = i.stmt#]]></querystr>
+<stuans>false</stuans>
+<correct>false</correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="while.stmt# = t.stmt#" >177</id><querystr><![CDATA[while w; assign t; Select BOOLEAN with w.stmt# = t.stmt#]]></querystr>
+<stuans>false</stuans>
+<correct>false</correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="while.stmt# = t.stmt#" >178</id><querystr><![CDATA[while w; stmt t; Select w with w.stmt# = t.stmt#]]></querystr>
+<stuans>15,21,26,41,48,5,51,52,69</stuans>
+<correct>5,15,21,26,41,48,51,52,69</correct>
+<time_taken>34.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="while.stmt# = stmt number" >179</id><querystr><![CDATA[while w; stmt t; Select w with w.stmt# = 69]]></querystr>
+<stuans>69</stuans>
+<correct>69</correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="while.stmt# = big number" >180</id><querystr><![CDATA[while w; stmt t; Select w with w.stmt# = 169]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>27.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="if.stmt# = calls.stmt#" >181</id><querystr><![CDATA[if i; call c; Select BOOLEAN with i.stmt# = c.stmt#]]></querystr>
+<stuans>false</stuans>
+<correct>false</correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="if.stmt# = calls.stmt#" >182</id><querystr><![CDATA[if i; call c; Select BOOLEAN with i.stmt# = i.stmt#]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="if.stmt# = calls.stmt#" >183</id><querystr><![CDATA[if i; while WHILE; Select BOOLEAN with i.stmt# = WHILE.stmt#]]></querystr>
+<stuans>false</stuans>
+<correct>false</correct>
+<time_taken>26.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="if.stmt# = calls.stmt#" >184</id><querystr><![CDATA[if i; stmt WHILE; Select i with i.stmt# = WHILE.stmt#]]></querystr>
+<stuans>12,18,29,33,34,4,57,63,64,65,71</stuans>
+<correct>4,12,18,29,33,34,57,63,64,65,71</correct>
+<time_taken>35.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="if.stmt# = calls.stmt#" >185</id><querystr><![CDATA[if i; stmt WHILE; Select WHILE with i.stmt# = 71]]></querystr>
+<stuans>1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,27,28,29,3,30,31,32,33,34,35,36,37,38,39,4,40,41,42,43,44,45,46,47,48,49,5,50,51,52,53,54,55,56,57,58,59,6,60,61,62,63,64,65,66,67,68,69,7,70,71,72,73,74,8,9</stuans>
+<correct>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74</correct>
+<time_taken>52.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="calls.stmt# = stmt.stmt#" >186</id><querystr><![CDATA[call c; stmt s; Select c.stmt# with c.stmt# = s.stmt#]]></querystr>
+<stuans>10,3,36,50,56</stuans>
+<correct>3,10,36,50,56</correct>
+<time_taken>35.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="calls.stmt# = stmt.stmt#" >187</id><querystr><![CDATA[call c; stmt s; Select c.procName with c.stmt# = 3]]></querystr>
+<stuans>alpha</stuans>
+<correct>alpha</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="calls.stmt# = stmt.stmt#" >188</id><querystr><![CDATA[call c; procedure p; Select c.procName with c.procName = p.procName]]></querystr>
+<stuans>q,alpha,alpha,alpha,delta</stuans>
+<correct>alpha,q,delta</correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="calls.stmt# = stmt.stmt#" >189</id><querystr><![CDATA[call c; procedure p; Select c with c.procName = p.procName]]></querystr>
+<stuans>10,3,36,50,56</stuans>
+<correct>3,10,36,50,56</correct>
+<time_taken>27.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="calls.stmt# = INTEGER" >190</id><querystr><![CDATA[call c; procedure p; Select c.stmt# with c.procName = "OLALA"]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>33.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = stmt.stmt#" >191</id><querystr><![CDATA[prog_line n; stmt s; Select n with n = s.stmt#]]></querystr>
+<stuans>1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,27,28,29,3,30,31,32,33,34,35,36,37,38,39,4,40,41,42,43,44,45,46,47,48,49,5,50,51,52,53,54,55,56,57,58,59,6,60,61,62,63,64,65,66,67,68,69,7,70,71,72,73,74,8,9</stuans>
+<correct>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74</correct>
+<time_taken>87.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = assign.stmt#" >192</id><querystr><![CDATA[prog_line n; assign a; Select n with n = a.stmt#]]></querystr>
+<stuans>1,11,13,14,16,17,19,2,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,6,60,61,62,66,67,68,7,70,72,73,74,8,9</stuans>
+<correct>1,2,6,7,8,9,11,13,14,16,17,19,20,22,23,24,25,27,28,30,31,32,35,37,38,39,40,42,43,44,45,46,47,49,53,54,55,58,59,60,61,62,66,67,68,70,72,73,74</correct>
+<time_taken>73.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = while.stmt#" >193</id><querystr><![CDATA[prog_line n; while w; Select n with n = w.stmt#]]></querystr>
+<stuans>15,21,26,41,48,5,51,52,69</stuans>
+<correct>5,15,21,26,41,48,51,52,69</correct>
+<time_taken>40.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = if.stmt#" >194</id><querystr><![CDATA[prog_line n; if q; Select n with n = q.stmt#]]></querystr>
+<stuans>12,18,29,33,34,4,57,63,64,65,71</stuans>
+<correct>4,12,18,29,33,34,57,63,64,65,71</correct>
+<time_taken>37.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = calls.stmt#" >195</id><querystr><![CDATA[prog_line n; call c; Select n with n = 600]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="variable.varName = procedure.procName" >196</id><querystr><![CDATA[variable v; procedure p; Select p with v.varName = p.procName]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>27.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="variable.varName = procedure.procName" >197</id><querystr><![CDATA[procedure p; call c; Select p with c.procName = p.procName]]></querystr>
+<stuans>q,alpha,delta</stuans>
+<correct>alpha,delta,q</correct>
+<time_taken>27.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="variable.varName = procedure.procName" >198</id><querystr><![CDATA[procedure p; call c; variable v; Select p with c.procName = p.procName and v.varName = p.procName]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>24.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="variable.varName = procedure.procName" >199</id><querystr><![CDATA[procedure RONALDO; Select RONALDO.procName with RONALDO.procName = "GERMANY"]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>24.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="variable.varName = procedure.procName" >200</id><querystr><![CDATA[procedure RAYMOND; Select RAYMOND with RAYMOND.procName = "alpha"]]></querystr>
+<stuans>alpha</stuans>
+<correct>alpha</correct>
+<time_taken>24.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = constant.value" >201</id><querystr><![CDATA[prog_line n; constant c; Select c.value with n = c.value]]></querystr>
+<stuans>1,2,3,5,8</stuans>
+<correct>1,2,3,5,8</correct>
+<time_taken>32.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = constant.value" >202</id><querystr><![CDATA[prog_line n; constant c; Select c with c.value = 5]]></querystr>
+<stuans>5</stuans>
+<correct>5</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = constant.value" >203</id><querystr><![CDATA[while s; constant c; Select c with c.value = s.stmt#]]></querystr>
+<stuans>5</stuans>
+<correct>5</correct>
+<time_taken>27.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = constant.value" >204</id><querystr><![CDATA[if i; constant c; Select c with c.value = i.stmt#]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>25.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = constant.value" >205</id><querystr><![CDATA[if i; constant c; Select c with c.value = 15]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>25.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="variable.varName = IDENT" >206</id><querystr><![CDATA[variable v; Select v with v.varName = "abc"]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>25.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="variable.varName = IDENT" >207</id><querystr><![CDATA[variable v; Select v.varName with v.varName = "a"]]></querystr>
+<stuans>a</stuans>
+<correct>a</correct>
+<time_taken>25.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="variable.varName = IDENT" >208</id><querystr><![CDATA[variable v; procedure BLUEBERRY; Select v with v.varName = BLUEBERRY.procName]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>25.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="variable.varName = IDENT" >209</id><querystr><![CDATA[variable v; call BLUEBERRY; Select v.varName with v.varName = BLUEBERRY.procName]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>25.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="variable.varName = IDENT" >210</id><querystr><![CDATA[variable v,V; call BLUEBERRY; Select V with v.varName = V.varName]]></querystr>
+<stuans>a,b,c,d,e,i,k,m,x,y,z</stuans>
+<correct>a,b,c,d,e,i,k,m,x,y,z</correct>
+<time_taken>31.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = stmt.stmt#" >211</id><querystr><![CDATA[prog_line n; stmt s; Select s with n = s.stmt#]]></querystr>
+<stuans>1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,27,28,29,3,30,31,32,33,34,35,36,37,38,39,4,40,41,42,43,44,45,46,47,48,49,5,50,51,52,53,54,55,56,57,58,59,6,60,61,62,63,64,65,66,67,68,69,7,70,71,72,73,74,8,9</stuans>
+<correct>1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74</correct>
+<time_taken>88.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = stmt.stmt#" >212</id><querystr><![CDATA[stmt s; constant c; Select s.stmt# with s.stmt# = c.value]]></querystr>
+<stuans>1,2,3,5,8</stuans>
+<correct>1,2,3,5,8</correct>
+<time_taken>41.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = stmt.stmt#" >213</id><querystr><![CDATA[stmt s; Select s.stmt# with s.stmt# = 500]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>33.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = stmt.stmt#" >214</id><querystr><![CDATA[stmt s;  Select BOOLEAN with s.stmt# = 35 and s.stmt# = 50 with s.stmt# = 40]]></querystr>
+<stuans>false</stuans>
+<correct>false</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="prog_line = stmt.stmt#" >215</id><querystr><![CDATA[stmt s; call c; Select s.stmt# with s.stmt# = c.stmt#]]></querystr>
+<stuans>10,3,36,50,56</stuans>
+<correct>3,10,36,50,56</correct>
+<time_taken>35.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="Mixed" >216</id><querystr><![CDATA[stmt s; call c; variable v; procedure p; Select c.procName with s.stmt# = c.stmt# and c.procName = p.procName and p.procName = v.varName]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="Mixed" >217</id><querystr><![CDATA[stmt s; call c; variable v; procedure p; Select p.procName with s.stmt# = c.stmt# and c.procName = p.procName and p.procName = v.varName]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="Mixed" >218</id><querystr><![CDATA[stmt s; call c; variable v; procedure p; Select c with s.stmt# = c.stmt# and c.procName = p.procName and p.procName = v.varName]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="Mixed" >219</id><querystr><![CDATA[stmt s; call c; variable v; procedure p; Select v.varName with v.varName = c.procName and c.stmt# = s.stmt#]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id With="1" Typed="1" comment="Mixed" >220</id><querystr><![CDATA[stmt s; call c; variable v; assign a; while w; Select a with a.stmt# = s.stmt# and w.stmt# = s.stmt# and c.procName = v.varName]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>42.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Follows and Affects" >221</id><querystr><![CDATA[stmt s; variable v; Select v such that Follows*(s,s) and Affects(13,16)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>60.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Follows and Affects" >222</id><querystr><![CDATA[assign a; Select a such that Follows(15,46) and Affects(a, 72)]]></querystr>
+<stuans>72</stuans>
+<correct>72</correct>
+<time_taken>34.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Modifies and Uses" >223</id><querystr><![CDATA[variable v; Select v such that Modifies(21,v) and Uses(11,v)]]></querystr>
+<stuans>b,x</stuans>
+<correct>b,x</correct>
+<time_taken>45.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Affects* and Next" >224</id><querystr><![CDATA[assign a;  Select a such that Affects* (23, a) and Next*(16, a)]]></querystr>
+<stuans>16,17,19,20,22,23,24,25,27,28,31,32,35,38,39,42,43,44,45,46</stuans>
+<correct>16,17,19,20,22,23,24,25,27,28,31,32,35,38,39,42,43,44,45,46</correct>
+<time_taken>90.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Next* and Parent*" >225</id><querystr><![CDATA[assign a;  Select a such that Next*(35, a) and Parent*(21, a)]]></querystr>
+<stuans>22,23,24,25,27,28</stuans>
+<correct>22,23,24,25,27,28</correct>
+<time_taken>36.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Parent* and Follows" >226</id><querystr><![CDATA[assign a;  Select a such that Parent*(21, a) and Follows(a, 26)]]></querystr>
+<stuans>25</stuans>
+<correct>25</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Parent* and Uses" >227</id><querystr><![CDATA[assign a; variable v; Select v.varName such that Parent*(21, a) and Uses(a, v)]]></querystr>
+<stuans>b,c,e,d,x</stuans>
+<correct>b,c,d,e,x</correct>
+<time_taken>50.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Parent* and Modifies" >228</id><querystr><![CDATA[assign a; variable v; Select v.varName such that Parent*(21, a) and Modifies(a, v)]]></querystr>
+<stuans>a,b,c,e,x</stuans>
+<correct>a,b,c,e,x</correct>
+<time_taken>47.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Next* and Next*" >229</id><querystr><![CDATA[while w; Select w such that Next*(51,w) and Next*(w,61)]]></querystr>
+<stuans>51,52</stuans>
+<correct>51,52</correct>
+<time_taken>31.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Affects* and Follows" >230</id><querystr><![CDATA[assign a; Select a such that Affects(65,a) and Follows(a,70)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Affects and Next*" >231</id><querystr><![CDATA[assign a; Select a such that Affects(62,a) and Next*(a,74)]]></querystr>
+<stuans>67,68,70</stuans>
+<correct>67,68,70</correct>
+<time_taken>67.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects" >232</id><querystr><![CDATA[assign a; if i; Select a pattern i("  z  ",_,_) such that Affects(62,a)]]></querystr>
+<stuans>67,68,70,74</stuans>
+<correct>67,68,70,74</correct>
+<time_taken>38.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Affects and With" >235</id><querystr><![CDATA[assign a;  Select a such that Affects (14,_) with a.stmt# = 25]]></querystr>
+<stuans>25</stuans>
+<correct>25</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Uses and With" >236</id><querystr><![CDATA[procedure p; Select p such that Uses(p,"e") with p.procName = "q"]]></querystr>
+<stuans>q</stuans>
+<correct>q</correct>
+<time_taken>25.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Uses and With" >237</id><querystr><![CDATA[prog_line n; Select n such that Uses("q   ","x") with n = 90]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>41.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Parent* and Follows*" >238</id><querystr><![CDATA[assign a; Select a such that Parent*(12, a) and Follows*(13,a)]]></querystr>
+<stuans>14,46</stuans>
+<correct>14,46</correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Affects* and Follows*" >239</id><querystr><![CDATA[assign a; Select a such that Affects*(1,a) and Follows*(13,a)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>30.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Affects* and Follows*" >240</id><querystr><![CDATA[assign a; Select a such that Affects*(1,a) and Follows*(13,a)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Parent* Next* Affects" >241</id><querystr><![CDATA[assign a; variable foo; Select a such that Parent*(12, a) and Next*(16,a) and Affects(24,a)]]></querystr>
+<stuans>16,23,25</stuans>
+<correct>16,23,25</correct>
+<time_taken>58.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="Affects* Follows* Affects" >242</id><querystr><![CDATA[assign a; Select a such that Affects*(9,a) and Follows*(1,a) and Affects(9,a)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >243</id><querystr><![CDATA[stmt s; Select s such that Follows*(12,s) and Follows(12,s) and Follows*(_,_)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>32.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >244</id><querystr><![CDATA[stmt s; Select s such that Parent*(15,s) and Parent(15,s) and Parent*(_,_)]]></querystr>
+<stuans>16,17,18,45</stuans>
+<correct>16,17,18,45</correct>
+<time_taken>37.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >245</id><querystr><![CDATA[stmt s; variable v; procedure p; Select v such that Modifies(s,v) and Uses(s,v) and Uses(p,v)]]></querystr>
+<stuans>b,y,x,m,i,c,e,k</stuans>
+<correct>m,x,b,k,y,c,e,i</correct>
+<time_taken>326.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >246</id><querystr><![CDATA[stmt s; variable v; procedure p; Select s such that Modifies(s,v) and Uses(s,v) and Uses(p,v)]]></querystr>
+<stuans>4,8,12,15,18,21,26,28,3,36,34,33,50,48,10,63,67,64,65,68,69,70,56,9,17,27,51,52,5,6,40,57,32,29,43,41,66,72,71</stuans>
+<correct>3,4,5,6,8,9,10,12,15,17,18,21,26,27,28,29,32,33,34,36,40,41,43,48,50,51,52,56,57,63,64,65,66,67,68,69,70,71,72</correct>
+<time_taken>528.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >252</id><querystr><![CDATA[while w; stmt s; variable v; Select w.stmt# pattern w("k ",_) such that Modifies(s,v) and Next*(50, s) with s.stmt# = 48]]></querystr>
+<stuans>48</stuans>
+<correct>48</correct>
+<time_taken>42.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >253</id><querystr><![CDATA[while w; stmt s; variable v; Select w.stmt# pattern w(" k",_) such that Modifies(s,v) and Next*(50, s)]]></querystr>
+<stuans>48</stuans>
+<correct>48</correct>
+<time_taken>72.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >254</id><querystr><![CDATA[assign a; Select a pattern a(_,_"b+ d   "_) such that Affects* (23, a) and Next*(16, a)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>36.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >261</id><querystr><![CDATA[assign a; stmt s; Select a such that Affects* (17, a) and Follows*(16, a) such that Next*(a,s) and Next*(a,23)]]></querystr>
+<stuans>17,45</stuans>
+<correct>17,45</correct>
+<time_taken>124.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >262</id><querystr><![CDATA[assign a; stmt s; Select a such that Affects* (17, a) and Follows*(16, a) such that Next*(a,s) and Next*(a,23) with a.stmt# = 17]]></querystr>
+<stuans>17</stuans>
+<correct>17</correct>
+<time_taken>86.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >263</id><querystr><![CDATA[assign a; stmt s; Select a such that Affects* (17, a) and Follows*(16, a) such that Next*(a,s) and Next*(a,23) with a.stmt# = 45]]></querystr>
+<stuans>45</stuans>
+<correct>45</correct>
+<time_taken>82.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >264</id><querystr><![CDATA[assign a; stmt s, s1, s2, s3; Select a such that Follows(s1, s2) and Follows(s2,s3) and Modifies(a,"y") and Parent*(s2,a) and Affects(s,s)]]></querystr>
+<stuans>16,35,42,44,45,67,68,70</stuans>
+<correct>16,35,42,44,45,67,68,70</correct>
+<time_taken>627.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >265</id><querystr><![CDATA[assign a; stmt s1, s2, s3; procedure p1,p2; Select a such that Follows(s1, s2) and Follows(s2,s3) and Affects*(35,a) and Calls(p1,p2) with p1.procName = "a"]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>42.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >266</id><querystr><![CDATA[assign a; stmt s1, s2, s3; procedure p1,p2; Select a such that Follows(s1, s2) and Follows(s2,s3) and Affects*(55,a) and Calls(p1,p2) with p1.procName = "alpha"]]></querystr>
+<stuans>58,59,60,61</stuans>
+<correct>58,59,60,61</correct>
+<time_taken>74.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >267</id><querystr><![CDATA[assign a; stmt s1, s2, s3; procedure p1,p2; Select s2 such that Follows(s1, s2) and Follows(s2,s3) and Affects*(55,a) and Calls(p1,p2) with p1.procName = "alpha"]]></querystr>
+<stuans>10,14,15,17,18,2,20,21,23,24,25,3,36,43,55,56,57,63</stuans>
+<correct>2,3,10,14,15,17,18,20,21,23,24,25,36,43,55,56,57,63</correct>
+<time_taken>108.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >268</id><querystr><![CDATA[assign a; stmt s1, s2, s3; procedure p1,p2; Select p1 such that Follows(s1, s2) and Follows(s2,s3) and Affects*(55,a) and Calls*(p1,p2) with p2.procName = "alpha"]]></querystr>
+<stuans>p,q</stuans>
+<correct>p,q</correct>
+<time_taken>77.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >269</id><querystr><![CDATA[constant co; variable v; if i; call c1,c2;procedure p1,p2; Select i pattern i(v,_,_) such that Modifies(i,v) and Next*(c1,i) with c2.stmt# = co.value such that Calls(p1,p2)]]></querystr>
+<stuans>4,34,33</stuans>
+<correct>4,33,34</correct>
+<time_taken>53.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >270</id><querystr><![CDATA[constant co; variable v1,v2; if i; call c1,c2; procedure p1,p2; Select i pattern i(v1,_,_) such that Modifies(i,v2) and Next*(c1,i) with c2.stmt# = co.value such that Calls(p1,p2)]]></querystr>
+<stuans>4,18,29,33,34,57</stuans>
+<correct>4,57,18,29,33,34</correct>
+<time_taken>69.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >271</id><querystr><![CDATA[constant co; variable v,v1; if i; call c; procedure p1; Select p1 pattern i(v,_,_) such that Modifies(i,v) and Next*(c,i) with p1.procName = v1.varName such that Calls(p1,62)]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>29.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >272</id><querystr><![CDATA[stmt s1, s2; variable v1, v2; prog_line n; assign a; Select n such that Affects(s1, n) and Affects(n, s2) with s1.stmt# = n pattern a(v1, "m-1") such that Modifies(s2, v2) with v1.varName = "m"]]></querystr>
+<stuans>6,28,17,27,40,32,43,70,72</stuans>
+<correct>6,17,27,28,32,40,43,70,72</correct>
+<time_taken>1264.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >273</id><querystr><![CDATA[stmt s1,s2; variable v1, v2; prog_line n; assign a; Select v1 such that Affects(s1, n) and Affects(n, s2) with s1.stmt# = n pattern a(v1, "m-1") such that Modifies(s2, v2)]]></querystr>
+<stuans>e,m</stuans>
+<correct>m,e</correct>
+<time_taken>1264.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >274</id><querystr><![CDATA[stmt s1,s2; variable v1, v2; prog_line n; assign a,a1,a2,a3,a4; Select v1 such that Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3,a4) with s1.stmt# = n pattern a(v1, "m-1") such that Modifies(s2, v2)]]></querystr>
+<timeout/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >275</id><querystr><![CDATA[stmt s1,s2; variable v1, v2; prog_line n; assign a,a1,a2,a3,a4; Select a3 such that Affects*(a1, a2) and Affects*(a2, a3) and Affects*(a3,a4) pattern a3(v1, "m-1") such that Modifies(s2, v2)]]></querystr>
+<stuans>6</stuans>
+<correct>6</correct>
+<time_taken>214.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >301</id><querystr><![CDATA[variable v; procedure p; assign a; Select <a, p> such that Modifies(a, v) with v.varName = p.procName]]></querystr>
+<stuans></stuans>
+<correct></correct>
+<time_taken>28.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >302</id><querystr><![CDATA[while w; stmt s; variable v; Select <w.stmt#, v, s> pattern w("k",_) such that Modifies(s,v) and Next*(50, s) with s.stmt# = 48]]></querystr>
+<stuans>48 x 48,48 k 48,48 b 48,48 a 48,48 e 48,48 c 48,48 y 48</stuans>
+<correct>48 x 48,48 k 48,48 b 48,48 y 48,48 c 48,48 a 48,48 e 48</correct>
+<time_taken>58.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >303</id><querystr><![CDATA[while w; stmt s1,s2,s3; variable v; Select <s1,s2,s3,v,w.stmt#> such that Follows(s1, s2) and Follows (s2,s3) and Follows* (s1, s3) and Follows* (s1, s2) and Modifies(s1,v) pattern w(v,_)]]></querystr>
+<stuans>13 14 15 b 15,23 24 25 b 15,55 56 57 b 15,9 10 11 x 26,14 15 46 x 26,17 18 45 x 26,20 21 29 x 26,51 55 56 x 26,51 55 56 k 48,56 57 61 k 48,13 14 15 b 51,23 24 25 b 51,55 56 57 b 51,16 17 18 y 69,35 36 37 y 69,42 43 44 y 69,62 63 74 y 69,56 57 61 y 69</stuans>
+<correct>9 10 11 x 26,13 14 15 b 51,13 14 15 b 15,14 15 46 x 26,16 17 18 y 69,17 18 45 x 26,20 21 29 x 26,23 24 25 b 51,23 24 25 b 15,35 36 37 y 69,42 43 44 y 69,51 55 56 x 26,51 55 56 k 48,55 56 57 b 51,55 56 57 b 15,56 57 61 y 69,56 57 61 k 48,62 63 74 y 69</correct>
+<time_taken>314.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >304</id><querystr><![CDATA[while w; stmt s1,s2; variable v; assign a; Select <s1,a,s2,v,w.stmt#> such that Follows(s1, a) and Follows (a,s2) and Follows* (s1, a) and Follows* (s1, s2) and Modifies(s1,v) pattern w(v,_)]]></querystr>
+<stuans>13 14 15 b 15,23 24 25 b 15,51 55 56 x 26,51 55 56 k 48,13 14 15 b 51,23 24 25 b 51,16 17 18 y 69,42 43 44 y 69</stuans>
+<correct>13 14 15 b 51,13 14 15 b 15,16 17 18 y 69,23 24 25 b 51,23 24 25 b 15,42 43 44 y 69,51 55 56 x 26,51 55 56 k 48</correct>
+<time_taken>228.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >305</id><querystr><![CDATA[assign a; variable foo; Select <a, a> such that Parent*(12, a) and Next*(16,a) and Affects(24,a)]]></querystr>
+<stuans>16 16,23 23,25 25</stuans>
+<correct>16 16,23 23,25 25</correct>
+<time_taken>64.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >306</id><querystr><![CDATA[assign a; variable foo; Select <a, a, a.stmt#> such that Parent*(12, a) and Next*(16,a) and Affects(24,a)]]></querystr>
+<stuans>16 16 16,23 23 23,25 25 25</stuans>
+<correct>16 16 16,23 23 23,25 25 25</correct>
+<time_taken>64.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="" >307</id><querystr><![CDATA[assign as; variable va; stmt st; while wh; Select st such that Follows*(st,as) and Follows*(_,_) with va.varName = "b" such that Affects(as,st) and Next*(as,st) and Parent*(wh,_)]]></querystr>
+<stuans>22,23,24,27</stuans>
+<correct>22,23,24,27</correct>
+<time_taken>1037.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >310</id><querystr><![CDATA[if i; Select BOOLEAN such that Calls(_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>26.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >311</id><querystr><![CDATA[if i; Select BOOLEAN such that Parent(_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>26.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >312</id><querystr><![CDATA[if i; Select BOOLEAN such that Parent*(_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>56.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >313</id><querystr><![CDATA[if i; Select BOOLEAN such that Follows(_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>48.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >314</id><querystr><![CDATA[if i; Select BOOLEAN such that Follows*(_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>52.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >315</id><querystr><![CDATA[if i; Select BOOLEAN such that Next(_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>47.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >316</id><querystr><![CDATA[if i; Select BOOLEAN such that Next*(_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>53.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >317</id><querystr><![CDATA[if i; Select BOOLEAN such that Affects(_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>45.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >320</id><querystr><![CDATA[variable v; stmt s; Select BOOLEAN such that Parent(s,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>66.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >321</id><querystr><![CDATA[variable v; procedure p; Select BOOLEAN such that Modifies(p,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>98.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >322</id><querystr><![CDATA[variable v; procedure p; Select BOOLEAN such that Uses(p,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>52.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >323</id><querystr><![CDATA[variable v; procedure p; Select BOOLEAN such that Modifies(p,v)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>37.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >324</id><querystr><![CDATA[variable v; procedure p; Select BOOLEAN such that Uses(p,v)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>40.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >120</id><querystr><![CDATA[assign a;  Select BOOLEAN such that Affects* (_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>40.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Affects="1" comment="" >127</id><querystr><![CDATA[assign a; Select BOOLEAN such that Affects (_,58)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>33.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects" >233</id><querystr><![CDATA[if i; Select BOOLEAN pattern i(_,_,_) such that Affects(_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>35.000000</time_taken>
+<passed/>
+</query>
+<query>
+<id Multiple_Clauses="1" Typed="1" comment="IfPattern and Affects*" >234</id><querystr><![CDATA[if i; Select BOOLEAN pattern i(_,_,_) such that Affects*(_,_)]]></querystr>
+<stuans>true</stuans>
+<correct>true</correct>
+<time_taken>34.000000</time_taken>
+<passed/>
+</query>
+</category>
+</queries>
+</test_results>

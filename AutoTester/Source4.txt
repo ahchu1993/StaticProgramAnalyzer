@@ -1,0 +1,46 @@
+procedure Carrot {i = 1;
+	x = 0;
+	y = i + x;
+	z = y - i;
+	while i{
+		if x then {
+			x = x + 5 * y;}
+		else { x = x * y + 3;}
+		while y{
+			if y then {
+				while x{
+					x = x + 1;
+					y = i * x + z * y;}}
+			else {while y {
+					x = y - 1;
+					i = i * 2;}}
+			while z {
+				while y {
+					while i {
+						x = i + 2 * y * z;
+						if x then {
+							m = y + 1;}
+						else { y = y - 1;}
+						while y {
+							while i {
+								while x {
+									x = y * 4;
+									while i {
+										m = 3;}
+									while x {
+										y = y;
+										if y then {
+											y = y + 1;}
+										else {y = x * y + y + 5 + i;}}}}}
+						z = x + 5 + x + m;
+						x = z + y;
+						m = i + m*x + y*x;}}
+				if y then {
+					y = x;}
+				else {y = x * i + z * y;
+					while m {
+						i = i +4;}}}
+			z = z +1;
+			x = i;}
+		while z {
+			m = i + m +x + k + y;}}}

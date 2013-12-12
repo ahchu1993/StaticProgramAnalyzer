@@ -1,0 +1,40 @@
+procedure John{	
+	i=1;
+	n=i;
+	a = i+n+2;
+	c =    i+n;
+	while i{
+		o=n+a;
+		while b{
+			a = a+i;
+			b=a+1;}
+		n=a+1;
+		while n {
+			while i{
+				while b{
+					i= a+5+3+n;
+					b=b+1;
+					while n{
+						while c{
+							while o{
+								a = a+1;}
+							a=c;
+							while n {
+								while b{
+									while i{
+										n=3;}
+									while a{
+										a=a;
+										while b{
+											n = a+c;}}}}}
+						b=a+5+1+a+n+c+i+o;
+						b=a;
+						i=n+1;
+						n=i+n+a+o+c;}
+					while n{
+						i=1+5;}}
+				n=a+i;}			
+			b=b+1;
+			a=i;}}
+	while b{
+		n=i+n+a+o+c;}}

@@ -1,0 +1,502 @@
+100
+cat: Parent
+1 - Parents ::
+while w; assign a;
+Select a such that Parent(w, a) with w.stmt# = 10
+11, 12
+5000
+2 - Parents ::
+while w1, w2;
+Select w2 such that Parent(w1, w2) with w1.stmt# = 58
+59
+5000
+3 - Parents ::
+while w; assign a;
+Select a pattern a(_, _"z"_) such that Parent(w, a) with w.stmt# = 42
+43, 45
+5000
+4 - Parents ::
+assign a; if ifs;
+Select a pattern a(_, _"a-idx-(y-x)"_) such that Parent(ifs, a) with ifs.stmt# = 102
+103
+5000
+5 - Parents ::
+assign a; if ifs; while w1, w2;
+Select a such that Modifies(a,"c") and Parent(ifs, a) and Parent(w1, ifs) and Parent(w2, w1) with w2.stmt# = 110
+113, 116
+5000
+6 - Parents ::
+assign a; if ifs1, ifs2, ifs3;
+Select a pattern a(_, _"a-c"_) such that Parent(ifs1, a) and Parent(ifs2, ifs1) and Parent(ifs3, ifs2) and Uses(ifs3, "a")
+81
+5000
+7  - Parents ::
+variable v; assign a; if ifs1, ifs2, ifs3;
+Select v pattern a(_, _"a-c"_) such that Parent(ifs1, a) and Parent(ifs2, ifs1) and Parent(ifs3, ifs2) and Uses(ifs3, "a") and Uses(a, v)
+a, c
+5000
+8 - Parents ::
+variable v; assign a; if ifs1, ifs2, ifs3;
+Select v pattern a(_, _"t-b"_) such that Parent(ifs1, a) and Parent(ifs2, ifs1) and Parent(ifs3, ifs2) and Uses(ifs3, "dszxcxc") and Uses(a, v)
+none
+5000
+9 - Parents ::
+procedure p;
+Select p such that Calls(p, "Iftest") and Calls(p, "Delta")
+Alpha
+5000
+10 - Parents ::
+variable v; assign a; if ifs1;
+Select v pattern a(_, _"idx-idx"_) such that Parent(ifs1, a) with ifs1.stmt# = 85 such that Modifies(a, v)
+idx
+5000
+11 - Follows ::
+assign a1; variable v;
+Select a1 such that Follows*(113, a1) pattern a1(_,_"c"_) such that Modifies(a1, v) with v.varName = "idx"
+115
+5000
+12- Follows ::
+assign a1, a2; variable v;
+Select a1 pattern a1("b",_) such that Follows(a2, a1) and Uses(a1, v) with v.varName = "c" and a2.stmt# = 69
+70
+5000
+13 - Follows ::
+assign a1, a2; while w;
+Select a1 pattern a1("z",_) such that Follows(a1, a2) with a2.stmt# = 52
+51
+5000
+14 - Follows ::
+assign a1; variable v; while w;
+Select w such that Follows(w, a1) with a1.stmt# = 46
+42
+5000
+15 - Follows ::
+assign a1; variable v; while w; if ifs;
+Select w such that Follows(a1, w) and Parent(ifs, a1) and Modifies(a1, "b") and Uses(a1, "z") with ifs.stmt# = 18
+21
+5000
+16 - Follows ::
+assign a1; if ifs;
+Select ifs such that Follows(a1, ifs) pattern a1(_,"idx+y") such that Modifies(a1, "t")
+8
+5000
+17 - Follows ::
+assign a1; variable v; if ifs1, ifs2; while w;
+Select ifs2 such that Follows*(ifs2, ifs1) and Parent(ifs1, w) with w.stmt# = 21
+8
+5000
+18 - Follows ::-
+assign a1; variable v; if ifs1, ifs2; while w;
+Select ifs1 such that Follows(a1, ifs1) and Parent(w, a1) with w.stmt# = 21
+23
+5000
+19 - Follows ::
+assign a1, a2, a3, a4, a5, a6;
+Select a1 such that Follows(a1, a2) and Follows(a2, a3) and Follows(a3, a4) and Follows(a4, a5) and Follows(a5, a6) with a6.stmt# = 29
+24
+5000
+20 - Follows ::
+assign a1; variable v; if ifs1, ifs2; while w1, w2;
+Select a1 such that Follows*(a1, w1) and Parent(w1, w2) with w2.stmt# = 59 such that Uses(a1,"k") and Modifies(a1, "a")
+55
+5000
+21 - Calls ::
+assign a1, a2; procedure p;
+Select p such that Modifies(a1, "idx")
+Alpha, Bravo, Charlie, Delta, Whiletest, Iftest, Jake
+5000
+22 - Calls ::
+assign a1, a2; procedure p;
+Select p such that Next*(a1, a2) with a1.stmt# = 24 and a2.stmt# = 27
+Alpha, Bravo, Charlie, Delta, Whiletest, Iftest, Jake
+5000
+23 - Modifies ::
+assign a1, a2; procedure p1, p2;
+Select p1 such that Modifies(p1, "idx")
+Alpha, Bravo, Delta, Whiletest, Iftest, Jake
+5000
+24 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3;
+Select a1 such that Modifies(a1, "x") and Parent(ifs1, a1) and Parent(ifs2, ifs1) and Parent(ifs3, ifs2) and Uses(ifs2, "b") and Uses(ifs3, "a") and Follows(a1, 83)
+82
+5000
+25 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3;
+Select a1 such that Uses(a1, "x") pattern a1(_,_"x+idx+a + b"_) such that Parent(ifs1, a1) with ifs1.stmt# = 37
+40
+5000
+26 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w;
+Select a1 such that Uses(a1, "x") pattern a1(_,_"x+3*y "_) such that Parent(w, a1) and Uses(w, "z")
+43
+5000
+27 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w;
+Select a1 such that Uses(a1, "idx") pattern a1(_,_"x-y"_) such that Parent(ifs1, a1) and Uses(ifs1, "x") with ifs1.stmt# = 94
+96
+5000
+28 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w;
+Select a1 such that Modifies(a1, "a") pattern a1(_,_"k-9"_) such that Parent(ifs1, a1) and Uses(ifs1, "b")
+105
+5000
+29 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2;
+Select a1 such that Modifies(a1, "c") pattern a1(_,_"y-x"_) such that Parent(w1, a1) and Uses(w1, "x") and Follows(a1, w2) and Uses(w2, "z")
+57
+5000
+30 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2;
+Select a1 such that Modifies(a1, "x") pattern a1(_,_"3-4 - 5 "_) such that Parent(w1, a1) and Uses(w1, "x")
+69
+5000
+31 - Uses ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2;
+Select a1 such that Uses(a1, "b") pattern a1(_,_"b * c"_) such that Parent(w1, a1) and Uses(w1, "y") and Parent(w1, a1) 
+62
+5000
+32 - Uses ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2;
+Select a1 such that Uses(a1, "test") and Modifies(a1, "i") pattern a1(_,_"test+3"_) such that Parent(ifs1, a1) and Uses(ifs1, "b")
+106
+5000
+33 - Uses ::-
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2;
+Select a1 such that Uses(a1, "b") pattern a1(_,"a") such that Parent(w1, a1) and Parent(w2, w1) with w2.stmt# = 91
+none
+5000
+34 - Uses ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2;
+Select v1 such that Uses(a1, v1) pattern a1("test",_) such that Follows(w1, a1) and Parent(w2, w1) with w2.stmt# = 60
+i
+5000
+35 - Uses ::-
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2;
+Select v1 pattern a1("a", _"b*c"_) such that Parent(w1, a1) and Parent(w2, w1) and Uses(w2, v1) and Uses(w1, v1)
+y,b,c,a,i,idx,k,t,x,z,test
+5000
+36 - Uses ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2;
+Select v1 pattern a1("i", "i+1") such that Follows(w1, a1) and Follows(a2, w1) with a2.stmt# = 67 such that Uses(a2, v1)
+y
+5000
+37 - Uses ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3; variable v1, v2;
+Select w1 such that Uses(w1, "y") and Follows*(w1, w2) and Parent(w3, w1) with w3.stmt# = 60
+61
+5000
+38 - Uses ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3; variable v1, v2;
+Select w1 such that Uses(w1, v1) and Parent(w2, w1) and Uses(w2, v1) and Parent(w1, 63)
+61
+5000
+39 - Uses ::-
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3; variable v1, v2;
+Select ifs1 such that Uses(ifs1, v1) and Parent(ifs1, ifs2) and Parent(ifs2, ifs3) and Parent(ifs3, a1) with a1.stmt# = 82
+78
+5000
+41 - Next ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2;
+Select w1 such that Next(w1, a1) with a1.stmt# = 73
+68
+5000
+42 - Next ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2;
+Select w1 such that Next(w1, a1) and Uses(w1, "z") with a1.stmt# = 46
+42
+5000
+43 - Next ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2;
+Select w1 such that Next(w1, a1) and Uses(w1, "z") pattern a1("y","x+idx")
+10
+5000
+44 - Next ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2;
+Select a1 such that Next(a1, w1) and Uses(w1, "z") and Follows*(11,a1) and Modifies(a1, "z")
+12
+5000
+45 - Next ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2;
+Select w1 such that Next(a1, w1) and Uses(w1, "x") with a1.stmt# = 35
+21
+5000
+46 - Next ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; prog_line n1;
+Select n1 such that Next(ifs1, n1) with ifs1.stmt# = 23
+24, 30
+5000
+47 - Next ::-
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; prog_line n1;
+Select a1 such that Next*(ifs1, a1) with ifs1.stmt# = 23 such that Modifies(a1, "c") and Uses(a1,"idx")
+22,27,35
+5000
+48 - Next ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; prog_line n1;
+Select a1 such that Next*(ifs1, a1) with ifs1.stmt# = 23 such that Follows(34, a1)
+35
+5000
+49 - Next ::-
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; prog_line n1;
+Select w1 such that Next*(w1, a1) pattern a1(_, _"idx* y+ x "_) such that Uses(w1, "x")
+47
+5000
+50 - Next ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2;
+Select ifs1 such that Next(ifs1, 88) and Uses(ifs1, "idx") and Follows(84, ifs1)
+85
+5000
+51 - Parents ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2;
+Select v1 pattern a1(_, _"3-4-5"_) such that Parent*(w1, a1) with w1.stmt# = 54 such that Uses(w1, v1)
+x,a,b,c,i,idx,k,t,y,z,test
+5000
+52 - Parents ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select p1 such that Uses(p1, v1) with v1.varName = "test" 
+Jake,Alpha,Iftest,Whiletest
+5000
+54 - Parents ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select p1 such that Uses(p1, v1) and Uses(a1, v1) and Parent*(w1, a1) and Modifies(a1, v2) with v2.varName = "i" and w1.stmt# = 99
+Jake,Alpha,Iftest,Whiletest
+5000
+55 - Parents ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select v1 such that Parent*(w1, a1) and Follows(w2, a1) and Modifies(a1, v1) with w1.stmt# = 54 and w2.stmt# = 61
+test
+5000
+56 - Parents ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select a1 such that Parent(ifs1, a1) and Parent(w1, ifs1) and Parent(ifs2, w1) and Modifies(a1, v1) with ifs2.stmt# = 18 and v1.varName = "idx"
+24, 28
+5000
+57 - Parents ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2,w3; variable v1, v2; stmt s1, s2;
+Select w1 such that Parent*(w1, w2) and Parent*(w2, w3) and Parent(w3, a1) pattern a1("a","b*c - 4")
+54,58,59
+5000
+58 - Parents ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select v1 such that Parent*(w1, ifs1) and Uses(w1, "idx") and Uses(ifs1, "b") and Parent(ifs1, a1) and Modifies(a1, v1) and Follows(ifs1, a2) with a2.stmt# = 118
+none
+5000
+59 - Parents ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select v1 such that Parent*(w1, ifs1) and Uses(w1, "idx") and Uses(ifs1, "b") and Parent(ifs1, a1) and Uses(a1, v1) and Follows(ifs1, a2) with a2.stmt# = 118
+none
+5000
+61 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select v1 such that Uses(a1, v1) and Parent(ifs1, a1) and Modifies(a1, "b") with ifs1.stmt# = 102
+a, b, c, idx, y, x
+5000
+62 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select a1 such that Parent*(w1, ifs1) and Parent(ifs1, a1) with w1.stmt# = 110 such that Uses(a1, v1) and Uses(a1, v2) with v1.varName = "c" and v2.varName ="b"
+113, 114, 115
+5000
+63 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select a1 such that Parent(ifs1, a1) with ifs1.stmt# = 102 such that Uses(a1, v1) and Modifies(a1, v1)
+103, 107, 108, 109
+5000
+64 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select a1 such that Parent(ifs1, a1) with ifs1.stmt# = 102 such that Uses(a1, v1) and Modifies(a1, v1) and Follows*(107, a1)
+108, 109
+5000
+65 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select v1 such that Parent(ifs1, a1) with ifs1.stmt# = 102 such that Uses(a1, v1) and Modifies(a1, v1) and Follows*(107, a1)
+x, z
+5000
+66 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select v1 such that Parent(ifs1, a1) with ifs1.stmt# = 102 such that Uses(a1, v1) and Modifies(a1, v1)
+b, y, x, z
+5000
+67 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select v1 such that Follows*(a1, a2) pattern a1(_,_"3 - 4 -5"_) such that Uses(a2, v1)
+c, x, z
+5000
+68 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select v1 such that Follows*(a1, a2) pattern a1("x",_" 3 - 4 -5 "_) such that Modifies(a2, v1)
+b, x
+5000
+70 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select v1 such that Follows*(a1, a2) pattern a1(_,_"3 * 4"_) such that Modifies(a2, v1)
+idx, c
+5000
+71 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select v1 such that Follows*(a1, a2) pattern a1(_,_"3 * 4"_) such that Uses(a2, v1)
+a, c, idx, t, y, x
+5000
+72 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select w1 such that Follows*(a1, w1) pattern a1(_,_"3 * 4"_) such that Uses(w1, v1) with v1.varName = "z"
+58
+5000
+73 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select a2 such that Follows*(a1, w1) pattern a1(_,_"3 * 4"_) such that Uses(w1, v1) with v1.varName = "z" such that Parent(w1, w2) and Parent(w2, w3) and Parent(w3, w4) and Parent(w4, a2) 
+62, 64, 65,69,70,71
+5000
+74 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select v1 such that Follows*(a1, w1) pattern a1(_,_"3 * 4"_) such that Uses(w1, v1) with v1.varName = "z" such that Parent(w1, w2) and Parent(w2, w3) and Parent(w3, w4) and Parent(w4, a2) and Uses(a2, v1)
+z
+5000
+75 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select v1 such that Follows*(a1, w1) pattern a1(_,_"3 * 4"_) such that Uses(w1, v1) with v1.varName = "z" such that Parent(w1, w2) and Parent(w2, w3) and Parent(w3, w4) and Parent(w4, a2) and Modifies(a2, v1)
+none
+5000
+76 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select a1 such that Parent(ifs1, a1) and Parent(w1, ifs1) and Parent(ifs2, w1) with ifs2.stmt# = 18
+24, 25, 26, 27, 28, 29, 31, 32, 33, 34, 35
+5000
+77 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select v1 such that Parent(ifs1, a1) and Parent(w1, ifs1) and Parent(ifs2, w1) with ifs2.stmt# = 18 such that Modifies(a1, v1)
+idx, a, b, c, z
+5000
+78 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select v1 such that Parent(ifs1, a1) and Parent(w1, ifs1) and Parent(ifs2, w1) with ifs2.stmt# = 18 such that Uses(a1, v1)
+a, b, c, idx, z
+5000
+79 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select a1 such that Parent(ifs1, a1) and Parent(w1, ifs1) and Parent(ifs2, w1) with ifs2.stmt# = 18 such that Uses(a1, "b")
+25, 32
+5000
+80 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select a1 such that Parent(ifs1, a1) and Parent(w1, ifs1) with w1.stmt# = 42 such that Uses(a1, "x")
+none
+5000
+81 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select a1 such that Parent(ifs1, a1) and Parent(w1, ifs1) with w1.stmt# = 42 such that Modifies(a1, "x")
+none
+5000
+82 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select ifs1 such that Parent(ifs1, w1) and Parent(ifs2, ifs1) with ifs2.stmt# = 18 
+37
+5000
+83 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select a2 such that Parent(w1, ifs1) and Parent(ifs2, ifs1) with ifs2.stmt# = 18 such that Parent(ifs1, a2) and Modifies(a2, "a")
+none
+5000
+84 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select a2 such that Parent(w1, ifs1) and Parent(ifs2, ifs1) with ifs2.stmt# = 18 such that Parent(ifs1, a2) and Modifies(a2, "b")
+none
+5000
+85 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select a2 such that Parent(w1, ifs1) and Parent(ifs2, ifs1) with ifs2.stmt# = 18 such that Parent(ifs1, a2) and Modifies(a2, "c")
+none
+5000
+86 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select v1 such that Follows(w1, a1) and Uses(a1, v1) and Parent(ifs1, w1) with ifs1.stmt# = 37
+x, idx, a, b, c, k
+5000
+87 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select v1 such that Follows(w1, a1) and Modifies(a1, v1) and Parent(ifs1, w1) with ifs1.stmt# = 37
+y
+5000
+88 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select v1 such that Parent(ifs1, a1) and Parent(w1, ifs1) with w1.stmt# = 47 pattern a1(_, _"idx*y + x "_) such that Uses(a1, v1) and Uses(w1, v1)
+x,idx,k,t,y
+5000
+89 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select a2 such that Parent(ifs1, a1) and Parent(w1, ifs1) with w1.stmt# = 47 pattern a1(_, _" idx*y + x "_) such that Uses(a1, v1) and Uses(w1, v1) and Next*(a1, a2) pattern a2("z", "idx+k+x ")
+51
+5000
+90 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select w1 such that Parent*(w2, w1) and Uses(w2, "x") and Parent(w2, a1) pattern a1("a", _" 3 * 4 "_) such that Uses(w1, "y") and Parent(w1, a2) with a2.stmt# = 62
+61
+5000
+91 - Modifies ::
+assign a1, a2,a3; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select v1 such that Parent*(w2, w1) and Uses(w2, "x") and Parent(w2, a1) pattern a1("a", _"3* 4"_) such that Uses(w1, "y") and Parent(w1, a2) with a2.stmt# = 62 such that Follows*(a2, a3) and Uses(a3, v1)
+b, c
+5000
+92 - Modifies ::
+assign a1, a2,a3; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select v1 such that Parent*(w2, w1) and Uses(w2, "x") and Parent(w2, a1) pattern a1("a", _"3 * 4"_) such that Uses(w1, "y") and Parent(w1, a2) with a2.stmt# = 62 such that Follows*(a2, a3) and Modifies(a3, v1)
+k, c
+5000
+93 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select w1 such that Parent(w2, w1) with w2.stmt# = 54 such that Follows*(a1, w1) and Uses(a1, v1) with v1.varName = "idx"
+58
+5000
+94 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select w1 such that Parent(w2, w1) with w2.stmt# = 54 such that Follows*(a1, w1) and Modifies(a1, v1) with v1.varName = "idx"
+58
+5000
+95 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select w2 such that Parent(w1, a1) pattern a1(_, _"3- 4-5 "_) such that Follows*(w2, w1) and Uses(w2, "y")
+61
+5000
+96 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select v1 such that Parent(w1, a1) pattern a1(_, _"3-4 - 5"_) such that Follows*(w2, w1) and Uses(w2, v1) and Parent(w3, w2) and Uses(w3, v1)
+y,b,c,a,i,idx,k,t,test,x,z
+5000
+97 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select w4 such that Parent(w1, a1) pattern a1(_, _"3-4 - 5"_) such that Follows*(w2, w1) and Uses(w2, v1) and Parent(w3, w2) and Uses(w3, v1) and Parent*(w4, w3) and Parent(w4, a2) with a2.stmt# = 55
+54
+5000
+98 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select a1 such that Parent(w1, a1) and Follows(w1, a2) with a2.stmt# = 46
+43, 45
+5000
+99 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select v1 such that Parent(w1, a1) and Follows(w1, a2) with a2.stmt# = 46 such that Uses(a1, v1)
+x, y, z
+5000
+100 - Modifies ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3, w4; variable v1, v2; stmt s1, s2;
+Select v1 such that Parent(w1, a1) and Follows(w1, a2) with a2.stmt# = 46 such that Modifies(a1, v1)
+idx, z
+5000
+40 - Uses ::-
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2, w3; variable v1, v2;
+Select ifs1 such that Uses(ifs1, v1) and Parent(ifs1, a1) pattern a1(_,"c-(a-b*(c*(a-idx-(y-x))))") such that Uses(a1, v1) with v1.varName = "b"
+102
+5000
+53 - Parents ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select p1 such that Uses(p1, v1) and Uses(a1, v1) and Follows*(a2,a1) and Modifies(a1, v2) with v2.varName = "i" pattern a2(_,_"c -(a- b* (c*(a- idx- (y -x ) )))"_)
+Jake,Alpha,Iftest,Whiletest
+5000
+60 - Follows ::
+assign a1, a2; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select a2 such that Follows*(a1, a2) and Parent*(w1, a1) with w1.stmt# = 99 pattern a1(_,_" c -(a-b*(c*(a-idx-(y-x))))"_) such that Uses(a2, "test")
+106
+5000
+69 - Follows ::
+assign a1, a2,a3; procedure p1, p2; if ifs1, ifs2, ifs3; while w1, w2; variable v1, v2; stmt s1, s2;
+Select v1 such that Follows(a1, a2) pattern a1(_,"  c -(a-b*(c*(a-idx- (y - x) )) )") such that Follows*(a2, a3) and Uses(a3, v1)
+k, test
+5000

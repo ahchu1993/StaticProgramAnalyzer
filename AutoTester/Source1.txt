@@ -1,0 +1,181 @@
+procedure Alpha {
+   idx = 1; 
+   y = idx; 
+   x = idx *y + 2;
+   call Charlie;
+   t = idx + y;
+   call Delta;
+   t = idx + y;
+   if idx then {
+      k = y - x;
+      while z {
+      	    x = x + idx;
+ 	    z = x + 1; }
+      y = x + idx; }
+   else {
+      y = x + idx;
+      call Delta;
+      z = z - 1; }
+   call Bravo;
+   if x then {
+      a = 5;
+      b = z;
+      while x {
+        c = idx + a + 5;
+		if c then {
+		   idx=a;
+		   a = b;
+		   b = c;
+		   c = idx;
+		   idx = z;
+		   z = a;
+		}
+		else {
+		   call Bravo;
+		   b = idx;
+		   c = b;
+		   a = z;
+		   z = c;
+		   c = idx;
+		}
+      }
+    }
+    else {
+       call Charlie;
+       if z then {
+       	  while a{
+	     call Iftest;
+	  }
+	  y = x+ idx +a+b+c+k;
+       }
+       else{
+	  call Delta;
+       }
+    } 
+ }
+ 
+procedure Bravo {
+ while z {
+ idx = x + 3 * y + z;
+ call Charlie;
+ z = z - 1; }
+ x = idx; }
+ 
+procedure Charlie {
+ while x {
+ if idx then {
+ x = idx + 2; }
+else {
+ y = idx * y + x + k * t; }}
+ z = idx + k + x; 
+ test = i;}
+ 
+procedure Delta {
+ idx = y + idx; }
+ 
+
+procedure Whiletest{
+	while x{
+		a = 3*4-idx *(k-t);
+		idx = a-c;
+		c = idx + t+(y-x);
+		while z {
+			while x {
+				while y{
+					while y{
+						a = b*c - 4;
+						call Iftest;
+						k = b -11;
+						c= 2*c;
+					}
+					test = i;
+					i = y;
+					while x {
+						x = 3 -4-5-b;
+						b = c*x;
+						x = x +z;
+						call Charlie;
+					}
+					i = i+1;
+				}
+				idx = idx - x;
+			}
+			i = i+4;
+			call Charlie;
+			t = t*a;
+		}
+	}
+}
+
+procedure Iftest {
+	if a then {
+		if b then {
+			if c then {
+				b = a -c+a;
+				x = y-z+x;
+				t = t -b;
+			}else {
+				call Bravo;
+				if idx then {
+					idx = x - idx;
+					call Alpha111;
+				}else {
+					call Jake;
+					idx = idx - idx;
+				}
+			}
+		}
+		else { 
+		 x = x -a;
+			while x{
+				while z {
+				 a = a-b;
+				}
+			}
+		}
+	}else {
+		if x then{
+			call Bravo;
+			x =x -y + idx;
+			call Jake;
+		} else{
+			x = a-4;
+		}
+	}
+}
+
+procedure  Jake{
+	while idx {
+		if a then{
+			while y {
+				if b then {
+					b = c -(a-b*(c*(a-idx-(y-x))));
+					c  = idx -a +b;
+					a =  k - 9;
+					i = test +3;
+				} else {
+					y = y;
+					x  = x;
+					z = z;
+					
+				}
+			}
+		}else {
+			while a {
+				while b {
+					if c then{
+						c = c +b;
+						b = c - b;
+						idx  = b * c ;
+						c = idx - c;
+					}else {
+						call Bravo;
+					}
+				}
+			}
+		}
+		k = a-1;
+	}
+	k = b+1;
+}
+

@@ -1,0 +1,214 @@
+procedure p1 {
+	is = 92 * 86 - 34 * 94;	
+	time = me * 36 + things + that;	
+	if things then { 	
+		if that then { 	
+			if tell then { 
+				there = 46 * 16 - me - there;	
+			} else {
+				while a { 	
+					a = me;	
+					some = only + is - 52 + 55;	
+				}
+			}
+		} else {
+			if some then { 	
+				abc = 66 + abc;	
+				time = tell + abc - 42 - 59 - 62;	
+			} else {
+				if will then { 	
+					while time {
+						if only then { 	
+							some = abc;	
+						} else {
+							things = tell;	
+						}
+					}
+					time = 55 + 93 + some * time;	
+				} else {
+					call p3;	
+				}
+			}
+		}
+	} else {
+		things = 94 - 60 * there - only + is;	
+		will = there * tell - 96;	
+	}
+	while me { 	
+		abc = will;	
+	}
+	while that { 	
+		will = 87 * tell - 83 - will * 67;	
+	}
+	only = 34 * a + 98 + some;	
+	while me { 	
+		if that then { 	
+			if some then { 	
+				me = 26 * 26;	
+			} else {
+				is = 59 * 90 + 36 - 62 + there;	
+				if abc then { 	
+					while is { 	
+						while that { 	
+							there = only;	
+						}
+						abc = 80 + 81;	
+					}
+				} else {
+					if a then { 	
+						me = 52 * 22 * 66 - 100;	
+						if me then { 	
+							only = a - time + things;	
+						} else {
+							there = things - 44 * that * 11 - some;
+						}
+						while things { 	
+							only = 53 * 49 + 56 - there;	
+							abc = 97;	
+						}
+					} else {
+						abc = only;	
+					}
+				}
+			}
+		} else {
+			if there then { 	
+				if things then { 	
+					abc = abc * 16 - 54 * 25;	
+				} else {
+					time = there - 16;	
+				}
+			} else {
+				that = 46 - 99 + 1;	
+			}
+		}
+	}
+	while will { 	
+		abc = abc;	
+	}
+	while a { 	
+		things = 56;	
+	}
+	if is then { 	
+		tell = time * 47 * a + 90 + 53;	
+		call p2;	
+	} else {
+		me = 61 + 18 * 77 - that - that;	
+	}
+	if some then { 	
+		is = 26 + a * 68 * things + 33;	
+	} else {
+		is = 83 * 27;	
+	}
+}
+
+procedure p2 {
+	if a then { 	
+		a = only;	
+	} else {
+		if some then { 	
+			that = 30 + some;	
+		} else {
+			me = things - that * tell * 49;	
+			will = things;	
+			while there { 	
+				that = time * 42 + things - 61 - 12;	
+			}
+		}
+	}
+	while only { 	
+		while things { 	
+			there = me - 65;	
+			a = 88;
+			that = that * 21 + there + that;	
+		}
+	}
+	if only then { 
+		only = there - some * 90 + 82 + 93;
+	} else {
+		call p4;	
+	}
+}
+
+procedure p3 {
+	while time { 	
+		while things { 	
+			while some { 	
+				there = 54;	
+			}
+		}
+	}
+	that = 12 + will + 38;
+	a = 44 + me + a;	
+	there = 26;	
+	only = 57;	
+	will = 9 + there * 82 * 43;	
+	while there { 
+		time = only - that - a;	
+	}
+	tell = 51 - 89 + only;	
+	me = 99 - will - 15;	
+	me = 37 * a * time;	
+	while will { 	
+		me = 37 + 85 + 51;	
+	}
+	will = 21 + 92;	
+	while is { 	
+		while that { 
+			me = 1 - only;	
+		}
+		if there then { 	
+			while me { 
+				me = 49 + 63;	
+			}
+			while some { 	
+				a = 71 + tell;
+			}
+			there = will - 21 - 83 + 49 + 75;	
+		} else {
+			while time { 	
+				there = there - a;	
+			}
+			while some { 	
+				time = things - 53 * 24;	
+			}
+			if me then { 
+				call p2;	
+			} else {
+				will = that * will + things - 6 * 57;	
+			}
+		}
+		if a then { 	
+			while abc { 	
+				things = only * some - 65 * there;
+			}
+		} else {
+			that = 8 - 15 * 76 * 85;	
+		}
+	}
+}
+
+procedure p4 {
+	if me then { 	
+		only = 50 - 65 - that + 33;	
+	} else {
+		while abc { 
+			time = a;	
+		}
+	}
+	while a { 	
+		if there then { 	
+			while some { 	
+				things = me * tell - will + some;	
+			}
+			only = tell * 92 - 57;	
+		} else {
+			is = 5;	
+		}
+		if things then { 	
+			some = a;	
+		} else {
+			will = 38;
+		}
+	}
+}

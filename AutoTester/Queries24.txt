@@ -1,0 +1,277 @@
+55
+cat: IfWhile_queries_AffectsStar
+1 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select s1 such that Affects*(s1,s2)
+1,2,6,8,9,11,12,16,17,18,20,21,23,25,26,35,36,40,41,43,44,45,48,49,50,52,54,65,66,69,72,74,82,83,84,85,86,88,89,94,102,103,105,110,113,114,126,127
+5000
+2 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select s2 such that Affects*(s1,s2)
+9,12,18,20,23,25,26,31,35,40,41,43,45,48,49,52,56,58,60,72,74,76,86,88,89,90,91,97,102,103,105,107,110,113,122
+5000
+3 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(s1,s2)
+true
+5000
+4 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select s1 such that Affects*(s1,25)
+21,25
+5000
+5 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(s1,91)
+true
+5000
+6 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select s1 such that Affects*(s1,a2)
+1,2,6,8,9,11,12,16,17,18,20,21,23,25,26,35,36,40,41,43,44,45,48,49,50,52,54,65,66,69,72,74,82,83,84,85,86,88,89,94,102,103,105,110,113,114,126,127
+5000
+7 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select a2 such that Affects*(s1,a2)
+9,12,18,20,23,25,26,31,35,40,41,43,45,48,49,52,56,58,60,72,74,76,86,88,89,90,91,97,102,103,105,107,110,113,122
+5000
+8 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(s1,a2)
+true
+5000
+9 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select s1 such that Affects*(s1,_)
+1,2,6,8,9,11,12,16,17,18,20,21,23,25,26,35,36,40,41,43,44,45,48,49,50,52,54,65,66,69,72,74,82,83,84,85,86,88,89,94,102,103,105,110,113,114,126,127
+5000
+10 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(s1,_)
+true
+5000
+11 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select s1 such that Affects*(s1,line2)
+1,2,6,8,9,11,12,16,17,18,20,21,23,25,26,35,36,40,41,43,44,45,48,49,50,52,54,65,66,69,72,74,82,83,84,85,86,88,89,94,102,103,105,110,113,114,126,127
+5000
+12 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select line2 such that Affects*(s1,line2)
+9,12,18,20,23,25,26,31,35,40,41,43,45,48,49,52,56,58,60,72,74,76,86,88,89,90,91,97,102,103,105,107,110,113,122
+5000
+13 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(s1,line2)
+true
+5000
+14 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select s2 such that Affects*(53,s2)
+none
+5000
+15 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(57,s2)
+false
+5000
+16 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(81,81)
+false
+5000
+17 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select a2 such that Affects*(73,a2)
+none
+5000
+18 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(82,a2)
+true
+5000
+19 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(4,_)
+false
+5000
+20 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select line2 such that Affects*(36,line2)
+48,52
+5000
+21 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(36,line2)
+true
+5000
+22 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select a1 such that Affects*(a1,s2)
+1,2,6,8,9,11,12,16,17,18,20,21,23,25,26,35,36,40,41,43,44,45,48,49,50,52,54,65,66,69,72,74,82,83,84,85,86,88,89,94,102,103,105,110,113,114,126,127
+5000
+23 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select s2 such that Affects*(a1,s2)
+9,12,18,20,23,25,26,31,35,40,41,43,45,48,49,52,56,58,60,72,74,76,86,88,89,90,91,97,102,103,105,107,110,113,122
+5000
+24 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(a1,s2)
+true
+5000
+25 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select a1 such that Affects*(a1,17)
+none
+5000
+26 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(a1,97)
+true
+5000
+27 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select a1 such that Affects*(a1,a2)
+1,2,6,8,9,11,12,16,17,18,20,21,23,25,26,35,36,40,41,43,44,45,48,49,50,52,54,65,66,69,72,74,82,83,84,85,86,88,89,94,102,103,105,110,113,114,126,127
+5000
+28 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select a2 such that Affects*(a1,a2)
+9,12,18,20,23,25,26,31,35,40,41,43,45,48,49,52,56,58,60,72,74,76,86,88,89,90,91,97,102,103,105,107,110,113,122
+5000
+29 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(a1,a2)
+true
+5000
+30 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select a1 such that Affects*(a1,_)
+1,2,6,8,9,11,12,16,17,18,20,21,23,25,26,35,36,40,41,43,44,45,48,49,50,52,54,65,66,69,72,74,82,83,84,85,86,88,89,94,102,103,105,110,113,114,126,127
+5000
+31 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(a1,_)
+true
+5000
+32 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select a1 such that Affects*(a1,line2)
+1,2,6,8,9,11,12,16,17,18,20,21,23,25,26,35,36,40,41,43,44,45,48,49,50,52,54,65,66,69,72,74,82,83,84,85,86,88,89,94,102,103,105,110,113,114,126,127
+5000
+33 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select line2 such that Affects*(a1,line2)
+9,12,18,20,23,25,26,31,35,40,41,43,45,48,49,52,56,58,60,72,74,76,86,88,89,90,91,97,102,103,105,107,110,113,122
+5000
+34 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(a1,line2)
+true
+5000
+35 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select s2 such that Affects*(_,s2)
+9,12,18,20,23,25,26,31,35,40,41,43,45,48,49,52,56,58,60,72,74,76,86,88,89,90,91,97,102,103,105,107,110,113,122
+5000
+36 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(_,s2)
+true
+5000
+37 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(_,43)
+true
+5000
+38 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select a2 such that Affects*(_,a2)
+9,12,18,20,23,25,26,31,35,40,41,43,45,48,49,52,56,58,60,72,74,76,86,88,89,90,91,97,102,103,105,107,110,113,122
+5000
+39 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(_,a2)
+true
+5000
+40 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(_,_)
+true
+5000
+41 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select line2 such that Affects*(_,line2)
+9,12,18,20,23,25,26,31,35,40,41,43,45,48,49,52,56,58,60,72,74,76,86,88,89,90,91,97,102,103,105,107,110,113,122
+5000
+42 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(_,line2)
+true
+5000
+43 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select line1 such that Affects*(line1,s2)
+1,2,6,8,9,11,12,16,17,18,20,21,23,25,26,35,36,40,41,43,44,45,48,49,50,52,54,65,66,69,72,74,82,83,84,85,86,88,89,94,102,103,105,110,113,114,126,127
+5000
+44 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select s2 such that Affects*(line1,s2)
+9,12,18,20,23,25,26,31,35,40,41,43,45,48,49,52,56,58,60,72,74,76,86,88,89,90,91,97,102,103,105,107,110,113,122
+5000
+45 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(line1,s2)
+true
+5000
+46 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select line1 such that Affects*(line1,94)
+none
+5000
+47 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(line1,50)
+false
+5000
+48 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select line1 such that Affects*(line1,a2)
+1,2,6,8,9,11,12,16,17,18,20,21,23,25,26,35,36,40,41,43,44,45,48,49,50,52,54,65,66,69,72,74,82,83,84,85,86,88,89,94,102,103,105,110,113,114,126,127
+5000
+49 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select a2 such that Affects*(line1,a2)
+9,12,18,20,23,25,26,31,35,40,41,43,45,48,49,52,56,58,60,72,74,76,86,88,89,90,91,97,102,103,105,107,110,113,122
+5000
+50 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(line1,a2)
+true
+5000
+51 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select line1 such that Affects*(line1,_)
+1,2,6,8,9,11,12,16,17,18,20,21,23,25,26,35,36,40,41,43,44,45,48,49,50,52,54,65,66,69,72,74,82,83,84,85,86,88,89,94,102,103,105,110,113,114,126,127
+5000
+52 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(line1,_)
+true
+5000
+53 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select line1 such that Affects*(line1,line2)
+1,2,6,8,9,11,12,16,17,18,20,21,23,25,26,35,36,40,41,43,44,45,48,49,50,52,54,65,66,69,72,74,82,83,84,85,86,88,89,94,102,103,105,110,113,114,126,127
+5000
+54 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select line2 such that Affects*(line1,line2)
+9,12,18,20,23,25,26,31,35,40,41,43,45,48,49,52,56,58,60,72,74,76,86,88,89,90,91,97,102,103,105,107,110,113,122
+5000
+55 - IfWhile_queries_AffectsStar, Affects*
+prog_line line1, line2; constant c1, c2; stmt s1, s2; while w1, w2; call call1, call2; variable v1, v2; stmtLst sl1, sl2; assign a1, a2; procedure proc1, proc2; if i1, i2; 
+Select BOOLEAN such that Affects*(line1,line2)
+true
+5000

@@ -1,0 +1,253 @@
+20
+cat: All Category
+1 - test01:: Tests if Query Parser accepts a combination of LETTER | DIGIT | '#'
+stmt s#1#1;
+Select s#1#1 such that Modifies (s#1#1, "u")
+1
+5000
+2 - test02:: Tests if Query Parser is able to differentiate a keyword from a variable name
+while while; 
+Select while such that Modifies (while, "var1able")
+29, 31, 33, 35, 37, 39, 41, 43
+5000
+3 - test03:: Tests if Query Parser is able to differentiate a keyword from a variable name
+while whilewhile; 
+Select whilewhile such that Modifies (whilewhile, "var1able")
+29, 31, 33, 35, 37, 39, 41, 43
+5000
+4 - test04:: Tests if Query Parser is able to handle white spaces within a query and if Query Parser is able to differentiate a keyword from a variable name
+stmt ssstmt;
+Select ssstmt         such that      Modifies (ssstmt, "ClOnE")
+none
+5000
+5 - test05 :: valid while name even is declaration type
+procedure procedureprocedure; 
+Select procedureprocedure
+Alpha, Alpha2, Beta, betaTwo, Gamma, Delta
+5000
+6 - test06:: Tests if the Parser is able to deal with random variables of white spaces and breaklines and not cause disruptions in the statement numbers.
+stmt s;
+Select s
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53
+5000
+7 - test07:: Tests Follows* across procedure boundary
+stmt s1;
+Select s1 such that Follows*(53, s1)
+none
+5000
+8 - test08:: Tests if Parser is able to take in a Cplusplus keyword as variable name
+stmt int; assign a;
+Select int such that Uses(int, "var1able") pattern a (_, _"var1able"_)
+29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44
+5000
+9 - test09:: Tests whether keyword names declared as variables in different cases is possible
+stmt Stmt; assign Assign;
+Select Stmt such that Uses(Stmt, "z") pattern Assign (_, _"z"_)
+23, 53
+5000
+10 - test10::
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s#, s##, s###, s####, s#####;
+Select s##### such that Follows (s1, 100)
+none
+5000
+cat: All Category
+1 - test01::
+procedure p;
+Select p
+Alpha, Alpha2, Beta, betaTwo, Gamma, Delta
+5000
+2 - test02::
+stmt s;
+Select s
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53
+5000
+3 - test03::
+variable v;
+Select v
+u, v, w, uv1, uv2, uv3, uv4, uv5, uuv, BIGUV, wide, veryWide, broken, veryBroken, wideBroken, clone, num123num, mix, x, y, z, xyz, x1, day, tomorrowNeverComes, var1able, a, b, c, d, e, f, g, h, BREAK1, BREAK2, BREAK3, lol, beta, long, r, s, t
+5000
+4 - test04::
+stmt s;
+Select s such that Modifies (s, "u")
+1
+5000
+5 - test05::
+stmt s;
+Select s such that Modifies (s, "veryBroken")
+15
+5000
+6 - test06::
+stmt s;
+Select s such that Modifies (s, "num123num")
+18
+5000
+7 - test07::
+stmt s;
+Select s such that Modifies (s, "clone")
+17
+5000
+8 - test08::
+stmt s;
+Select s such that Modifies (1, "u")
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53
+5000
+9 - test09::
+stmt s;
+Select s such that Modifies (1, "v")
+none
+5000
+10 - test10::
+stmt s1;
+Select s1 such that Modifies (s1, "u")
+1
+5000
+11 - test11::
+stmt s#1#1;
+Select s#1#1 such that Modifies (s#1#1, "u")
+1
+5000
+12 - test12::
+stmt s##;
+Select s## such that Modifies (s##, "u")
+1
+5000
+13 - test13::
+stmt s11;
+Select s11 such that Modifies (s11, "u")
+1
+5000
+14 - test14::
+variable v;
+Select v such that Modifies (17, _)
+u, v, w, uv1, uv2, uv3, uv4, uv5, uuv, BIGUV, wide, veryWide, broken, veryBroken, wideBroken, clone, num123num, mix, x, y, z, xyz, x1, day, tomorrowNeverComes, var1able, a, b, c, d, e, f, g, h, BREAK1, BREAK2, BREAK3, lol, beta, long, r, s, t
+5000
+15 - test15::
+assign a;
+Select a
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 30, 32, 34, 36, 38, 40, 42, 44, 48, 49, 50, 51, 52, 53
+5000
+16 - test16::
+assign a;
+Select a such that Modifies (19, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 30, 32, 34, 36, 38, 40, 42, 44, 48, 49, 50, 51, 52, 53
+5000
+17 - test17::
+assign a;
+Select a pattern a (_, _"u"_)
+3, 4, 5, 6, 7 ,8, 9, 10, 11, 12, 13, 14, 15, 16, 19
+5000
+18 - test18::
+assign a#1#;
+Select a#1# pattern a#1# ("r", _"x"_)
+51
+5000
+19 - test19::
+assign var1able;
+Select var1able pattern var1able (_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 27, 28, 30, 32, 34, 36, 38, 40, 42, 44, 48, 49, 50, 51, 52, 53
+5000
+20 - test20::
+assign aaAaa;
+Select aaAaa pattern aaAaa (_, _"y"_)
+23, 52
+5000
+21 - test21::
+stmt t; assign aaAaa;
+Select t such that Modifies (t, "t") pattern aaAaa (_, _"z"_)
+53
+5000
+22 - test22::
+stmt t; assign aaAaa;
+Select t such that Modifies (t, _) pattern aaAaa (_, _"z"_)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53
+5000
+23 - test23::
+constant c#1; prog_line n;
+Select       c#1
+1, 2, 3, 9999, 0, 90192
+5000
+24 - test24::
+procedure p;
+Select BOOLEAN such that Modifies       (18, "     num123num      ")
+true
+5000
+25 - test25::
+while w1;
+Select w2 such that Modifies (w2, "var1able")
+none
+5000
+26 - test26::
+while whiles;
+Select whiles such that Modifies (whiles, "var1able")
+29, 31, 33, 35, 37, 39, 41, 43
+5000
+27 - test27::
+while while;
+Select while such that Modifies (while, "var1able")
+29, 31, 33, 35, 37, 39, 41, 43
+5000
+28 - test28::
+prog_line n;
+Select n such that Uses (3, "u")
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53
+5000
+29 - test29::
+procedure p#p#p1;
+Select p#p#p1 such that Uses (17, "w")
+Alpha, Alpha2, Beta, betaTwo, Gamma, Delta
+5000
+30 - test30::
+stmt procedure;
+Select procedure such that Modifies (procedure, "day")
+25, 26, 27
+5000
+31 - test31::
+stmt ssstmt;
+Select ssstmt         such that      Modifies (ssstmt, "ClOnE")
+none
+5000
+32 - test32::
+stmt Stmt; assign Assign;
+Select Stmt such that Uses(Stmt, "z") pattern Assign (_, _"z"_)
+23, 53
+5000
+33 - test33::
+stmt                      s1                  ;
+Select s1 such that Follows* (1, s1)
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+5000
+34 - test34::
+stmt s1;
+Select s1 such that Follows (19, s1);
+none
+5000
+35 - test35::
+stmt s1;
+Select s1 such that Follows* (19, s1);
+none
+5000
+36 - test36::
+stmt s1;
+Select s1 such that Follows* (24, s1);
+none
+5000
+37 - test37::
+stmt s1;
+Select s1 such that Follows* (53, s1);
+none
+5000
+38 - test38::
+stmt s1;
+Select s1 such that Follows*    (s1, 53);
+51, 52
+5000
+39 - test39::
+stmt s;
+Select s such that Follows* (100, s)
+none
+5000
+40 - test40::
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s#, s##, s###, s####, s#####;
+Select s##### such that Follows (s1, 100)
+none
+5000
